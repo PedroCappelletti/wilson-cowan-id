@@ -19,6 +19,7 @@ investigacion/
 │   └── utils/             # Configuración, semillas, plots
 ├── scripts/              # Puntos de entrada (generar datos, entrenar, evaluar)
 ├── configs/              # Configuraciones YAML
+├── documentos/           # Papers, PDFs y bibliografía del proyecto
 ├── data/
 │   ├── raw/              # Datos crudos
 │   └── processed/        # Datasets listos para entrenar
