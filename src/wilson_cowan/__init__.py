@@ -1,3 +1,9 @@
-"""Modelo de Wilson-Cowan."""
+"""Modelo de Wilson-Cowan (fiel al simulador de MATLAB)."""
 
-from .model import WilsonCowan, WilsonCowanParams  # noqa: F401
+from .model import (  # noqa: F401
+    WilsonCowan,
+    WilsonCowanParams,
+    sigmoid,
+    box_pulse,
+    zero_input,
+)
