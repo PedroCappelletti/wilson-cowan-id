@@ -1,27 +1,35 @@
-"""Modelo de Wilson-Cowan.
-
-Implementación fiel al simulador de MATLAB en
-`documentos/simulador_wilson_cowan.m`.
-
-Sistema de dos EDOs con estado X = [I, E] (inhibitoria, excitatoria):
-
-    dI/dt = (1/ti) * ( -I + S_i(wIE*E - wII*I + Q(t) - thetai) - ki )
-    dE/dt = (1/te) * ( -E + S_e(wEE*E - wEI*I + P(t) - thetae) - ke )
-
-con la respuesta sigmoidea  S_x(u) = 1 / (1 + exp(-a_x * u))  y las
-constantes  ke = S_e(-thetae) = 1/(1+exp(ae*thetae)),
-            ki = S_i(-thetai) = 1/(1+exp(ai*thetai)),
-que se restan para que el reposo E = I = 0 sea un equilibrio sin entrada.
-
-La salida del sistema es el "potencial"  y(t) = E(t) - I(t).
-
-P(t) y Q(t) son las entradas externas a las poblaciones E e I
-respectivamente (por defecto, cero; ver `box_pulse`).
-"""
+# =============================================================================
+#  MODELO DE WILSON-COWAN
+#  Traduccion fiel del simulador de MATLAB: documentos/simulador_wilson_cowan.m
+# =============================================================================
+#
+#  Que es: un modelo de dos poblaciones de neuronas que se influyen entre si.
+#    - E = poblacion EXCITATORIA (empuja la actividad hacia arriba)
+#    - I = poblacion INHIBITORIA (frena la actividad)
+#  La interaccion entre las dos puede producir oscilaciones sostenidas
+#  (un "ciclo limite"), parecidas a un ritmo cerebral.
+#
+#  El sistema son dos ecuaciones diferenciales (una para I y otra para E).
+#  El estado del sistema en cada instante es el par X = [I, E]:
+#
+#    dI/dt = (1/ti) * ( -I + S_i(wIE*E - wII*I + Q(t) - thetai) - ki )
+#    dE/dt = (1/te) * ( -E + S_e(wEE*E - wEI*I + P(t) - thetae) - ke )
+#
+#  donde:
+#    - S(u) = 1/(1+exp(-a*u)) es la "sigmoidea" (curva en forma de S que
+#      convierte la entrada total de una poblacion en su tasa de disparo).
+#    - ke, ki son constantes que se restan para que el reposo (E=I=0) sea
+#      un punto de equilibrio cuando no hay entrada externa.
+#    - P(t) y Q(t) son las ENTRADAS EXTERNAS (la "fuerza" que se le inyecta
+#      al sistema desde afuera) a las poblaciones E e I respectivamente.
+#
+#  La salida que nos interesa es el "potencial":  y(t) = E(t) - I(t).
+# =============================================================================
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable
 
 import numpy as np
@@ -29,86 +37,90 @@ from scipy.integrate import solve_ivp
 from scipy.special import expit
 
 
+# =============================================================================
+#  SECCION 1: PARAMETROS DEL SISTEMA
+# =============================================================================
+# De donde salen: son exactamente los valores del simulador de MATLAB.
+# Estan elegidos para que el sistema genere oscilaciones sostenidas
+# (ciclo limite). Si los cambias, cambia el comportamiento del modelo.
+
 @dataclass
 class WilsonCowanParams:
-    """Parámetros del modelo de Wilson-Cowan.
+    # --- Constantes de tiempo [s]: que tan rapido reacciona cada poblacion.
+    #     Mas grande = mas lenta.
+    te: float = 1.0   # poblacion excitatoria
+    ti: float = 2.0   # poblacion inhibitoria
 
-    Los valores por defecto son los del simulador de MATLAB, que generan
-    oscilaciones sostenidas (ciclo límite).
-    """
+    # --- Pesos sinapticos: cuanto influye cada poblacion sobre cada otra.
+    wEE: float = 6.4  # E sobre si misma (autoexcitacion)
+    wEI: float = 4.8  # I sobre E (cuanto la frena I)
+    wIE: float = 6.0  # E sobre I (cuanto la activa E)
+    wII: float = 1.2  # I sobre si misma (autoinhibicion)
 
-    # Constantes de tiempo de cada población [s]
-    te: float = 1.0
-    ti: float = 2.0
+    # --- Ganancia de las sigmoideas: que tan "abrupta" es la curva en S.
+    ae: float = 1.2   # de la poblacion excitatoria
+    ai: float = 1.0   # de la poblacion inhibitoria
 
-    # Pesos sinápticos
-    wEE: float = 6.4
-    wEI: float = 4.8
-    wIE: float = 6.0
-    wII: float = 1.2
-
-    # Ganancia de las sigmoideas
-    ae: float = 1.2
-    ai: float = 1.0
-
-    # Umbrales de las sigmoideas
-    thetae: float = 2.8
-    thetai: float = 4.0
+    # --- Umbrales de las sigmoideas: a partir de que entrada la poblacion
+    #     empieza a dispararse con fuerza.
+    thetae: float = 2.8  # de la poblacion excitatoria
+    thetai: float = 4.0  # de la poblacion inhibitoria
 
     @property
     def ke(self) -> float:
-        """Offset de la sigmoidea excitatoria: S_e evaluada en reposo (u=0)."""
+        # Offset de la sigmoidea excitatoria. Es el valor de la sigmoidea
+        # en reposo (entrada total = 0). Se resta para que, sin estimulo,
+        # E=0 sea un equilibrio (que el sistema "duerma" en cero).
         return 1.0 / (1.0 + np.exp(self.ae * self.thetae))
 
     @property
     def ki(self) -> float:
-        """Offset de la sigmoidea inhibitoria: S_i evaluada en reposo (u=0)."""
+        # Lo mismo que ke, pero para la poblacion inhibitoria.
         return 1.0 / (1.0 + np.exp(self.ai * self.thetai))
 
 
+# La funcion sigmoidea: convierte la entrada total "u" de una poblacion en
+# una tasa de disparo entre 0 y 1. El umbral NO entra aca: viene ya restado
+# dentro de "u" (igual que en el MATLAB). Usamos expit (= 1/(1+exp(-x)))
+# porque es la misma formula pero numericamente estable (no se desborda).
 def sigmoid(u: np.ndarray | float, a: float) -> np.ndarray | float:
-    """Respuesta sigmoidea S(u) = 1 / (1 + exp(-a * u)).
-
-    El umbral no entra acá: se incluye en `u` como (... - theta), igual que
-    en el simulador de MATLAB. Se usa expit (= 1/(1+exp(-x))) por estabilidad
-    numérica.
-    """
     return expit(a * u)
 
 
-def box_pulse(
-    amplitude: float, t_on: float, t_off: float
-) -> Callable[[float], float]:
-    """Devuelve una función de pulso cuadrado.
+# =============================================================================
+#  SECCION 2: SEÑALES DE ENTRADA / "FUERZA" EXTERNA  P(t) y Q(t)
+# =============================================================================
+# Que son: el estimulo externo que se le inyecta al sistema desde afuera.
+#   - P(t) entra a la poblacion E.
+#   - Q(t) entra a la poblacion I.
+# Como se obtienen: en el MATLAB son pulsos cuadrados (la señal vale una
+#   amplitud constante durante una ventana de tiempo, y 0 fuera de ella).
+# Donde se usan: dentro de la funcion derivada (rhs), sumados a la entrada
+#   total de cada poblacion. Sin estimulo el sistema queda quieto en reposo;
+#   al prender el pulso, arranca a oscilar.
 
-    f(t) = amplitude  si  t_on <= t < t_off,  y  0 en otro caso.
-
-    Reproduce las entradas Pstim/Qstim del simulador de MATLAB. Los valores
-    del MATLAB son:
-        P (a la población E): box_pulse(0.8, 100, 400)
-        Q (a la población I): box_pulse(0.6, 200, 500)
-    """
-
+# Fabrica un pulso cuadrado: vale "amplitude" entre t_on y t_off, 0 si no.
+# En el MATLAB los valores son:  P = box_pulse(0.8, 100, 400)
+#                                Q = box_pulse(0.6, 200, 500)
+def box_pulse(amplitude: float, t_on: float, t_off: float) -> Callable[[float], float]:
     def f(t: float) -> float:
         return amplitude if (t_on <= t < t_off) else 0.0
-
     return f
 
 
+# Entrada nula: para cuando no se quiere aplicar ningun estimulo externo.
 def zero_input(t: float) -> float:
-    """Entrada nula (sin estímulo externo)."""
     return 0.0
 
 
+# =============================================================================
+#  CLASE PRINCIPAL: junta los parametros + las entradas + la derivada + la
+#  integracion en un solo objeto facil de usar.
+# =============================================================================
 class WilsonCowan:
-    """Modelo de Wilson-Cowan con entradas externas dependientes del tiempo.
-
-    Args:
-        params: parámetros del modelo.
-        P: entrada externa a la población excitatoria, P(t). Por defecto 0.
-        Q: entrada externa a la población inhibitoria, Q(t). Por defecto 0.
-    """
-
+    # Al crear el modelo se le pasan:
+    #   - params: los parametros (Seccion 1). Si no, usa los del MATLAB.
+    #   - P, Q: las funciones de entrada externa (Seccion 2). Por defecto 0.
     def __init__(
         self,
         params: WilsonCowanParams | None = None,
@@ -119,56 +131,46 @@ class WilsonCowan:
         self.P = P
         self.Q = Q
 
+    # =========================================================================
+    #  SECCION 3: FUNCION DERIVADA (el "corazon" del modelo)
+    # =========================================================================
+    # Dada la situacion actual (tiempo t y estado [I, E]), devuelve la
+    # VELOCIDAD de cambio del estado: [dI/dt, dE/dt]. El integrador la llama
+    # muchisimas veces para ir avanzando la solucion paso a paso.
     def rhs(self, t: float, state: np.ndarray) -> list[float]:
-        """Lado derecho del sistema de EDOs.
-
-        Args:
-            t: tiempo actual.
-            state: vector de estado [I, E].
-
-        Returns:
-            [dI/dt, dE/dt].
-        """
         p = self.params
-        I, E = state
+        I, E = state  # desarmamos el estado en sus dos componentes
 
-        # Argumentos de cada sigmoidea (incluyen el umbral y el estímulo).
-        u_i = p.wIE * E - p.wII * I + self.Q(t) - p.thetai
-        u_e = p.wEE * E - p.wEI * I + self.P(t) - p.thetae
+        # Entrada total que recibe cada poblacion en este instante:
+        #   suma de las influencias internas + el estimulo externo - el umbral.
+        u_i = p.wIE * E - p.wII * I + self.Q(t) - p.thetai  # entrada a I
+        u_e = p.wEE * E - p.wEI * I + self.P(t) - p.thetae  # entrada a E
 
+        # Cada ecuacion: la poblacion tiende a relajarse (-I, -E) y al mismo
+        # tiempo es empujada por su sigmoidea (menos el offset de reposo).
+        # Todo escalado por 1/constante_de_tiempo.
         dI = (1.0 / p.ti) * (-I + sigmoid(u_i, p.ai) - p.ki)
         dE = (1.0 / p.te) * (-E + sigmoid(u_e, p.ae) - p.ke)
         return [dI, dE]
 
+    # =========================================================================
+    #  SECCION 4: INTEGRACION NUMERICA (resolver las ecuaciones en el tiempo)
+    # =========================================================================
+    # Avanza el sistema desde t_inicial hasta t_final partiendo de [I0, E0].
+    # Equivale al ode45 del MATLAB: usa Runge-Kutta 4-5 de paso adaptativo.
     def simulate(
         self,
-        I0: float = 0.0,
-        E0: float = 0.0,
-        t_span: tuple[float, float] = (0.0, 600.0),
-        t_eval: np.ndarray | None = None,
-        rel_tol: float = 1e-3,
-        abs_tol: float = 1e-6,
-        method: str = "RK45",
+        I0: float = 0.0,                       # condicion inicial de I
+        E0: float = 0.0,                       # condicion inicial de E
+        t_span: tuple[float, float] = (0.0, 600.0),  # (t_inicial, t_final)
+        t_eval: np.ndarray | None = None,      # tiempos donde devolver la sol.
+        rel_tol: float = 1e-3,                 # tolerancia relativa (como MATLAB)
+        abs_tol: float = 1e-6,                 # tolerancia absoluta (como MATLAB)
+        method: str = "RK45",                  # RK45 ≈ ode45
     ) -> dict[str, np.ndarray]:
-        """Integra el sistema (equivalente a ode45 del simulador de MATLAB).
-
-        Args:
-            I0, E0: condiciones iniciales de las poblaciones I y E.
-            t_span: (t_inicial, t_final).
-            t_eval: tiempos en los que devolver la solución. Si es None, usa
-                los puntos adaptativos que elige el integrador (como ode45).
-            rel_tol, abs_tol: tolerancias del integrador.
-            method: método de integración de scipy (RK45 ≈ ode45).
-
-        Returns:
-            dict con:
-                't': tiempos, shape (N,)
-                'I': tasa inhibitoria, shape (N,)
-                'E': tasa excitatoria, shape (N,)
-                'y': salida y = E - I, shape (N,)
-                'P': estímulo P(t) muestreado, shape (N,)
-                'Q': estímulo Q(t) muestreado, shape (N,)
-        """
+        # solve_ivp hace todo el trabajo pesado: llama a rhs muchas veces y
+        # va construyendo la trayectoria. Si t_eval es None, devuelve los
+        # puntos que el propio integrador elige (paso adaptativo, como ode45).
         sol = solve_ivp(
             fun=self.rhs,
             t_span=t_span,
@@ -179,12 +181,17 @@ class WilsonCowan:
             atol=abs_tol,
         )
 
+        # Separamos los resultados en variables con nombre claro.
         t = sol.t
-        I = sol.y[0]
-        E = sol.y[1]
+        I = sol.y[0]  # tasa de la poblacion inhibitoria a lo largo del tiempo
+        E = sol.y[1]  # tasa de la poblacion excitatoria a lo largo del tiempo
+
+        # Reconstruimos las entradas externas en esos mismos tiempos (para
+        # poder graficarlas despues).
         P = np.array([self.P(ti) for ti in t])
         Q = np.array([self.Q(ti) for ti in t])
 
+        # Devolvemos todo en un diccionario. 'y' = E - I es la salida final.
         return {
             "t": t,
             "I": I,
@@ -193,3 +200,89 @@ class WilsonCowan:
             "P": P,
             "Q": Q,
         }
+
+
+# =============================================================================
+#  SECCION 5: VISUALIZACION (generar y guardar los graficos)
+# =============================================================================
+# Toma el resultado de simulate() y arma una figura de 3 paneles, igual que
+# el MATLAB:
+#   1) las entradas externas P y Q
+#   2) los estados I y E
+#   3) la salida y = E - I
+# Donde se guarda: en la ruta "save_path". Por defecto en
+#   results/figures/simulacion_wilson_cowan.png  (relativo a la raiz del repo).
+# Si show=True ademas la muestra en pantalla.
+def plot_results(
+    sol: dict[str, np.ndarray],
+    save_path: str | Path | None = "results/figures/simulacion_wilson_cowan.png",
+    show: bool = False,
+):
+    # Importamos matplotlib aca adentro para no exigirlo si solo se simula.
+    import matplotlib.pyplot as plt
+
+    t = sol["t"]
+
+    # 3 paneles, uno arriba del otro, compartiendo el eje del tiempo.
+    fig, axes = plt.subplots(3, 1, figsize=(8, 8), sharex=True)
+
+    # Panel 1: entradas externas (la "fuerza" aplicada al sistema).
+    axes[0].plot(t, sol["Q"], label="Q: entrada a poblacion I", linewidth=1.3)
+    axes[0].plot(t, sol["P"], label="P: entrada a poblacion E", linewidth=1.3)
+    axes[0].set_ylabel("[xA]")
+    axes[0].set_title("Entradas")
+    axes[0].legend(loc="upper right")
+    axes[0].grid(True)
+
+    # Panel 2: estados (la actividad de cada poblacion en el tiempo).
+    axes[1].plot(t, sol["I"], label="I: actividad inhibitoria", linewidth=1.3)
+    axes[1].plot(t, sol["E"], label="E: actividad excitatoria", linewidth=1.3)
+    axes[1].set_ylabel("[rate]")
+    axes[1].set_title("Estados")
+    axes[1].legend()
+    axes[1].grid(True)
+
+    # Panel 3: salida y = E - I (el "potencial" que observamos).
+    axes[2].plot(t, sol["y"], linewidth=1.3)
+    axes[2].set_ylabel("[xV]")
+    axes[2].set_xlabel("tiempo (s)")
+    axes[2].set_title("Salida")
+    axes[2].grid(True)
+
+    fig.tight_layout()
+
+    # Guardado: creamos la carpeta destino si no existe y escribimos el PNG.
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(save_path, dpi=150)
+
+    if show:
+        plt.show()
+
+    return fig
+
+
+# =============================================================================
+#  EJECUCION DIRECTA: si corres este archivo (python -m src.wilson_cowan.model)
+#  reproduce la simulacion completa del MATLAB y guarda el grafico.
+# =============================================================================
+if __name__ == "__main__":
+    # Mismos parametros, entradas y condiciones iniciales que el simulador.
+    modelo = WilsonCowan(
+        params=WilsonCowanParams(),
+        P=box_pulse(0.8, 100.0, 400.0),
+        Q=box_pulse(0.6, 200.0, 500.0),
+    )
+
+    # Integramos de 0 a 600 s, muestreando en una grilla uniforme para graficar.
+    resultado = modelo.simulate(
+        I0=0.0,
+        E0=0.0,
+        t_span=(0.0, 600.0),
+        t_eval=np.linspace(0.0, 600.0, 6000),
+    )
+
+    # Generamos y guardamos la figura de 3 paneles.
+    plot_results(resultado)
+    print("Listo. Grafico guardado en results/figures/simulacion_wilson_cowan.png")
