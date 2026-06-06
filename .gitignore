@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Datos y resultados pesados (se regeneran)
+data/raw/*
+data/processed/*
+results/figures/*
+results/models/*
+!**/.gitkeep
+
+# Formatos de datos / modelos
+*.npz
+*.npy
+*.pt
+*.pth
+*.ckpt
+*.h5
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store

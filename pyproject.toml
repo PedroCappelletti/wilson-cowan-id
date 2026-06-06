@@ -1,0 +1,9 @@
+[project]
+name = "investigacion-wilson-cowan-pinn"
+version = "0.1.0"
+description = "Modelo de Wilson-Cowan y PINN"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
