@@ -48,7 +48,7 @@ from src.data import generate_dataset, save_dataset  # noqa: E402
 #                       (pero mas lento). Menos puntos = mas liviano.
 T_INICIAL = 0.0
 T_FINAL = 600.0
-N_PUNTOS = 6000
+N_PUNTOS = 60001   # = un punto cada 0.01 s (dt = 600/60000 = 0.01)
 
 # -----------------------------------------------------------------------------
 #  2) CONDICIONES INICIALES (estado del sistema en t = T_INICIAL)
