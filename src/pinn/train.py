@@ -31,7 +31,10 @@ class TrainConfig:
     """Hiperparametros de entrenamiento."""
 
     epochs: int = 30_000        # tope maximo (la parada por meseta suele cortar antes)
-    lr: float = 1e-3
+    lr: float = 1e-3            # learning rate de la red
+    lr_weights: float = 1e-3   # learning rate de los pesos a identificar (theta).
+                               # Conviene mas alto que el de la red: theta arranca
+                               # lejos y tiene que viajar mucho (ej. 1.0 -> 6.4).
     w_data: float = 1.0         # peso del termino de datos
     w_physics: float = 1.0      # peso del termino fisico (el "lambda")
     w_ic: float = 1.0           # peso de la condicion inicial
@@ -41,6 +44,16 @@ class TrainConfig:
     device: str = "cpu"
     log_every: int = 200
     checkpoint_dir: str = "results/models"
+    # --- Curriculum "datos primero" (clave para el inverso desde arranque lejano) ---
+    # Durante los primeros `physics_warmup` epochs se entrena SOLO con datos
+    # (fisica apagada) para que la red aprenda la trayectoria verdadera. Recien
+    # despues se prende la fisica, ya con la curva correcta: asi el residuo
+    # empuja los pesos hacia su valor real en vez de trabarse en un minimo local.
+    physics_warmup: int = 0
+    # Al terminar el warmup, CONGELAR la red y ajustar SOLO los pesos de
+    # Wilson-Cowan. Evita que la red "haga trampa" deformando la trayectoria
+    # para satisfacer la fisica con pesos errados; obliga a que se muevan los pesos.
+    freeze_net_after_warmup: bool = False
     # --- Parada automatica al amesetar la perdida (meseta) ---
     early_stop: bool = True
     plateau_tol: float = 1e-3   # mejora relativa minima para considerar "todavia baja"
@@ -61,11 +74,17 @@ class Trainer:
         self.model = model.to(config.device)
         self.config = config
         self.fixed = fixed_params
-        # Un unico optimizador sobre TODO: red + raw_w (los pesos a identificar).
-        self.opt = torch.optim.Adam(self.model.parameters(), lr=config.lr)
+        # Un solo optimizador, pero con DOS grupos: la red con su lr y los pesos
+        # a identificar (raw_w) con un lr propio (normalmente mas alto). Asi theta
+        # puede moverse rapido sin desestabilizar a la red.
+        grupos = [{"params": list(self.model.net.parameters()), "lr": config.lr}]
+        if self.model.raw_w is not None:
+            grupos.append({"params": [self.model.raw_w], "lr": config.lr_weights})
+        self.opt = torch.optim.Adam(grupos)
         # Reduce el lr cuando la perdida (suavizada) se estanca, para cerrar mejor.
+        # min_lr evita que colapse a cero y congele el entrenamiento.
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            self.opt, factor=config.lr_factor, patience=config.lr_patience,
+            self.opt, factor=config.lr_factor, patience=config.lr_patience, min_lr=1e-5,
         )
 
     # -------------------------------------------------------------------------
@@ -118,7 +137,26 @@ class Trainer:
         sin_mejora = 0          # chequeos seguidos sin mejora apreciable
         stop_epoch = cfg.epochs - 1
 
+        warmup = cfg.physics_warmup
         for epoch in range(cfg.epochs):
+            # --- Transicion fin del warmup: se prende la fisica. Reiniciamos el
+            #     lr y la deteccion de meseta, porque la perdida da un salto.
+            if warmup > 0 and epoch == warmup:
+                self.opt.param_groups[0]["lr"] = cfg.lr              # red
+                if len(self.opt.param_groups) > 1:
+                    self.opt.param_groups[1]["lr"] = cfg.lr_weights  # pesos theta
+                self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                    self.opt, factor=cfg.lr_factor, patience=cfg.lr_patience, min_lr=1e-5)
+                ema, best_ema, sin_mejora = None, float("inf"), 0
+                print(f"--> fin del warmup (datos solos) en epoch {epoch}: activo la fisica.")
+                if cfg.freeze_net_after_warmup:
+                    for p in self.model.net.parameters():
+                        p.requires_grad_(False)
+                    print("    red congelada: ahora solo se ajustan los pesos de Wilson-Cowan.")
+
+            en_warmup = epoch < warmup
+            wf = 0.0 if en_warmup else cfg.w_physics   # fisica apagada durante el warmup
+
             self.opt.zero_grad()
 
             # --- L_datos: minibatch del tramo de ENTRENAMIENTO (primeros 80%).
@@ -136,7 +174,7 @@ class Trainer:
             # --- L_inicial.
             L_ic = initial_condition_loss(self.model, t0, ic)
 
-            L = cfg.w_data * L_d + cfg.w_physics * L_f + cfg.w_ic * L_ic
+            L = cfg.w_data * L_d + wf * L_f + cfg.w_ic * L_ic
             L.backward()
             self.opt.step()
 
@@ -166,8 +204,8 @@ class Trainer:
                     f"| val_MSE={val:.3e}{extra}"
                 )
 
-                # --- Deteccion de meseta sobre la EMA ---
-                if cfg.early_stop:
+                # --- Deteccion de meseta sobre la EMA (recien despues del warmup) ---
+                if cfg.early_stop and epoch >= warmup:
                     if ema < best_ema * (1.0 - cfg.plateau_tol):
                         best_ema = ema          # hubo mejora apreciable
                         sin_mejora = 0
@@ -179,6 +217,7 @@ class Trainer:
                             break
 
         hist["stop_epoch"] = stop_epoch
+        hist["warmup"] = warmup
         return hist
 
     # -------------------------------------------------------------------------
