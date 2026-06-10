@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cómo funciona cada modelo — Identificación Wilson-Cowan</title>
+<style>
+  body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2733;
+       line-height:1.6;margin:0;background:#f4f6f8;padding:2rem 1rem}
+  .wrap{max-width:960px;margin:0 auto}
+  header{background:#1f4e79;color:#fff;border-radius:12px 12px 0 0;padding:1.7rem 2rem}
+  header h1{margin:0;font-size:1.4rem;line-height:1.3}
+  header p{margin:.45rem 0 0;opacity:.92;font-size:.95rem}
+  main{background:#fff;border:1px solid #d7dee5;border-top:none;
+        border-radius:0 0 12px 12px;padding:1.6rem 2rem 2.2rem}
+  h2{color:#1f4e79;font-size:1.22rem;margin:2rem 0 .6rem;
+      padding-bottom:.35rem;border-bottom:2px solid #e8f0f8}
+  h3{color:#1f4e79;font-size:1.05rem;margin:1.3rem 0 .4rem}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.89rem}
+  th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid #d7dee5;vertical-align:top}
+  th{background:#e8f0f8;color:#1f4e79}
+  td.c,th.c{text-align:center}
+  code{background:#f0f3f6;padding:.1rem .35rem;border-radius:4px;
+       font-family:Consolas,monospace;font-size:.88em}
+  .pill{display:inline-block;padding:.12rem .55rem;border-radius:999px;
+         font-size:.74rem;font-weight:700;margin-right:.35rem;white-space:nowrap}
+  .ok{background:#e3f5ea;color:#1b7f4b}
+  .warn{background:#fbf0db;color:#b06a00}
+  .bad{background:#fbe3e3;color:#b02a2a}
+  .info{background:#e3eefb;color:#1f4e79}
+  .nota{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.8rem 1.1rem;
+         border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.93rem}
+  .eq{background:#f7fafd;border:1px solid #e1e8ef;border-radius:6px;
+      padding:.6rem .9rem;font-family:Consolas,monospace;font-size:.85rem;margin:.6rem 0;overflow-x:auto}
+  .card{border:1px solid #d7dee5;border-radius:10px;padding:1.1rem 1.3rem;margin:1.2rem 0}
+  .card.m1{border-top:5px solid #b02a2a}
+  .card.m2{border-top:5px solid #b06a00}
+  .card.m3{border-top:5px solid #1b7f4b}
+  .meta{color:#5b6770;font-size:.83rem;margin:.1rem 0 .6rem}
+  ul,ol{margin:.4rem 0;padding-left:1.3rem} li{margin:.3rem 0}
+  /* diagrama de flujo */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:.8rem 0;font-size:.82rem}
+  .box{background:#eef4fb;border:1px solid #c4d5e8;border-radius:8px;padding:.5rem .7rem;text-align:center;min-width:90px}
+  .box.frozen{background:#f0f0f2;border-style:dashed;color:#777}
+  .box.target{background:#e3f5ea;border-color:#9dd6b4}
+  .arrow{color:#1f4e79;font-weight:700;font-size:1.1rem}
+  .lbl{font-size:.7rem;color:#5b6770;display:block;margin-top:.15rem}
+  footer{color:#5b6770;font-size:.82rem;text-align:center;margin-top:1.5rem}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Cómo funciona cada modelo que entrenamos</h1>
+  <p>Identificación paramétrica de Wilson-Cowan · explicación de los 3 métodos y sus diferencias · ITBA 2026</p>
+</header>
+<main>
+
+  <div class="nota">
+    <b>Qué busca cualquiera de los métodos.</b> A partir de trayectorias observadas de la actividad
+    <code>I(t)</code> (inhibitoria) y <code>E(t)</code> (excitatoria), recuperar los 4 pesos sinápticos
+    del modelo de Wilson-Cowan: <code>wEE=6.4</code>, <code>wEI=4.8</code>, <code>wIE=6.0</code>,
+    <code>wII=1.2</code>. Los tres métodos comparten la misma "materia prima" y se diferencian en
+    <b>cómo calculan las derivadas</b> y <b>cómo entrenan</b>.
+  </div>
+
+  <!-- ====================================================== -->
+  <h2>0 · Los ingredientes compartidos</h2>
+  <p>Antes de los métodos, lo que tienen en común los tres:</p>
+
+  <h3>a) La red neuronal: <code>t → [I, E]</code></h3>
+  <p>Una red (MLP) que recibe el tiempo y devuelve el estado del sistema. Hace de "curva suave y
+  derivable" que pasa por los datos. Para que pueda representar las oscilaciones del ciclo límite,
+  el tiempo no entra "pelado": se codifica con <b>Fourier features</b> (senos y cosenos de muchas
+  frecuencias). Sin esto, un MLP con <code>tanh</code> no captura los picos (sesgo espectral).</p>
+
+  <h3>b) El residuo físico (las ecuaciones de Wilson-Cowan)</h3>
+  <p>Las dos ecuaciones del modelo. El "residuo" mide cuánto se desvía la red de cumplirlas:</p>
+  <div class="eq">residuo_E = dE/dt − (1/te)·( −E + sigmoide(ae·(wEE·E − wEI·I + P − θe)) − ke )<br>
+residuo_I = dI/dt − (1/ti)·( −I + sigmoide(ai·(wIE·E − wII·I + Q − θi)) − ki )</div>
+  <p>Si los pesos y la trayectoria son correctos, el residuo es ≈ 0. <b>Acá entra la clave del
+  problema:</b> hay que calcular <code>dE/dt</code> y <code>dI/dt</code> — y <i>cómo</i> se calculan
+  es lo que separa a un método de otro.</p>
+
+  <h3>c) Multi-trayectoria con pesos compartidos</h3>
+  <p>Con una sola trayectoria, <code>wIE·E − wII·I</code> se puede satisfacer con muchos pares
+  (wIE, wII) distintos → <b>wII no se identifica</b> (degeneración). Por eso se usan <b>4 trayectorias</b>
+  con estímulos P y Q distintos (una con Q alto): una red por trayectoria, pero <b>un único juego de
+  4 pesos compartido</b> que tiene que explicarlas a todas a la vez. Eso rompe la degeneración.</p>
+
+  <h3>d) Pesos siempre positivos</h3>
+  <p>Los pesos se guardan "crudos" y el valor real es <code>softplus(crudo) &gt; 0</code> (los signos
+  ya están explícitos en las ecuaciones como <code>−wEI</code>, <code>−wII</code>).</p>
+
+  <!-- ====================================================== -->
+  <h2>1 · ¿Qué es "autograd" vs "diferencias finitas"?</h2>
+  <p>Como todo gira alrededor de cómo se calcula la derivada de la red, conviene tenerlo claro:</p>
+  <table>
+    <tr><th>Diferencias finitas (FD)</th><th>Autograd (diferenciación automática)</th></tr>
+    <tr>
+      <td>Aproxima la derivada evaluando la red en dos tiempos cercanos:
+      <div class="eq">dE/dt ≈ (E(t+Δ) − E(t−Δ)) / (2Δ)</div>
+      Es una <b>aproximación</b> (tiene error de truncamiento), pero al promediar puntos vecinos
+      <b>suaviza el ruido</b> de alta frecuencia.</td>
+      <td>PyTorch calcula la derivada <b>exacta</b> de la red respecto de <code>t</code>, propagando
+      por la estructura interna de la red. Sin error de aproximación. Es el mecanismo que define a
+      una PINN.</td>
+    </tr>
+  </table>
+
+  <!-- ====================================================== -->
+  <h2>2 · Los tres métodos, uno por uno</h2>
+
+  <!-- MÉTODO 1 -->
+  <div class="card m1">
+    <h3 style="margin-top:0"><span class="pill bad">Método 1</span> Surrogate + diferencias finitas (dos etapas)</h3>
+    <div class="meta">Script: <code>scripts/noise_sweep.py</code> · NO es PINN → es el "método clásico de comparación" del OE2</div>
+
+    <div class="flow">
+      <div class="box">Datos<br>ruidosos</div>
+      <span class="arrow">→</span>
+      <div class="box">Etapa 1<br>MLP ajusta<br>la trayectoria<span class="lbl">solo datos</span></div>
+      <span class="arrow">→</span>
+      <div class="box frozen">MLP<br>CONGELADA</div>
+      <span class="arrow">→</span>
+      <div class="box">Etapa 2<br>derivadas por <b>FD</b><br>+ ajustar pesos<span class="lbl">solo física</span></div>
+      <span class="arrow">→</span>
+      <div class="box target">4 pesos</div>
+    </div>
+
+    <p><b>Cómo funciona:</b></p>
+    <ol>
+      <li><b>Etapa 1 (sin física):</b> cada MLP aprende su trayectoria <code>I(t), E(t)</code>
+      ajustándose solo a los datos. Hace de "suavizador/denoiser".</li>
+      <li><b>Se congelan</b> las redes.</li>
+      <li><b>Etapa 2 (solo física):</b> se calculan <code>dI/dt, dE/dt</code> por <b>diferencias
+      finitas</b> sobre las redes congeladas, y se ajustan los 4 pesos compartidos para que el residuo
+      físico se minimice sumando sobre las 4 trayectorias.</li>
+    </ol>
+    <p><b>Por qué anda bien:</b> al estar la red congelada en la trayectoria verdadera, los pesos solo
+    pueden ajustarse para cumplir la física <i>sobre la curva correcta</i> → solución única. El FD
+    además suaviza el ruido, lo que ayuda en los niveles altos.</p>
+    <p><b>Por qué NO es PINN:</b> dos pecados — usa FD en vez de autograd, y la red nunca "aprende la
+    física" (se entrena solo con datos y después se congela). Es esencialmente identificación clásica
+    por <i>derivative matching</i> con una red como suavizador.</p>
+    <p style="font-size:.88rem"><b>Resultado sin ruido:</b> los 4 pesos &lt;10%, wII ~6.4%.</p>
+  </div>
+
+  <!-- MÉTODO 2 -->
+  <div class="card m2">
+    <h3 style="margin-top:0"><span class="pill warn">Método 2</span> Híbrido: autograd + dos etapas (warmup + freeze)</h3>
+    <div class="meta">Scripts: <code>src/pinn/multitraj.py</code> + <code>scripts/train_multi.py</code> · zona gris (PINN con asterisco)</div>
+
+    <div class="flow">
+      <div class="box">Datos<br>ruidosos</div>
+      <span class="arrow">→</span>
+      <div class="box">Warmup<br>MLP ajusta<br>la trayectoria<span class="lbl">solo datos</span></div>
+      <span class="arrow">→</span>
+      <div class="box frozen">MLP<br>CONGELADA</div>
+      <span class="arrow">→</span>
+      <div class="box">Ajustar pesos<br>derivadas por <b>autograd</b><span class="lbl">solo física</span></div>
+      <span class="arrow">→</span>
+      <div class="box target">4 pesos</div>
+    </div>
+
+    <p><b>Cómo funciona:</b> es igual al Método 1 en estructura (dos etapas, red que se congela), <b>pero
+    cambia las diferencias finitas por autograd</b>. Primero un "warmup" donde las MLP aprenden las
+    trayectorias solo con datos; después se congelan y se ajustan los 4 pesos compartidos minimizando el
+    residuo físico, con las derivadas exactas por autograd.</p>
+    <p><b>Dónde queda:</b> usa autograd (pilar de PINN ✓) pero mantiene el esquema de dos etapas con la
+    red congelada (la red no se entrena con la física ✗). Es <b>más PINN que el Método 1</b>, pero no la
+    PINN canónica. Pragmáticamente robusto: el freeze evita que la red "haga trampa".</p>
+  </div>
+
+  <!-- MÉTODO 3 -->
+  <div class="card m3">
+    <h3 style="margin-top:0"><span class="pill ok">Método 3</span> PINN canónica: autograd + entrenamiento conjunto</h3>
+    <div class="meta">Script: <code>scripts/pinn_joint_sweep.py</code> · PINN sin asteriscos (Raissi et al.)</div>
+
+    <div class="flow">
+      <div class="box">Datos<br>ruidosos</div>
+      <span class="arrow">→</span>
+      <div class="box" style="background:#e3f5ea;border-color:#9dd6b4">UNA sola fase<br>MLPs + 4 pesos<br>se entrenan JUNTOS<span class="lbl">datos + física (autograd)</span></div>
+      <span class="arrow">→</span>
+      <div class="box target">4 pesos<br>+ trayectoria</div>
+    </div>
+
+    <p><b>Cómo funciona:</b> no hay etapas. En cada paso se optimizan <b>a la vez</b> los pesos de las
+    MLPs y los 4 pesos físicos compartidos, minimizando una sola pérdida:</p>
+    <div class="eq">L = w_data · L_datos  +  w_física · L_física  +  w_ic · L_inicial</div>
+    <p>Las derivadas del residuo salen por <b>autograd</b>. Como la física está en la pérdida mientras
+    la red entrena, <b>la red está obligada a ser físicamente consistente</b>: no puede ajustar ruido
+    de alta frecuencia sin violar la ecuación → la física actúa como regularizador.</p>
+    <p><b>El desafío y cómo se resolvió:</b> entrenar todo junto es más difícil (la red "libre" tiende a
+    co-adaptarse a pesos incorrectos → wEI, wII colapsan a 0). La receta que lo hizo converger:</p>
+    <ul>
+      <li><b>Peso de datos alto</b> → ancla la red a la trayectoria verdadera (imita el efecto del freeze sin congelar).</li>
+      <li><b>Learning rate separado</b> y más alto para los 4 pesos (tienen que viajar de 1.0 a ~6).</li>
+      <li><b>Adam → L-BFGS</b> al final (segundo orden para cerrar fino).</li>
+    </ul>
+    <p style="font-size:.88rem"><b>Resultado sin ruido:</b> error máximo <b>0.3%</b> en los 4 pesos
+    (el mejor de los tres).</p>
+  </div>
+
+  <!-- ====================================================== -->
+  <h2>3 · La diferencia de fondo: dos topologías de entrenamiento</h2>
+  <p>Más allá de FD vs autograd, la diferencia estructural es <b>cuándo entra la física</b>:</p>
+  <div class="grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div class="card" style="margin:0">
+      <b>Dos etapas (Métodos 1 y 2)</b>
+      <p style="font-size:.88rem">La red se entrena <b>primero solo con datos</b> y después se
+      <b>congela</b>. Los pesos se ajustan en una segunda etapa aparte. La red es un suavizador fijo;
+      la física solo estima parámetros. <br><b>+</b> robusto, evita co-adaptación.
+      <b>−</b> la red no aprende la física (por eso no es PINN canónica).</p>
+    </div>
+    <div class="card" style="margin:0">
+      <b>Conjunto (Método 3)</b>
+      <p style="font-size:.88rem">La red <b>y</b> los pesos se entrenan <b>al mismo tiempo</b> con la
+      física en la pérdida. La red queda físicamente consistente. <br><b>+</b> es la PINN canónica; la
+      física regulariza. <b>−</b> más difícil de hacer converger (hay que anclar la red con datos).</p>
+    </div>
+  </div>
+
+  <!-- ====================================================== -->
+  <h2>4 · Tabla comparativa</h2>
+  <table>
+    <tr>
+      <th>Característica</th>
+      <th class="c">M1 · FD</th>
+      <th class="c">M2 · Híbrido</th>
+      <th class="c">M3 · PINN conjunta</th>
+    </tr>
+    <tr><td>Derivadas</td><td class="c">Diferencias finitas</td><td class="c">Autograd</td><td class="c">Autograd</td></tr>
+    <tr><td>Entrenamiento</td><td class="c">2 etapas</td><td class="c">2 etapas</td><td class="c">Conjunto (1 fase)</td></tr>
+    <tr><td>¿La red aprende la física?</td><td class="c">No</td><td class="c">No</td><td class="c">Sí</td></tr>
+    <tr><td>Multi-trayectoria</td><td class="c">Sí</td><td class="c">Sí</td><td class="c">Sí</td></tr>
+    <tr><td>¿Es PINN?</td>
+        <td class="c"><span class="pill bad">No</span></td>
+        <td class="c"><span class="pill warn">Gris</span></td>
+        <td class="c"><span class="pill ok">Sí</span></td></tr>
+    <tr><td>Rol en el proyecto</td><td class="c">Comparación clásica</td><td class="c">Variante robusta</td><td class="c">PINN del OE2</td></tr>
+    <tr><td>Error wII sin ruido</td><td class="c">~6.4%</td><td class="c">—</td><td class="c"><b>0.07%</b></td></tr>
+    <tr><td>Robustez al ruido (esperada)</td><td class="c">Alta (FD suaviza)</td><td class="c">Media-alta</td><td class="c">Por evaluar (física regulariza)</td></tr>
+  </table>
+
+  <div class="nota">
+    <b>En una frase cada uno.</b><br>
+    <span class="pill bad">M1</span> Una red suaviza los datos, después medimos su pendiente con
+    diferencias finitas y buscamos los pesos que la expliquen. <i>Método clásico.</i><br>
+    <span class="pill warn">M2</span> Igual, pero la pendiente la da autograd en vez de diferencias
+    finitas. <i>Híbrido.</i><br>
+    <span class="pill ok">M3</span> La red y los pesos se aprenden juntos, con las ecuaciones metidas
+    en la función de pérdida. <i>PINN de verdad.</i>
+  </div>
+
+  <p style="font-size:.86rem;color:#5b6770">Documento complementario: <code>docs/informe_10-6.html</code>
+  (estado y roadmap) y <code>docs/bitacora.html</code> (registro cronológico de qué se probó y por qué).</p>
+
+</main>
+<footer>Proyecto Wilson-Cowan + PINN · ITBA 2026 · documento explicativo de los métodos</footer>
+</div></body></html>

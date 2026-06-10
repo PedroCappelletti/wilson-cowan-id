@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Informe de avance y roadmap — Identificación Wilson-Cowan (PINN)</title>
+<style>
+  body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2733;
+       line-height:1.6;margin:0;background:#f4f6f8;padding:2rem 1rem}
+  .wrap{max-width:960px;margin:0 auto}
+  header{background:#1f4e79;color:#fff;border-radius:12px 12px 0 0;padding:1.7rem 2rem}
+  header h1{margin:0;font-size:1.45rem;line-height:1.3}
+  header p{margin:.45rem 0 0;opacity:.92;font-size:.95rem}
+  main{background:#fff;border:1px solid #d7dee5;border-top:none;
+        border-radius:0 0 12px 12px;padding:1.6rem 2rem 2.2rem}
+  h2{color:#1f4e79;font-size:1.22rem;margin:2rem 0 .6rem;
+      padding-bottom:.35rem;border-bottom:2px solid #e8f0f8}
+  h3{color:#1f4e79;font-size:1.05rem;margin:1.3rem 0 .4rem}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.9rem}
+  th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid #d7dee5;vertical-align:top}
+  th{background:#e8f0f8;color:#1f4e79}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  code{background:#f0f3f6;padding:.1rem .35rem;border-radius:4px;
+       font-family:Consolas,monospace;font-size:.88em}
+  .pill{display:inline-block;padding:.12rem .55rem;border-radius:999px;
+         font-size:.74rem;font-weight:700;margin-right:.35rem;white-space:nowrap}
+  .ok{background:#e3f5ea;color:#1b7f4b}
+  .warn{background:#fbf0db;color:#b06a00}
+  .bad{background:#fbe3e3;color:#b02a2a}
+  .info{background:#e3eefb;color:#1f4e79}
+  .oe{background:#ede3fb;color:#5b2a9e}
+  .nota{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.8rem 1.1rem;
+         border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.93rem}
+  .card{border:1px solid #d7dee5;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0}
+  .card.win{border-left:4px solid #1b7f4b}
+  .card.next{border-left:4px solid #b06a00}
+  .card.novel{border-left:4px solid #5b2a9e}
+  .meta{color:#5b6770;font-size:.83rem;margin:.1rem 0 .5rem}
+  ul{margin:.4rem 0;padding-left:1.3rem} li{margin:.25rem 0}
+  .eq{background:#f7fafd;border:1px solid #e1e8ef;border-radius:6px;
+      padding:.5rem .8rem;font-family:Consolas,monospace;font-size:.85rem;margin:.5rem 0;overflow-x:auto}
+  footer{color:#5b6770;font-size:.82rem;text-align:center;margin-top:1.5rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Identificación de Wilson–Cowan mediante PINNs<br>Informe de avance y roadmap para el tutor</h1>
+  <p>Concurso Iniciación I+D · ITBA 2026 · Tutor: Dr. R. Sánchez-Peña · Codir.: Dr. D. García-Violini</p>
+  <p>Alumnos: Ralf Högner (coord.) · J. I. Hanachian · P. Cappelletti</p>
+</header>
+<main>
+
+  <div class="nota">
+    <b>Propósito de este documento:</b> resumir qué métodos de identificación implementamos y
+    cómo resultaron, aclarar el criterio metodológico de qué cuenta como PINN (y qué no), y
+    proponer un roadmap de lo que falta —incluida una extensión novedosa: conectar el
+    controlador directamente a la PINN—. Cada bloque se ancla a los objetivos específicos
+    (OE1, OE2, OE3) y fases del proyecto.
+  </div>
+
+  <!-- ====================================================== -->
+  <h2>1 · Resumen ejecutivo · dónde estamos</h2>
+  <table>
+    <tr><th>Objetivo</th><th>Estado</th><th>Detalle</th></tr>
+    <tr>
+      <td><span class="pill oe">OE1</span> Simulador + datasets</td>
+      <td><span class="pill ok">Completo</span></td>
+      <td>Simulador WC en Python (NumPy/SciPy) fiel al MATLAB del grupo [13]; datasets con ruido gaussiano aditivo en 4 niveles (0, bajo, medio, alto) calibrados a SNR de LFP. Régimen de ciclo límite (oscilación sostenida).</td>
+    </tr>
+    <tr>
+      <td><span class="pill oe">OE2</span> Identificación (PINN)</td>
+      <td><span class="pill warn">En curso</span></td>
+      <td><b>PINN canónica validada sin ruido (error máx 0.3%).</b> Método clásico de comparación implementado. Falta: Neural ODEs, mínimos cuadrados no lineales, y completar el barrido con ruido de los tres métodos.</td>
+    </tr>
+    <tr>
+      <td><span class="pill oe">OE3</span> Validación en lazo cerrado</td>
+      <td><span class="pill bad">Pendiente</span></td>
+      <td>Integrar el mejor modelo con el controlador IMC de referencia [13] y medir preservación de la sincronización theta–gamma. Aquí se inserta la extensión novedosa (§5).</td>
+    </tr>
+  </table>
+
+  <!-- ====================================================== -->
+  <h2>2 · Métodos implementados y resultados <span class="pill oe">OE2</span></h2>
+
+  <p>El modelo de Wilson–Cowan tiene 4 pesos sinápticos a identificar
+  (<code>wEE=6.4</code>, <code>wEI=4.8</code>, <code>wIE=6.0</code>, <code>wII=1.2</code>). Las
+  dos ecuaciones del residuo físico desacoplan la identificación en dos pares:</p>
+  <div class="eq">u_e = wEE·E − wEI·I + P(t) − θe   →  identifica (wEE, wEI)<br>
+u_i = wIE·E − wII·I + Q(t) − θi   →  identifica (wIE, wII)</div>
+  <p><b>wII es el peso difícil:</b> es el más chico y multiplica a <code>I</code> (amplitud menor),
+  y en un ciclo límite <code>E</code> e <code>I</code> oscilan correlacionados, dejando
+  <code>wIE·E − wII·I</code> casi degenerado. <b>Solución (común a todos los métodos):</b> usar
+  <b>múltiples trayectorias</b> con estímulos P y Q distintos (incluida una con Q alto), que rompen
+  la correlación y vuelven los 4 pesos identificables.</p>
+
+  <h3>Los tres métodos (espectro de "cuán PINN es")</h3>
+  <table>
+    <tr><th>Método</th><th>Derivadas</th><th>Entrenamiento</th><th>¿PINN?</th><th>Rol en el OE2</th></tr>
+    <tr>
+      <td>Surrogate + matching (FD)</td>
+      <td>Diferencias finitas</td>
+      <td>Dos etapas (red congelada)</td>
+      <td><span class="pill bad">No</span></td>
+      <td>Es el <b>método clásico de comparación</b> que pide el OE2 (línea de mínimos cuadrados / SINDy [2])</td>
+    </tr>
+    <tr>
+      <td>Híbrido multi-trayectoria</td>
+      <td>Autograd</td>
+      <td>Dos etapas (warmup + freeze)</td>
+      <td><span class="pill warn">Zona gris</span></td>
+      <td>Variante pragmática robusta; punto de comparación intermedio</td>
+    </tr>
+    <tr>
+      <td><b>PINN conjunta</b></td>
+      <td>Autograd</td>
+      <td>Conjunto (red + parámetros)</td>
+      <td><span class="pill ok">Sí, canónica</span></td>
+      <td>La PINN del OE2, sin asteriscos (cf. Raissi et al. [17])</td>
+    </tr>
+  </table>
+
+  <h3>Resultados sin ruido (validación de convergencia)</h3>
+  <div class="grid2">
+    <div class="card win">
+      <div class="meta">PINN canónica (autograd + conjunto)</div>
+      <table>
+        <tr><th>peso</th><th class="num">estim.</th><th class="num">error</th></tr>
+        <tr><td>wEE</td><td class="num">6.393</td><td class="num"><span class="pill ok">0.11%</span></td></tr>
+        <tr><td>wEI</td><td class="num">4.786</td><td class="num"><span class="pill ok">0.28%</span></td></tr>
+        <tr><td>wIE</td><td class="num">5.999</td><td class="num"><span class="pill ok">0.02%</span></td></tr>
+        <tr><td>wII</td><td class="num">1.199</td><td class="num"><span class="pill ok">0.07%</span></td></tr>
+      </table>
+      <p style="font-size:.86rem;margin:.4rem 0 0">Error máx <b>0.3%</b> · MSE trayectoria <code>9.5e-08</code></p>
+    </div>
+    <div class="card">
+      <div class="meta">Método clásico de comparación (FD)</div>
+      <table>
+        <tr><th>peso</th><th class="num">estim.</th><th class="num">error</th></tr>
+        <tr><td>wEE</td><td class="num">6.31</td><td class="num"><span class="pill ok">1.4%</span></td></tr>
+        <tr><td>wEI</td><td class="num">4.66</td><td class="num"><span class="pill ok">3.0%</span></td></tr>
+        <tr><td>wIE</td><td class="num">6.04</td><td class="num"><span class="pill ok">0.7%</span></td></tr>
+        <tr><td>wII</td><td class="num">1.28</td><td class="num"><span class="pill warn">6.4%</span></td></tr>
+      </table>
+      <p style="font-size:.86rem;margin:.4rem 0 0">Error máx <b>6.4%</b> (wII)</p>
+    </div>
+  </div>
+  <p style="font-size:.9rem"><b>Lectura:</b> la PINN canónica recupera los 4 pesos casi exactamente; el método
+  clásico también pasa (&lt;10%) pero con peor precisión en wII. El barrido con ruido (niveles 0.01 /
+  0.05 / 0.10) está en ejecución y será la comparación central del OE2.</p>
+
+  <h3>Cómo se logró que la PINN conjunta convergiera (registro técnico)</h3>
+  <p style="font-size:.9rem">La PINN conjunta de una sola trayectoria se traba (mínimo degenerado: wEI y
+  wII colapsan a 0). La receta que funcionó, toda dentro de lo que es una PINN legítima (solo cambia
+  optimización y pesos de pérdida):</p>
+  <ul style="font-size:.9rem">
+    <li><b>Multi-trayectoria</b> con P y Q variados → rompe la degeneración E/I.</li>
+    <li><b>Peso de datos alto</b> → ancla la red a la trayectoria verdadera, evita que se "co-adapte" a pesos incorrectos.</li>
+    <li><b>Learning rate separado</b> para los parámetros físicos (viajan de 1.0 a ~6).</li>
+    <li><b>Adam → L-BFGS</b> (segundo orden para cerrar fino), receta canónica de PINNs.</li>
+  </ul>
+  <p style="font-size:.86rem;color:#5b6770">El detalle completo (qué falló y por qué en cada intento) está en
+  <code>docs/bitacora.html</code>.</p>
+
+  <!-- ====================================================== -->
+  <h2>3 · ¿Qué cuenta como PINN y qué no? (criterio metodológico)</h2>
+  <p>Esta distinción es importante para defender el OE2 ante la comisión. Una <b>PINN canónica</b>
+  (Raissi et al. [17]) requiere tres pilares:</p>
+  <ol>
+    <li>Red neuronal como aproximador de la solución.</li>
+    <li>Derivadas calculadas por <b>diferenciación automática (autograd)</b> a través de la red.</li>
+    <li>Las ecuaciones físicas en la <b>función de pérdida durante el entrenamiento</b>, entrenando la red junto con los parámetros.</li>
+  </ol>
+  <p><b>Regla práctica:</b> cambiar el optimizador (Adam/L-BFGS), el learning rate, el batch, la
+  arquitectura o los pesos de la pérdida <i>no</i> afecta el carácter de PINN —son decisiones de
+  cómo se entrena—. Lo único que saca de "PINN canónica" es: usar diferencias finitas en lugar de
+  autograd, o congelar la red (esquema en dos etapas, donde la red no aprende la física).</p>
+  <div class="nota">
+    <b>Ventaja para el informe:</b> tener los tres métodos no es redundante, es un activo. El método
+    FD es exactamente el <b>método clásico de comparación</b> que el OE2 exige; la PINN conjunta es
+    la PINN de manual; el híbrido muestra el trade-off intermedio. Esto cubre el eje
+    "PINN vs métodos clásicos" del OE2 de forma natural. La variante <b>RK-PINN [21]</b> (citada en
+    el proyecto) encaja como puente entre el FD y la PINN pura.
+  </div>
+
+  <!-- ====================================================== -->
+  <h2>4 · Roadmap · lo que falta <span class="pill oe">OE2 → OE3</span></h2>
+
+  <div class="card next">
+    <h3 style="margin-top:0">4.1 · Completar OE2 (Fase 2) — identificación</h3>
+    <ul>
+      <li><b>Barrido con ruido completo</b> de los 3 métodos (niveles 0 / 0.01 / 0.05 / 0.10) → curvas error-vs-ruido. <span class="pill warn">en ejecución</span></li>
+      <li><b>Neural ODEs</b> (<code>torchdiffeq</code>): el proyecto pide explícitamente comparar PINNs <i>y</i> Neural ODEs. Es el principal componente del OE2 todavía no implementado. <span class="pill bad">pendiente</span></li>
+      <li><b>Mínimos cuadrados no lineales</b> como baseline clásico formal sobre los mismos datos (además del FD/matching ya hecho).</li>
+      <li><b>Tabla comparativa final</b>: error paramétrico relativo + MSE de trayectoria + costo computacional, por método y nivel de ruido (cierre del OE2 / Informe Parcial).</li>
+    </ul>
+  </div>
+
+  <div class="card next">
+    <h3 style="margin-top:0">4.2 · OE3 estándar (Fase 3) — validación en lazo cerrado</h3>
+    <p style="margin:.3rem 0">Tal como lo define el proyecto: tomar el modelo identificado de mejor desempeño
+    (las ecuaciones WC con los pesos aprendidos θ̂) y conectarlo al <b>controlador IMC de referencia [13]</b>.</p>
+    <ul>
+      <li>Integrar θ̂ en el lazo con el controlador IMC + estimador de Kalman extendido [13].</li>
+      <li>Ejecutar la tarea de <b>sincronización theta–gamma</b> y comparar contra el modelo verdadero.</li>
+      <li><b>Mapa de robustez</b>: barrer nivel de ruido × variación paramétrica (incluso fuera del rango de entrenamiento) y caracterizar dónde se preserva o se degrada el control. → es el resultado central del OE3.</li>
+    </ul>
+    <p style="font-size:.86rem;color:#5b6770;margin:.3rem 0 0">Requiere conseguir/portar el controlador IMC del grupo [13]
+    al pipeline en Python. Es la dependencia externa principal de esta fase.</p>
+  </div>
+
+  <!-- ====================================================== -->
+  <h2>5 · Extensión novedosa · conectar el controlador directamente a la PINN <span class="pill novel">más allá del OE3</span></h2>
+
+  <div class="card novel">
+    <p><b>La idea.</b> El OE3 "estándar" usa la PINN solo para estimar los parámetros offline y después
+    controla las ecuaciones WC. La propuesta más novedosa es que el <b>controlador opere directamente
+    sobre la PINN como planta</b>: la red entrenada <i>es</i> el modelo de simulación dentro del lazo,
+    diferenciable de punta a punta.</p>
+
+    <h3>Qué hay que modificar de lo que tenemos</h3>
+    <p>Hoy la PINN mapea <code>t → [I,E]</code> para un estímulo <b>fijo</b>. Para conectarle un
+    controlador, tiene que volverse función de la <b>entrada de control</b> <code>u(t)=(P,Q)</code>:</p>
+    <ul>
+      <li><b>PINN condicionada al control:</b> entrada ampliada → la red aprende el <i>operador</i>
+      (estado, control) → evolución, no una sola trayectoria. Acerca la PINN a un modelo tipo
+      Neural-ODE controlable (<code>ẋ = f(x, u)</code>), unificando ambas arquitecturas del OE2.</li>
+      <li><b>Entrenar con familias de estímulos</b> (ya generamos multi-trayectoria con P,Q variados:
+      es la base de datos natural para esto).</li>
+      <li><b>Explotar la diferenciabilidad:</b> al ser autograd end-to-end, el controlador puede
+      <b>retropropagar a través de la planta</b> → control óptimo por gradiente / MPC diferenciable.</li>
+    </ul>
+
+    <h3>Por qué es novedoso y dónde se ancla</h3>
+    <p>El proyecto ya plantea la <i>validación orientada al control</i> como criterio nuevo. Esta
+    extensión va un paso más: convierte al modelo aprendido en un <b>plant diferenciable</b> para
+    síntesis de control, en la línea de trabajos recientes citados en el propio proyecto —MPC sobre
+    el manifold neural [7], DNN para MPC embebido [3], políticas de control para Hodgkin–Huxley [11]—.
+    Es material potencial para la publicación corta en revista que el proyecto contempla.</p>
+
+    <h3>Pasos sugeridos (incrementales, con plan de contingencia)</h3>
+    <ol>
+      <li>Primero cerrar OE3 estándar (PINN para θ̂ + controlador IMC clásico) → resultado seguro y suficiente para el concurso.</li>
+      <li>Prototipo de PINN condicionada al control sobre 1–2 familias de estímulos (validar que reproduce respuestas a entradas no vistas).</li>
+      <li>Conectar el controlador IMC sobre la PINN-planta y comparar contra el lazo con el modelo verdadero (misma métrica theta–gamma del OE3).</li>
+      <li>Si converge: explorar control por gradiente a través de la PINN (lo genuinamente novedoso).</li>
+    </ol>
+    <p style="font-size:.86rem;color:#5b6770;margin:.3rem 0 0"><b>Riesgo:</b> la PINN condicionada al control es
+    notablemente más difícil de entrenar que la de identificación. Por eso se propone como capa
+    <i>sobre</i> el OE3 ya cumplido, no como reemplazo —alineado con el plan de contingencia del proyecto
+    (si una arquitectura no converge, se degrada a una más simple sin perder el OE3)—.</p>
+  </div>
+
+  <!-- ====================================================== -->
+  <h2>6 · Mapa rápido avance ↔ objetivos del proyecto</h2>
+  <table>
+    <tr><th>Componente del proyecto</th><th>Fase</th><th>Estado</th></tr>
+    <tr><td>Simulador WC + datasets con ruido (OE1)</td><td>Fase 1 (m.1–2)</td><td><span class="pill ok">Hecho</span></td></tr>
+    <tr><td>Pipeline PINN (OE2)</td><td>Fase 2 (m.3–4)</td><td><span class="pill ok">PINN canónica validada s/ruido</span></td></tr>
+    <tr><td>Método clásico de comparación (OE2)</td><td>Fase 2</td><td><span class="pill ok">Hecho (FD/matching)</span></td></tr>
+    <tr><td>Pipeline Neural ODEs (OE2)</td><td>Fase 2</td><td><span class="pill bad">Pendiente</span></td></tr>
+    <tr><td>Barrido de ruido + tabla comparativa (OE2)</td><td>Fase 2</td><td><span class="pill warn">En curso</span></td></tr>
+    <tr><td>Integración con controlador IMC (OE3)</td><td>Fase 3 (m.5–6)</td><td><span class="pill bad">Pendiente</span></td></tr>
+    <tr><td>Mapa de robustez theta–gamma (OE3)</td><td>Fase 3</td><td><span class="pill bad">Pendiente</span></td></tr>
+    <tr><td><b>Controlador directo sobre la PINN</b> (extensión)</td><td>sobre Fase 3</td><td><span class="pill info">Propuesta novedosa</span></td></tr>
+  </table>
+
+
+</main>
+<footer>Documento de avance interno · Proyecto Wilson-Cowan + PINN · ITBA 2026 · generado para la reunión con el tutor</footer>
+</div></body></html>

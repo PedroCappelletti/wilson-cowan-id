@@ -1,0 +1,157 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fourier Features, explicado intuitivamente</title>
+<style>
+  body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2733;
+       line-height:1.65;margin:0;background:#f4f6f8;padding:2rem 1rem}
+  .wrap{max-width:880px;margin:0 auto}
+  header{background:#1f4e79;color:#fff;border-radius:12px 12px 0 0;padding:1.7rem 2rem}
+  header h1{margin:0;font-size:1.4rem;line-height:1.3}
+  header p{margin:.45rem 0 0;opacity:.92;font-size:.95rem}
+  main{background:#fff;border:1px solid #d7dee5;border-top:none;
+        border-radius:0 0 12px 12px;padding:1.6rem 2rem 2.2rem}
+  h2{color:#1f4e79;font-size:1.22rem;margin:2rem 0 .6rem;
+      padding-bottom:.35rem;border-bottom:2px solid #e8f0f8}
+  h3{color:#1f4e79;font-size:1.05rem;margin:1.2rem 0 .4rem}
+  code{background:#f0f3f6;padding:.1rem .35rem;border-radius:4px;
+       font-family:Consolas,monospace;font-size:.88em}
+  .eq{background:#f7fafd;border:1px solid #e1e8ef;border-radius:6px;
+      padding:.6rem .9rem;font-family:Consolas,monospace;font-size:.84rem;margin:.6rem 0;overflow-x:auto}
+  .nota{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.8rem 1.1rem;
+         border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.93rem}
+  .analogia{background:#fff7e6;border-left:4px solid #d99a00;padding:.8rem 1.1rem;
+            border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.94rem}
+  .fig{background:#fcfdfe;border:1px solid #e1e8ef;border-radius:8px;padding:.8rem;margin:1rem 0;text-align:center}
+  .fig .cap{font-size:.82rem;color:#5b6770;margin-top:.4rem}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.89rem}
+  th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid #d7dee5}
+  th{background:#e8f0f8;color:#1f4e79}
+  .pill{display:inline-block;padding:.12rem .55rem;border-radius:999px;font-size:.74rem;font-weight:700}
+  .ok{background:#e3f5ea;color:#1b7f4b} .bad{background:#fbe3e3;color:#b02a2a}
+  ul{margin:.4rem 0;padding-left:1.3rem} li{margin:.3rem 0}
+  footer{color:#5b6770;font-size:.82rem;text-align:center;margin-top:1.5rem}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Fourier Features, explicado con intuición</h1>
+  <p>Por qué le ponemos "anteojos con zoom" a la red · Proyecto Wilson-Cowan + PINN · ITBA 2026</p>
+</header>
+<main>
+
+  <div class="nota">
+    <b>En una frase:</b> en vez de darle a la red el tiempo <code>t</code> "pelado", le damos ese
+    mismo tiempo convertido en un montón de <b>ondas (senos y cosenos) de distintas velocidades</b>.
+    Eso le permite dibujar curvas con oscilaciones y detalles finos que, con el número crudo, no podría.
+  </div>
+
+  <!-- ================================================== -->
+  <h2>1 · El problema: la red ve un número plano</h2>
+  <p>Nuestra red recibe el <b>tiempo</b> (un solo número, ej. <code>t = 137.4 s</code>) y tiene que
+  devolver el estado del sistema <code>[I, E]</code>. Pero la actividad de Wilson-Cowan <b>oscila</b>
+  (es un ciclo límite: sube y baja muchas veces).</p>
+  <p>Una red común (un MLP con <code>tanh</code>) alimentada con <code>t</code> crudo es muy buena
+  haciendo curvas <b>suaves y lentas</b>, pero le cuesta enormemente representar oscilaciones rápidas.
+  A esto se lo llama <b>sesgo espectral</b>: la red "prefiere" lo suave y le escapa a lo que se repite
+  rápido.</p>
+
+  <div class="fig">
+    <svg viewBox="0 0 620 140" width="100%" style="max-width:600px">
+      <line x1="10" y1="70" x2="610" y2="70" stroke="#cbd5e0" stroke-width="1"/>
+      <!-- señal real que oscila (rojo) -->
+      <polyline fill="none" stroke="#b02a2a" stroke-width="2.5" points="10,70 35,48.8 60,40 85,48.8 110,70 135,91.2 160,100 185,91.2 210,70 235,48.8 260,40 285,48.8 310,70 335,91.2 360,100 385,91.2 410,70 435,48.8 460,40 485,48.8 510,70 535,91.2 560,100 585,91.2 610,70"/>
+      <!-- intento del MLP sin fourier (gris, casi plano) -->
+      <polyline fill="none" stroke="#8a96a3" stroke-width="2.5" stroke-dasharray="6 5" points="10,70 160,63 310,66 460,63 610,70"/>
+    </svg>
+    <div class="cap"><span style="color:#b02a2a">━</span> lo que la red debería dibujar (oscila) &nbsp;·&nbsp;
+    <span style="color:#8a96a3">┄</span> lo que un MLP sin Fourier logra: una envolvente suave que <b>se pierde los picos</b></div>
+  </div>
+
+  <div class="nota" style="background:#fbe3e3;border-left-color:#b02a2a">
+    <b>Esto nos pasó de verdad.</b> El primer intento con un MLP plano sobre <code>t</code> dejó la
+    pérdida de datos clavada en <b>~8e-3</b> y la predicción era una curva suave que no capturaba los
+    picos. Al agregar Fourier features bajó a <b>~5e-6</b> y la trayectoria se superpuso con la real.
+    (Registrado en <code>docs/bitacora.html</code>, paso 4.0.)
+  </div>
+
+  <!-- ================================================== -->
+  <h2>2 · El truco: convertir el tiempo en muchas ondas</h2>
+  <p>En vez de meter <code>t</code> directo, lo multiplicamos por varias "velocidades" (frecuencias)
+  y lo pasamos por senos y cosenos. La red nunca ve el número plano: ve esta <b>lista de ondas</b>:</p>
+  <div class="eq">features(t) = [ sin(2π·B₁·t), cos(2π·B₁·t),  sin(2π·B₂·t), cos(2π·B₂·t),  …,  sin(2π·Bₙ·t), cos(2π·Bₙ·t) ]</div>
+  <p>donde las <code>B</code> son las <b>frecuencias</b> (las "velocidades" de cada onda). Son
+  <b>fijas</b> — no se entrenan — y se eligen al azar con cierta dispersión. La red solo aprende
+  <b>cómo combinar</b> esas ondas para reconstruir la trayectoria.</p>
+
+  <h3>Ondas lentas y ondas rápidas = anteojos con zoom</h3>
+  <div class="fig">
+    <svg viewBox="0 0 620 200" width="100%" style="max-width:600px">
+      <!-- onda lenta -->
+      <text x="10" y="18" font-size="11" fill="#1f4e79">Onda LENTA (frecuencia baja) → formas grandes</text>
+      <line x1="10" y1="55" x2="610" y2="55" stroke="#e2e8f0" stroke-width="1"/>
+      <polyline fill="none" stroke="#1f6fb2" stroke-width="2.5" points="10,55 60,35 110,20.4 160,15 210,20.4 260,35 310,55 360,75 410,89.6 460,95 510,89.6 560,75 610,55"/>
+      <!-- onda rapida -->
+      <text x="10" y="130" font-size="11" fill="#1b7f4b">Onda RÁPIDA (frecuencia alta) → detalles finos</text>
+      <line x1="10" y1="165" x2="610" y2="165" stroke="#e2e8f0" stroke-width="1"/>
+      <polyline fill="none" stroke="#1b7f4b" stroke-width="2.5" points="10,165 35,146.5 60,140 85,146.5 110,165 135,183.5 160,190 185,183.5 210,165 235,146.5 260,140 285,146.5 310,165 335,183.5 360,190 385,183.5 410,165 435,146.5 460,140 485,146.5 510,165 535,183.5 560,190 585,183.5 610,165"/>
+    </svg>
+    <div class="cap">La red combina ondas de muchas velocidades a la vez: las lentas le dan la forma
+    general; las rápidas, los picos y los bordes.</div>
+  </div>
+  <div class="analogia">
+    <b>Analogía.</b> Es como darle a la red <b>anteojos con zoom</b>. Las
+    ondas lentas son la "vista panorámica" (la forma grande de la curva); las ondas rápidas son la
+    "lupa" (los detalles finos, los picos, los bordes). Con el número plano solo tenía la vista
+    borrosa.
+  </div>
+
+  <!-- ================================================== -->
+  <h2>3 · ¿Por qué ayuda tanto?</h2>
+  <ul>
+    <li><b>Le damos las curvas ya hechas.</b> En vez de pedirle a la red que "doble" líneas rectas
+    para fabricar oscilaciones (algo que le cuesta), le entregamos senos y cosenos —que <i>ya</i> son
+    curvas que suben y bajan—. Solo tiene que mezclarlas.</li>
+    <li><b>Captura lo que se repite.</b> Como las ondas son periódicas, la red entiende
+    al instante los patrones que se repiten —y la actividad de Wilson-Cowan es exactamente eso: una
+    oscilación que se repite—.</li>
+    <li><b>Rompe el sesgo espectral.</b> Las frecuencias altas, que el MLP solo nunca alcanzaba, ahora
+    vienen servidas desde la entrada.</li>
+  </ul>
+
+  <div class="nota">
+    <b>Una perilla importante: la "dispersión" de las frecuencias</b> (en el código,
+    <code>fourier_scale</code>). Más alta = ondas más rápidas disponibles = más capacidad de captar
+    picos agudos… pero también más capacidad de <b>ajustar ruido</b>. Lo vimos en el proyecto: bajarla
+    de más arruinó el ajuste. Es un balance entre "captar el detalle real" y "no copiar el ruido".
+  </div>
+
+  <!-- ================================================== -->
+  <h2>4 · ¿La red se entrena sobre esto? Sí</h2>
+  <p>Exacto: la red <b>nunca ve el tiempo plano</b>. Ve la lista de ondas que fabricamos, y entrena
+  directamente sobre eso. El flujo es:</p>
+  <div class="eq">t  →  [sin/cos de muchas frecuencias]  →  MLP  →  [I, E]</div>
+  <p>Las frecuencias <code>B</code> quedan fijas (parte del "preprocesamiento"); lo que se aprende son
+  los pesos del MLP que combinan las ondas.</p>
+
+  <!-- ================================================== -->
+  <h2>5 · En nuestro proyecto, concretamente</h2>
+  <table>
+    <tr><th>Detalle</th><th>Valor</th></tr>
+    <tr><td>Entrada</td><td>El tiempo <code>t ∈ [0, 600] s</code> (normalizado a [−1, 1])</td></tr>
+    <tr><td>Nº de frecuencias (<code>n_fourier</code>)</td><td>128 → genera 256 features (sin + cos)</td></tr>
+    <tr><td>Dispersión (<code>fourier_scale</code>)</td><td>6 (capta oscilaciones rápidas)</td></tr>
+    <tr><td>Salida</td><td>El estado <code>[I, E]</code> en ese instante</td></tr>
+    <tr><td>Resultado</td><td>Pérdida de datos: <span class="pill bad">~8e-3 sin Fourier</span> → <span class="pill ok">~5e-6 con Fourier</span></td></tr>
+  </table>
+
+  <div class="analogia">
+    <b>Resumen de bolsillo.</b> Fourier features = convertir el tiempo en una orquesta de ondas
+    lentas y rápidas. Las lentas dibujan la forma; las rápidas, los detalles. La red se entrena sobre
+    esa orquesta (nunca sobre el número crudo), y por eso puede reproducir las oscilaciones de
+    Wilson-Cowan que de otra forma se le escapaban.
+  </div>
+
+  <p style="font-size:.86rem;color:#5b6770">Ver también: <code>docs/modelos_explicacion.html</code>
+  (cómo funciona cada método) · el código está en <code>src/pinn/network.py</code>.</p>
+
+</main>
+<footer>Proyecto Wilson-Cowan + PINN · ITBA 2026 · documento explicativo</footer>
+</div></body></html>
