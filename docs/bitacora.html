@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bitácora — Identificación paramétrica Wilson-Cowan</title>
+<style>
+  body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2733;
+       line-height:1.6;margin:0;background:#f4f6f8;padding:2rem 1rem}
+  .wrap{max-width:920px;margin:0 auto}
+  header{background:#1f4e79;color:#fff;border-radius:12px 12px 0 0;padding:1.6rem 1.9rem}
+  header h1{margin:0;font-size:1.4rem}
+  header p{margin:.4rem 0 0;opacity:.9;font-size:.95rem}
+  main{background:#fff;border:1px solid #d7dee5;border-top:none;
+        border-radius:0 0 12px 12px;padding:1.5rem 1.9rem 2rem}
+  h2{color:#1f4e79;font-size:1.18rem;margin:1.8rem 0 .5rem;
+      padding-bottom:.3rem;border-bottom:2px solid #e8f0f8}
+  h3{color:#1f4e79;font-size:1.02rem;margin:1.2rem 0 .3rem}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.9rem}
+  th,td{text-align:left;padding:.45rem .7rem;border-bottom:1px solid #d7dee5;vertical-align:top}
+  th{background:#e8f0f8;color:#1f4e79}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  code{background:#f0f3f6;padding:.1rem .35rem;border-radius:4px;
+       font-family:Consolas,monospace;font-size:.88em}
+  .pill{display:inline-block;padding:.1rem .55rem;border-radius:999px;
+         font-size:.74rem;font-weight:700;margin-right:.35rem}
+  .ok{background:#e3f5ea;color:#1b7f4b}
+  .warn{background:#fbf0db;color:#b06a00}
+  .bad{background:#fbe3e3;color:#b02a2a}
+  .info{background:#e3eefb;color:#1f4e79}
+  .step{border-left:4px solid #1f4e79;background:#f7fafd;padding:.9rem 1.2rem;
+        border-radius:0 8px 8px 0;margin:1.1rem 0}
+  .step.fail{border-left-color:#b02a2a;background:#fdf6f6}
+  .step.win{border-left-color:#1b7f4b;background:#f5fbf7}
+  .step h3{margin-top:0}
+  .meta{color:#5b6770;font-size:.82rem;margin:.2rem 0 .6rem}
+  .kv{font-size:.9rem;margin:.3rem 0}
+  .nota{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.7rem 1rem;
+         border-radius:0 6px 6px 0;margin:1rem 0;font-size:.92rem}
+  footer{color:#5b6770;font-size:.82rem;text-align:center;margin-top:1.4rem}
+  ul{margin:.4rem 0 .4rem 0;padding-left:1.3rem}
+  li{margin:.2rem 0}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Bitácora del proceso — Identificación paramétrica Wilson-Cowan</h1>
+  <p>Registro cronológico de qué probamos, cómo dio, por qué, y qué cambiamos · ITBA 2026</p>
+</header>
+<main>
+
+  <div class="nota">
+    <b>Objetivo del proyecto:</b> recuperar los 4 pesos sinápticos de Wilson-Cowan
+    (<code>wEE=6.4</code>, <code>wEI=4.8</code>, <code>wIE=6.0</code>, <code>wII=1.2</code>)
+    a partir de trayectorias observadas, usando una PINN, y evaluar la robustez frente
+    a ruido de medición. Criterio de éxito: error relativo &lt; 10% en cada peso.
+  </div>
+
+  <h2>Contexto: el problema difícil es wII</h2>
+  <p>Los 4 pesos están <b>desacoplados en dos grupos</b> por la estructura de las ecuaciones:</p>
+  <table>
+    <tr><th>Ecuación</th><th>Identifica</th></tr>
+    <tr><td><code>u_e = wEE·E − wEI·I + P − θe</code></td><td>wEE, wEI</td></tr>
+    <tr><td><code>u_i = wIE·E − wII·I + Q − θi</code></td><td>wIE, wII</td></tr>
+  </table>
+  <p><b>wII es el más difícil:</b> es el peso más chico y multiplica a <code>I</code>
+  (población inhibitoria, de amplitud menor). El término <code>wII·I</code> aporta poco a
+  <code>u_i</code> → gradiente débil → error relativo alto. Además, en un ciclo límite
+  <code>E</code> e <code>I</code> oscilan correlacionados, y <code>wIE·E − wII·I</code>
+  queda casi degenerado (distintos pares (wIE, wII) dan el mismo residuo).</p>
+
+  <h2>Línea de tiempo</h2>
+
+  <!-- ============================================================= -->
+  <div class="step">
+    <h3><span class="pill info">MÉTODO A</span> Surrogate neuronal + diferencias finitas (multi-trayectoria)</h3>
+    <div class="meta">Script: <code>scripts/noise_sweep.py</code> · estado de partida</div>
+    <p>Estrategia en dos etapas: (1) una MLP por trayectoria ajusta los datos sin física;
+    (2) MLPs congeladas, las derivadas <code>dI/dt</code>, <code>dE/dt</code> se calculan por
+    <b>diferencias finitas</b> (FD, <code>dt=0.1</code>) y un <code>raw_w</code> compartido
+    minimiza el residuo físico sobre las 4 trayectorias. Las trayectorias usan P y Q distintos
+    para romper la correlación E/I.</p>
+    <div class="kv"><b>Resultado sin ruido (config original):</b></div>
+    <table>
+      <tr><th>peso</th><th class="num">error %</th></tr>
+      <tr><td>wEE</td><td class="num"><span class="pill ok">0.65%</span></td></tr>
+      <tr><td>wEI</td><td class="num"><span class="pill ok">1.57%</span></td></tr>
+      <tr><td>wIE</td><td class="num"><span class="pill ok">0.99%</span></td></tr>
+      <tr><td>wII</td><td class="num"><span class="pill ok">8.79%</span></td></tr>
+    </table>
+    <p>MSE train = <code>2.94e-6</code> (ajuste excelente). Los 4 pesos por debajo del 10%.
+    wII el rezagado, como predice la estructura.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step fail">
+    <h3><span class="pill bad">REGRESIÓN</span> Tres cambios juntos pensando en el ruido</h3>
+    <div class="meta">Objetivo: preparar el método para que aguante ruido</div>
+    <p>Aplicamos a la vez tres cambios pensados para robustez al ruido:</p>
+    <ul>
+      <li><b>Weight decay</b> (<code>1e-4</code>) en la MLP de Stage 1 — regularizar para que no ajuste ruido.</li>
+      <li><b>Fourier reducido</b> (frecuencias <code>128→64</code>, escala <code>6→4</code>) — menos capacidad para fittear ruido.</li>
+      <li><b>Trayectoria con Q alto</b> (Q_amp <code>0.5→1.8</code> en la traj 4) — inyectar amplitud en I para fortalecer el gradiente hacia wII.</li>
+    </ul>
+    <div class="kv"><b>Resultado sin ruido: wII saltó a 98.01%.</b> wEI y wIE también se degradaron.</div>
+    <table>
+      <tr><th>peso</th><th class="num">error %</th></tr>
+      <tr><td>wEE</td><td class="num"><span class="pill ok">1.42%</span></td></tr>
+      <tr><td>wEI</td><td class="num"><span class="pill ok">2.04%</span></td></tr>
+      <tr><td>wIE</td><td class="num"><span class="pill warn">8.94%</span></td></tr>
+      <tr><td>wII</td><td class="num"><span class="pill bad">98.01%</span></td></tr>
+    </table>
+    <p><b>Diagnóstico:</b> wIE y wII se fueron <i>juntos</i> hacia arriba (6.54 y 2.38) — la
+    degeneración <code>wIE·E − wII·I</code> empeoró. El <b>MSE train subió 26×</b>
+    (<code>2.94e-6 → 7.61e-5</code>): el método depende de derivadas FD precisas, y al recortar
+    la capacidad Fourier la MLP ajustó peor → derivadas sucias → wII (el más sensible) explotó.
+    Confundimos tres cambios y al menos uno arruinó la fidelidad que el caso sin ruido necesita.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step win">
+    <h3><span class="pill ok">DIAGNÓSTICO</span> Aislar la causa: revertir capacidad, dejar solo Q alto</h3>
+    <div class="meta">Un solo run, sin ruido, para separar las variables confundidas</div>
+    <p>Revertimos Fourier a <code>128/6</code> y weight decay a <code>0</code> (los que matan fidelidad),
+    dejando <b>solo</b> la trayectoria con Q alto. Agregamos un print del MSE de Stage 1 por trayectoria.</p>
+    <div class="kv"><b>Resultado sin ruido: wII bajó a 6.38%</b> (mejor que el 8.79% original).</div>
+    <table>
+      <tr><th>peso</th><th class="num">error %</th></tr>
+      <tr><td>wEE</td><td class="num"><span class="pill ok">1.42%</span></td></tr>
+      <tr><td>wEI</td><td class="num"><span class="pill ok">2.99%</span></td></tr>
+      <tr><td>wIE</td><td class="num"><span class="pill ok">0.68%</span></td></tr>
+      <tr><td>wII</td><td class="num"><span class="pill ok">6.38%</span></td></tr>
+    </table>
+    <p><b>Conclusión:</b> el culpable de la regresión fue <b>recortar la capacidad Fourier</b>,
+    no el Q alto. La trayectoria de Q alto es sana y <i>mejora</i> wII. Confirma el principio:
+    sin ruido se necesita máxima fidelidad (alta capacidad, sin regularización); la regularización
+    debe escalar con el ruido, no ser fija.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step">
+    <h3><span class="pill info">DECISIÓN</span> ¿El método A es realmente una PINN?</h3>
+    <p>Revisión honesta: el método A (FD + dos etapas) <b>no es una PINN canónica</b>.
+    Una PINN requiere (1) red como aproximador, (2) derivadas por <b>autograd</b>,
+    (3) física en la pérdida <b>durante</b> el entrenamiento (red y parámetros juntos).</p>
+    <table>
+      <tr><th>Requisito</th><th>Método A (FD)</th></tr>
+      <tr><td>NN como aproximador</td><td><span class="pill ok">Sí</span></td></tr>
+      <tr><td>Derivadas por autograd</td><td><span class="pill bad">No — usa FD</span></td></tr>
+      <tr><td>Entrenamiento conjunto</td><td><span class="pill bad">No — dos etapas, red congelada</span></td></tr>
+    </table>
+    <p>La desviación grande es <b>el entrenamiento en dos etapas</b> (la red nunca "aprende la
+    física", solo suaviza), más que el FD. El método A queda como el <b>"método clásico de
+    comparación"</b> que el concurso pide igual. Decisión: crear además la PINN canónica.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step">
+    <h3><span class="pill info">MÉTODO B</span> PINN canónica: autograd + entrenamiento conjunto + multi-trayectoria</h3>
+    <div class="meta">Script: <code>scripts/pinn_joint_sweep.py</code> · creado</div>
+    <p>Una sola fase: se optimizan a la vez los pesos de las 4 MLPs (una por trayectoria) y un
+    <code>raw_w</code> compartido (los 4 pesos físicos). Las derivadas salen por <b>autograd</b>;
+    la física entra en la pérdida durante el entrenamiento. La física actúa como
+    <b>regularizador</b>: la red no puede ajustar ruido de alta frecuencia sin violar la ecuación
+    (mecanismo más principista que el suavizado del FD). Mantiene las multi-trayectorias, que es
+    lo que rompe la degeneración de wII.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step win">
+    <h3><span class="pill ok">AJUSTE PINN #1</span> Learning rate separado para raw_w</h3>
+    <div class="meta">Técnica PINN estándar — no compromete que siga siendo PINN</div>
+    <p>El historial (<code>docs/approach_log.md</code>, Intentos 1-2) mostró que en entrenamiento
+    conjunto los pesos físicos reciben <b>gradiente débil</b> y se quedan en ~1.0 mientras la red
+    ajusta rápido. Solución: poner <code>raw_w</code> en su propio grupo del optimizador con
+    <b>lr 10× mayor</b> (<code>lr_MLP=1e-3</code>, <code>lr_raw_w=1e-2</code>), para que los pesos
+    recorran de 1.0 → 6.4 sin quedarse atrás. Ataca la causa raíz del stall de wII.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step fail">
+    <h3><span class="pill bad">RUN B-1</span> Primer run conjunto: el learning rate colapsó</h3>
+    <div class="meta">Síntoma detectado a tiempo, antes de desperdiciar el run completo</div>
+    <p>En epoch 500 el <code>lr</code> ya estaba en <code>1.6e-05</code> (arrancó en <code>1e-03</code>):
+    bajó ~60× en 500 epochs y congeló los pesos para los 19.500 restantes.</p>
+    <p><b>Causa:</b> el <code>ReduceLROnPlateau</code> pisaba sobre la loss <b>cruda del minibatch</b>
+    (ruidosa) → veía "no mejoró" todo el tiempo y reducía de más. <b>Fix:</b> pisar sobre una
+    <b>EMA</b> de la loss (suaviza el ruido del minibatch) y subir la paciencia (15 → 80).
+    Es optimización pura: no toca el carácter de PINN.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step fail">
+    <h3><span class="pill bad">RUN B-2</span> Con el lr sano, aparece el mínimo degenerado</h3>
+    <div class="meta">El problema real, ya sin la confusión del lr</div>
+    <p>Con <code>lr</code> estable, los pesos se movieron pero hacia el lugar equivocado:
+    wEE y wIE <b>subían</b> (bien), pero <b>wEI → 0.28</b> y <b>wII → 0.07</b> (colapsaban a cero).</p>
+    <p><b>Diagnóstico:</b> los dos pesos que <i>restan</i> en las ecuaciones colapsan. Es la
+    degeneración E/I: en las trayectorias ajustadas <code>E ≈ k·I</code>, entonces
+    <code>wEE·E − wEI·I ≈ (wEE − k·wEI)·E</code> → solo se identifica la combinación. Con la red
+    <b>libre</b>, se <b>co-adapta</b>: deforma su trayectoria para que pesos incorrectos satisfagan
+    la física. El método A (FD) evitaba esto porque congelaba las redes en la trayectoria verdadera.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step win">
+    <h3><span class="pill ok">AJUSTE PINN #2</span> Anclar la red con W_DATA alto — rompió la degeneración</h3>
+    <div class="meta">Sigue siendo PINN: es solo loss weighting</div>
+    <p>Subimos <code>W_DATA</code> de 1 → 20 para <b>anclar las redes a la trayectoria verdadera</b>,
+    imitando el efecto del freeze del método A pero sin congelar. Razón fina: <code>raw_w</code>
+    <b>solo</b> recibe gradiente de la física, así que pesar más los datos <i>no</i> frena la
+    identificación — solo evita que la red se escape.</p>
+    <div class="kv"><b>Resultado: la degeneración se rompió.</b> Comparación con el colapso:</div>
+    <table>
+      <tr><th>peso</th><th class="num">colapso (B-2)</th><th class="num">anclado (B-3)</th><th class="num">verdadero</th><th class="num">error</th></tr>
+      <tr><td>wEE</td><td class="num">3.76</td><td class="num">6.343</td><td class="num">6.4</td><td class="num"><span class="pill ok">0.9%</span></td></tr>
+      <tr><td>wEI</td><td class="num">0.28</td><td class="num">4.702</td><td class="num">4.8</td><td class="num"><span class="pill ok">2.0%</span></td></tr>
+      <tr><td>wIE</td><td class="num">5.53</td><td class="num">5.929</td><td class="num">6.0</td><td class="num"><span class="pill ok">1.2%</span></td></tr>
+      <tr><td>wII</td><td class="num">0.07</td><td class="num">1.074</td><td class="num">1.2</td><td class="num"><span class="pill warn">10.5%</span></td></tr>
+    </table>
+    <p><b>La PINN canónica conjunta converge.</b> wII quedó en 10.5%, apenas sobre el umbral. Detalle:
+    el <code>lr</code> volvió a colapsar (este scheduler no tenía <code>min_lr</code>) y congeló los
+    pesos en epoch ~9500 — wII no pudo seguir refinando.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step">
+    <h3><span class="pill info">SINCRONIZACIÓN</span> Recuperar trabajo del repo GitHub</h3>
+    <div class="meta">El clon local estaba 1 commit atrás del remoto</div>
+    <p>El remoto tenía un commit (<code>6fc0525</code>) con <code>src/pinn/multitraj.py</code>,
+    <code>scripts/train_multi.py</code> y reportes 4.1/4.2 que no estaban en el clon local. Se
+    integró por <b>fast-forward</b> (sin conflictos: nuestros archivos nuevos no colisionan).
+    Nuestro cambio en <code>train.py</code> (<code>weight_decay</code>) se re-aplicó sobre la versión
+    del remoto.</p>
+    <p><b>Hallazgo:</b> el <code>train.py</code> del remoto <b>ya traía</b> las soluciones que
+    redescubrimos hoy: <code>lr_weights</code> (lr separado para theta), <code>min_lr</code>
+    (anti-colapso), <code>physics_warmup</code> (curriculum datos-primero) y
+    <code>freeze_net_after_warmup</code>. <code>multitraj.py</code> es el tercer método del espectro:
+    autograd + dos etapas (freeze) — más PINN que el FD, pero no canónico.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step win">
+    <h3><span class="pill ok">AJUSTE PINN #3</span> min_lr anti-colapso + refinamiento L-BFGS</h3>
+    <div class="meta">Ambos son técnicas PINN estándar (solo cambian el optimizador)</div>
+    <p>Para cerrar wII bajo 10%: (1) <code>min_lr=1e-5</code> en el scheduler para que el lr no
+    colapse y los pesos sigan refinándose; (2) fase de <b>L-BFGS</b> al final (segundo orden,
+    line search de Wolfe), que es la receta canónica de PINNs (Adam para el grueso → L-BFGS para
+    cerrar fino). La pérdida, la red y el autograd no cambian → sigue siendo PINN.</p>
+    <div class="kv"><b>Resultado sin ruido (Adam + L-BFGS): la PINN canónica quedó validada.</b></div>
+    <table>
+      <tr><th>peso</th><th class="num">estimado</th><th class="num">verdadero</th><th class="num">error</th></tr>
+      <tr><td>wEE</td><td class="num">6.3928</td><td class="num">6.4</td><td class="num"><span class="pill ok">0.11%</span></td></tr>
+      <tr><td>wEI</td><td class="num">4.7864</td><td class="num">4.8</td><td class="num"><span class="pill ok">0.28%</span></td></tr>
+      <tr><td>wIE</td><td class="num">5.9985</td><td class="num">6.0</td><td class="num"><span class="pill ok">0.02%</span></td></tr>
+      <tr><td>wII</td><td class="num">1.1991</td><td class="num">1.2</td><td class="num"><span class="pill ok">0.07%</span></td></tr>
+    </table>
+    <p>MSE train = <code>9.49e-08</code>, max error = <b>0.3%</b>. El <code>min_lr</code> evitó el
+    congelamiento (wII llegó a 2.6% al final de Adam, vs 10.5% del run anterior) y L-BFGS lo cerró
+    a 0.07%. La PINN conjunta recupera los 4 pesos casi exactamente sin ruido.</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <div class="step win">
+    <h3><span class="pill ok">AJUSTE PINN #4</span> Toggle de lr fijo (para el barrido con ruido)</h3>
+    <div class="meta">Solo cambia el optimizador → sigue siendo PINN</div>
+    <p>Se agregó <code>FIXED_LR</code> (una línea): <code>True</code> = lr fijo durante todo Adam
+    (más rápido, no se ralentiza; la precisión la da L-BFGS), <code>False</code> = scheduler.
+    Para el barrido con ruido (4 niveles = mucho cómputo) conviene <code>True</code>. Validado que
+    sin ruido converge igual de bien.</p>
+  </div>
+
+  <h2>Palancas PINN-legítimas pendientes (si wII sigue rezagado)</h2>
+  <p>Todas son técnicas publicadas que <b>mantienen el carácter de PINN</b>:</p>
+  <ul>
+    <li><b>Adam → L-BFGS:</b> refinamiento final de segundo orden (conclusión del propio approach_log).</li>
+    <li><b>Pesado por ecuación del residuo:</b> dar más peso al residuo de la ecuación de I (donde vive wII).</li>
+    <li><b>Lambda adaptativo:</b> balanceo automático datos/física (learning-rate annealing de Wang et al.).</li>
+    <li><b>Causal/curriculum temporal:</b> ajustar primero tiempos tempranos (evita mínimos degenerados).</li>
+    <li><b>Hard-constraint de la condición inicial:</b> ansatz que cumple [I₀,E₀] por construcción.</li>
+  </ul>
+
+  <h2>Los tres métodos (espectro)</h2>
+  <table>
+    <tr><th>Método</th><th>Derivada</th><th>Red entrenada con física</th><th>¿PINN?</th><th>Rol</th></tr>
+    <tr><td><code>noise_sweep.py</code></td><td>FD</td><td>No (dos etapas)</td><td><span class="pill bad">No</span></td><td>comparación clásica</td></tr>
+    <tr><td><code>multitraj.py</code> / <code>train_multi.py</code></td><td>autograd</td><td>No (freeze)</td><td><span class="pill warn">gris</span></td><td>híbrido PINN-surrogate</td></tr>
+    <tr><td><code>pinn_joint_sweep.py</code></td><td>autograd</td><td>Sí (conjunto)</td><td><span class="pill ok">Sí, canónica</span></td><td>la PINN sin asteriscos</td></tr>
+  </table>
+
+  <h2>Estado actual y próximos pasos</h2>
+  <table>
+    <tr><th>Ítem</th><th>Estado</th></tr>
+    <tr><td>Método A (FD) sin ruido</td><td><span class="pill ok">wII 6.38% — funciona</span></td></tr>
+    <tr><td>Método A con ruido [0.01, 0.05, 0.10]</td><td><span class="pill warn">pendiente de correr</span></td></tr>
+    <tr><td>Método B (PINN conjunta) sin ruido</td><td><span class="pill ok">VALIDADO — max err 0.3% (Adam+L-BFGS)</span></td></tr>
+    <tr><td>Método B con ruido [0.01, 0.05, 0.10]</td><td><span class="pill warn">listo para correr (FIXED_LR=True)</span></td></tr>
+    <tr><td>Método A (FD) con ruido</td><td><span class="pill warn">pendiente de correr</span></td></tr>
+    <tr><td>Comparación A vs B vs híbrido (curvas error-vs-ruido)</td><td><span class="pill info">objetivo final</span></td></tr>
+    <tr><td>Checkpoint periódico + reanudar (robustez a cortes)</td><td><span class="pill info">pendiente (mejora de robustez)</span></td></tr>
+  </table>
+  <p><b>Siguiente:</b> correr <code>python scripts/pinn_joint_sweep.py</code> con los 4 niveles de
+  ruido (<code>FIXED_LR=True</code> para velocidad). Después barrer el método A (FD) con ruido y
+  comparar las curvas error-vs-ruido de los tres métodos como entregable del concurso.</p>
+
+</main>
+<footer>Proyecto Wilson-Cowan + PINN · Concurso I+D ITBA 2026 · documento vivo, se actualiza con cada experimento</footer>
+</div></body></html>

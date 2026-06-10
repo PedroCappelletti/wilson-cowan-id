@@ -35,6 +35,7 @@ class TrainConfig:
     lr_weights: float = 1e-3   # learning rate de los pesos a identificar (theta).
                                # Conviene mas alto que el de la red: theta arranca
                                # lejos y tiene que viajar mucho (ej. 1.0 -> 6.4).
+    weight_decay: float = 0.0   # regularizacion L2 de la red (clave bajo ruido: evita que la MLP ajuste el ruido)
     w_data: float = 1.0         # peso del termino de datos
     w_physics: float = 1.0      # peso del termino fisico (el "lambda")
     w_ic: float = 1.0           # peso de la condicion inicial
@@ -77,7 +78,8 @@ class Trainer:
         # Un solo optimizador, pero con DOS grupos: la red con su lr y los pesos
         # a identificar (raw_w) con un lr propio (normalmente mas alto). Asi theta
         # puede moverse rapido sin desestabilizar a la red.
-        grupos = [{"params": list(self.model.net.parameters()), "lr": config.lr}]
+        grupos = [{"params": list(self.model.net.parameters()), "lr": config.lr,
+                   "weight_decay": config.weight_decay}]
         if self.model.raw_w is not None:
             grupos.append({"params": [self.model.raw_w], "lr": config.lr_weights})
         self.opt = torch.optim.Adam(grupos)
