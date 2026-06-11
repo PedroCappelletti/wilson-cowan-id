@@ -113,6 +113,11 @@ LBFGS_STEPS  = 50     # pasos externos de L-BFGS (0 = desactivar). Cada uno hace
                       # hasta max_iter iteraciones internas con line search.
 LBFGS_LR     = 1.0    # lr de L-BFGS (con strong_wolfe, 1.0 es lo habitual)
 
+# --- Checkpoints (para no perder runs largos ante un corte) ---
+CHECKPOINT_EVERY = 2_000  # guardar estado cada N epochs de Adam
+RESUME           = True   # True = retoma desde el ultimo checkpoint de cada nivel;
+                          # False = ignora checkpoints viejos y arranca limpio (igual los guarda)
+
 OUT_DIR = Path("results")
 
 # #############################################################################
@@ -126,12 +131,15 @@ IDENTIFY = ("wEE", "wEI", "wIE", "wII")
 # =============================================================================
 #  ENTRENAMIENTO CONJUNTO MULTI-TRAYECTORIA
 # =============================================================================
-def train_joint(models: list, datasets: list, fixed: dict) -> tuple:
+def train_joint(models: list, datasets: list, fixed: dict, ckpt_path=None) -> tuple:
     """
     Optimiza SIMULTANEAMENTE:
       - los pesos de cada MLP (una por trayectoria), y
       - un unico raw_w compartido (los 4 pesos fisicos),
     con un solo optimizador. Las derivadas son por autograd (physics_loss).
+
+    Si ckpt_path se da, guarda el estado cada CHECKPOINT_EVERY epochs y (si
+    RESUME) retoma desde ahi en vez de arrancar de cero.
     """
     dev = "cpu"
 
@@ -177,7 +185,37 @@ def train_joint(models: list, datasets: list, fixed: dict) -> tuple:
     hist = {"loss": [], "data": [], "physics": [], "ic": [], **{k: [] for k in IDENTIFY}}
     ema = None  # media movil de la loss para el scheduler (ignora ruido del minibatch)
 
-    for epoch in range(EPOCHS):
+    # -------------------------------------------------------------------------
+    #  CHECKPOINTING: guardar el estado completo (redes + raw_w + optimizador +
+    #  historial) cada CHECKPOINT_EVERY epochs, y reanudar desde ahi si RESUME.
+    # -------------------------------------------------------------------------
+    def save_ckpt(epoch, phase):
+        if ckpt_path is None:
+            return
+        ckpt_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save({
+            "epoch": epoch, "phase": phase,
+            "models": [m.state_dict() for m in models],
+            "raw_w": raw_w.detach().clone(),
+            "opt": opt.state_dict(),
+            "hist": hist,
+        }, ckpt_path)
+
+    start_epoch = 0
+    if RESUME and ckpt_path is not None and ckpt_path.exists():
+        ck = torch.load(ckpt_path)
+        for m, sd in zip(models, ck["models"]):
+            m.load_state_dict(sd)
+        raw_w.data.copy_(ck["raw_w"])
+        hist = ck["hist"]
+        if ck["phase"] == "done":
+            print(f"  [checkpoint] nivel ya completo (epoch {ck['epoch']}) -> salteo el entrenamiento")
+            return hist, raw_w.detach()
+        opt.load_state_dict(ck["opt"])
+        start_epoch = ck["epoch"] + 1
+        print(f"  [checkpoint] reanudando Adam desde epoch {start_epoch}")
+
+    for epoch in range(start_epoch, EPOCHS):
         opt.zero_grad()
         params = build_params()
 
@@ -219,6 +257,14 @@ def train_joint(models: list, datasets: list, fixed: dict) -> tuple:
                 f"| lr={lr_now:.1e} | "
                 + " ".join(f"{k}={wdict[k]:.3f}" for k in IDENTIFY)
             )
+
+        # Checkpoint periodico (cada CHECKPOINT_EVERY epochs de Adam).
+        if (epoch + 1) % CHECKPOINT_EVERY == 0:
+            save_ckpt(epoch, "adam")
+
+    # Guardar al terminar Adam: si un corte ocurre durante L-BFGS, al reanudar
+    # se saltea Adam (start_epoch = EPOCHS) y se rehace solo L-BFGS.
+    save_ckpt(EPOCHS - 1, "adam")
 
     # =========================================================================
     #  REFINAMIENTO FINAL CON L-BFGS (segundo orden, cierra lo que Adam dejo).
@@ -271,6 +317,9 @@ def train_joint(models: list, datasets: list, fixed: dict) -> tuple:
                     + " ".join(f"{k}={wdict[k]:.3f}" for k in IDENTIFY)
                 )
 
+    # Checkpoint final: marca el nivel como completo (al reanudar se saltea).
+    save_ckpt(EPOCHS - 1, "done")
+
     hist["stop_epoch"] = len(hist["loss"]) - 1
     return hist, raw_w.detach()
 
@@ -319,9 +368,10 @@ def run_one(noise_std: float) -> dict:
         models.append(model)
         datasets.append(ds)
 
-    # --- Entrenamiento conjunto.
+    # --- Entrenamiento conjunto (con checkpoint por nivel de ruido).
     print(f"\n  Entrenamiento conjunto — {len(models)} trayectorias, raw_w compartido, autograd")
-    hist, final_raw_w = train_joint(models, datasets, fixed)
+    ckpt_path = OUT_DIR / "checkpoints" / f"ckpt_{tag}.pt"
+    hist, final_raw_w = train_joint(models, datasets, fixed, ckpt_path)
 
     # --- Pesos finales.
     w_vals = F.softplus(final_raw_w)

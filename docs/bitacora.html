@@ -261,8 +261,9 @@
     <div class="meta">Solo cambia el optimizador → sigue siendo PINN</div>
     <p>Se agregó <code>FIXED_LR</code> (una línea): <code>True</code> = lr fijo durante todo Adam
     (más rápido, no se ralentiza; la precisión la da L-BFGS), <code>False</code> = scheduler.
-    Para el barrido con ruido (4 niveles = mucho cómputo) conviene <code>True</code>. Validado que
-    sin ruido converge igual de bien.</p>
+    Para el barrido con ruido (4 niveles = mucho cómputo) conviene <code>True</code>. <b>Validado:</b>
+    con <code>FIXED_LR=True</code> el run sin ruido dio error máx <b>0.2%</b> (wII 0.17%), igual o mejor
+    que el scheduler (0.3%). La config rápida converge perfecto.</p>
   </div>
 
   <h2>Palancas PINN-legítimas pendientes (si wII sigue rezagado)</h2>
@@ -283,6 +284,67 @@
     <tr><td><code>pinn_joint_sweep.py</code></td><td>autograd</td><td>Sí (conjunto)</td><td><span class="pill ok">Sí, canónica</span></td><td>la PINN sin asteriscos</td></tr>
   </table>
 
+  <!-- ============================================================= -->
+  <div class="step">
+    <h3><span class="pill info">OBJETIVO NUEVO</span> Entradas P, Q variables en el tiempo (excitación persistente)</h3>
+    <div class="meta">Mejorar identificabilidad y acercarse al régimen de control</div>
+    <p>Hasta acá los estímulos eran pulsos cuadrados. Se incorpora el objetivo de usar entradas que
+    <b>varían en el tiempo</b> (senoides, multisenos, chirps): recorren más estados → el problema
+    inverso queda mejor condicionado (excitación persistente), y se parecen más a lo que produce un
+    controlador. Se agregaron los generadores (<code>sine_pulse</code>, <code>multisine_pulse</code>,
+    <code>chirp_pulse</code> en <code>model.py</code>) y un demo (<code>scripts/demo_estimulos.py</code>).</p>
+    <p><b>Hallazgo del demo:</b> la métrica ingenua <code>std(E)·std(I)</code> resultó engañosa —
+    premia la <i>amplitud</i> de oscilación (gana el pulso cuadrado, que sostiene un ciclo límite
+    grande) y no la <i>diversidad</i> de estados. En los retratos de fase, el <b>multiseno</b> es el
+    que más llena el plano (lo realmente útil para identificar). El régimen se mantiene sano (no
+    satura) con las 4 entradas. La prueba definitiva no es una métrica proxy sino correr la
+    identificación con esas entradas.</p>
+  </div>
+
+  <h2>Extensión orientada al control (OE3): el modelo como planta</h2>
+
+  <div class="step">
+    <h3><span class="pill info">CAMBIO DE ALCANCE</span> El modelo aprendido como planta del lazo cerrado</h3>
+    <p>Se amplía el alcance más allá de la identificación paramétrica: el <b>modelo aprendido debe ser
+    la planta</b> del lazo cerrado — recibir los estímulos <code>P, Q</code> que el controlador genera
+    online y reproducir la dinámica de Wilson-Cowan — para que el controlador IMC logre la
+    sincronización theta-gamma operando sobre el modelo aprendido, no sobre las ecuaciones verdaderas.</p>
+  </div>
+
+  <div class="step win">
+    <h3><span class="pill ok">DECISIÓN DE ARQUITECTURA</span> Neural ODE gray-box (no una PINN <code>t→estado</code>, no black-box)</h3>
+    <p>Dos razones, ambas estructurales:</p>
+    <ul>
+      <li><b>El controlador genera <code>P,Q</code> online por realimentación</b> → el modelo tiene que
+      ser de estados <code>ẋ = f_θ(x, P, Q)</code> (forma Neural ODE), integrable paso a paso. Una PINN
+      <code>t→[I,E]</code> no puede ser la planta (necesitaría el estímulo completo por adelantado).</li>
+      <li><b>El controlador hace feedback linearization</b> — cancela el acoplamiento con
+      <code>(wIE·E − wII·I)</code> asumiendo la estructura Wilson-Cowan. Por eso el modelo debe ser
+      <b>gray-box</b> (estructura WC + corrección neuronal), no black-box, o la cancelación no calza.</li>
+    </ul>
+    <p>Resultado: <b>Neural ODE gray-box</b> = backbone WC (pesos inicializados desde la PINN) +
+    corrección <code>g<sub>φ</sub></code> opcional. La PINN no se descarta: aporta identificación e
+    inicialización. Además, esto <b>completa el Neural ODE</b> que el OE2 también pedía. Para <i>solo</i>
+    meter parámetros en el controlador no haría falta Neural ODE (la PINN basta); el modelo <i>como
+    planta</i> sí lo requiere. Plan completo en <code>docs/plan_planta_neural.html</code>.</p>
+  </div>
+
+  <div class="step win">
+    <h3><span class="pill ok">IMPLEMENTADO</span> Port del controlador IMC + módulo de planta — validado</h3>
+    <div class="meta">Módulo nuevo <code>src/neural_ode/</code> (no toca el pipeline de identificación)</div>
+    <p>Se portó a Python el controlador IMC (estados integradores, salida PI, saturación, sigmoidea
+    inversa, cancelación con los pesos) en <code>closed_loop.py</code>, con la <b>planta enchufable</b>
+    (verdadera o aprendida). Se sumaron <code>dynamics.py</code> (el modelo <code>f_θ</code> gray-box) e
+    <code>integrate.py</code> (RK4 diferenciable).</p>
+    <p><b>Validación:</b> <code>scripts/eval_closed_loop.py</code> corre el lazo con la planta verdadera
+    (V0) y reproduce el seguimiento de las referencias theta-gamma (RMSE en régimen ≈ <b>0.03</b>),
+    consistente con el resultado del controlador original. El port quedó verificado.</p>
+    <p><b>Decisiones de diseño pendientes:</b> (1) unidades de tiempo (ms del control vs s de la
+    identificación); (2) modelo de medición (estado completo vs LFP + EKF); (3) diseño del dataset
+    multi-variante y el split en espacio de entradas; (4) detalles de entrenamiento (V0→V1, multiple
+    shooting, paso de integración).</p>
+  </div>
+
   <h2>Estado actual y próximos pasos</h2>
   <table>
     <tr><th>Ítem</th><th>Estado</th></tr>
@@ -291,12 +353,17 @@
     <tr><td>Método B (PINN conjunta) sin ruido</td><td><span class="pill ok">VALIDADO — max err 0.3% (Adam+L-BFGS)</span></td></tr>
     <tr><td>Método B con ruido [0.01, 0.05, 0.10]</td><td><span class="pill warn">listo para correr (FIXED_LR=True)</span></td></tr>
     <tr><td>Método A (FD) con ruido</td><td><span class="pill warn">pendiente de correr</span></td></tr>
-    <tr><td>Comparación A vs B vs híbrido (curvas error-vs-ruido)</td><td><span class="pill info">objetivo final</span></td></tr>
-    <tr><td>Checkpoint periódico + reanudar (robustez a cortes)</td><td><span class="pill info">pendiente (mejora de robustez)</span></td></tr>
+    <tr><td>Comparación A vs B vs híbrido (curvas error-vs-ruido)</td><td><span class="pill info">objetivo final OE2</span></td></tr>
+    <tr><td>Checkpoint periódico + reanudar (robustez a cortes)</td><td><span class="pill ok">implementado en pinn_joint_sweep.py</span></td></tr>
+    <tr><td>Port del controlador IMC + lazo cerrado (V0)</td><td><span class="pill ok">implementado y validado (RMSE ≈ 0.03)</span></td></tr>
+    <tr><td>Neural ODE gray-box como planta (V0→V1)</td><td><span class="pill warn">modelo y módulo listos; falta dataset + entrenamiento</span></td></tr>
+    <tr><td>Validación orientada al control (theta-gamma, mapa de robustez)</td><td><span class="pill info">objetivo OE3</span></td></tr>
   </table>
-  <p><b>Siguiente:</b> correr <code>python scripts/pinn_joint_sweep.py</code> con los 4 niveles de
-  ruido (<code>FIXED_LR=True</code> para velocidad). Después barrer el método A (FD) con ruido y
-  comparar las curvas error-vs-ruido de los tres métodos como entregable del concurso.</p>
+  <p><b>Siguiente (OE2):</b> correr <code>pinn_joint_sweep.py</code> y <code>noise_sweep.py</code> con
+  los 4 niveles de ruido y comparar las curvas error-vs-ruido de los tres métodos.</p>
+  <p><b>Siguiente (OE3):</b> fijar las decisiones de diseño (unidades de tiempo, modelo de medición),
+  generar el dataset multi-variante, entrenar el Neural ODE gray-box (V0→V1) y conectarlo al
+  controlador en lugar de la planta verdadera para medir si se preserva la sincronización theta-gamma.</p>
 
 </main>
 <footer>Proyecto Wilson-Cowan + PINN · Concurso I+D ITBA 2026 · documento vivo, se actualiza con cada experimento</footer>

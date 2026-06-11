@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Plan — Modelo neuronal como planta controlable (Neural ODE gray-box)</title>
+<style>
+  body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2733;
+       line-height:1.6;margin:0;background:#f4f6f8;padding:2rem 1rem}
+  .wrap{max-width:980px;margin:0 auto}
+  header{background:#1f4e79;color:#fff;border-radius:12px 12px 0 0;padding:1.7rem 2rem}
+  header h1{margin:0;font-size:1.4rem;line-height:1.3}
+  header p{margin:.45rem 0 0;opacity:.92;font-size:.95rem}
+  main{background:#fff;border:1px solid #d7dee5;border-top:none;
+        border-radius:0 0 12px 12px;padding:1.6rem 2rem 2.2rem}
+  h2{color:#1f4e79;font-size:1.22rem;margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid #e8f0f8}
+  h3{color:#1f4e79;font-size:1.05rem;margin:1.3rem 0 .4rem}
+  code{background:#f0f3f6;padding:.1rem .35rem;border-radius:4px;font-family:Consolas,monospace;font-size:.88em}
+  pre{background:#f7fafd;border:1px solid #e1e8ef;border-radius:6px;padding:.7rem .9rem;
+      font-family:Consolas,monospace;font-size:.82rem;overflow-x:auto;line-height:1.45}
+  .eq{background:#f7fafd;border:1px solid #e1e8ef;border-radius:6px;padding:.6rem .9rem;
+      font-family:Consolas,monospace;font-size:.83rem;margin:.6rem 0;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.89rem}
+  th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid #d7dee5;vertical-align:top}
+  th{background:#e8f0f8;color:#1f4e79} td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .pill{display:inline-block;padding:.12rem .55rem;border-radius:999px;font-size:.74rem;font-weight:700;margin-right:.3rem}
+  .ok{background:#e3f5ea;color:#1b7f4b} .warn{background:#fbf0db;color:#b06a00}
+  .bad{background:#fbe3e3;color:#b02a2a} .info{background:#e3eefb;color:#1f4e79} .oe{background:#ede3fb;color:#5b2a9e}
+  .nota{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.8rem 1.1rem;border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.92rem}
+  .step{border:1px solid #d7dee5;border-left:4px solid #1f4e79;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1.1rem 0}
+  .step h3{margin-top:0}
+  .num-badge{display:inline-block;background:#1f4e79;color:#fff;border-radius:50%;width:1.5rem;height:1.5rem;
+             text-align:center;line-height:1.5rem;font-size:.85rem;font-weight:700;margin-right:.5rem}
+  ul,ol{margin:.4rem 0;padding-left:1.4rem} li{margin:.3rem 0}
+  .rec{background:#f5fbf7;border-left:4px solid #1b7f4b}
+  footer{color:#5b6770;font-size:.82rem;text-align:center;margin-top:1.5rem}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Plan — Modelo neuronal como planta controlable</h1>
+  <p>Neural ODE gray-box que imita la dinámica de Wilson-Cowan y responde a los estímulos del controlador IMC · extensión del OE3 · ITBA 2026</p>
+</header>
+<main>
+
+  <div class="nota">
+    <b>Objetivo (lo que pidió el tutor).</b> No quedarse en la identificación paramétrica: que el
+    <b>modelo aprendido sea la planta</b> del lazo cerrado — que reciba los estímulos <code>P, Q</code>
+    que genera el controlador online y reproduzca el comportamiento del Wilson-Cowan, de modo que el
+    controlador IMC de referencia [13] logre la sincronización theta-gamma operando sobre el modelo
+    aprendido (no sobre las ecuaciones verdaderas).
+  </div>
+
+  <!-- ============================================ -->
+  <h2>0 · Decisión de arquitectura (y por qué)</h2>
+  <p>El controlador genera <code>P, Q</code> <b>online por realimentación</b>. Por eso el modelo
+  tiene que ser un <b>modelo de estados</b> <code>ẋ = f_θ(x, P, Q)</code> (forma Neural ODE):
+  integrable paso a paso con el control instantáneo. Una PINN <code>t→[I,E]</code> no puede ser la
+  planta (necesitaría el estímulo completo de antemano).</p>
+
+  <div class="nota rec">
+    <b>Restricción clave del controlador real:</b> hace <b>feedback linearization</b> — cancela el
+    acoplamiento con el término <code>(wIE·E − wII·I)</code> e invierte la sigmoidea, asumiendo la
+    <b>estructura Wilson-Cowan</b>. Por lo tanto el modelo aprendido <b>debe conservar esa estructura</b>
+    (gray-box). Un black-box puro NO sería compatible con este controlador. → La arquitectura no es una
+    preferencia: es un <b>requisito de compatibilidad</b>.
+  </div>
+
+  <h3>Arquitectura recomendada: Neural ODE gray-box (physics-informed)</h3>
+  <div class="eq">İ = (1/ti)·( −I + σ(ai·(wIE·E − wII·I + Q − θi)) − ki ) + g<sub>φ</sub><sup>I</sup>(I,E,P,Q)<br>
+Ė = (1/te)·( −E + σ(ae·(wEE·E − wEI·I + P − θe)) − ke ) + g<sub>φ</sub><sup>E</sup>(I,E,P,Q)</div>
+  <ul>
+    <li><b>Backbone físico:</b> la estructura WC exacta, con los pesos <b>inicializados desde la PINN</b> (lo que ya identificamos), opcionalmente ajustables.</li>
+    <li><b>Corrección neuronal <code>g<sub>φ</sub></code>:</b> un MLP chico que captura lo que el backbone no modela. Es la parte "aprendida" genuina. Con datos sintéticos del WC exacto tiende a ≈0, pero es lo que da robustez ante mismatch y habilita el aporte novedoso.</li>
+  </ul>
+
+  <h3>Espectro de variantes (de seguro a novedoso)</h3>
+  <table>
+    <tr><th>Variante</th><th>Qué es</th><th>Rol</th></tr>
+    <tr><td><b>V0 — white-box</b></td><td>WC con pesos de la PINN, sin corrección</td><td>Baseline: valida el lazo. Funciona seguro.</td></tr>
+    <tr><td><b>V1 — gray-box</b> <span class="pill ok">recomendada</span></td><td>WC + corrección <code>g<sub>φ</sub></code> chica</td><td>Novedosa y probable de funcionar. Compatible con el controlador.</td></tr>
+    <tr><td><b>V2 — gris oscuro</b></td><td><code>f_θ</code> más libre, manteniendo la entrada dentro de la sigmoidea</td><td>Más novedosa, más riesgo. Solo si V1 anda.</td></tr>
+  </table>
+  <p style="font-size:.88rem">Estrategia: empezar por <b>V0</b> (¿el lazo cierra con el modelo en vez de las ecuaciones?), subir a <b>V1</b> (el entregable), y <b>V2</b> solo como exploración. Alineado con el plan de contingencia del concurso (degradar a algo más simple si lo complejo no converge).</p>
+
+  <!-- ============================================ -->
+  <h2>1 · Estructura de carpetas (módulo aparte)</h2>
+  <p>No tocamos el pipeline de identificación que ya funciona. Módulo nuevo:</p>
+  <pre>src/neural_ode/
+  __init__.py
+  dynamics.py        # f_θ gray-box: ẋ = f(x, P, Q)  (backbone WC + corrección g_φ)
+  integrate.py       # wrapper de integración (torchdiffeq o RK4 propio)
+  dataset_multi.py   # genera la grilla de escenarios + split train/test en INPUT space
+  train_ode.py       # entrenamiento (multiple shooting + loss)
+  closed_loop.py     # co-simulación: controlador IMC + planta aprendida
+scripts/
+  gen_multi_dataset.py     # genera y guarda el dataset multi-variante
+  train_neural_ode.py      # entrena el modelo de estados
+  eval_closed_loop.py      # corre el lazo cerrado y mide theta-gamma
+data/processed/control/    # datasets multi-variante
+results/                   # reportes + checkpoints</pre>
+
+  <!-- ============================================ -->
+  <h2>2 · Plan por pasos</h2>
+
+  <div class="step">
+    <h3><span class="num-badge">1</span>Reconciliar unidades de tiempo <span class="pill warn">prerequisito</span></h3>
+    <p>El controlador trabaja en <b>ms</b> (<code>tf=50</code>, referencias de 120 Hz = gamma); nuestra
+    identificación corrió en <b>s</b> (<code>tf=600</code>). Mismas ecuaciones, pero hay que fijar las
+    unidades de <code>te, ti</code> y de las frecuencias de estímulo/referencia. <b>Acción:</b> definir
+    con el tutor la escala correcta y unificar todo el pipeline a esa escala antes de generar datos.</p>
+  </div>
+
+  <div class="step">
+    <h3><span class="num-badge">2</span>Generador de dataset multi-variante <span class="pill ok">casi hecho</span></h3>
+    <p>Ya tenemos los generadores (<code>box_pulse</code>, <code>sine_pulse</code>,
+    <code>multisine_pulse</code>, <code>chirp_pulse</code>). Falta el script que arme la grilla y
+    guarde el dataset:</p>
+    <ul>
+      <li><b>Grilla de escenarios:</b> escalones + senoides + multisenos + chirps, variando amplitud y frecuencia. ~40-50 para arrancar.</li>
+      <li><b>Cubrir el envoltorio del controlador:</b> rango de amplitudes y frecuencias que el controlador puede comandar (hasta la banda gamma). Las entradas deben parecerse a lo que el controlador produce.</li>
+      <li><b>Split train/test en el ESPACIO DE ENTRADAS:</b> reservar escenarios completos (ciertas amplitudes/frecuencias) que el modelo NO ve en entrenamiento → test de generalización ("¿responde a estímulos nuevos?", el análogo de responder al controlador).</li>
+      <li><b>Volumen:</b> ~50 variantes × ~2000-6000 puntos ≈ 100k-300k muestras <code>(t, I, E, P, Q)</code>. Metadatos de reproducibilidad (seed, parámetros).</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="num-badge">3</span>Modelo de dinámica — <code>dynamics.py</code></h3>
+    <ul>
+      <li>Implementar <code>f_θ(x, P, Q)</code> con el backbone WC (estructura exacta) + corrección <code>g<sub>φ</sub></code> (MLP chico, ej. 2 capas × 32).</li>
+      <li>Pesos del backbone inicializados desde el checkpoint de la PINN (identificación).</li>
+      <li>Mantener la entrada dentro de la sigmoidea (para compatibilidad con la inversión del controlador).</li>
+      <li>Que <code>g<sub>φ</sub></code> se pueda apagar (→ recupera V0 white-box) con un flag.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="num-badge">4</span>Entrenamiento — <code>train_ode.py</code></h3>
+    <ul>
+      <li><b>Integrar</b> <code>f_θ</code> sobre cada escenario con su <code>P(t), Q(t)</code> (torchdiffeq, o RK4 de paso fijo propio). Comparar la trayectoria predicha con la observada (MSE).</li>
+      <li><b>Multiple shooting / ventanas cortas:</b> en vez de integrar los 600 s de una, partir en ventanas y reiniciar desde el estado observado. Es el truco estándar que estabiliza el entrenamiento de Neural ODEs (evita que el gradiente explote en horizontes largos).</li>
+      <li><b>Loss:</b> ajuste a datos; opcional residuo físico (la estructura ya mete la física, así que el residuo es redundante con el backbone — usar si V2).</li>
+      <li><b>Optimizador:</b> Adam → L-BFGS (igual que en la PINN).</li>
+      <li>Reusar el <b>checkpointing</b> que ya hicimos para runs largos.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="num-badge">5</span>Validación open-loop (generalización)</h3>
+    <p>Antes de meterlo en el lazo: ¿el modelo responde bien a los <b>escenarios held-out</b> (entradas
+    que no vio)? Métrica: MSE de la trayectoria en los escenarios de test. Si generaliza acá, hay chance
+    de que funcione en lazo cerrado. Si no, no tiene sentido seguir → volver a 2/3/4.</p>
+  </div>
+
+  <div class="step">
+    <h3><span class="num-badge">6</span>Conexión con el controlador — <code>closed_loop.py</code> <span class="pill oe">OE3</span></h3>
+    <ul>
+      <li>Portar el controlador IMC de MATLAB a Python (estados <code>Z1, Z2</code>, salida LTI <code>5·Z+K·error</code>, saturación, sigmoidea inversa, cancelación <code>P=up−(wEE·E−wEI·I)</code>).</li>
+      <li><b>Reemplazar la planta WC verdadera por <code>f_θ</code></b> en el lazo. El controlador genera <code>P, Q</code> → se los damos a <code>f_θ</code> → integra → devuelve estado → el controlador recalcula. Co-simulación.</li>
+      <li>Tarea: seguimiento de las referencias theta-gamma (las senoides de 120 Hz del archivo del controlador).</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="num-badge">7</span>Validación orientada al control + mapa de robustez <span class="pill oe">OE3</span></h3>
+    <ul>
+      <li>Comparar el seguimiento theta-gamma con la planta aprendida vs. con la planta verdadera. ¿Se preserva?</li>
+      <li><b>Mapa de robustez:</b> barrer nivel de ruido (en los datos de entrenamiento del modelo) × variación paramétrica, y caracterizar dónde el control se preserva o se degrada. Es el resultado central del OE3.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="num-badge">8</span>Reporte</h3>
+    <p>HTML autocontenido: generalización open-loop (held-out), seguimiento en lazo cerrado (planta
+    aprendida vs verdadera), mapa de robustez. Actualizar bitácora.</p>
+  </div>
+
+  <!-- ============================================ -->
+  <h2>3 · Riesgos y contingencia</h2>
+  <table>
+    <tr><th>Riesgo</th><th>Mitigación</th></tr>
+    <tr><td>Neural ODE difícil de entrenar (ciclo límite, horizontes largos)</td><td>Gray-box (backbone físico) + multiple shooting + init desde la PINN. Si falla: V0 white-box (siempre funciona).</td></tr>
+    <tr><td>El modelo no generaliza a entradas nuevas</td><td>Más/mejor cobertura del dataset (paso 2); el test held-out lo detecta temprano.</td></tr>
+    <tr><td>Incompatibilidad con el controlador (cancelación)</td><td>Mantener estructura WC (gray-box, no black-box). Ya contemplado en el diseño.</td></tr>
+    <tr><td>Inestabilidad en lazo cerrado</td><td>Empezar con V0 (planta = ecuaciones con θ̂) para aislar si el problema es el control o el modelo aprendido.</td></tr>
+  </table>
+
+  <!-- ============================================ -->
+  <h2>4 · Relación con los objetivos del concurso</h2>
+  <ul>
+    <li><span class="pill oe">OE2</span> El modelo de estados <b>es un Neural ODE</b> → completa la segunda arquitectura que el OE2 pide (todavía pendiente), además de la PINN.</li>
+    <li><span class="pill oe">OE3</span> Es la "validación orientada al control" llevada a su forma más fuerte: el modelo aprendido <i>como planta</i>, no solo sus parámetros.</li>
+    <li><b>Rol de la PINN:</b> identificación (OE2) + inicialización/regularización del backbone del Neural ODE. No se descarta nada de lo hecho.</li>
+    <li><b>Aporte novedoso:</b> un modelo neuronal diferenciable que sirve de planta controlable — la dirección que el tutor quiere y posible material de la publicación.</li>
+  </ul>
+
+  <div class="nota">
+    <b>Orden sugerido para no jugarse todo de una:</b> 1 (unidades) → 2-3-4-5 (dataset + modelo + entrenamiento + generalización open-loop, sin controlador todavía) → 6-7 con <b>V0</b> primero (planta = ecuaciones con θ̂, para validar el lazo) → repetir 6-7 con <b>V1</b> (la planta aprendida de verdad). Cada etapa tiene un entregable parcial verificable.
+  </div>
+
+</main>
+<footer>Plan de la extensión orientada al control · Proyecto Wilson-Cowan + PINN · ITBA 2026</footer>
+</div></body></html>

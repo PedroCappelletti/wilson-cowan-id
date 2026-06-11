@@ -114,6 +114,61 @@ def zero_input(t: float) -> float:
 
 
 # =============================================================================
+#  ENTRADAS QUE VARIAN EN EL TIEMPO (excitacion persistente)
+# =============================================================================
+# Por que: un pulso cuadrado es casi "DC" (constante mientras esta prendido) y
+# excita el sistema de forma pobre -> lo lleva por un rango limitado de estados.
+# Entradas que VARIAN en el tiempo (senoides, multiseno, chirp) recorren mas
+# estados -> el problema inverso queda mejor condicionado y los parametros se
+# identifican con mas precision (excitacion persistente, Ljung). El simulador
+# de MATLAB ya soporta esto: pre-genera P,Q en una grilla y las interpola.
+#
+# Todas estan GATEADAS a una ventana [t_on, t_off) (0 fuera) y por defecto llevan
+# un offset = amplitude para que la senal quede >= 0 (estimulo no negativo, como
+# en la actuacion optogenetica). Pasar offset explicito para cambiarlo.
+
+# Senoide de una frecuencia: offset + amplitude*sin(2*pi*freq*(t - t_on)).
+def sine_pulse(amplitude: float, freq: float, t_on: float, t_off: float,
+               offset: float | None = None) -> Callable[[float], float]:
+    off = amplitude if offset is None else offset
+    def f(t: float) -> float:
+        if t_on <= t < t_off:
+            return off + amplitude * np.sin(2.0 * np.pi * freq * (t - t_on))
+        return 0.0
+    return f
+
+
+# Multiseno: suma de senoides de varias frecuencias (excitacion mas rica).
+# La amplitud total se reparte entre las frecuencias.
+def multisine_pulse(amplitude: float, freqs, t_on: float, t_off: float,
+                    offset: float | None = None) -> Callable[[float], float]:
+    freqs = list(freqs)
+    a = amplitude / len(freqs)
+    off = amplitude if offset is None else offset
+    def f(t: float) -> float:
+        if t_on <= t < t_off:
+            return off + sum(a * np.sin(2.0 * np.pi * fr * (t - t_on)) for fr in freqs)
+        return 0.0
+    return f
+
+
+# Chirp: barrido lineal de frecuencia f0 -> f1 dentro de la ventana. Excita un
+# rango continuo de frecuencias (muy bueno para identificabilidad).
+def chirp_pulse(amplitude: float, f0: float, f1: float, t_on: float, t_off: float,
+                offset: float | None = None) -> Callable[[float], float]:
+    off = amplitude if offset is None else offset
+    dur = max(t_off - t_on, 1e-9)
+    k = (f1 - f0) / dur
+    def f(t: float) -> float:
+        if t_on <= t < t_off:
+            tau = t - t_on
+            phase = 2.0 * np.pi * (f0 * tau + 0.5 * k * tau * tau)
+            return off + amplitude * np.sin(phase)
+        return 0.0
+    return f
+
+
+# =============================================================================
 #  CLASE PRINCIPAL: junta los parametros + las entradas + la derivada + la
 #  integracion en un solo objeto facil de usar.
 # =============================================================================

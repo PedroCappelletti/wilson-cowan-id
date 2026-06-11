@@ -7,5 +7,8 @@ from .model import (  # noqa: F401
     sigmoid,
     box_pulse,
     zero_input,
+    sine_pulse,
+    multisine_pulse,
+    chirp_pulse,
     plot_results,
 )
