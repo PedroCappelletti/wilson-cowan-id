@@ -22,10 +22,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import numpy as np
+import torch
 
 from src.wilson_cowan import WilsonCowanParams
 from src.neural_ode import (
-    IMCController, make_true_plant, simulate_closed_loop, theta_gamma_refs,
+    IMCController, make_true_plant, make_neural_plant, simulate_closed_loop,
+    theta_gamma_refs, GrayBoxWC,
 )
 
 # #############################################################################
@@ -43,11 +45,31 @@ T_SPAN = (0.0, 50.0)   # ms (igual que el MATLAB)
 DT     = 0.005         # paso de integracion
 FREQ   = 120.0         # Hz de las referencias (gamma)
 
+NEURAL_CKPT = Path("results/models/neural_ode.pt")  # planta aprendida (si existe)
+
 OUT_DIR = Path("results")
 
 # #############################################################################
 # ##   FIN ZONA EDITABLE                                                     ##
 # #############################################################################
+
+
+def _rmse(sol):
+    n0 = len(sol["t"]) // 5   # descarta transitorio inicial
+    rI = float(np.sqrt(np.mean((sol["I"][n0:] - sol["rI"][n0:]) ** 2)))
+    rE = float(np.sqrt(np.mean((sol["E"][n0:] - sol["rE"][n0:]) ** 2)))
+    return rI, rE
+
+
+def _load_neural_plant():
+    if not NEURAL_CKPT.exists():
+        return None
+    ck = torch.load(NEURAL_CKPT, weights_only=False)
+    model = GrayBoxWC(ck["fixed"], {k: 1.0 for k in GrayBoxWC.WEIGHTS},
+                      learnable_weights=ck["learn_weights"], use_correction=ck["use_correction"])
+    model.load_state_dict(ck["state"])
+    model.eval()
+    return make_neural_plant(model)
 
 
 def main():
@@ -56,39 +78,57 @@ def main():
         "te": p.te, "ti": p.ti, "ae": p.ae, "ai": p.ai,
         "thetae": p.thetae, "thetai": p.thetai, "ke": p.ke, "ki": p.ki,
     }
+    ctrl = IMCController(fixed, W_CTRL)
+    refs = theta_gamma_refs(freq_hz=FREQ, time_in_ms=True)
 
-    plant = make_true_plant(fixed, {"wEE": p.wEE, "wEI": p.wEI, "wIE": p.wIE, "wII": p.wII})
-    ctrl  = IMCController(fixed, W_CTRL)
-    refs  = theta_gamma_refs(freq_hz=FREQ, time_in_ms=True)
+    # Planta verdadera (referencia) y planta aprendida (Neural ODE), MISMO controlador.
+    plant_true = make_true_plant(fixed, {"wEE": p.wEE, "wEI": p.wEI, "wIE": p.wIE, "wII": p.wII})
+    sol_true = simulate_closed_loop(plant_true, ctrl, refs, t_span=T_SPAN, dt=DT)
+    rIt, rEt = _rmse(sol_true)
+    print(f"Planta VERDADERA  — RMSE seguimiento:  I={rIt:.3e}  E={rEt:.3e}")
 
-    sol = simulate_closed_loop(plant, ctrl, refs, t_span=T_SPAN, dt=DT)
+    sol_neural = None
+    plant_neural = _load_neural_plant()
+    if plant_neural is not None:
+        sol_neural = simulate_closed_loop(plant_neural, ctrl, refs, t_span=T_SPAN, dt=DT)
+        rIn, rEn = _rmse(sol_neural)
+        print(f"Planta APRENDIDA  — RMSE seguimiento:  I={rIn:.3e}  E={rEn:.3e}")
+        print("  -> Si el seguimiento de la planta aprendida ~ el de la verdadera, "
+              "el modelo aprendido es una planta controlable valida.")
+    else:
+        print("(No hay checkpoint del Neural ODE; corro solo la planta verdadera.)")
 
-    # --- Error de seguimiento (RMSE) en regimen (descartando el transitorio inicial).
-    n0 = len(sol["t"]) // 5
-    rmse_I = float(np.sqrt(np.mean((sol["I"][n0:] - sol["rI"][n0:]) ** 2)))
-    rmse_E = float(np.sqrt(np.mean((sol["E"][n0:] - sol["rE"][n0:]) ** 2)))
-    print(f"Seguimiento (RMSE en regimen):  I = {rmse_I:.3e}   E = {rmse_E:.3e}")
-
-    _plot(sol, OUT_DIR / "figures" / "closed_loop_v0.png")
-    print(f"Figura: {OUT_DIR / 'figures' / 'closed_loop_v0.png'}")
+    path = OUT_DIR / "figures" / "closed_loop_compare.png"
+    _plot(sol_true, sol_neural, path)
+    print(f"Figura: {path}")
 
 
-def _plot(sol, path):
+def _plot(sol_t, sol_n, path):
     import matplotlib.pyplot as plt
-    t = sol["t"]
-    fig, axes = plt.subplots(3, 1, figsize=(9, 7), sharex=True)
-    axes[0].plot(t, sol["rI"], "k--", lw=1.0, label="ref rI")
-    axes[0].plot(t, sol["I"], lw=1.3, label="I (lazo cerrado)")
-    axes[0].set_ylabel("I"); axes[0].legend(loc="upper right"); axes[0].grid(True, alpha=0.3)
-    axes[0].set_title("Seguimiento en lazo cerrado — planta verdadera (V0)")
+    t = sol_t["t"]
+    fig, axes = plt.subplots(3, 1, figsize=(9, 7.5), sharex=True)
 
-    axes[1].plot(t, sol["rE"], "k--", lw=1.0, label="ref rE")
-    axes[1].plot(t, sol["E"], lw=1.3, label="E (lazo cerrado)")
-    axes[1].set_ylabel("E"); axes[1].legend(loc="upper right"); axes[1].grid(True, alpha=0.3)
+    axes[0].plot(t, sol_t["rI"], "k--", lw=1.0, label="ref rI")
+    axes[0].plot(t, sol_t["I"], lw=1.3, label="I — planta verdadera")
+    if sol_n is not None:
+        axes[0].plot(sol_n["t"], sol_n["I"], lw=1.1, ls=":", color="#d62728",
+                     label="I — planta aprendida")
+    axes[0].set_ylabel("I"); axes[0].legend(loc="upper right", fontsize=8); axes[0].grid(True, alpha=0.3)
+    axes[0].set_title("Lazo cerrado: controlador sobre planta verdadera vs. aprendida")
 
-    axes[2].plot(t, sol["y"], lw=1.3, color="#5b2a9e")
+    axes[1].plot(t, sol_t["rE"], "k--", lw=1.0, label="ref rE")
+    axes[1].plot(t, sol_t["E"], lw=1.3, label="E — planta verdadera")
+    if sol_n is not None:
+        axes[1].plot(sol_n["t"], sol_n["E"], lw=1.1, ls=":", color="#d62728",
+                     label="E — planta aprendida")
+    axes[1].set_ylabel("E"); axes[1].legend(loc="upper right", fontsize=8); axes[1].grid(True, alpha=0.3)
+
+    axes[2].plot(t, sol_t["y"], lw=1.3, label="y — verdadera")
+    if sol_n is not None:
+        axes[2].plot(sol_n["t"], sol_n["y"], lw=1.1, ls=":", color="#d62728", label="y — aprendida")
     axes[2].set_ylabel("y = E - I"); axes[2].set_xlabel("tiempo (ms)")
-    axes[2].grid(True, alpha=0.3); axes[2].set_title("Salida (potencial)")
+    axes[2].legend(loc="upper right", fontsize=8); axes[2].grid(True, alpha=0.3)
+    axes[2].set_title("Salida (potencial)")
 
     fig.tight_layout()
     path.parent.mkdir(parents=True, exist_ok=True)

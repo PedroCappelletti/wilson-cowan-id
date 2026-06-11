@@ -345,6 +345,39 @@
     shooting, paso de integración).</p>
   </div>
 
+  <div class="step win">
+    <h3><span class="pill ok">DECISIONES + NEURAL ODE ENTRENADO</span> El modelo aprendido funciona como planta controlable</h3>
+    <div class="meta">Decisiones de diseño tomadas y pipeline completo validado</div>
+    <p><b>Decisiones fijadas:</b> (1) unidades de tiempo = <b>ms</b> (régimen del control; los pesos
+    identificados son adimensionales, así que se transfieren sin re-identificar); (2) medición =
+    <b>estado completo</b> [I,E] (como el controlador que tenemos, sin EKF).</p>
+    <p><b>Dataset multi-variante</b> (<code>scripts/gen_multi_dataset.py</code>): 19 escenarios
+    (escalones/senoides/multisenos/chirps) con split train/test en el espacio de entradas (5 held-out).</p>
+    <p><b>Neural ODE entrenado</b> (<code>scripts/train_neural_ode.py</code>, multiple shooting +
+    Adam + L-BFGS) — esto es el <b>brazo Neural ODE del OE2</b> (identifica θ integrando la dinámica)
+    y a la vez produce la planta:</p>
+    <table>
+      <tr><th>peso</th><th class="num">estimado</th><th class="num">error</th></tr>
+      <tr><td>wEE</td><td class="num">6.414</td><td class="num"><span class="pill ok">0.21%</span></td></tr>
+      <tr><td>wEI</td><td class="num">4.819</td><td class="num"><span class="pill ok">0.40%</span></td></tr>
+      <tr><td>wIE</td><td class="num">6.030</td><td class="num"><span class="pill ok">0.51%</span></td></tr>
+      <tr><td>wII</td><td class="num">1.242</td><td class="num"><span class="pill ok">3.49%</span></td></tr>
+    </table>
+    <p>MSE open-loop: train <code>2.0e-5</code>, <b>test held-out <code>3.4e-5</code></b> → generaliza
+    a entradas no vistas. (La PINN es más precisa en parámetros —0.3%— pero el Neural ODE es el que
+    puede ser planta; ambos son legítimos y el OE2 pide los dos.)</p>
+    <div class="kv"><b>Validación en lazo cerrado (OE3):</b> mismo controlador sobre la planta verdadera
+    vs. la aprendida.</div>
+    <table>
+      <tr><th>Planta</th><th class="num">RMSE I</th><th class="num">RMSE E</th></tr>
+      <tr><td>Verdadera</td><td class="num">3.348e-2</td><td class="num">3.134e-2</td></tr>
+      <tr><td><b>Aprendida (Neural ODE)</b></td><td class="num">3.342e-2</td><td class="num">3.129e-2</td></tr>
+    </table>
+    <p><b>El seguimiento theta-gamma es prácticamente idéntico</b> (difieren en el 4º decimal). El
+    modelo aprendido es una planta controlable válida: el controlador logra la misma sincronización
+    sobre él que sobre el sistema verdadero. Cierra el arco identificar → modelo como planta → control.</p>
+  </div>
+
   <h2>Estado actual y próximos pasos</h2>
   <table>
     <tr><th>Ítem</th><th>Estado</th></tr>
@@ -356,8 +389,10 @@
     <tr><td>Comparación A vs B vs híbrido (curvas error-vs-ruido)</td><td><span class="pill info">objetivo final OE2</span></td></tr>
     <tr><td>Checkpoint periódico + reanudar (robustez a cortes)</td><td><span class="pill ok">implementado en pinn_joint_sweep.py</span></td></tr>
     <tr><td>Port del controlador IMC + lazo cerrado (V0)</td><td><span class="pill ok">implementado y validado (RMSE ≈ 0.03)</span></td></tr>
-    <tr><td>Neural ODE gray-box como planta (V0→V1)</td><td><span class="pill warn">modelo y módulo listos; falta dataset + entrenamiento</span></td></tr>
-    <tr><td>Validación orientada al control (theta-gamma, mapa de robustez)</td><td><span class="pill info">objetivo OE3</span></td></tr>
+    <tr><td>Neural ODE entrenado (identificación OE2 + planta)</td><td><span class="pill ok">VALIDADO — max err 3.5%, generaliza a held-out</span></td></tr>
+    <tr><td>Lazo cerrado con planta aprendida (theta-gamma)</td><td><span class="pill ok">VALIDADO — seguimiento ≈ planta verdadera</span></td></tr>
+    <tr><td>Mapa de robustez (ruido × variación paramétrica)</td><td><span class="pill info">objetivo OE3 (siguiente)</span></td></tr>
+    <tr><td>Correción gray-box g_φ (V1) para mismatch</td><td><span class="pill info">extensión futura</span></td></tr>
   </table>
   <p><b>Siguiente (OE2):</b> correr <code>pinn_joint_sweep.py</code> y <code>noise_sweep.py</code> con
   los 4 niveles de ruido y comparar las curvas error-vs-ruido de los tres métodos.</p>
