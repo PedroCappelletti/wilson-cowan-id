@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Candidatos de estímulo — dataset del Neural ODE</title>
+<style>
+  body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2733;
+       line-height:1.6;margin:0;background:#f4f6f8;padding:2rem 1rem}
+  .wrap{max-width:1080px;margin:0 auto}
+  header{background:#1f4e79;color:#fff;border-radius:12px 12px 0 0;padding:1.7rem 2rem}
+  header h1{margin:0;font-size:1.4rem;line-height:1.3}
+  header p{margin:.45rem 0 0;opacity:.92;font-size:.95rem}
+  main{background:#fff;border:1px solid #d7dee5;border-top:none;
+        border-radius:0 0 12px 12px;padding:1.6rem 2rem 2.2rem}
+  h2{color:#1f4e79;font-size:1.18rem;margin:1.8rem 0 .6rem;padding-bottom:.3rem;border-bottom:2px solid #e8f0f8}
+  code{background:#f0f3f6;padding:.1rem .35rem;border-radius:4px;font-family:Consolas,monospace;font-size:.86em}
+  .scroll{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.85rem;min-width:760px}
+  th,td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid #d7dee5;vertical-align:top}
+  th{background:#e8f0f8;color:#1f4e79;position:sticky;top:0}
+  td.c,th.c{text-align:center}
+  .pill{display:inline-block;padding:.1rem .5rem;border-radius:999px;font-size:.72rem;font-weight:700;white-space:nowrap}
+  .alta{background:#e3f5ea;color:#1b7f4b}
+  .muyalta{background:#bdeccd;color:#155f38}
+  .media{background:#fbf0db;color:#b06a00}
+  .baja{background:#fbe3e3;color:#b02a2a}
+  .si{background:#e3f5ea;color:#1b7f4b} .no{background:#fbe3e3;color:#b02a2a}
+  .cand{background:#e3eefb;color:#1f4e79} .rec{background:#bdeccd;color:#155f38} .desc{background:#eceff2;color:#5b6770}
+  .nota{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.8rem 1.1rem;border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.92rem}
+  .leg{font-size:.8rem;color:#5b6770;margin:.4rem 0}
+  ul{margin:.4rem 0;padding-left:1.3rem} li{margin:.25rem 0}
+  footer{color:#5b6770;font-size:.82rem;text-align:center;margin-top:1.5rem}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Candidatos de estímulo para el dataset del Neural ODE</h1>
+  <p>Entradas P, Q para entrenar la planta controlable · proyecto Wilson-Cowan + PINN · ITBA 2026</p>
+</header>
+<main>
+
+  <div class="nota">
+    <b>Para qué se elige.</b> El modelo de estados (Neural ODE) tiene que aprender a responder a
+    estímulos variados para luego responder al controlador. Criterios: <b>(1)</b> excitación persistente
+    para identificar bien un sistema no lineal, <b>(2)</b> relevancia fisiológica / que se use en
+    estimulación neural real, <b>(3)</b> realizable por actuación optogenética (on/off).
+    <b>Decisión tomada:</b> no usar senoidales (seno, multiseno, chirp); priorizar entradas tipo
+    pulso/escalón.
+  </div>
+
+  <div class="leg">
+    Escalas: <span class="pill muyalta">muy alta</span> <span class="pill alta">alta</span>
+    <span class="pill media">media</span> <span class="pill baja">baja</span> &nbsp;·&nbsp;
+    Estado: <span class="pill rec">recomendado</span> <span class="pill cand">candidato</span>
+    <span class="pill desc">descartado / baseline</span>
+  </div>
+
+  <h2>Tabla comparativa</h2>
+  <div class="scroll">
+  <table>
+    <tr>
+      <th>Estímulo</th>
+      <th>Qué es</th>
+      <th class="c">Excitación<br>(ident. no lineal)</th>
+      <th class="c">Cobertura<br>amplitud</th>
+      <th class="c">Cobertura<br>frecuencia</th>
+      <th class="c">On/off<br>(optogenético)</th>
+      <th>Relevancia fisiológica · dónde se usa</th>
+      <th class="c">Estado</th>
+    </tr>
+
+    <tr>
+      <td><b>Escalón (box)</b></td>
+      <td>Amplitud constante en una ventana</td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill si">sí</span></td>
+      <td>Activación optogenética sostenida</td>
+      <td class="c"><span class="pill desc">baseline</span></td>
+    </tr>
+
+    <tr>
+      <td><b>Onda cuadrada /<br>tren de pulsos</b></td>
+      <td>On/off periódico (frecuencia + duty cycle)</td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill media">media</span></td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill si">sí</span></td>
+      <td><b>DBS</b> (~130 Hz) y <b>optogenética</b>: la forma estándar de estimular neuronas</td>
+      <td class="c"><span class="pill cand">candidato</span></td>
+    </tr>
+
+    <tr>
+      <td><b>Theta-gated gamma<br>(ráfagas)</b> ⭐</td>
+      <td>Pulsos a frecuencia gamma modulados por una envolvente theta</td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill media">media</span></td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill si">sí</span></td>
+      <td><b>Theta-burst stimulation</b> · <b>coincide con el objetivo del proyecto</b> (sincronización theta-gamma del controlador [13])</td>
+      <td class="c"><span class="pill rec">recomendado</span></td>
+    </tr>
+
+    <tr>
+      <td><b>PRBS</b></td>
+      <td>Secuencia binaria pseudo-aleatoria (2 niveles, conmuta al azar)</td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill si">sí</span></td>
+      <td>Clásico de identificación de sistemas (Ljung); binario = optogenética pura</td>
+      <td class="c"><span class="pill cand">candidato</span></td>
+    </tr>
+
+    <tr>
+      <td><b>APRBS</b> ⭐</td>
+      <td>Escalones de amplitud y duración aleatorias</td>
+      <td class="c"><span class="pill muyalta">muy alta</span></td>
+      <td class="c"><span class="pill muyalta">muy alta</span></td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill si">sí</span></td>
+      <td>Estándar para identificar sistemas <b>no lineales</b> (cubre amplitudes × frecuencias)</td>
+      <td class="c"><span class="pill rec">recomendado</span></td>
+    </tr>
+
+    <tr>
+      <td><b>Tren de Poisson</b></td>
+      <td>Pulsos en tiempos aleatorios (estadística de spikes)</td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill media">media</span></td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill si">sí</span></td>
+      <td>Naturalista: imita la estadística de disparos neuronales reales</td>
+      <td class="c"><span class="pill cand">candidato</span></td>
+    </tr>
+
+    <tr>
+      <td>Senoide</td>
+      <td>Oscilación de una frecuencia</td>
+      <td class="c"><span class="pill media">media</span></td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill no">no</span></td>
+      <td>Poco fisiológica como estímulo directo</td>
+      <td class="c"><span class="pill desc">descartado</span></td>
+    </tr>
+
+    <tr>
+      <td>Multiseno</td>
+      <td>Suma de senoides de varias frecuencias</td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill media">media</span></td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill no">no</span></td>
+      <td>Buena para identificación, pero no fisiológica ni on/off</td>
+      <td class="c"><span class="pill desc">descartado</span></td>
+    </tr>
+
+    <tr>
+      <td>Chirp</td>
+      <td>Barrido de frecuencia (de una senoide)</td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill no">no</span></td>
+      <td>"Chirp stimulation" para caracterizar resonancia, pero es senoidal</td>
+      <td class="c"><span class="pill desc">descartado</span></td>
+    </tr>
+  </table>
+  </div>
+
+  <h2>Mezcla recomendada para el dataset</h2>
+  <p>Cubre los tres frentes con entradas <b>todas tipo pulso/escalón</b> (sin senoides):</p>
+  <ul>
+    <li><b>APRBS</b> ⭐ — el caballo de batalla para identificabilidad no lineal (amplitudes × frecuencias).</li>
+    <li><b>Theta-gated gamma</b> ⭐ — el régimen fisiológico del propio proyecto (lo que el controlador induce).</li>
+    <li><b>Onda cuadrada / tren de pulsos</b> — variando frecuencia y duty (DBS / optogenética).</li>
+    <li><b>PRBS</b> — banda ancha, clásico de identificación.</li>
+    <li><b>Tren de Poisson</b> — naturalista (estadística de spikes).</li>
+    <li><b>Escalón (box)</b> — baseline.</li>
+  </ul>
+
+  <div class="nota">
+    <b>Por qué esta mezcla.</b> <b>APRBS + PRBS</b> aportan la excitación persistente que necesita
+    identificar un sistema no lineal. <b>Theta-gated gamma + tren de pulsos + Poisson</b> aportan
+    relevancia fisiológica y se parecen a lo que el controlador comanda (y a la estimulación real:
+    DBS, optogenética). El <b>escalón</b> queda de referencia. Todo es realizable on/off → compatible
+    con actuación optogenética. Se descartan seno/multiseno/chirp por no ser fisiológicos ni on/off.
+  </div>
+
+  <p style="font-size:.86rem;color:#5b6770">Relacionado: <code>docs/plan_planta_neural.html</code> (plan
+  de la planta controlable) · los generadores viven / vivirán en <code>src/wilson_cowan/model.py</code>.</p>
+
+</main>
+<footer>Proyecto Wilson-Cowan + PINN · ITBA 2026 · candidatos de estímulo para el dataset multi-variante</footer>
+</div></body></html>
