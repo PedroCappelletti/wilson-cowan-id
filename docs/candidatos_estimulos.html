@@ -132,6 +132,17 @@
     </tr>
 
     <tr>
+      <td><b>Chirp</b></td>
+      <td>Barrido de frecuencia (senoide que acelera de f0 a f1)</td>
+      <td class="c"><span class="pill alta">alta</span></td>
+      <td class="c"><span class="pill baja">baja</span></td>
+      <td class="c"><span class="pill muyalta">muy alta</span></td>
+      <td class="c"><span class="pill no">no</span></td>
+      <td>"Chirp stimulation": caracteriza la respuesta en frecuencia / resonancia del circuito</td>
+      <td class="c"><span class="pill cand">candidato</span></td>
+    </tr>
+
+    <tr>
       <td>Senoide</td>
       <td>Oscilación de una frecuencia</td>
       <td class="c"><span class="pill media">media</span></td>
@@ -174,6 +185,7 @@
     <li><b>Onda cuadrada / tren de pulsos</b> — variando frecuencia y duty (DBS / optogenética).</li>
     <li><b>PRBS</b> — banda ancha, clásico de identificación.</li>
     <li><b>Tren de Poisson</b> — naturalista (estadística de spikes).</li>
+    <li><b>Chirp</b> — barrido de frecuencia, excelente cobertura espectral (única senoidal que se conserva, por su valor para caracterizar la respuesta en frecuencia).</li>
     <li><b>Escalón (box)</b> — baseline.</li>
   </ul>
 
@@ -181,8 +193,8 @@
     <b>Por qué esta mezcla.</b> <b>APRBS + PRBS</b> aportan la excitación persistente que necesita
     identificar un sistema no lineal. <b>Theta-gated gamma + tren de pulsos + Poisson</b> aportan
     relevancia fisiológica y se parecen a lo que el controlador comanda (y a la estimulación real:
-    DBS, optogenética). El <b>escalón</b> queda de referencia. Todo es realizable on/off → compatible
-    con actuación optogenética. Se descartan seno/multiseno/chirp por no ser fisiológicos ni on/off.
+    DBS, optogenética). El <b>escalón</b> queda de referencia. El <b>chirp</b> se conserva (aunque es senoidal) por su gran
+    cobertura espectral. Se descartan seno y multiseno por no aportar lo suficiente como estímulos directos.
   </div>
 
   <p style="font-size:.86rem;color:#5b6770">Relacionado: <code>docs/plan_planta_neural.html</code> (plan
