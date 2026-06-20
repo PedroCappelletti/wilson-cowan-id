@@ -61,15 +61,16 @@ def _rmse(sol):
     return rI, rE
 
 
-def _load_neural_plant():
+def _load_neural():
+    """Devuelve (planta_callable, pesos_aprendidos) o (None, None) si no hay checkpoint."""
     if not NEURAL_CKPT.exists():
-        return None
+        return None, None
     ck = torch.load(NEURAL_CKPT, weights_only=False)
     model = GrayBoxWC(ck["fixed"], {k: 1.0 for k in GrayBoxWC.WEIGHTS},
                       learnable_weights=ck["learn_weights"], use_correction=ck["use_correction"])
     model.load_state_dict(ck["state"])
     model.eval()
-    return make_neural_plant(model)
+    return make_neural_plant(model), model.weights_dict()
 
 
 def main():
@@ -88,13 +89,20 @@ def main():
     print(f"Planta VERDADERA  — RMSE seguimiento:  I={rIt:.3e}  E={rEt:.3e}")
 
     sol_neural = None
-    plant_neural = _load_neural_plant()
+    plant_neural, w_hat = _load_neural()
     if plant_neural is not None:
         sol_neural = simulate_closed_loop(plant_neural, ctrl, refs, t_span=T_SPAN, dt=DT)
         rIn, rEn = _rmse(sol_neural)
         print(f"Planta APRENDIDA  — RMSE seguimiento:  I={rIn:.3e}  E={rEn:.3e}")
-        print("  -> Si el seguimiento de la planta aprendida ~ el de la verdadera, "
-              "el modelo aprendido es una planta controlable valida.")
+        print("  -> Si ~ la verdadera, el modelo aprendido es una planta controlable valida.")
+
+        # OE3 honesto: controlador construido con los pesos APRENDIDOS (θ̂) corriendo
+        # sobre la planta VERDADERA -> cuanto degrada el control el error de identificacion.
+        ctrl_hat = IMCController(fixed, w_hat)
+        sol_hat = simulate_closed_loop(plant_true, ctrl_hat, refs, t_span=T_SPAN, dt=DT)
+        rIh, rEh = _rmse(sol_hat)
+        print(f"Controlador θ̂ s/ planta VERDADERA — RMSE: I={rIh:.3e}  E={rEh:.3e}")
+        print("  (pesos θ̂ del controlador: " + " ".join(f"{k}={w_hat[k]:.3f}" for k in w_hat) + ")")
     else:
         print("(No hay checkpoint del Neural ODE; corro solo la planta verdadera.)")
 

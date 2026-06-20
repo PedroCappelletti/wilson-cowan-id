@@ -3,10 +3,11 @@
 #  DATASET MULTI-VARIANTE para el Neural ODE (planta controlable) — régimen ms
 # =============================================================================
 #
-#  Genera trayectorias de Wilson-Cowan bajo MUCHOS tipos de estimulo (escalones,
-#  senoides, multisenos, chirps) variando amplitud y frecuencia. Con esa
-#  diversidad el modelo de estados f_θ(x,P,Q) aprende a RESPONDER a entradas
-#  variadas -> condicion para que despues responda a un controlador.
+#  Genera trayectorias de Wilson-Cowan bajo MUCHOS tipos de estimulo tipo PULSO
+#  (escalon, onda cuadrada/tren de pulsos, APRBS, PRBS, theta-gamma, Poisson) +
+#  chirp, variando amplitud y frecuencia. Sin senoides puras (decision del
+#  proyecto: estimulos realizables on/off). Con esa diversidad el modelo de estados
+#  f_θ(x,P,Q) aprende a RESPONDER a entradas variadas -> condicion para el control.
 #
 #  Convencion (decision tomada): TIEMPO EN ms (regimen del control). Las
 #  frecuencias se dan en Hz y se convierten a ciclos/ms con hz(). Estado COMPLETO
@@ -31,7 +32,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np
 
 from src.wilson_cowan import (
-    WilsonCowanParams, box_pulse, sine_pulse, multisine_pulse, chirp_pulse,
+    WilsonCowanParams, box_pulse, chirp_pulse,
+    aprbs_pulse, theta_gamma_pulse, square_wave_pulse, prbs_pulse, poisson_pulse,
 )
 from src.data import generate_dataset
 
@@ -41,8 +43,8 @@ from src.data import generate_dataset
 
 PARAMS = WilsonCowanParams()    # parametros verdaderos (genera los datos)
 
-T_SPAN   = (0.0, 100.0)   # ms  (varias decenas -> captura transitorios + ciclos)
-N_EVAL   = 2000           # dt = 0.05 ms
+T_SPAN   = (0.0, 200.0)   # ms  (mas largo -> entran mas ciclos, incl. envolvente theta)
+N_EVAL   = 4000           # dt = 0.05 ms
 I0, E0   = 0.0, 0.0
 SEED     = 42
 NOISE    = 0.0            # plant dataset limpio (el ruido es otra dimension, luego)
@@ -59,36 +61,52 @@ def hz(f_hz: float) -> float:
 # arrancar; si el test en lazo cerrado muestra que falta el regimen de P,Q altos,
 # se amplia (o se agregan trayectorias generadas por el propio lazo cerrado).
 def build_scenarios():
+    """Escenarios con estimulos tipo PULSO (la libreria nueva). Sin senoides puras;
+    se conserva el chirp por su cobertura espectral. P y Q decorrelacionados
+    (distinta amplitud/timing/semilla). Cada familia reserva 1 escenario como test."""
     S = []
-    ton, toff = 10.0, 90.0
+    ton, toff = 10.0, 190.0
 
-    # --- Escalones (box) ---
-    for amp in (0.4, 0.8, 1.2, 1.6):
-        S.append((f"step_a{amp}", box_pulse(amp, ton, toff),
-                  box_pulse(0.7 * amp, ton + 5, toff - 5), amp == 1.2))  # a=1.2 -> test
+    # --- Escalon (box): baseline ---
+    for amp in (0.4, 0.8, 1.2):
+        S.append((f"box_a{amp}", box_pulse(amp, ton, toff),
+                  box_pulse(0.7 * amp, ton + 5, toff - 5), amp == 1.2))
 
-    # --- Senoides (amp x frecuencia) ---
-    for amp in (0.4, 0.8):
-        for fhz in (20, 50, 100, 150):
-            es_test = (fhz == 150)  # la mas alta -> test (extrapolacion en frecuencia)
-            S.append((f"sine_a{amp}_f{fhz}",
-                      sine_pulse(amp, hz(fhz), ton, toff),
-                      sine_pulse(0.7 * amp, hz(0.8 * fhz), ton, toff), es_test))
+    # --- Onda cuadrada / tren de pulsos (DBS, optogenetica): amp x frecuencia ---
+    for amp in (0.6, 1.0):
+        for fhz in (50, 100, 130):
+            es_test = (fhz == 130 and amp == 1.0)
+            S.append((f"square_a{amp}_f{fhz}",
+                      square_wave_pulse(amp, hz(fhz), ton, toff, 0.4),
+                      square_wave_pulse(0.7 * amp, hz(0.8 * fhz), ton, toff, 0.5), es_test))
 
-    # --- Multisenos (combinaciones de frecuencias) ---
-    combos = [[20, 50, 90], [30, 70, 120], [15, 45, 100], [25, 60, 110], [40, 80, 130]]
-    for i, c in enumerate(combos):
-        es_test = (i == len(combos) - 1)  # el ultimo combo -> test
-        S.append((f"multisine_{i}",
-                  multisine_pulse(0.8, [hz(x) for x in c], ton, toff),
-                  multisine_pulse(0.6, [hz(0.9 * x) for x in c], ton, toff), es_test))
+    # --- APRBS (amplitud x frecuencia; el mas rico para no lineal) ---
+    for i, (amp, dmin, dmax, s) in enumerate([(1.0, 2, 8, 71), (1.4, 1.5, 6, 72), (0.8, 3, 10, 73)]):
+        S.append((f"aprbs_{i}",
+                  aprbs_pulse(amp, ton, toff, dmin, dmax, seed=s, amp_min=0.2 * amp),
+                  aprbs_pulse(0.8 * amp, ton, toff, dmin * 1.3, dmax * 1.2, seed=s + 10, amp_min=0.1 * amp),
+                  i == 2))
 
-    # --- Chirps (barrido de frecuencia) ---
-    for amp in (0.4, 0.8):
-        es_test = (amp == 0.8)  # uno a test
-        S.append((f"chirp_a{amp}",
-                  chirp_pulse(amp, hz(10), hz(150), ton, toff),
-                  chirp_pulse(0.7 * amp, hz(15), hz(120), ton, toff), es_test))
+    # --- PRBS (banda ancha, binario) ---
+    for i, (amp, bp, s) in enumerate([(1.0, 4, 81), (1.3, 6, 82)]):
+        S.append((f"prbs_{i}", prbs_pulse(amp, ton, toff, bp, seed=s),
+                  prbs_pulse(0.8 * amp, ton, toff, bp * 1.2, seed=s + 10), i == 1))
+
+    # --- Theta-gamma (regimen del proyecto): rafagas gamma bajo envolvente theta ---
+    for i, (amp, fg, ft) in enumerate([(1.0, 40, 10), (1.2, 60, 12), (0.8, 50, 8)]):
+        S.append((f"thetagamma_{i}",
+                  theta_gamma_pulse(amp, hz(fg), hz(ft), ton, toff, 0.5),
+                  theta_gamma_pulse(0.7 * amp, hz(0.9 * fg), hz(ft), ton, toff, 0.5), i == 2))
+
+    # --- Tren de Poisson (naturalista). Pulsos ANCHOS (~4-6 ms): los angostos se
+    #     promedian a ~0 en un modelo de tasas y no excitan (verificado). ---
+    for i, (amp, rate, pw, s) in enumerate([(1.2, 0.10, 4.0, 91), (1.4, 0.12, 5.0, 92)]):
+        S.append((f"poisson_{i}", poisson_pulse(amp, rate, ton, toff, pw, seed=s),
+                  poisson_pulse(0.8 * amp, rate * 0.8, ton, toff, pw, seed=s + 10), i == 1))
+
+    # --- Chirp (unica senoidal conservada: cobertura espectral) ---
+    S.append(("chirp", chirp_pulse(0.8, hz(10), hz(150), ton, toff),
+              chirp_pulse(0.6, hz(15), hz(120), ton, toff), True))
 
     return S
 
