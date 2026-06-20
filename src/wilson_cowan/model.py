@@ -169,6 +169,133 @@ def chirp_pulse(amplitude: float, f0: float, f1: float, t_on: float, t_off: floa
 
 
 # =============================================================================
+#  ENTRADAS TIPO PULSO / ESCALON  (on-off, realizables con optogenetica)
+# =============================================================================
+# Por que estas y no senoides: para IDENTIFICAR un sistema no lineal lo que mas
+# importa es recorrer muchas AMPLITUDES (la sigmoidea responde distinto en cada
+# punto de operacion) ademas de muchas frecuencias. Las senoides (seno, multiseno,
+# chirp) varian poco la amplitud y NO son on/off, asi que no son realizables con
+# estimulacion optogenetica (que solo prende/apaga). Estas entradas si: son todas
+# >= 0 y conmutan, y barren amplitud y/o frecuencia mucho mejor.
+#
+# Todas estan GATEADAS a una ventana [t_on, t_off) (0 fuera) y son >= 0.
+#
+# DETALLE IMPORTANTE de implementacion: el integrador (solve_ivp) llama a la
+# entrada en tiempos salteados y repetidos, no en orden. Por eso las entradas
+# aleatorias PRE-CALCULAN su "agenda" (cuando cambian y a que valor) a partir de
+# la semilla, y la funcion f(t) solo CONSULTA en que tramo cae t. Asi f(t) es una
+# funcion pura del tiempo (mismo t -> mismo valor siempre), reproducible con seed.
+#
+# NOTA sobre las frecuencias: van en las MISMAS unidades de tiempo que la
+# simulacion (segundos aca; t hasta ~600, te=1, ti=2). No son los Hz biologicos
+# (gamma ~40 Hz, theta ~6 Hz): a esa velocidad el sistema ni responde. Lo que se
+# conserva es la RELACION entre frecuencias (gamma/theta ~6:1) y que caigan en la
+# banda en la que el sistema reacciona (~0.005-0.05 en estas unidades).
+
+# --- APRBS: escalones de amplitud Y duracion aleatorias. El "caballo de batalla"
+#     para identificacion no lineal: cubre amplitud x frecuencia. En cada tramo
+#     elige una duracion al azar en [dwell_min, dwell_max] y una amplitud al azar
+#     en [0, amplitude].
+def aprbs_pulse(amplitude: float, t_on: float, t_off: float,
+                dwell_min: float, dwell_max: float, seed: int = 0,
+                amp_min: float = 0.0) -> Callable[[float], float]:
+    # amp_min: piso de amplitud. Con 0.0 cada tramo puede caer cerca de cero (la
+    # excitacion se "apaga" seguido). Subirlo mantiene la señal viva (mejor para
+    # identificar) sin perder el barrido de amplitudes hasta `amplitude`.
+    rng = np.random.default_rng(seed)
+    bordes = [t_on]          # tiempos donde cambia el escalon
+    valores: list[float] = []  # amplitud de cada tramo
+    t = t_on
+    while t < t_off:
+        t = t + rng.uniform(dwell_min, dwell_max)
+        bordes.append(min(t, t_off))
+        valores.append(rng.uniform(amp_min, amplitude))
+    bordes_a = np.asarray(bordes)
+    valores_a = np.asarray(valores)
+
+    def f(t: float) -> float:
+        if t_on <= t < t_off:
+            # indice del ultimo borde <= t  ->  en que tramo cae t.
+            i = int(np.searchsorted(bordes_a, t, side="right")) - 1
+            i = min(max(i, 0), len(valores_a) - 1)
+            return float(valores_a[i])
+        return 0.0
+    return f
+
+
+# --- Theta-gated gamma: rafagas de pulsos rapidos (gamma) cuya intensidad la
+#     modula una envolvente lenta (theta). Es el REGIMEN PROPIO del proyecto (lo
+#     que el controlador induce). El tren gamma da el on/off; la envolvente theta
+#     (en [0,1]) sube y baja la amplitud de las rafagas.
+def theta_gamma_pulse(amplitude: float, f_gamma: float, f_theta: float,
+                      t_on: float, t_off: float, duty: float = 0.5) -> Callable[[float], float]:
+    def f(t: float) -> float:
+        if t_on <= t < t_off:
+            tau = t - t_on
+            env = 0.5 * (1.0 + np.sin(2.0 * np.pi * f_theta * tau))  # envolvente theta en [0,1]
+            fase = (f_gamma * tau) % 1.0                              # fase del tren gamma
+            gamma_on = 1.0 if fase < duty else 0.0                    # pulso gamma prendido/apagado
+            return amplitude * env * gamma_on
+        return 0.0
+    return f
+
+
+# --- Onda cuadrada / tren de pulsos: prende/apaga periodico. 'duty' = fraccion
+#     del periodo que esta prendido. Estandar en DBS y optogenetica.
+def square_wave_pulse(amplitude: float, freq: float, t_on: float, t_off: float,
+                      duty: float = 0.5) -> Callable[[float], float]:
+    def f(t: float) -> float:
+        if t_on <= t < t_off:
+            fase = (freq * (t - t_on)) % 1.0
+            return amplitude if fase < duty else 0.0
+        return 0.0
+    return f
+
+
+# --- PRBS: secuencia binaria pseudo-aleatoria. Cada 'bit_period' el valor es 0 o
+#     'amplitude' al azar. Banda ancha, clasico de identificacion (Ljung). Binario
+#     puro = optogenetica directa. Limitacion: una sola amplitud (no barre el eje
+#     amplitud como APRBS), por eso suele ir como complemento.
+def prbs_pulse(amplitude: float, t_on: float, t_off: float,
+               bit_period: float, seed: int = 0) -> Callable[[float], float]:
+    rng = np.random.default_rng(seed)
+    n_bits = max(int(np.ceil((t_off - t_on) / bit_period)), 1)
+    bits = rng.integers(0, 2, size=n_bits)   # 0 o 1 en cada bit
+
+    def f(t: float) -> float:
+        if t_on <= t < t_off:
+            i = min(int((t - t_on) // bit_period), len(bits) - 1)
+            return amplitude * float(bits[i])
+        return 0.0
+    return f
+
+
+# --- Tren de Poisson: pulsos cortos (ancho 'pulse_width') en tiempos aleatorios,
+#     con 'rate' eventos por unidad de tiempo (inter-arribos exponenciales).
+#     Naturalista: imita la estadistica de disparos neuronales reales.
+def poisson_pulse(amplitude: float, rate: float, t_on: float, t_off: float,
+                  pulse_width: float, seed: int = 0) -> Callable[[float], float]:
+    rng = np.random.default_rng(seed)
+    tiempos = []             # instantes en que ocurre cada evento
+    t = t_on
+    while True:
+        t = t + rng.exponential(1.0 / rate)
+        if t >= t_off:
+            break
+        tiempos.append(t)
+    tiempos_a = np.asarray(tiempos)
+
+    def f(t: float) -> float:
+        if t_on <= t < t_off and tiempos_a.size:
+            # ultimo evento <= t; si t cae dentro de su ancho de pulso -> prendido.
+            i = int(np.searchsorted(tiempos_a, t, side="right")) - 1
+            if i >= 0 and (t - tiempos_a[i]) < pulse_width:
+                return amplitude
+        return 0.0
+    return f
+
+
+# =============================================================================
 #  CLASE PRINCIPAL: junta los parametros + las entradas + la derivada + la
 #  integracion en un solo objeto facil de usar.
 # =============================================================================

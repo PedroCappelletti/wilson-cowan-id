@@ -10,5 +10,10 @@ from .model import (  # noqa: F401
     sine_pulse,
     multisine_pulse,
     chirp_pulse,
+    aprbs_pulse,
+    theta_gamma_pulse,
+    square_wave_pulse,
+    prbs_pulse,
+    poisson_pulse,
     plot_results,
 )
