@@ -1,0 +1,8 @@
+  theta-gamma  120 Hz (base)            RMSE_E(Sim+θ̂)=3.14e-02
+  theta-gamma  160 Hz                   RMSE_E(Sim+θ̂)=4.16e-02
+  APRBS        escalones lentos (~12 ms) RMSE_E(Sim+θ̂)=2.11e-02
+  APRBS        escalones rápidos (~6 ms) RMSE_E(Sim+θ̂)=2.96e-02
+  chirp        80→200 Hz                RMSE_E(Sim+θ̂)=4.03e-02
+  chirp        200→80 Hz                RMSE_E(Sim+θ̂)=3.48e-02
+
+Informe: docs/informe_integral.html

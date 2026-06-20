@@ -1,0 +1,32 @@
+=== Neural ODE — train 13 / test 7 trayectorias ===
+    correccion g_phi: OFF (identificacion pura)
+    multiple shooting: 507 ventanas de 100 pasos
+      0 | loss=9.723e-03 | wEE=1.032 wEI=0.969 wIE=1.032 wII=0.969
+    200 | loss=3.011e-05 | wEE=6.321 wEI=4.628 wIE=5.527 wII=0.179
+    400 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+    600 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+    800 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   1000 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   1200 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   1400 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   1600 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   1800 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   2000 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   2200 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   2400 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   2600 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   2800 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+   2999 | loss=9.804e-06 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+  --- L-BFGS aplicado ---
+
+=== Pesos identificados (Neural ODE) vs verdaderos ===
+  peso    verdadero   estimado    error %
+  wEE        6.4000     6.4070      0.11%
+  wEI        4.8000     4.8178      0.37%
+  wIE        6.0000     5.9944      0.09%
+  wII        1.2000     1.2050      0.42%
+
+  MSE open-loop (rollout completo):  train=3.36e-05   test(held-out)=8.54e-05
+  max error parametrico = 0.42%
+
+  Checkpoint: results/models/neural_ode.pt

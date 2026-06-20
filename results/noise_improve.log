@@ -1,0 +1,5 @@
+=== Diagnóstico a σ=0.1 (error de θ̂, menor = mejor) ===
+  A baseline             | max= 106.1% | wEE= 15.6% wEI= 40.4% wIE= 18.2% wII=106.1% | wEE=5.40 wEI=2.86 wIE=7.09 wII=2.47
+  B +suavizado           | max=  15.4% | wEE=  3.4% wEI=  8.6% wIE=  2.9% wII= 15.4% | wEE=6.18 wEI=4.39 wIE=6.18 wII=1.38
+  C estimulo fuerte      | max=  32.4% | wEE= 13.4% wEI= 32.4% wIE=  7.0% wII= 19.2% | wEE=5.55 wEI=3.25 wIE=6.42 wII=1.43
+  D fuerte+suavizado     | max=  10.6% | wEE=  4.1% wEI= 10.6% wIE=  2.4% wII=  3.3% | wEE=6.14 wEI=4.29 wIE=6.14 wII=1.24

@@ -1,0 +1,7 @@
+baseline ideal (pesos reales): RMSE I=3.348e-02 E=3.134e-02
+ruido=0.00 | θ̂ max err=  0.4% | control RMSE I=3.344e-02 E=3.138e-02 | wEE=6.407 wEI=4.818 wIE=5.994 wII=1.205
+ruido=0.01 | θ̂ max err=  2.1% | control RMSE I=3.357e-02 E=3.130e-02 | wEE=6.394 wEI=4.764 wIE=6.007 wII=1.175
+ruido=0.05 | θ̂ max err= 19.3% | control RMSE I=3.498e-02 E=2.927e-02 | wEE=5.975 wEI=3.873 wIE=6.308 wII=1.214
+ruido=0.10 | θ̂ max err=106.1% | control RMSE I=3.629e-02 E=2.643e-02 | wEE=5.403 wEI=2.860 wIE=7.094 wII=2.473
+
+Informe: docs/informe_ruido.html

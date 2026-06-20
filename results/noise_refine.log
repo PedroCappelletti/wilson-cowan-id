@@ -1,0 +1,5 @@
+=== Refinamiento a σ=0.1 (error de θ̂, menor = mejor) ===
+  strong  k=7  (Iter 14) (12 tray) | max= 10.6% | wEE=  4.1% wEI= 10.6% wIE=  2.4% wII=  3.3%
+  strong  k=11           (12 tray) | max=  8.9% | wEE=  2.3% wEI=  6.9% wIE=  3.0% wII=  8.9%
+  XL      k=7            (20 tray) | max=  9.0% | wEE=  3.7% wEI=  9.0% wIE=  2.1% wII=  5.8%
+  XL      k=11           (20 tray) | max= 10.3% | wEE=  1.8% wEI=  5.6% wIE=  2.9% wII= 10.3%

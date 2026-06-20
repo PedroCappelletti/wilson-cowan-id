@@ -1,0 +1,104 @@
+
+======================================================================
+  IDENTIFICANDO con: Box (baseline)
+======================================================================
+epoch     0 | L=2.110e-01 (ema=2.11e-01) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch   500 | L=4.458e-04 (ema=2.70e-03) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1000 | L=1.218e-04 (ema=1.53e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1500 | L=7.765e-05 (ema=8.56e-05) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+--> fin del warmup en epoch 2000: congelo las redes, ajusto solo theta.
+epoch  2000 | L=1.490e-01 (ema=1.49e-01) | wEE=1.032 wEI=0.969 wIE=1.032 wII=0.969
+epoch  2500 | L=2.032e-03 (ema=5.08e-03) | wEE=4.963 wEI=2.313 wIE=5.398 wII=0.107
+epoch  3000 | L=2.467e-04 (ema=2.60e-04) | wEE=6.278 wEI=4.592 wIE=5.920 wII=1.053
+epoch  3500 | L=1.251e-04 (ema=1.73e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.267
+epoch  4000 | L=1.379e-04 (ema=1.70e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.267
+epoch  4500 | L=1.653e-04 (ema=1.73e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.267
+epoch  5000 | L=1.828e-04 (ema=1.73e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.267
+epoch  5500 | L=2.133e-04 (ema=1.71e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.267
+epoch  6000 | L=1.659e-04 (ema=1.72e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.267
+epoch  6500 | L=1.860e-04 (ema=1.71e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.268
+epoch  7000 | L=1.535e-04 (ema=1.72e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.268
+epoch  7500 | L=1.537e-04 (ema=1.72e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.268
+epoch  8000 | L=1.771e-04 (ema=1.72e-04) | wEE=6.332 wEI=4.686 wIE=6.040 wII=1.268
+epoch  8500 | L=1.831e-04 (ema=1.72e-04) | wEE=6.332 wEI=4.687 wIE=6.040 wII=1.268
+epoch  9000 | L=1.608e-04 (ema=1.70e-04) | wEE=6.332 wEI=4.687 wIE=6.041 wII=1.268
+--> meseta detectada en epoch 9000. Corto.
+  -> Box (baseline): wEE=6.332(1.1%) wEI=4.687(2.4%) wIE=6.041(0.7%) wII=1.268(5.7%) | max_err=5.7%
+
+======================================================================
+  IDENTIFICANDO con: APRBS ⭐
+======================================================================
+epoch     0 | L=1.896e-01 (ema=1.90e-01) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch   500 | L=4.249e-04 (ema=2.48e-03) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1000 | L=1.414e-04 (ema=1.75e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1500 | L=1.085e-04 (ema=1.10e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+--> fin del warmup en epoch 2000: congelo las redes, ajusto solo theta.
+epoch  2000 | L=1.358e-01 (ema=1.36e-01) | wEE=1.032 wEI=0.969 wIE=1.032 wII=0.969
+epoch  2500 | L=9.202e-04 (ema=3.79e-03) | wEE=5.762 wEI=3.637 wIE=5.466 wII=0.161
+epoch  3000 | L=3.554e-04 (ema=3.71e-04) | wEE=6.334 wEI=4.710 wIE=6.093 wII=1.401
+epoch  3500 | L=3.303e-04 (ema=3.42e-04) | wEE=6.339 wEI=4.714 wIE=6.102 wII=1.416
+epoch  4000 | L=3.115e-04 (ema=3.44e-04) | wEE=6.339 wEI=4.714 wIE=6.102 wII=1.415
+epoch  4500 | L=3.408e-04 (ema=3.43e-04) | wEE=6.339 wEI=4.714 wIE=6.102 wII=1.415
+epoch  5000 | L=3.214e-04 (ema=3.43e-04) | wEE=6.339 wEI=4.714 wIE=6.102 wII=1.416
+epoch  5500 | L=3.666e-04 (ema=3.41e-04) | wEE=6.339 wEI=4.714 wIE=6.102 wII=1.415
+epoch  6000 | L=3.279e-04 (ema=3.40e-04) | wEE=6.338 wEI=4.715 wIE=6.102 wII=1.415
+epoch  6500 | L=3.646e-04 (ema=3.42e-04) | wEE=6.339 wEI=4.714 wIE=6.102 wII=1.415
+epoch  7000 | L=3.462e-04 (ema=3.41e-04) | wEE=6.338 wEI=4.715 wIE=6.102 wII=1.415
+epoch  7500 | L=3.370e-04 (ema=3.41e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+epoch  8000 | L=3.400e-04 (ema=3.42e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+epoch  8500 | L=3.285e-04 (ema=3.40e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+epoch  9000 | L=3.402e-04 (ema=3.43e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+epoch  9500 | L=3.542e-04 (ema=3.44e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+epoch 10000 | L=3.585e-04 (ema=3.42e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+epoch 10500 | L=3.315e-04 (ema=3.42e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+epoch 11000 | L=3.449e-04 (ema=3.44e-04) | wEE=6.339 wEI=4.715 wIE=6.102 wII=1.415
+--> meseta detectada en epoch 11000. Corto.
+  -> APRBS ⭐: wEE=6.339(1.0%) wEI=4.715(1.8%) wIE=6.102(1.7%) wII=1.415(17.9%) | max_err=17.9%
+
+======================================================================
+  IDENTIFICANDO con: Theta-gamma ⭐
+======================================================================
+epoch     0 | L=1.649e-01 (ema=1.65e-01) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch   500 | L=8.747e-04 (ema=3.58e-03) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1000 | L=3.795e-04 (ema=4.43e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1500 | L=3.255e-04 (ema=3.20e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+--> fin del warmup en epoch 2000: congelo las redes, ajusto solo theta.
+epoch  2000 | L=1.107e-01 (ema=1.11e-01) | wEE=1.032 wEI=0.969 wIE=1.032 wII=0.969
+epoch  2500 | L=1.998e-03 (ema=4.23e-03) | wEE=5.575 wEI=3.158 wIE=5.488 wII=0.152
+epoch  3000 | L=1.849e-03 (ema=1.86e-03) | wEE=6.164 wEI=4.367 wIE=5.942 wII=1.083
+epoch  3500 | L=1.855e-03 (ema=1.82e-03) | wEE=6.165 wEI=4.367 wIE=5.942 wII=1.083
+epoch  4000 | L=2.012e-03 (ema=1.84e-03) | wEE=6.165 wEI=4.368 wIE=5.942 wII=1.083
+epoch  4500 | L=1.632e-03 (ema=1.83e-03) | wEE=6.164 wEI=4.368 wIE=5.942 wII=1.083
+epoch  5000 | L=1.710e-03 (ema=1.84e-03) | wEE=6.165 wEI=4.368 wIE=5.943 wII=1.083
+epoch  5500 | L=1.779e-03 (ema=1.84e-03) | wEE=6.164 wEI=4.368 wIE=5.943 wII=1.083
+epoch  6000 | L=1.780e-03 (ema=1.84e-03) | wEE=6.164 wEI=4.369 wIE=5.943 wII=1.083
+epoch  6500 | L=1.993e-03 (ema=1.84e-03) | wEE=6.164 wEI=4.370 wIE=5.943 wII=1.083
+epoch  7000 | L=1.837e-03 (ema=1.85e-03) | wEE=6.164 wEI=4.370 wIE=5.943 wII=1.083
+epoch  7500 | L=1.964e-03 (ema=1.82e-03) | wEE=6.164 wEI=4.371 wIE=5.943 wII=1.083
+epoch  8000 | L=1.863e-03 (ema=1.82e-03) | wEE=6.164 wEI=4.371 wIE=5.944 wII=1.083
+epoch  8500 | L=1.864e-03 (ema=1.84e-03) | wEE=6.164 wEI=4.372 wIE=5.944 wII=1.084
+epoch  9000 | L=1.867e-03 (ema=1.84e-03) | wEE=6.164 wEI=4.372 wIE=5.944 wII=1.084
+epoch  9500 | L=1.807e-03 (ema=1.83e-03) | wEE=6.164 wEI=4.373 wIE=5.944 wII=1.084
+epoch 10000 | L=1.732e-03 (ema=1.84e-03) | wEE=6.164 wEI=4.373 wIE=5.945 wII=1.085
+epoch 10500 | L=1.923e-03 (ema=1.83e-03) | wEE=6.165 wEI=4.373 wIE=5.945 wII=1.085
+epoch 11000 | L=1.658e-03 (ema=1.84e-03) | wEE=6.165 wEI=4.374 wIE=5.946 wII=1.085
+epoch 11500 | L=1.714e-03 (ema=1.82e-03) | wEE=6.165 wEI=4.374 wIE=5.946 wII=1.086
+epoch 12000 | L=1.810e-03 (ema=1.84e-03) | wEE=6.165 wEI=4.375 wIE=5.946 wII=1.086
+epoch 12500 | L=1.805e-03 (ema=1.82e-03) | wEE=6.165 wEI=4.375 wIE=5.946 wII=1.087
+--> meseta detectada en epoch 12500. Corto.
+  -> Theta-gamma ⭐: wEE=6.165(3.7%) wEI=4.375(8.9%) wIE=5.946(0.9%) wII=1.087(9.5%) | max_err=9.5%
+
+======================================================================
+  RANKING (menor error parametrico = mejor estimulo)
+======================================================================
+familia                 wEE err%    wEI err%    wIE err%    wII err%   max err%
+Box (baseline)             1.06%       2.36%       0.68%       5.68%      5.68%
+Theta-gamma ⭐              3.67%       8.85%       0.90%       9.45%      9.45%
+APRBS ⭐                    0.96%       1.77%       1.70%      17.92%     17.92%
+/home/pedro/Documentos/investigacion/scripts/compare_estimulos.py:230: UserWarning: Glyph 11088 (\N{WHITE MEDIUM STAR}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/pedro/Documentos/investigacion/scripts/compare_estimulos.py:232: UserWarning: Glyph 11088 (\N{WHITE MEDIUM STAR}) missing from font(s) DejaVu Sans.
+  fig.savefig(FIG_PATH, dpi=120); plt.close(fig)
+
+Figura: results/figures/compare_estimulos.png
+Reporte HTML: results/reporte_compare_estimulos.html

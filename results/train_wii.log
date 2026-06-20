@@ -1,0 +1,41 @@
+  tray 'P fuerte Q=0 ': I_max=0.475  E_max=0.821
+  tray 'Q grande     ': I_max=0.335  E_max=0.048
+  tray 'Q muy grande ': I_max=0.518  E_max=0.016
+  tray 'pulsos Q gde ': I_max=0.745  E_max=0.859
+  tray 'P=0 Q muy gde': I_max=0.454  E_max=0.000
+  tray 'Q intermedio ': I_max=0.197  E_max=0.084
+
+=== Identificacion dedicada a wII: 6 trayectorias ===
+epoch     0 | L=4.161e-01 (ema=4.16e-01) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch   500 | L=3.791e-03 (ema=4.76e-03) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1000 | L=4.849e-04 (ema=5.62e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  1500 | L=3.497e-04 (ema=3.77e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  2000 | L=3.002e-04 (ema=3.11e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+epoch  2500 | L=2.510e-04 (ema=2.61e-04) | wEE=1.000 wEI=1.000 wIE=1.000 wII=1.000
+--> fin del warmup en epoch 3000: congelo las redes, ajusto solo theta.
+epoch  3000 | L=1.430e-01 (ema=1.43e-01) | wEE=1.032 wEI=0.969 wIE=1.032 wII=1.032
+epoch  3500 | L=1.570e-03 (ema=3.49e-03) | wEE=6.158 wEI=4.349 wIE=6.015 wII=1.220
+epoch  4000 | L=1.664e-03 (ema=1.60e-03) | wEE=6.293 wEI=4.586 wIE=6.015 wII=1.221
+epoch  4500 | L=1.453e-03 (ema=1.58e-03) | wEE=6.293 wEI=4.586 wIE=6.015 wII=1.220
+epoch  5000 | L=1.644e-03 (ema=1.58e-03) | wEE=6.293 wEI=4.586 wIE=6.015 wII=1.220
+epoch  5500 | L=1.606e-03 (ema=1.58e-03) | wEE=6.293 wEI=4.585 wIE=6.015 wII=1.220
+epoch  6000 | L=1.658e-03 (ema=1.59e-03) | wEE=6.293 wEI=4.585 wIE=6.015 wII=1.220
+epoch  6500 | L=1.607e-03 (ema=1.59e-03) | wEE=6.293 wEI=4.585 wIE=6.015 wII=1.220
+epoch  7000 | L=1.547e-03 (ema=1.58e-03) | wEE=6.293 wEI=4.585 wIE=6.015 wII=1.220
+epoch  7500 | L=1.582e-03 (ema=1.58e-03) | wEE=6.293 wEI=4.585 wIE=6.015 wII=1.220
+epoch  8000 | L=1.623e-03 (ema=1.59e-03) | wEE=6.293 wEI=4.585 wIE=6.015 wII=1.220
+epoch  8500 | L=1.688e-03 (ema=1.58e-03) | wEE=6.293 wEI=4.585 wIE=6.014 wII=1.220
+epoch  9000 | L=1.533e-03 (ema=1.59e-03) | wEE=6.293 wEI=4.585 wIE=6.014 wII=1.220
+epoch  9500 | L=1.586e-03 (ema=1.58e-03) | wEE=6.293 wEI=4.585 wIE=6.014 wII=1.220
+--> meseta detectada en epoch 9500. Corto.
+
+=== Pesos identificados vs verdaderos ===
+peso    verdadero   estimado    error %
+wEE        6.4000     6.2932      1.67%
+wEI        4.8000     4.5854      4.47%
+wIE        6.0000     6.0143      0.24%
+wII        1.2000     1.2199      1.66%
+
+>>> wII error = 1.66%   (max global = 4.47%)
+
+Reporte HTML: results/reporte_wii.html
