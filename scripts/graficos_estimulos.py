@@ -63,10 +63,11 @@ AHORA = [
      chirp_pulse(0.3, 0.005, 0.04, 150, 450)),
 ]
 
-# --- AJUSTE clave para wII: Q débil vs Q fuerte (con P apagado para aislar el efecto en I) ---
+# --- AJUSTE clave para wII: MISMO estímulo (APRBS), solo cambia la amplitud de Q.
+#     P apagado para aislar el efecto de Q sobre la población inhibitoria I.
 AJUSTE = [
-    ("ANTES — Q débil (~1)", zero_input, box_pulse(1.0, 100, 500)),
-    ("AHORA — Q fuerte (~5)", zero_input, aprbs_pulse(5.0, 100, 500, 18, 55, seed=3, amp_min=2.0)),
+    ("APRBS — Q débil (~1)", zero_input, aprbs_pulse(1.0, 100, 500, 18, 55, seed=3, amp_min=0.3)),
+    ("APRBS — Q fuerte (~5)", zero_input, aprbs_pulse(5.0, 100, 500, 18, 55, seed=3, amp_min=2.0)),
 ]
 
 
@@ -127,6 +128,7 @@ def main():
  img{{width:100%;border:1px solid #d7dee5;border-radius:8px;margin:.5rem 0}}
  .nota{{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.92rem}}
  .ok{{background:#e7f6ec;border-left-color:#0a7d33}}
+ .ajuste{{font-size:.9rem;color:#555}}
 </style></head><body><div class="wrap">
 <header><h1>Estímulos utilizados — antes vs ahora, con la respuesta del sistema</h1></header>
 <main>
@@ -138,17 +140,28 @@ def main():
  (senoide, multiseno, chirp). El pulso cuadrado "mueve poco" el sistema; las senoidales no son on/off
  (no realizables con optogenética), por eso se descartaron.</p>
  <img src="data:image/png;base64,{_b64(f_antes)}">
+ <p class="ajuste"><b>Figura 1 — Estímulos originales.</b> Una fila por estímulo (box, senoide,
+ multiseno, chirp). Columna izquierda: la entrada (P→E azul, Q→I rojo); columna derecha: la respuesta
+ del sistema (E verde, I violeta). Se ve que el box es casi constante (excita poco) y que las
+ senoidales recorren más estados pero no prenden/apagan.</p>
 
  <h2>2 · AHORA — librería nueva tipo pulso</h2>
  <p>Estímulos realizables (on/off, ≥ 0): onda cuadrada, APRBS, PRBS, theta-gamma, Poisson (+ chirp
  conservado por su cobertura espectral). Excitan el sistema de forma más rica y variada.</p>
  <img src="data:image/png;base64,{_b64(f_ahora)}">
+ <p class="ajuste"><b>Figura 2 — Librería nueva.</b> Misma disposición que la Figura 1 (izq.: entrada
+ P/Q; der.: respuesta I/E), una fila por estímulo nuevo. Comparado con el box, estas entradas hacen
+ que I y E recorran muchos más estados — mejor para identificar.</p>
 
- <h2>3 · El ajuste clave para wII — Q débil vs Q fuerte</h2>
- <p>Con P apagado, se ve el efecto de Q sobre la población inhibitoria I. Con <b>Q débil (~1)</b>, I
- casi no se mueve (no se puede identificar wII). Con <b>Q fuerte (~5)</b>, I se activa de verdad y se
- mueve independiente de E — la condición para identificar wII.</p>
+ <h2>3 · El ajuste clave para wII — Q débil vs Q fuerte (mismo estímulo)</h2>
+ <p>Las dos filas usan <b>el mismo estímulo (APRBS)</b> con P apagado; lo único que cambia es la
+ <b>amplitud de Q</b>. Así se aísla el efecto de Q sobre la población inhibitoria I. Con <b>Q débil
+ (~1)</b>, I casi no se mueve (no se puede identificar wII). Con <b>Q fuerte (~5)</b>, I se activa de
+ verdad y se mueve independiente de E — la condición para identificar wII.</p>
  <img src="data:image/png;base64,{_b64(f_ajuste)}">
+ <p class="ajuste"><b>Figura 3 — Efecto de la amplitud de Q.</b> Mismo APRBS en ambas filas (P apagado),
+ solo cambia la amplitud de Q (izq.). A la derecha, la respuesta: con Q débil I queda casi plana; con
+ Q fuerte I se levanta. La diferencia es por la amplitud, no por el tipo de estímulo.</p>
  <div class="nota ok">Este es el cambio que destrabó la identificación de wII: empujar la población
  inhibitoria con Q grande para que I sea grande y decorrelado de E.</div>
 </main></div></body></html>"""

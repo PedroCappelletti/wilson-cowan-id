@@ -223,11 +223,15 @@ def _build_html(results, w_real, w_hat):
  <p>{tinfo['desc']}</p>
  <p class="ajuste"><b>Ajuste:</b> {tinfo['ajuste']}</p>
  <img src="data:image/png;base64,{_b64(FIGDIR / f'int_ref_{tname}.png')}">
+ <p class="ajuste"><b>Figura — Referencias de tipo {tname}.</b> Las <b>formas</b> de la consigna que
+ el controlador debe imponer: rI (izq.) y rE (der.) en el tiempo. Son lo que I y E deberían seguir.</p>
  <table><tr><th>Forma</th>{th}</tr>{filas}</table>
+ <p class="ajuste">Tabla: RMSE de seguimiento (I y E) de cada una de las 4 configuraciones, por forma.
+ Menor = mejor. Las 4 columnas casi iguales = usar θ̂ o la planta aprendida no degrada el control.</p>
  <img src="data:image/png;base64,{_b64(FIGDIR / f'int_track_{tname}.png')}">
- <p class="ajuste">Las 4 configuraciones están dibujadas con grosor decreciente y se superponen casi
- exactamente (se ven como bandas anidadas) — esa coincidencia <b>es</b> el resultado: las 4 se
- comportan igual. La línea negra punteada es la referencia.</p>
+ <p class="ajuste"><b>Figura — Seguimiento ({tname}).</b> I(t) y E(t) reales de las 4 configuraciones
+ siguiendo la referencia (negra punteada). Las 4 se dibujan con grosor decreciente y se superponen casi
+ exactamente (bandas anidadas) — esa coincidencia <b>es</b> el resultado: las 4 se comportan igual.</p>
 """
 
     F = Path("results/figures")
@@ -270,15 +274,23 @@ def _build_html(results, w_real, w_hat):
  <p>Wilson-Cowan: dos poblaciones (E excitatoria, I inhibitoria). Es el "sistema real" que genera
  los datos. Se inyecta un estímulo externo (P→E, Q→I).</p>
  {_img(F / 'simulacion_wilson_cowan.png', 'simulación WC')}
+ <p class="ajuste"><b>Figura 1 — Simulación del modelo Wilson-Cowan.</b> Tres paneles que comparten el
+ eje de tiempo: (arriba) las <b>entradas</b> externas P→E y Q→I; (medio) los <b>estados</b> I y E
+ (la actividad de cada población); (abajo) la <b>salida</b> y = E − I (el "potencial" observable).
+ Muestra cómo un estímulo externo produce la actividad de las dos poblaciones.</p>
  <p>Se amplió la librería de estímulos (todos on/off, realizables con optogenética), reemplazando las
- senoides por entradas tipo pulso:</p>
+ senoides por entradas tipo pulso. <b>"Variaciones"</b> = configuraciones distintas del mismo tipo
+ (amplitud / frecuencia / duty / semilla) usadas en el dataset de control:</p>
  <table>
-  <tr><th>Estímulo</th><th>Qué es</th><th>Para qué</th></tr>
-  <tr><td>APRBS</td><td>Escalones de amplitud y duración aleatorias</td><td>Barre amplitud × frecuencia (el más rico)</td></tr>
-  <tr><td>Theta-gamma</td><td>Ráfagas gamma bajo envolvente theta</td><td>El régimen propio del proyecto</td></tr>
-  <tr><td>Onda cuadrada</td><td>Tren de pulsos (freq + duty)</td><td>DBS / optogenética</td></tr>
-  <tr><td>PRBS</td><td>Secuencia binaria pseudo-aleatoria</td><td>Clásico de identificación</td></tr>
-  <tr><td>Poisson</td><td>Pulsos en tiempos aleatorios</td><td>Naturalista (spikes)</td></tr>
+  <tr><th>Estímulo</th><th>Qué es</th><th>Para qué</th><th class="num">Variaciones</th></tr>
+  <tr><td>Escalón (box)</td><td>Amplitud constante en una ventana</td><td>Baseline (excita poco)</td><td class="num">3</td></tr>
+  <tr><td>Onda cuadrada</td><td>Tren de pulsos periódico (freq + duty)</td><td>DBS / optogenética; cubre frecuencia</td><td class="num">6</td></tr>
+  <tr><td>APRBS</td><td>Escalones de amplitud y duración aleatorias</td><td>Barre amplitud × frecuencia (el más rico)</td><td class="num">3</td></tr>
+  <tr><td>Theta-gamma</td><td>Ráfagas gamma bajo envolvente theta</td><td>El régimen propio del proyecto</td><td class="num">3</td></tr>
+  <tr><td>PRBS</td><td>Secuencia binaria pseudo-aleatoria</td><td>Clásico de identificación (banda ancha)</td><td class="num">2</td></tr>
+  <tr><td>Poisson</td><td>Pulsos en tiempos aleatorios</td><td>Naturalista (estadística de spikes)</td><td class="num">2</td></tr>
+  <tr><td>Chirp</td><td>Barrido de frecuencia (senoide que acelera)</td><td>Respuesta en frecuencia (única senoidal conservada)</td><td class="num">1</td></tr>
+  <tr><td colspan="3"><b>Total dataset de control</b></td><td class="num"><b>20</b></td></tr>
  </table>
 
  <h2 id="ident">2 · Identificación paramétrica (en limpio)</h2>
@@ -291,12 +303,20 @@ def _build_html(results, w_real, w_hat):
   <tr><td><b>Neural ODE</b></td><td class="num good">0.1%</td><td class="num good">0.4%</td><td class="num good">0.1%</td><td class="num good">0.4%</td></tr>
  </table>
  {_img(F / 'wii_pesos.png', 'convergencia de pesos')}
+ <p class="ajuste"><b>Figura 2 — Convergencia de los pesos durante el entrenamiento.</b> Eje x: épocas
+ (vueltas de entrenamiento); eje y: valor de cada peso. Cada curva es un peso (wEE, wEI, wIE, wII); la
+ línea punteada del mismo color es su <b>valor verdadero</b>. Que cada curva termine pegada a su
+ punteada = identificación correcta — incluido wII, el difícil.</p>
 
  <h2 id="nodelo">3 · El Neural ODE como planta (lazo abierto)</h2>
  <p>Un único Neural ODE <code>f(x,P,Q)</code> entrenado con todos los estímulos. Mismo estímulo
  aplicado al simulador y al Neural ODE: las trayectorias casi coinciden. Rollout MSE: train
  <b>3.4e-5</b>, test held-out <b>8.5e-5</b> (generaliza a estímulos no vistos).</p>
  {_img(F / 'informe_ol.png', 'lazo abierto simulador vs Neural ODE')}
+ <p class="ajuste"><b>Figura 3 — Lazo abierto: simulador vs Neural ODE.</b> Una fila por trayectoria
+ (con estímulos distintos, algunos <b>no vistos</b> en entrenamiento); columnas: I(t) y E(t). Línea
+ llena = simulador real; punteado = Neural ODE. Que se superpongan significa que el modelo aprendido
+ reproduce la dinámica y <b>generaliza</b> a estímulos nuevos.</p>
 
  <h2 id="control">4 · Control en lazo cerrado — matriz por tipo de referencia</h2>
  <p>El controlador IMC lleva un modelo de la planta adentro (sus pesos), por eso importa con qué
@@ -326,6 +346,10 @@ def _build_html(results, w_real, w_hat):
   <tr><td class="num">0.10</td><td class="num bad">106.1%</td><td class="num good">8.9%</td><td class="num">3.42e-2 / 3.06e-2</td></tr>
  </table>
  {_img(F / 'ruido.png', 'robustez bajo ruido')}
+ <p class="ajuste"><b>Figura final — Robustez bajo ruido.</b> (Izquierda) error de identificación de
+ los pesos (θ̂) vs nivel de ruido: método ingenuo (gris, se dispara) vs mejorado (azul, se mantiene
+ bajo). (Derecha) RMSE de seguimiento del control vs ruido, con la cota ideal punteada. El control
+ queda plano (robusto) y la identificación mejorada baja muchísimo el error.</p>
  <div class="nota ok">Dos resultados: (1) el control se mantiene cerca del ideal (~3.3e-2) en todos
  los niveles, incluso con θ̂ muy errado (acción integral del IMC); (2) la identificación bajo ruido
  mejora drásticamente con suavizado + estímulo fuerte (a σ=0.10: de 106% a 8.9%).</div>
