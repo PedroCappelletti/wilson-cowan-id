@@ -24,9 +24,13 @@
 #  plant_rhs(I,E,P,Q)->(dI,dE), que puede ser la WC verdadera o el Neural ODE
 #  aprendido. Asi se enchufa el modelo aprendido sin tocar el controlador.
 #
-#  NOTA (pendiente de decision): el archivo original corre en ms (tf=50, ref
-#  120 Hz). Acá se replican esos valores por defecto; reconciliar unidades con
-#  el setup de identificacion (que corrio en s) es una decision de diseño.
+#  UNIDADES (reconciliado): TODA la cadena trabaja en MILISEGUNDOS. La decision ya
+#  estaba tomada en gen_multi_dataset.py ("régimen ms"): el dataset de control, la
+#  identificacion (te=1 ms, ti=2 ms; estimulos con freq en Hz -> ciclos/ms via f/1000)
+#  y este lazo cerrado (tf=50 ms, refs 120 Hz = 0.12 ciclos/ms) usan la MISMA unidad.
+#  Los parametros del modelo son numericamente identicos en ambos lados; lo unico que
+#  cambia es el paso de integracion (dt~0.05 ms en identificacion vs dt=0.005 ms aca),
+#  que es una eleccion numerica, no de unidades. No hay reescalado de parametros.
 #
 #  NOTA: el archivo original usa realimentacion de ESTADO COMPLETO (I,E directos,
 #  sin filtro de Kalman). Se replica igual. El EKF del paper seria una capa extra.

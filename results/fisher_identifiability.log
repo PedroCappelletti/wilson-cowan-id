@@ -1,0 +1,35 @@
+=== Identificabilidad FIM+SVD — 4 escenarios, dt=0.0500 ms ===
+    salidas (N_out) = 6400
+
+--- Valores singulares (normalizados al mayor) ---
+  σ 1 =  9.9825e+02   (rel  1.00e+00)   bien cond.
+  σ 2 =  1.7126e+02   (rel  1.72e-01)   bien cond.
+  σ 3 =  4.3927e+01   (rel  4.40e-02)   bien cond.
+  σ 4 =  2.0284e+01   (rel  2.03e-02)   bien cond.
+  σ 5 =  1.5318e+01   (rel  1.53e-02)   bien cond.
+  σ 6 =  1.1106e+01   (rel  1.11e-02)   bien cond.
+  σ 7 =  6.6111e+00   (rel  6.62e-03)   debil
+  σ 8 =  3.8640e+00   (rel  3.87e-03)   debil
+  σ 9 =  2.3722e+00   (rel  2.38e-03)   debil
+  σ10 =  7.4692e-01   (rel  7.48e-04)   MUY debil
+
+  Numero de condicion  σ1/σ10 = 1.336e+03
+
+--- Direcciones MAL condicionadas (σ chicos) -> combinaciones poco identificables ---
+  σ10 (rel 7.48e-04): wII=+0.914  ae=+0.245  te=+0.214  thetae=-0.124
+  σ9 (rel 2.38e-03): ae=-0.607  te=-0.459  wEE=+0.398  thetae=+0.350
+  σ8 (rel 3.87e-03): ai=-0.711  wEI=+0.355  ti=-0.352  thetai=+0.351
+
+--- Sensibilidad relativa total por parametro (||columna||) ---
+  wII     2.590e+01
+  ti      2.759e+01
+  wEI     7.748e+01
+  thetai  9.308e+01
+  ai      1.008e+02
+  te      1.099e+02
+  wIE     1.515e+02
+  ae      2.178e+02
+  wEE     3.202e+02
+  thetae  9.041e+02
+
+Figura: results/figures/fisher_svd.png

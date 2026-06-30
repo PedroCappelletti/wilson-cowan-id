@@ -1,0 +1,31 @@
+=== LAZO ABIERTO (modelo identificado completo) ===
+  estimulo               split           MSE
+  box_a0.4               train     1.347e-07
+  box_a0.8               train     5.211e-07
+  box_a1.2               TEST      3.012e-03
+  square_a0.6_f50        train     3.374e-07
+  square_a0.6_f100       train     6.830e-07
+  square_a0.6_f130       train     5.196e-07
+  square_a1.0_f50        train     5.190e-05
+  square_a1.0_f100       train     1.216e-05
+  square_a1.0_f130       TEST      9.655e-06
+  aprbs_0                train     4.575e-05
+  aprbs_1                train     8.194e-05
+  aprbs_2                TEST      2.033e-06
+  prbs_0                 train     3.064e-05
+  prbs_1                 TEST      7.578e-04
+  thetagamma_0           train     2.263e-06
+  thetagamma_1           train     2.418e-05
+  thetagamma_2           TEST      1.642e-06
+  poisson_0              train     1.174e-04
+  poisson_1              TEST      8.261e-05
+  chirp                  TEST      1.919e-05
+  --> MSE medio  train=2.834e-05   test(held-out)=5.549e-04
+  Figura: results/figures/open_loop_full.png
+
+=== LAZO CERRADO (controlador IMC) ===
+  caso                                              RMSE I     RMSE E
+  nominal (ctrl verdadero / planta verdadera)    3.348e-02  3.134e-02
+  planta APRENDIDA (ctrl verdadero)              3.346e-02  3.128e-02
+  controlador θ̂ / planta verdadera              3.341e-02  3.132e-02
+  Figura: results/figures/closed_loop_full.png

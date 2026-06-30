@@ -28,6 +28,9 @@ import torch.nn.functional as F
 
 class GrayBoxWC(nn.Module):
     WEIGHTS = ("wEE", "wEI", "wIE", "wII")
+    # Parametros "fisicos" que tambien se pueden identificar (ademas de los pesos).
+    # ke,ki NO estan aca: no son libres, se derivan de ae,thetae / ai,thetai.
+    EXTRA = ("te", "ti", "ae", "ai", "thetae", "thetai")
 
     def __init__(
         self,
@@ -35,13 +38,24 @@ class GrayBoxWC(nn.Module):
         w_init: dict,                # wEE,wEI,wIE,wII (p.ej. los identificados por la PINN)
         learnable_weights: bool = False,  # True -> los 4 pesos se siguen ajustando
         use_correction: bool = False,     # True -> agrega la correccion neuronal g_φ (V1)
+        learnable_params: bool = False,   # True -> tambien aprende te,ti,ae,ai,thetae,thetai
         hidden: int = 32,
     ) -> None:
         super().__init__()
 
-        # Constantes del modelo (no se entrenan): viajan como buffers.
-        for k in ("te", "ti", "ae", "ai", "thetae", "thetai", "ke", "ki"):
-            self.register_buffer(k, torch.tensor(float(fixed[k])))
+        # --- Parametros fisicos (te,ti,ae,ai,thetae,thetai) ---------------------
+        #  Caso por defecto: son constantes conocidas -> buffers (no se entrenan).
+        #  Caso "todo aprendible": se guardan crudos (softplus -> >0, como los pesos)
+        #  y ademas ke,ki dejan de ser fijos: se recalculan en cada forward a partir
+        #  de los ae,thetae / ai,thetai actuales, para que E=I=0 siga siendo reposo.
+        self._learn_extra = learnable_params
+        if learnable_params:
+            for k in self.EXTRA:
+                v = torch.tensor(float(fixed[k]))
+                self.register_parameter(f"raw_{k}", nn.Parameter(torch.log(torch.expm1(v))))
+        else:
+            for k in ("te", "ti", "ae", "ai", "thetae", "thetai", "ke", "ki"):
+                self.register_buffer(k, torch.tensor(float(fixed[k])))
 
         # Pesos sinapticos. Si son entrenables, se guardan "crudos" (softplus -> >0).
         w = torch.tensor([float(w_init[k]) for k in self.WEIGHTS])
@@ -72,6 +86,18 @@ class GrayBoxWC(nn.Module):
         w = self.weights().detach()
         return {k: float(w[i]) for i, k in enumerate(self.WEIGHTS)}
 
+    # Valor actual de un parametro fisico (softplus si es aprendible, buffer si no).
+    def _extra(self, k: str) -> torch.Tensor:
+        return F.softplus(getattr(self, f"raw_{k}")) if self._learn_extra else getattr(self, k)
+
+    def params_dict(self) -> dict[str, float]:
+        """Todos los parametros identificados (pesos + fisicos si son aprendibles)."""
+        d = self.weights_dict()
+        if self._learn_extra:
+            for k in self.EXTRA:
+                d[k] = float(self._extra(k).detach())
+        return d
+
     # -------------------------------------------------------------------------
     #  ẋ = f_θ(x, P, Q).  x: (...,2)=[I,E];  P,Q: tensores broadcastables a (...,1).
     # -------------------------------------------------------------------------
@@ -84,11 +110,23 @@ class GrayBoxWC(nn.Module):
         w = self.weights()
         wEE, wEI, wIE, wII = w[0], w[1], w[2], w[3]
 
+        # Parametros fisicos (constantes o aprendidos, segun learnable_params).
+        te, ti = self._extra("te"), self._extra("ti")
+        ae, ai = self._extra("ae"), self._extra("ai")
+        thetae, thetai = self._extra("thetae"), self._extra("thetai")
+        # Offsets de reposo: fijos si no se aprende nada, o recalculados de los
+        # ae,thetae / ai,thetai actuales para conservar el equilibrio en E=I=0.
+        if self._learn_extra:
+            ke = torch.sigmoid(-ae * thetae)
+            ki = torch.sigmoid(-ai * thetai)
+        else:
+            ke, ki = self.ke, self.ki
+
         # MISMA estructura que rhs() en model.py (umbral adentro, offset ke/ki).
-        u_i = wIE * E - wII * I + Q - self.thetai
-        u_e = wEE * E - wEI * I + P - self.thetae
-        dI = (1.0 / self.ti) * (-I + torch.sigmoid(self.ai * u_i) - self.ki)
-        dE = (1.0 / self.te) * (-E + torch.sigmoid(self.ae * u_e) - self.ke)
+        u_i = wIE * E - wII * I + Q - thetai
+        u_e = wEE * E - wEI * I + P - thetae
+        dI = (1.0 / ti) * (-I + torch.sigmoid(ai * u_i) - ki)
+        dE = (1.0 / te) * (-E + torch.sigmoid(ae * u_e) - ke)
 
         if self.use_correction:
             corr = self.g(torch.cat([I, E, P, Q], dim=-1))

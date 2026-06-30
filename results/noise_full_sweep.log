@@ -1,0 +1,13 @@
+baseline ideal (params reales): control RMSE I=3.348e-02 E=3.134e-02
+
+σ=0.00 (k=7) | θ̂(10) máx=  0.83%  θ̂(4 pesos) máx=  0.14% | ctrl RMSE I=3.348e-02 E=3.134e-02
+   err10 por param: wEE=0.05%  wEI=0.08%  wIE=0.14%  wII=0.83%  te=0.16%  ti=0.68%  ae=0.03%  ai=0.35%  thetae=0.03%  thetai=0.03%
+σ=0.01 (k=7) | θ̂(10) máx=  4.53%  θ̂(4 pesos) máx=  0.65% | ctrl RMSE I=3.360e-02 E=3.137e-02
+   err10 por param: wEE=0.78%  wEI=0.92%  wIE=0.19%  wII=4.53%  te=0.00%  ti=1.44%  ae=0.72%  ai=0.92%  thetae=0.35%  thetai=0.48%
+σ=0.05 (k=7) | θ̂(10) máx= 19.32%  θ̂(4 pesos) máx=  1.19% | ctrl RMSE I=3.333e-02 E=3.061e-02
+   err10 por param: wEE=4.78%  wEI=1.23%  wIE=0.57%  wII=19.32%  te=2.92%  ti=4.55%  ae=7.54%  ai=4.76%  thetae=3.53%  thetai=2.18%
+σ=0.10 (k=11) | θ̂(10) máx= 41.34%  θ̂(4 pesos) máx=  8.92% | ctrl RMSE I=3.291e-02 E=2.982e-02
+   err10 por param: wEE=3.33%  wEI=4.25%  wIE=1.18%  wII=41.34%  te=5.44%  ti=15.88%  ae=9.05%  ai=11.53%  thetae=4.05%  thetai=5.21%
+
+Figuras: results/figures/noise_param_error.png  |  results/figures/noise_control_rmse.png
+Resultados: results/noise_full_sweep.json
