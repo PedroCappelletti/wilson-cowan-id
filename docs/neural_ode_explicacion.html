@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cómo funciona nuestro Neural ODE</title>
+<style>
+  body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2733;
+       line-height:1.65;margin:0;background:#f4f6f8;padding:2rem 1rem}
+  .wrap{max-width:920px;margin:0 auto}
+  header{background:#1f4e79;color:#fff;border-radius:12px 12px 0 0;padding:1.7rem 2rem}
+  header h1{margin:0;font-size:1.4rem;line-height:1.3}
+  header p{margin:.45rem 0 0;opacity:.92;font-size:.95rem}
+  main{background:#fff;border:1px solid #d7dee5;border-top:none;
+        border-radius:0 0 12px 12px;padding:1.6rem 2rem 2.2rem}
+  h2{color:#1f4e79;font-size:1.2rem;margin:2rem 0 .6rem;padding-bottom:.3rem;border-bottom:2px solid #e8f0f8}
+  h3{color:#1f4e79;font-size:1.04rem;margin:1.2rem 0 .4rem}
+  code{background:#f0f3f6;padding:.1rem .35rem;border-radius:4px;font-family:Consolas,monospace;font-size:.86em}
+  .eq{background:#f7fafd;border:1px solid #e1e8ef;border-radius:6px;padding:.6rem .9rem;
+      font-family:Consolas,monospace;font-size:.84rem;margin:.6rem 0;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.88rem}
+  .scroll{overflow-x:auto}
+  th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid #d7dee5;vertical-align:top}
+  th{background:#e8f0f8;color:#1f4e79}
+  .pill{display:inline-block;padding:.1rem .5rem;border-radius:999px;font-size:.73rem;font-weight:700}
+  .ok{background:#e3f5ea;color:#1b7f4b} .warn{background:#fbf0db;color:#b06a00} .bad{background:#fbe3e3;color:#b02a2a}
+  .nota{background:#e8f0f8;border-left:4px solid #1f4e79;padding:.8rem 1.1rem;border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.93rem}
+  .key{background:#fff7e6;border-left:4px solid #d99a00;padding:.8rem 1.1rem;border-radius:0 6px 6px 0;margin:1.1rem 0;font-size:.94rem}
+  ul,ol{margin:.4rem 0;padding-left:1.35rem} li{margin:.3rem 0}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:.8rem 0;font-size:.82rem}
+  .box{background:#eef4fb;border:1px solid #c4d5e8;border-radius:8px;padding:.5rem .7rem;text-align:center;min-width:110px}
+  .arrow{color:#1f4e79;font-weight:700;font-size:1.1rem}
+  .lbl{font-size:.7rem;color:#5b6770;display:block;margin-top:.15rem}
+  footer{color:#5b6770;font-size:.82rem;text-align:center;margin-top:1.5rem}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Cómo funciona nuestro Neural ODE</h1>
+  <p>El modelo de dinámica que sirve de planta controlable · proyecto Wilson-Cowan + PINN · ITBA 2026</p>
+</header>
+<main>
+
+  <div class="nota">
+    Este documento responde: <b>qué derivada aprende</b>, <b>qué subtipo de Neural ODE es</b>,
+    <b>cómo funciona</b> (archivos, pipeline, funciones), <b>qué se aprende y qué se da</b>, qué pasa
+    <b>con datos reales</b>, y si es <b>computacionalmente costoso</b>.
+  </div>
+
+  <!-- ================================================== -->
+  <h2>1 · ¿Qué aprende? La derivada <i>de qué</i></h2>
+  <p>Aprende la <b>derivada temporal del estado</b>: <code>dI/dt</code> y <code>dE/dt</code> — qué tan
+  rápido cambian las actividades inhibitoria (I) y excitatoria (E) en cada instante. Formalmente, la
+  red representa el <b>campo vectorial</b> <code>f</code>:</p>
+  <div class="eq">[dI/dt, dE/dt] = f_θ(I, E, P, Q)</div>
+  <p>"Dado dónde está el sistema ahora <code>(I,E)</code> y qué se le inyecta <code>(P,Q)</code>, hacia
+  dónde se mueve." No es la derivada respecto de los parámetros ni de la entrada — es la <b>velocidad
+  de cambio del estado en el tiempo</b>.</p>
+
+  <div class="key">
+    <b>PINN vs Neural ODE en una línea.</b> La PINN aprende la <b>solución</b> <code>x(t)</code> (la
+    curva ya recorrida). El Neural ODE aprende la <b>regla</b> <code>dx/dt = f(x,u)</code> que
+    <i>genera</i> la curva. Para obtener la curva hay que <b>integrar</b> <code>f</code>. Por eso el
+    Neural ODE se puede meter en un lazo de control (responde a cualquier entrada online) y la PINN no.
+  </div>
+
+  <!-- ================================================== -->
+  <h2>2 · ¿Qué subtipo de Neural ODE es?</h2>
+  <p>No es el Neural ODE "vainilla" (Chen et al. 2018, una MLP black-box para <code>f</code>). El nuestro combina cuatro rasgos:</p>
+  <table>
+    <tr><th>Rasgo</th><th>Qué significa</th></tr>
+    <tr><td><b>Gray-box / physics-informed</b><br>(Universal Differential Equation)</td>
+        <td><code>f</code> = ecuaciones de Wilson-Cowan conocidas + corrección neuronal <code>g_φ</code> opcional. Con <code>g_φ</code> apagada, es física pura con <b>parámetros aprendibles</b>.</td></tr>
+    <tr><td><b>Controlado / no-autónomo</b><br>(input-driven)</td>
+        <td><code>f</code> depende de una entrada externa <code>u=(P,Q)</code>, no solo de <code>(x,t)</code>. Es lo que permite conectarle un controlador.</td></tr>
+    <tr><td><b>Discretize-then-optimize</b></td>
+        <td>El gradiente backpropaga a través de un integrador <b>RK4 de paso fijo</b> (no usa el método adjunto).</td></tr>
+    <tr><td><b>Multiple shooting</b></td>
+        <td>Esquema de entrenamiento en ventanas cortas (ver §3).</td></tr>
+  </table>
+  <p>En una frase: <b>un Neural ODE controlado, gray-box (physics-informed), entrenado por backprop a
+  través de RK4 con multiple shooting.</b> Con la corrección apagada funciona como un Neural ODE
+  <b>mecanístico para estimación de parámetros</b> (identifica los 4 pesos).</p>
+
+  <!-- ================================================== -->
+  <h2>3 · Cómo funciona (el mecanismo)</h2>
+  <p>Tres piezas:</p>
+  <ol>
+    <li><b>El campo <code>f_θ</code></b> (<code>dynamics.py</code>): la fórmula de Wilson-Cowan con los 4 pesos adentro (+ <code>g_φ</code> si está activa). Le das <code>(I,E,P,Q)</code>, te da <code>(dI/dt, dE/dt)</code>.</li>
+    <li><b>El integrador</b> (<code>integrate.py</code>): convierte la regla en trayectoria. Parte de <code>x0</code> y da pasos RK4 acumulando el estado. Es diferenciable → el gradiente puede volver hasta los pesos.</li>
+    <li><b>El entrenamiento</b> (<code>train_neural_ode.py</code>): ajusta los pesos para que la trayectoria integrada coincida con los datos.</li>
+  </ol>
+
+  <div class="key">
+    <b>Sutileza clave del entrenamiento.</b> NO ajusta <code>dx/dt</code> contra derivadas medidas (eso
+    sería <i>derivative-matching</i>, como el método FD). En cambio <b>integra <code>f_θ</code> y compara
+    la trayectoria resultante con los estados observados</b>. El gradiente fluye hacia atrás por el RK4
+    hasta los pesos. Por eso es un Neural ODE de verdad (simulación, no matching).
+  </div>
+
+  <h3>Multiple shooting (por qué)</h3>
+  <p>Integrar los 200 ms de un tirón (miles de pasos) y backpropagar → gradientes que explotan y un
+  paisaje de pérdida feo. Solución: cortar cada trayectoria en <b>ventanas cortas</b> (100 pasos = 5 ms),
+  cada una arrancando desde el <b>estado observado real</b> al inicio de la ventana. Así el error no se
+  acumula a lo largo de toda la trayectoria durante el entrenamiento, y todas las ventanas se integran
+  en paralelo (un batch grande).</p>
+
+  <!-- ================================================== -->
+  <h2>4 · Qué se aprende y qué se da</h2>
+  <p>En <code>GrayBoxWC</code>, de los 12 parámetros de Wilson-Cowan:</p>
+  <table>
+    <tr><th></th><th>Parámetros</th><th>Cómo</th></tr>
+    <tr><td><span class="pill ok">Se aprenden</span></td>
+        <td>Los <b>4 pesos sinápticos</b>: <code>wEE, wEI, wIE, wII</code></td>
+        <td><code>raw_w</code> (<code>nn.Parameter</code>; el peso real = <code>softplus(raw_w)</code> &gt; 0)</td></tr>
+    <tr><td><span class="pill warn">Se dan (fijos)</span></td>
+        <td>Los otros <b>8</b>: <code>te, ti</code> (constantes de tiempo), <code>ae, ai</code> (ganancias), <code>thetae, thetai</code> (umbrales), <code>ke, ki</code> (offsets, derivados)</td>
+        <td><code>buffers</code> (no se entrenan)</td></tr>
+  </table>
+  <p>Tiene sentido en el concurso: el problema es <b>recuperar los pesos</b>; los demás se toman como propiedades fisiológicas conocidas.</p>
+
+  <!-- ================================================== -->
+  <h2>5 · ¿Y con datos "reales" donde sabemos menos?</h2>
+  <p>Cambian tres cosas, de menos a más difícil:</p>
+  <ol>
+    <li><b>No conocés los otros parámetros.</b> Se los hace también aprendibles (sumarlos a <code>raw_w</code>). Cambio chico, pero la <b>identificabilidad se complica</b> (más parámetros desde los mismos datos; algunos se "pisan" entre sí). Necesita más diversidad de estímulos.</li>
+    <li><b>El modelo no es exactamente Wilson-Cowan (mismatch).</b> Datos reales tienen dinámica no modelada. <b>Para esto existe <code>g_φ</code></b> (la corrección, variante gray-box V1): el backbone WC captura lo conocido y <code>g_φ</code> (una MLP) absorbe el residuo. Es la idea "Universal Differential Equation".</li>
+    <li><b>Solo medís el LFP, no <code>I</code> y <code>E</code> por separado.</b> Es el cambio más grande: el estado pasa a ser <b>latente</b> (observabilidad parcial). Hay que usar un <b>estimador de estado</b> (el EKF del paper [13]) o entrenar como Neural ODE latente con una función de medición <code>y = c₁E + c₂I</code>. El multiple shooting además debe estimar los estados iniciales de cada ventana. Sumale <b>ruido</b> de medición.</li>
+  </ol>
+
+  <h3>El espectro según cuánto sabés</h3>
+  <div class="scroll"><table>
+    <tr><th>Cuánto sabés</th><th>Modelo</th><th>Costo</th></tr>
+    <tr><td>Estructura WC + 8 params; faltan los 4 pesos</td><td><b>Lo de ahora</b> (aprende 4 pesos)</td><td>Eficiente, identificable</td></tr>
+    <tr><td>Estructura WC; faltan más params</td><td>Aprender también <code>te,ti,ae,…</code></td><td>Identificabilidad más difícil</td></tr>
+    <tr><td>Estructura aproximada (mismatch)</td><td><b>Gray-box: WC + <code>g_φ</code></b></td><td>Más datos; sigue interpretable</td></tr>
+    <tr><td>No sabés casi nada</td><td>Black-box Neural ODE (MLP pura)</td><td>Máximos datos, sin interpretabilidad</td></tr>
+  </table></div>
+  <div class="nota">
+    <b>Trade-off clave acá:</b> cuanto más black-box, más datos necesitás <b>y peor funciona el
+    controlador</b> — el IMC hace feedback linearization <i>asumiendo la estructura WC</i>. Un <code>f</code>
+    black-box rompe esa cancelación. → Para datos reales el punto dulce es <b>conservar WC + activar
+    <code>g_φ</code></b>: estructura suficiente para el control, flexibilidad para absorber lo desconocido.
+  </div>
+
+  <!-- ================================================== -->
+  <h2>6 · Arquitectura y costo computacional</h2>
+  <p>¿Tienen capas como una red común? <b>Sí, pero adentro de <code>f</code></b>: en un Neural ODE
+  general, el campo <code>f_θ</code> es una MLP (Linear + activación). Lo distinto:</p>
+  <div class="key">
+    En una red común con N capas, hacés N multiplicaciones <b>una vez</b>. En un Neural ODE, evaluás
+    <code>f</code> <b>muchas veces</b> — una por cada paso de integración (y RK4 hace <b>4 por paso</b>).
+    La profundidad no la dan las capas apiladas, la da <b>el integrador</b>:
+    <div class="eq">profundidad efectiva ≈ (capas de f) × (nº de pasos de integración)</div>
+  </div>
+  <p><b>¿Son pesadas?</b> El cuello de botella casi nunca es el tamaño de la red:</p>
+  <table>
+    <tr><th>Aspecto</th><th>De qué depende</th></tr>
+    <tr><td>Parámetros (tamaño)</td><td>Tamaño de <code>f</code> — suele ser chico</td></tr>
+    <tr><td>Cómputo</td><td><b>(nº de pasos) × 4 (RK4) × costo(f)</b> — lo manda el nº de pasos</td></tr>
+    <tr><td>Memoria en entrenamiento</td><td>Crece con el nº de pasos (backprop por el solver). El método adjunto lo hace O(1) a cambio de complejidad.</td></tr>
+  </table>
+
+  <h3>Nuestro caso: livianísimo</h3>
+  <ul>
+    <li><b>Con <code>g_φ</code> apagada</b> (lo que corrimos): <code>f</code> <b>no tiene capas</b> — es la fórmula WC con 4 números (2 sigmoideas + multiplicaciones). Cada evaluación es trivial.</li>
+    <li><b>Con <code>g_φ</code> activada:</b> <code>f</code> suma una MLP chica (<code>4→32→32→2</code>, ~1200 parámetros). Minúscula para estándares de redes.</li>
+  </ul>
+  <p>El costo viene <b>solo de integrar</b> (ventanas de 100 pasos × 4 RK4 = 400 evals de <code>f</code>
+  por ventana, en batch). Como <code>f</code> es casi gratis, <b>entrenó rápido</b> (convergió en ~600
+  de 3000 epochs).</p>
+  <div class="nota">
+    <b>Modelo mental:</b> un Neural ODE es <b>una red chica evaluada muchísimas veces</b> (una por paso).
+    Lo que lo encarece no es el tamaño de la red sino <b>cuántos pasos integrás</b> (y cuán rígida es la
+    dinámica, que obliga a pasos chicos). El nuestro es de los baratos porque <code>f</code> es la fórmula WC.
+  </div>
+
+  <!-- ================================================== -->
+  <h2>7 · Archivos y funciones</h2>
+  <div class="scroll"><table>
+    <tr><th>Archivo</th><th>Función</th><th>Qué hace</th></tr>
+    <tr><td rowspan="3"><code>src/neural_ode/<br>dynamics.py</code></td>
+        <td><code>GrayBoxWC.__init__</code></td><td>Arma constantes fijas (buffers), los 4 pesos (raw_w aprendible o buffer), y <code>g_φ</code> (MLP init a salida 0).</td></tr>
+    <tr><td><code>forward(x,P,Q)</code></td><td><b>El campo <code>f_θ</code>.</b> Calcula <code>u_i,u_e</code>, luego <code>dI,dE</code> con la fórmula WC; suma <code>g_φ</code> si está. Devuelve <code>[dI,dE]</code>.</td></tr>
+    <tr><td><code>weights() / weights_dict()</code></td><td>Los pesos reales positivos (<code>softplus</code>) / como floats.</td></tr>
+    <tr><td rowspan="2"><code>src/neural_ode/<br>integrate.py</code></td>
+        <td><code>rk4_step(f,x,P,Q,dt)</code></td><td>Un paso RK4 (4 evals de <code>f</code>), con P,Q constantes en el paso.</td></tr>
+    <tr><td><code>rollout(f,x0,P,Q,dt)</code></td><td>Integra una secuencia completa → trayectoria. Diferenciable. Es "el ODE solve".</td></tr>
+    <tr><td rowspan="4"><code>scripts/<br>train_neural_ode.py</code></td>
+        <td><code>load()</code></td><td>Carga el dataset <code>.npz</code>, arma los parámetros fijos y <code>dt</code>.</td></tr>
+    <tr><td><code>make_windows(...)</code></td><td><b>Multiple shooting:</b> corta cada trayectoria en ventanas (cada una con su <code>x0</code> observado, su P,Q y los targets). Apila en batch.</td></tr>
+    <tr><td><code>open_loop_mse(...)</code></td><td>Validación: rollout COMPLETO de cada trayectoria vs datos → MSE. Mide generalización (held-out).</td></tr>
+    <tr><td><code>main()</code></td><td>Carga → crea <code>GrayBoxWC</code> → ventanas → Adam (rollout+MSE+backprop) → L-BFGS → reporta pesos y MSE → guarda checkpoint.</td></tr>
+    <tr><td><code>src/neural_ode/<br>closed_loop.py</code></td>
+        <td><code>make_neural_plant(model)</code></td><td>Envuelve el <code>f_θ</code> entrenado como planta <code>(I,E,P,Q)→(dI,dE)</code> para el lazo de control.</td></tr>
+  </table></div>
+
+  <!-- ================================================== -->
+  <h2>8 · El pipeline de punta a punta</h2>
+  <div class="flow">
+    <div class="box">gen_multi_dataset.py<span class="lbl">dataset multi-variante + split train/test</span></div>
+    <span class="arrow">→</span>
+    <div class="box">train_neural_ode.py<span class="lbl">ajusta f_θ (multiple shooting) → neural_ode.pt</span></div>
+    <span class="arrow">→</span>
+    <div class="box">eval_closed_loop.py<span class="lbl">f_θ como planta + controlador IMC</span></div>
+  </div>
+  <ol>
+    <li><b>Genera</b> trayectorias bajo estímulos variados, separando algunos escenarios como test.</li>
+    <li><b>Entrena</b> el campo <code>f_θ</code> integrando y ajustando a los datos → identifica los 4 pesos (brazo Neural ODE del OE2) y produce la planta.</li>
+    <li><b>Valida</b> conectando <code>f_θ</code> como planta al controlador y comparando con la planta verdadera (OE3).</li>
+  </ol>
+
+  <div class="nota">
+    <b>Idea de fondo:</b> el Neural ODE aprende la <b>ley de movimiento</b> del sistema (cómo cambia el
+    estado), no la trayectoria. Por eso se integra con cualquier entrada y se mete en un lazo de control
+    — lo que la PINN no podía. Y como mantenemos la estructura Wilson-Cowan, sigue siendo interpretable y
+    compatible con el controlador.
+  </div>
+
+  <p style="font-size:.86rem;color:#5b6770">Relacionado: <code>docs/modelos_explicacion.html</code>
+  (los métodos de identificación) · <code>docs/plan_planta_neural.html</code> (el plan de la planta controlable).</p>
+
+</main>
+<footer>Proyecto Wilson-Cowan + PINN · ITBA 2026 · explicación del Neural ODE</footer>
+</div></body></html>
