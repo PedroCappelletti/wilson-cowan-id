@@ -138,7 +138,7 @@ Se integra el modelo aprendido sobre cada trayectoria del dataset **sin resets**
 
 **MSE medio:** train `2.8e-5`, test held-out `5.5e-4`.
 
-![Lazo abierto — modelo vs. real (chirp)](../results/figures/open_loop_full.png)
+*(Figura "Lazo abierto — modelo vs. real (chirp)" no versionada en el repo.)*
 
 - El **chirp** (held-out, barrido de frecuencia nunca visto) se reproduce con MSE
   `1.9e-5`: en la figura, la curva del modelo se superpone a la real.
@@ -159,7 +159,7 @@ nominal (todo verdadero). RMSE de seguimiento de las referencias theta-gamma
 | Planta **aprendida** (ctrl verdadero) | 3.346e-2 | 3.128e-2 |
 | Controlador **θ̂** (todo identificado) / planta verdadera | 3.341e-2 | 3.132e-2 |
 
-![Lazo cerrado — seguimiento theta-gamma](../results/figures/closed_loop_full.png)
+*(Figura "Lazo cerrado — seguimiento theta-gamma" no versionada en el repo.)*
 
 - **El modelo aprendido es una planta controlable válida**: usado como planta del
   controlador, el seguimiento es idéntico al de la planta verdadera (RMSE `3.346e-2`

@@ -63,7 +63,7 @@ consistente con el 1.14%).
 | σ₉ | 2.4e-3 | **ae** (−0.61), **te** (−0.46), **wEE** (+0.40), thetae (+0.35) |
 | σ₈ | 3.9e-3 | **ai** (−0.71), wEI (+0.36), **ti** (−0.35), thetai (+0.35) |
 
-![Espectro FIM y vectores singulares](../results/figures/fisher_svd.png)
+*(Figura "Espectro FIM y vectores singulares" no versionada — regenerar con `scripts/fisher_identifiability.py`.)*
 
 **Predicción:** el parámetro menos identificable es **wII** (domina la dirección más
 débil y tiene la menor sensibilidad relativa). Le siguen **ti**, las ganancias **ae/ai**
@@ -123,7 +123,7 @@ reales: I=3.348e-2, E=3.134e-2):
 | 0.05 | 19.32% | 3.333e-2 | 3.061e-2 |
 | 0.10 | **41.34%** | 3.291e-2 | 2.982e-2 |
 
-![RMSE de control vs σ](../results/figures/noise_control_rmse.png)
+*(Figura "RMSE de control vs σ" no versionada — regenerar con `scripts/noise_full_sweep.py`.)*
 
 **La acción integral absorbe el error de identificación aun con θ̂ malo.** Con wII al
 **41%** de error (σ=0.10), el seguimiento sigue clavado en ~3.3e-2 / ~3.0e-2,

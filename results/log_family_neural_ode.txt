@@ -1,0 +1,23 @@
+==========================================================================
+ NEURAL ODE (10 params) POR FAMILIA — σ=0.05, 4 tray/familia
+==========================================================================
+ familias: chirp, poisson, aprbs, square, thetagamma
+ dt≈0.200 (N_EVAL=1000)  WINDOW=25  EPOCHS=1500  LBFGS=40  smooth_k=7
+
+[calibracion de tiempo] (2 corridas cortas sobre la 1ra familia)
+    calibracion: fijo≈3.8s  por-epoca≈152.4ms  L-BFGS≈48.8s
+    -> por familia ≈ 4.7 min  |  TOTAL 5 familias ≈ 23.4 min
+
+[corrida completa]
+  chirp       wII=  2.88%  max=  7.26%  (3.6 min)   ETA restante: 14.4 min
+  poisson     wII=402.55%  max=402.55%  (3.7 min)   ETA restante: 10.9 min
+  aprbs       wII=285.41%  max=285.41%  (3.6 min)   ETA restante: 7.2 min
+  square      wII=246.65%  max=246.65%  (3.3 min)   ETA restante: 3.5 min
+  thetagamma  wII= 86.30%  max= 86.30%  (3.4 min)   ETA restante: 0.0 s
+
+--- Ranking wII: EMPIRICO (NODE) vs PREDICHO (CRB Exp C) ---
+  empirico  (mejor→peor): chirp  thetagamma  square  aprbs  poisson
+  CRB Exp C (mejor→peor): chirp  poisson  aprbs  thetagamma  square
+
+JSON: results\ident_family_neural_ode.json
+Figura: results\figures\family_neural_ode.png
