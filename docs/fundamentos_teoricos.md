@@ -49,6 +49,24 @@ $$\mathcal I(\theta) = \mathbb E\!\left[-\frac{\partial^2\ell}{\partial\theta\,\
 
 **En el proyecto.** Trabajamos con la FIM **relativa** ($\tilde J^\top\tilde J$). Su SVD nos da el espectro (§1) y las direcciones débiles. Método tomado de **Plate et al. 2024** (OED para UDEs).
 
+### 3.1. Por qué la FIM *es* la curvatura, y por qué su SVD nos importa
+
+**Qué espacio.** El "espacio" es el **espacio de parámetros** $\theta$ (los 10: wEE, wII, te, …). Sobre él vive la superficie de error $L(\theta)=\frac{1}{2\sigma^2}\lVert y - f(\theta)\rVert^2$ (equivalente a $-\ell$). Cerca del óptimo $\hat\theta$ el gradiente es ~0, así que el Taylor a 2º orden deja solo el término cuadrático:
+$$L(\theta)\approx L(\hat\theta) + \tfrac12(\theta-\hat\theta)^\top H\,(\theta-\hat\theta),\qquad H=\text{Hessiano}=\mathcal I.$$
+Es decir, **la FIM es la matriz de curvatura del paisaje de error alrededor del óptimo** — un paraboloide cuya forma la fija $\mathcal I$:
+- dirección **muy curvada** (autovalor grande) → el error sube rápido al moverte → parámetro/combinación **bien determinado**;
+- dirección **plana** (autovalor chico) → te movés mucho sin que suba el error → **no identificable** (el "valle plano").
+
+**Por qué la SVD.** Diagonalizando la FIM (o vía SVD de $J=U\Sigma V^\top$):
+$$\mathcal I=\frac{J^\top J}{\sigma^2}=\frac{V\,\Sigma^2\,V^\top}{\sigma^2}.$$
+Entonces:
+- **autovectores de la FIM = vectores singulares derechos $v_i$** → los **ejes propios del paraboloide**, que son *combinaciones* de parámetros (no parámetros sueltos);
+- **autovalores de la FIM = $\sigma_i^2/\sigma^2$** → la curvatura a lo largo de cada eje.
+
+Por eso miramos la SVD y **no** las columnas de $J$ una por una: un $\sigma_i\approx 0$ marca una **dirección $v_i$** (p.ej. "wEE·ae") que los datos no restringen, aunque cada parámetro por separado parezca sensible. El número de condición $\sigma_1/\sigma_n$ mide cuán alargado es el valle.
+
+**El enlace con Cramér-Rao (§4).** Como $\operatorname{Cov}(\hat\theta)\succeq\mathcal I^{-1}$ e invertir la FIM es invertir $\Sigma^2$, las direcciones planas ($\sigma_i$ chico) se vuelven **varianza enorme**: curvatura-chica → incertidumbre-grande. Por eso la incertidumbre marginal correcta de wII sale de $\sqrt{(\mathcal I^{-1})_{ii}}$ y no de la norma de su columna (ver figura del valle: `valle_plano_svd_fim.png`).
+
 ---
 
 ## 4. Cota de Cramér-Rao (CRB)
