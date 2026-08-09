@@ -1,0 +1,9 @@
+
+=== eps = 0.0 — white-box (sin correccion), 10 parametros ===
+    ep     0 | data=6.813e-03 | err_max= 83.88% 
+    ep   300 | data=3.431e-05 | err_max= 41.13% 
+    ep   600 | data=4.476e-06 | err_max= 12.35% 
+    ep   900 | data=1.322e-06 | err_max=  3.98% 
+    ep  1200 | data=1.015e-06 | err_max=  3.11% 
+    ep  1499 | data=9.940e-07 | err_max=  3.66% 
+  err_max=3.67%  err_medio=1.05%  peor=wII  mse_test=9.135e-04

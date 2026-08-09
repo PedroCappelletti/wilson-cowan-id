@@ -1,0 +1,98 @@
+[
+  {
+    "caso": "refract_r0.1",
+    "tipo": "capturable",
+    "df_rms": 0.006577769294381142,
+    "r2_g_x": 0.9665910111385944,
+    "r2_g_xpq": 0.9970660933914157,
+    "veredicto": "CAPTURABLE"
+  },
+  {
+    "caso": "hetero_0.8",
+    "tipo": "capturable",
+    "df_rms": 0.010469496250152588,
+    "r2_g_x": 0.7682361066191451,
+    "r2_g_xpq": 0.9840073715051914,
+    "veredicto": "CAPTURABLE"
+  },
+  {
+    "caso": "par_nominal",
+    "tipo": "el del roadmap",
+    "df_rms": 0.017182065173983574,
+    "r2_g_x": -0.11136810477595094,
+    "r2_g_xpq": 0.7752909885866901,
+    "veredicto": "parcial"
+  },
+  {
+    "caso": "adapt_tau1",
+    "tipo": "memoria rapida",
+    "df_rms": 0.008938576094806194,
+    "r2_g_x": 0.9134006401754391,
+    "r2_g_xpq": 0.9893229760490319,
+    "veredicto": "CAPTURABLE"
+  },
+  {
+    "caso": "adapt_tau3",
+    "tipo": "memoria rapida",
+    "df_rms": 0.006920715793967247,
+    "r2_g_x": 0.8497198308557674,
+    "r2_g_xpq": 0.9477142923581096,
+    "veredicto": "CAPTURABLE"
+  },
+  {
+    "caso": "adapt_tau10",
+    "tipo": "memoria media",
+    "df_rms": 0.004799074027687311,
+    "r2_g_x": 0.6149411792478696,
+    "r2_g_xpq": 0.7678289570423391,
+    "veredicto": "parcial"
+  },
+  {
+    "caso": "adapt_tau30",
+    "tipo": "memoria lenta",
+    "df_rms": 0.003983082249760628,
+    "r2_g_x": 0.43860465568794305,
+    "r2_g_xpq": 0.690713889312284,
+    "veredicto": "parcial"
+  },
+  {
+    "caso": "adapt_tau100",
+    "tipo": "memoria lenta",
+    "df_rms": 0.0027442278806120157,
+    "r2_g_x": 0.30851482793042306,
+    "r2_g_xpq": 0.5426333139367596,
+    "veredicto": "POBRE"
+  },
+  {
+    "caso": "depresion",
+    "tipo": "estado oculto",
+    "df_rms": 0.019347889348864555,
+    "r2_g_x": 0.633623191004661,
+    "r2_g_xpq": 0.7167496712943798,
+    "veredicto": "parcial"
+  },
+  {
+    "caso": "poblacion_oculta",
+    "tipo": "estado oculto",
+    "df_rms": 0.004874130245298147,
+    "r2_g_x": 0.6075804596408185,
+    "r2_g_xpq": 0.7844896711679776,
+    "veredicto": "parcial"
+  },
+  {
+    "caso": "deriva_wEE",
+    "tipo": "no autonoma",
+    "df_rms": 0.020492633804678917,
+    "r2_g_x": 0.23423840932127238,
+    "r2_g_xpq": 0.5266377588440305,
+    "veredicto": "POBRE"
+  },
+  {
+    "caso": "ruido_proceso",
+    "tipo": "irreducible",
+    "df_rms": 0.020125828683376312,
+    "r2_g_x": 0.11943368747556593,
+    "r2_g_xpq": 0.11150703057537725,
+    "veredicto": "POBRE"
+  }
+]

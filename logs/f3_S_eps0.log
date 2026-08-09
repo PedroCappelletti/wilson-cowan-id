@@ -1,0 +1,15 @@
+
+=== F3 · variante S · eps0.npz · lam=None ===
+    ep     0 | data=6.821e-03 | err_max= 83.88% 
+    ep   300 | data=3.367e-05 | err_max= 40.59% 
+    ep   600 | data=4.520e-06 | err_max= 12.25% 
+    ep   900 | data=1.324e-06 | err_max=  3.95% 
+    ep  1200 | data=1.015e-06 | err_max=  3.09% 
+    ep  1499 | data=9.994e-07 | err_max=  3.74% 
+  Correccion FISICA identificada (verdadero -> estimado):
+     r_i :   0.0000 ->   0.0000
+     r_e :   0.0000 ->   0.0000
+     sat :      inf -> 1000.0000
+
+  RESULTADO S: err_max=3.74% err_medio=1.06% peor=wII mse_test=9.235e-04 g_rel=0.000 redundante=0.000
+  -> results/uncertainty/f3_S_eps0.json

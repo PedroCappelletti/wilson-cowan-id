@@ -1,0 +1,396 @@
+<title>Simulador vs. modelo gray-box — dónde entra cada cosa</title>
+<style>
+  :root {
+    --ground:      #F7F8FA;
+    --panel:       #FFFFFF;
+    --ink:         #171C24;
+    --ink-soft:    #5A6472;
+    --ink-faint:   #8B95A3;
+    --rule:        #DDE2E9;
+    --rule-soft:   #EAEEF3;
+    --luz:         #B06E12;
+    --luz-fill:    #FBF1E0;
+    --refr:        #B8455C;
+    --refr-fill:   #FCEDF0;
+    --red:         #1F7684;
+    --red-fill:    #E4F2F4;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:    #12161C;
+      --panel:     #1A1F27;
+      --ink:       #E8ECF1;
+      --ink-soft:  #A3AEBC;
+      --ink-faint: #6F7B8A;
+      --rule:      #2C333D;
+      --rule-soft: #232932;
+      --luz:       #E0A94E;
+      --luz-fill:  #2E2418;
+      --refr:      #E8879B;
+      --refr-fill: #2E1D22;
+      --red:       #5FB9C7;
+      --red-fill:  #14282C;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#12161C; --panel:#1A1F27; --ink:#E8ECF1; --ink-soft:#A3AEBC;
+    --ink-faint:#6F7B8A; --rule:#2C333D; --rule-soft:#232932;
+    --luz:#E0A94E; --luz-fill:#2E2418; --refr:#E8879B; --refr-fill:#2E1D22;
+    --red:#5FB9C7; --red-fill:#14282C;
+  }
+  :root[data-theme="light"] {
+    --ground:#F7F8FA; --panel:#FFFFFF; --ink:#171C24; --ink-soft:#5A6472;
+    --ink-faint:#8B95A3; --rule:#DDE2E9; --rule-soft:#EAEEF3;
+    --luz:#B06E12; --luz-fill:#FBF1E0; --refr:#B8455C; --refr-fill:#FCEDF0;
+    --red:#1F7684; --red-fill:#E4F2F4;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 24px 96px;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+
+  header { padding: 72px 0 40px; border-bottom: 1px solid var(--rule); }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(30px, 4.6vw, 46px);
+    line-height: 1.12; margin: 0 0 18px; text-wrap: balance; letter-spacing: -.01em;
+  }
+  .lede {
+    font-size: 18px; color: var(--ink-soft); max-width: 62ch; margin: 0;
+  }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  h2 {
+    font-family: var(--serif); font-weight: 600; font-size: 26px;
+    margin: 56px 0 8px; letter-spacing: -.01em;
+  }
+  .sub { color: var(--ink-soft); margin: 0 0 24px; max-width: 66ch; }
+
+  /* ---- clave de colores ---- */
+  .clave { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0 0; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--rule); border-radius: 2px;
+    padding: 7px 12px; font-size: 13px; background: var(--panel);
+  }
+  .chip i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .chip.luz  i { background: var(--luz); }
+  .chip.refr i { background: var(--refr); }
+  .chip.red  i { background: var(--red); }
+  .chip.nom  i { background: var(--ink-faint); }
+  .chip b { font-weight: 600; }
+
+  /* ---- figuras ---- */
+  figure {
+    margin: 0 0 12px; background: var(--panel);
+    border: 1px solid var(--rule); border-radius: 3px;
+    padding: 26px 20px 20px; overflow-x: auto;
+  }
+  figure svg { display: block; width: 100%; min-width: 660px; height: auto; }
+  figcaption {
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule-soft);
+    font-size: 14px; color: var(--ink-soft); min-width: 660px;
+  }
+  figcaption b { color: var(--ink); font-weight: 600; }
+
+  .rotulo {
+    display: flex; align-items: baseline; gap: 12px;
+    margin: 0 0 14px; padding-bottom: 10px; border-bottom: 2px solid var(--ink);
+  }
+  .rotulo h3 {
+    font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0;
+  }
+  .rotulo span { font-size: 13px; color: var(--ink-soft); }
+
+  /* ---- tabla ---- */
+  .tabla-wrap { overflow-x: auto; }
+  table {
+    border-collapse: collapse; width: 100%; font-size: 14.5px;
+    min-width: 560px; margin-top: 4px;
+  }
+  th, td { text-align: left; padding: 13px 14px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  thead th {
+    font-size: 12px; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--ink-faint); font-weight: 600; border-bottom: 1px solid var(--rule);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.si { color: var(--ink); }
+  td.no { color: var(--ink-faint); }
+  code {
+    font-family: var(--mono); font-size: .9em;
+    background: var(--rule-soft); padding: 1px 5px; border-radius: 2px;
+  }
+  .mate { font-family: var(--serif); font-style: italic; }
+
+  .nota {
+    margin-top: 48px; padding: 22px 24px;
+    border-left: 3px solid var(--red); background: var(--panel);
+    border-radius: 0 3px 3px 0;
+  }
+  .nota p { margin: 0; color: var(--ink-soft); }
+  .nota p + p { margin-top: 12px; }
+  .nota b { color: var(--ink); }
+
+  footer {
+    margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--rule);
+    font-size: 13.5px; color: var(--ink-faint);
+  }
+  footer code { background: none; padding: 0; }
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Wilson-Cowan · gray-box</p>
+  <h1>Qué tiene el simulador que el modelo no tiene</h1>
+  <p class="lede">Los dos resuelven la misma ecuación. La diferencia está en
+  <b>tres puntos concretos</b>: dos que agregamos al simulador para que deje de
+  ser ideal, y uno que le agregamos al modelo para que intente compensarlos.</p>
+
+  <div class="clave">
+    <span class="chip nom"><i></i>Wilson-Cowan nominal <b>— lo compartido</b></span>
+    <span class="chip luz"><i></i>Perturbación 1 <b>— la luz</b></span>
+    <span class="chip refr"><i></i>Perturbación 2 <b>— refractariedad</b></span>
+    <span class="chip red"><i></i>Corrección <b>— la red neuronal</b></span>
+  </div>
+</header>
+
+<h2>El simulador (la planta)</h2>
+<p class="sub">Genera los datos. Es Wilson-Cowan con las dos perturbaciones:
+una deforma <span class="mate">la entrada</span> antes de que llegue, la otra
+multiplica <span class="mate">la salida</span> de la sigmoidea.</p>
+
+<div class="rotulo">
+  <h3>Simulador</h3>
+  <span>4 estados: <span class="mate">I, E, P<sub>lag</sub>, Q<sub>lag</sub></span></span>
+</div>
+
+<figure>
+<svg viewBox="0 0 880 330" role="img" aria-label="Diagrama del simulador: el estímulo comandado P pasa por un retardo de primer orden y una saturación antes de entrar en la ecuación de Wilson-Cowan, y la salida de la sigmoidea se multiplica por el factor de refractariedad uno menos r por E.">
+  <defs>
+    <marker id="pf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="currentColor"/>
+    </marker>
+    <marker id="pl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="var(--luz)"/>
+    </marker>
+    <marker id="pr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="var(--refr)"/>
+    </marker>
+  </defs>
+
+  <!-- ===== camino de la luz (perturbacion 1) ===== -->
+  <text x="16" y="46" font-size="11" fill="var(--luz)" font-weight="600" letter-spacing="1.2">PERTURBACIÓN 1 · EL ACTUADOR ÓPTICO</text>
+
+  <text x="16" y="82" font-size="14" fill="currentColor" font-family="Georgia, serif" font-style="italic">P</text>
+  <text x="16" y="98" font-size="10.5" fill="var(--ink-faint)">comando</text>
+  <line x1="46" y1="77" x2="86" y2="77" stroke="var(--luz)" stroke-width="1.6" marker-end="url(#pl)"/>
+
+  <rect x="90" y="55" width="164" height="46" rx="2" fill="var(--luz-fill)" stroke="var(--luz)" stroke-width="1.4"/>
+  <text x="172" y="74" font-size="12.5" fill="var(--luz)" text-anchor="middle" font-weight="600">retardo del canal</text>
+  <text x="172" y="90" font-size="11" fill="var(--luz)" text-anchor="middle" font-family="Georgia, serif" font-style="italic">dP_lag/dt = (P − P_lag)/τ</text>
+
+  <line x1="254" y1="77" x2="292" y2="77" stroke="var(--luz)" stroke-width="1.6" marker-end="url(#pl)"/>
+
+  <rect x="296" y="55" width="150" height="46" rx="2" fill="var(--luz-fill)" stroke="var(--luz)" stroke-width="1.4"/>
+  <text x="371" y="74" font-size="12.5" fill="var(--luz)" text-anchor="middle" font-weight="600">saturación</text>
+  <text x="371" y="90" font-size="11" fill="var(--luz)" text-anchor="middle" font-family="Georgia, serif" font-style="italic">A·tanh(P_lag /A)</text>
+
+  <!-- baja hacia la ecuacion -->
+  <path d="M371,101 L371,152" fill="none" stroke="var(--luz)" stroke-width="1.6" marker-end="url(#pl)"/>
+  <text x="380" y="130" font-size="12" fill="var(--luz)" font-family="Georgia, serif" font-style="italic" font-weight="600">P_ef</text>
+
+  <!-- ===== fila principal ===== -->
+  <text x="16" y="196" font-size="14" fill="currentColor" font-family="Georgia, serif" font-style="italic">E, I</text>
+  <line x1="52" y1="191" x2="96" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#pf)"/>
+
+  <rect x="100" y="156" width="292" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="246" y="181" font-size="11" fill="var(--ink-faint)" text-anchor="middle" letter-spacing="1">ENTRADA TOTAL</text>
+  <text x="246" y="204" font-size="13.5" fill="currentColor" text-anchor="middle" font-family="Georgia, serif" font-style="italic">u = w·E − w·I + P_ef − θ</text>
+
+  <line x1="392" y1="191" x2="436" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#pf)"/>
+
+  <rect x="440" y="163" width="112" height="56" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="496" y="187" font-size="11" fill="var(--ink-faint)" text-anchor="middle" letter-spacing="1">SIGMOIDEA</text>
+  <text x="496" y="207" font-size="14" fill="currentColor" text-anchor="middle" font-family="Georgia, serif" font-style="italic">S(a·u)</text>
+
+  <line x1="552" y1="191" x2="602" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#pf)"/>
+
+  <!-- nodo multiplicador -->
+  <circle cx="622" cy="191" r="19" fill="var(--refr-fill)" stroke="var(--refr)" stroke-width="1.8"/>
+  <text x="622" y="197" font-size="17" fill="var(--refr)" text-anchor="middle" font-weight="600">×</text>
+
+  <line x1="641" y1="191" x2="694" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#pf)"/>
+
+  <rect x="698" y="163" width="166" height="56" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="781" y="187" font-size="11" fill="var(--ink-faint)" text-anchor="middle" letter-spacing="1">DERIVADA</text>
+  <text x="781" y="207" font-size="13" fill="currentColor" text-anchor="middle" font-family="Georgia, serif" font-style="italic">dE/dt = (−E + ⋯)/τ_e</text>
+
+  <!-- ===== refractariedad (perturbacion 2) ===== -->
+  <path d="M622,290 L622,214" fill="none" stroke="var(--refr)" stroke-width="1.6" marker-end="url(#pr)"/>
+  <rect x="536" y="292" width="172" height="30" rx="2" fill="var(--refr-fill)" stroke="var(--refr)" stroke-width="1.4"/>
+  <text x="622" y="312" font-size="13" fill="var(--refr)" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-weight="600">(1 − r·E)</text>
+  <text x="16" y="300" font-size="11" fill="var(--refr)" font-weight="600" letter-spacing="1.2">PERTURBACIÓN 2</text>
+  <text x="16" y="316" font-size="11" fill="var(--refr)" font-weight="600" letter-spacing="1.2">REFRACTARIEDAD</text>
+</svg>
+<figcaption>
+  <b>Las dos perturbaciones entran en lugares distintos.</b> La del actuador
+  entra <b>antes</b>: el comando <span class="mate">P</span> atraviesa un retardo
+  y una saturación, y lo que llega a la ecuación es
+  <span class="mate">P<sub>ef</sub></span>, nunca <span class="mate">P</span>.
+  La refractariedad entra <b>después</b>: multiplica la salida de la sigmoidea,
+  reduciéndola cuanto más activa esté la población.
+</figcaption>
+</figure>
+
+<h2>El modelo gray-box</h2>
+<p class="sub">Lo que entrenamos. No sabe que las perturbaciones existen: usa el
+estímulo comandado tal cual y no tiene el factor multiplicativo. A cambio le
+sumamos una red neuronal a la salida.</p>
+
+<div class="rotulo">
+  <h3>Modelo</h3>
+  <span>2 estados: <span class="mate">I, E</span></span>
+</div>
+
+<figure>
+<svg viewBox="0 0 880 330" role="img" aria-label="Diagrama del modelo gray-box: el estímulo comandado P entra directamente en la ecuación de Wilson-Cowan sin deformarse, no hay factor multiplicativo sobre la sigmoidea, y se suma una corrección neuronal que depende sólo del estado.">
+  <defs>
+    <marker id="mf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="currentColor"/>
+    </marker>
+    <marker id="mr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="var(--red)"/>
+    </marker>
+  </defs>
+
+  <!-- entrada directa, sin deformar -->
+  <text x="16" y="46" font-size="11" fill="var(--ink-faint)" font-weight="600" letter-spacing="1.2">SIN DEFORMAR — EL MODELO USA EL COMANDO TAL CUAL</text>
+
+  <text x="16" y="82" font-size="14" fill="currentColor" font-family="Georgia, serif" font-style="italic">P</text>
+  <text x="16" y="98" font-size="10.5" fill="var(--ink-faint)">comando</text>
+
+  <path d="M46,77 L371,77 L371,152" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-dasharray="5 4" marker-end="url(#mf)"/>
+  <text x="380" y="130" font-size="12" fill="currentColor" font-family="Georgia, serif" font-style="italic" font-weight="600">P</text>
+  <text x="150" y="68" font-size="11.5" fill="var(--ink-faint)">sin retardo ni saturación</text>
+
+  <!-- ===== fila principal: IDENTICA al simulador ===== -->
+  <text x="16" y="196" font-size="14" fill="currentColor" font-family="Georgia, serif" font-style="italic">E, I</text>
+  <line x1="52" y1="191" x2="96" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#mf)"/>
+
+  <rect x="100" y="156" width="292" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="246" y="181" font-size="11" fill="var(--ink-faint)" text-anchor="middle" letter-spacing="1">ENTRADA TOTAL</text>
+  <text x="246" y="204" font-size="13.5" fill="currentColor" text-anchor="middle" font-family="Georgia, serif" font-style="italic">u = w·E − w·I + P − θ</text>
+
+  <line x1="392" y1="191" x2="436" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#mf)"/>
+
+  <rect x="440" y="163" width="112" height="56" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="496" y="187" font-size="11" fill="var(--ink-faint)" text-anchor="middle" letter-spacing="1">SIGMOIDEA</text>
+  <text x="496" y="207" font-size="14" fill="currentColor" text-anchor="middle" font-family="Georgia, serif" font-style="italic">S(a·u)</text>
+
+  <line x1="552" y1="191" x2="602" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#mf)"/>
+
+  <!-- nodo sumador -->
+  <circle cx="622" cy="191" r="19" fill="var(--red-fill)" stroke="var(--red)" stroke-width="1.8"/>
+  <text x="622" y="198" font-size="18" fill="var(--red)" text-anchor="middle" font-weight="600">+</text>
+
+  <line x1="641" y1="191" x2="694" y2="191" stroke="currentColor" stroke-width="1.6" marker-end="url(#mf)"/>
+
+  <rect x="698" y="163" width="166" height="56" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="781" y="187" font-size="11" fill="var(--ink-faint)" text-anchor="middle" letter-spacing="1">DERIVADA</text>
+  <text x="781" y="207" font-size="13" fill="currentColor" text-anchor="middle" font-family="Georgia, serif" font-style="italic">dE/dt = (−E + ⋯)/τ_e</text>
+
+  <!-- ===== la red neuronal ===== -->
+  <path d="M622,290 L622,214" fill="none" stroke="var(--red)" stroke-width="1.6" marker-end="url(#mr)"/>
+  <rect x="512" y="292" width="220" height="30" rx="2" fill="var(--red-fill)" stroke="var(--red)" stroke-width="1.4"/>
+  <text x="622" y="312" font-size="12.5" fill="var(--red)" text-anchor="middle" font-weight="600">red neuronal <tspan font-family="Georgia, serif" font-style="italic" font-weight="400">g(I, E)</tspan></text>
+
+  <!-- E,I alimenta a la red -->
+  <path d="M34,205 L34,307 L506,307" fill="none" stroke="var(--red)" stroke-width="1.4"
+        stroke-dasharray="4 4" marker-end="url(#mr)"/>
+  <text x="60" y="296" font-size="11.5" fill="var(--red)">la red ve sólo el estado — nunca el estímulo</text>
+
+  <text x="750" y="300" font-size="11" fill="var(--red)" font-weight="600" letter-spacing="1.2">CORRECCIÓN</text>
+  <text x="750" y="316" font-size="11" fill="var(--red)" font-weight="600" letter-spacing="1.2">APRENDIDA</text>
+</svg>
+<figcaption>
+  <b>El núcleo es idéntico</b> — mismas cajas, mismas posiciones que arriba. Lo
+  que cambia son los bordes: entra <span class="mate">P</span> sin deformar (línea
+  punteada, no pasa por nada) y donde el simulador <b>multiplicaba</b> por la
+  refractariedad, el modelo <b>suma</b> la corrección neuronal.
+</figcaption>
+</figure>
+
+<h2>Punto por punto</h2>
+<p class="sub">Las tres diferencias, en la misma tabla.</p>
+
+<div class="tabla-wrap">
+<table>
+  <thead>
+    <tr><th style="width:30%">Dónde</th><th style="width:35%">Simulador</th><th style="width:35%">Modelo gray-box</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Antes de la ecuación</b><br><span style="color:var(--ink-faint);font-size:13px">la entrada</span></td>
+      <td class="si">El comando pasa por retardo y saturación.<br>Entra <span class="mate">P<sub>ef</sub></span>.</td>
+      <td class="no">Nada. Entra <span class="mate">P</span> tal cual.</td>
+    </tr>
+    <tr>
+      <td><b>Después de la sigmoidea</b><br><span style="color:var(--ink-faint);font-size:13px">la salida</span></td>
+      <td class="si">Se <b>multiplica</b> por <span class="mate">(1 − r·E)</span>.</td>
+      <td class="no">Nada. El factor sería 1.</td>
+    </tr>
+    <tr>
+      <td><b>En la derivada</b><br><span style="color:var(--ink-faint);font-size:13px">el resultado</span></td>
+      <td class="no">Nada.</td>
+      <td class="si">Se <b>suma</b> <span class="mate">g(I, E)</span>, la red.</td>
+    </tr>
+    <tr>
+      <td><b>Estados</b></td>
+      <td class="si"><b>4</b> — <span class="mate">I, E</span> más <span class="mate">P<sub>lag</sub>, Q<sub>lag</sub></span> del actuador.</td>
+      <td class="no"><b>2</b> — sólo <span class="mate">I, E</span>.</td>
+    </tr>
+    <tr>
+      <td><b>Parámetros</b></td>
+      <td class="si">Los 10 verdaderos, fijos.</td>
+      <td class="si">Los 10 se <b>aprenden</b>, más 1218 pesos de la red.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="nota">
+  <p><b>La asimetría que hace difícil el problema.</b> El simulador guarda dos
+  estados ocultos, <span class="mate">P<sub>lag</sub></span> y
+  <span class="mate">Q<sub>lag</sub></span>, que se acuerdan de por dónde venía el
+  estímulo. El modelo no los tiene, y la red tampoco los ve: recibe
+  únicamente <span class="mate">I</span> y <span class="mate">E</span>.</p>
+
+  <p>Por eso puede haber dos instantes con el mismo estado y distinta derivada
+  real — porque difieren en algo que la red no observa. <b>Ninguna función de
+  <span class="mate">(I, E)</span> puede dar dos respuestas para la misma
+  entrada</b>, así que esa parte de la física queda fuera de alcance por
+  construcción, no por falta de entrenamiento.</p>
+</div>
+
+<footer>
+  Simulador: <code>src/wilson_cowan/model.py</code> ·
+  perturbaciones: <code>src/wilson_cowan/uncertainty.py</code> ·
+  modelo: <code>src/neural_ode/dynamics.py</code>
+</footer>
+
+</div>

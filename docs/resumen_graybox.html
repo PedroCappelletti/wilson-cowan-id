@@ -1,0 +1,424 @@
+<meta charset="utf-8">
+<title>Gray-box en Wilson–Cowan</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 16mm 16mm; }
+  :root{
+    --tinta:#0b0b0b; --gris:#52514e; --suave:#d8d8d4;
+    --azul:#1f4e79; --azul2:#2a78d6; --nara:#eb6834;
+    --rojo:#c0392b; --verde:#008300; --fondo:#f6f7f9;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    font-family:"Charter","Georgia","Times New Roman",serif;
+    font-size:10.2pt; line-height:1.5; color:var(--tinta);
+    margin:0; hyphens:auto; text-align:justify;
+  }
+  h1{ font-size:20pt; text-align:center; color:var(--azul); margin:0 0 2pt;
+      font-weight:600; letter-spacing:.2px; }
+  .sub{ text-align:center; color:var(--gris); font-size:10.5pt; margin:0 0 16pt; }
+  h2{ break-after:avoid; page-break-after:avoid; font-size:13pt; color:var(--azul); margin:20pt 0 6pt; font-weight:600;
+      border-bottom:1px solid var(--suave); padding-bottom:3pt; }
+  h3{ break-after:avoid; page-break-after:avoid; font-size:11pt; color:var(--azul2); margin:14pt 0 4pt; font-weight:600; }
+  p{ margin:0 0 7pt; }
+  .lead{ background:var(--fondo); border-left:3px solid var(--azul2);
+         padding:9pt 12pt; margin:0 0 14pt; }
+  .lead p{ margin:0; }
+  .nota{ background:var(--fondo); padding:8pt 11pt; margin:9pt 0;
+         border-radius:3px; font-size:9.6pt; }
+  .nota p{ margin:0 0 5pt; } .nota p:last-child{ margin:0; }
+  .clave{ background:#fff8e8; border-left:3px solid #eda100;
+          padding:9pt 12pt; margin:10pt 0; }
+  .clave p{ margin:0; }
+  figure{ margin:11pt 0 13pt; page-break-inside:avoid; text-align:center; }
+  figure img{ width:100%; height:auto; }
+  figcaption{ font-size:9pt; color:var(--gris); margin-top:4pt;
+              text-align:left; line-height:1.4; }
+  table{ border-collapse:collapse; width:100%; margin:8pt 0 10pt;
+         font-size:9.5pt; page-break-inside:avoid; }
+  th{ text-align:left; border-bottom:1.2px solid var(--tinta);
+      padding:4pt 7pt; font-weight:600; }
+  td{ padding:3.5pt 7pt; border-bottom:.5px solid var(--suave); }
+  td.n, th.n{ text-align:right; font-variant-numeric:tabular-nums; }
+  tr.tot td{ border-top:1px solid var(--tinta); border-bottom:none;
+             font-weight:600; }
+  code{ font-family:"DejaVu Sans Mono",monospace; font-size:9pt;
+        background:var(--fondo); padding:.5pt 3pt; border-radius:2px; }
+  .mal{ color:var(--rojo); font-weight:600; }
+  .bien{ color:var(--verde); font-weight:600; }
+  .term{ color:var(--azul2); font-weight:600; }
+  ul,ol{ margin:0 0 8pt; padding-left:16pt; }
+  li{ margin-bottom:3.5pt; }
+  .eq{ text-align:center; margin:8pt 0; font-size:10.5pt; }
+  .pie{ text-align:left; font-size:8.6pt; color:var(--gris); border-top:1px solid var(--suave);
+        margin-top:16pt; padding-top:6pt; }
+</style>
+
+<h1>Gray-box en Wilson–Cowan</h1>
+<p class="sub">Qué hicimos, qué salió, y qué significa</p>
+
+<div class="lead">
+<p><strong>La idea en una frase.</strong> Hasta ahora identificábamos los parámetros de
+Wilson–Cowan con un modelo que era <em>exactamente</em> igual al simulador que generaba los
+datos. Le rompimos esa igualdad a propósito, y medimos qué pasa cuando le agregamos una red
+neuronal para tapar el agujero.</p>
+</div>
+
+<h2>1. Glosario, primero</h2>
+<p>Los términos que van a aparecer todo el tiempo.</p>
+<p><span class="term">Planta</span> — El sistema real. En nuestro caso, el simulador. Es lo
+que genera los datos.</p>
+<p><span class="term">Modelo</span> — Nuestra hipótesis sobre cómo funciona la planta. Es lo
+que entrenamos.</p>
+<p><span class="term">Mismatch</span> — El hueco entre los dos: física que la planta tiene y
+el modelo no. Se escribe Δf. <em>Mismatch estructural</em> significa que le erramos a la
+<em>forma</em> de la ecuación, no a un número: ningún ajuste de parámetros lo arregla.</p>
+<p><span class="term">White-box</span> — Modelo hecho sólo de ecuaciones escritas por
+nosotros. Es el enfoque de siempre del proyecto.</p>
+<p><span class="term">Gray-box</span> — Ecuaciones nuestras <em>más</em> una red neuronal que
+tapa lo que las ecuaciones no explican. Gris = mitad blanco (interpretable), mitad negro.</p>
+<p><span class="term">θ</span> (theta) — Los 10 parámetros de Wilson–Cowan: pesos sinápticos,
+umbrales, constantes de tiempo. Es lo que queremos identificar, y tienen significado
+biológico.</p>
+<p><span class="term">g<sub>φ</sub></span> — La red neuronal que hace de corrección. Un MLP
+chiquito: 2 capas, 32 neuronas ocultas.</p>
+<p><span class="term">ε</span> (épsilon) — La perilla que controla cuánto mismatch hay.
+ε = 0: ninguno. ε = 1: el nivel nominal.</p>
+<p><span class="term">P, Q</span> — El estímulo externo que le mandamos a cada población
+(<em>P</em> a la excitatoria, <em>Q</em> a la inhibitoria).</p>
+<p><span class="term">MSE</span> — Error cuadrático medio. Mide qué tan bien el modelo
+reproduce las trayectorias. Es el error de <em>ajuste</em>.</p>
+<p><span class="term">R²</span> — Mide qué tan parecidas son dos funciones. 1 = idénticas,
+0 = tan bueno como predecir el promedio, negativo = peor que el promedio.</p>
+
+<h2>2. El problema que teníamos</h2>
+<p>El proyecto identifica los 10 parámetros con un error del 1 %. Excelente número — pero
+con trampa.</p>
+<p>El simulador que genera los datos y el modelo que entrenamos eran <strong>exactamente las
+mismas ecuaciones</strong>. O sea que el problema que resolvíamos era: <em>“dado que el
+modelo es perfecto, encontrale los parámetros”</em>. Legítimo y difícil, pero no es el
+problema real. En un experimento de verdad tu modelo del cerebro siempre está incompleto.</p>
+<p>Y tenía una consecuencia concreta en el código: el término de corrección g<sub>φ</sub>
+existía desde el principio y nunca se había usado. No por olvido: <strong>porque no tenía
+nada que aprender</strong>. Sumarle una red a un modelo que ya es exacto sólo puede empeorar
+las cosas.</p>
+
+<h2>3. Qué hicimos: le rompimos la igualdad</h2>
+<p>Le agregamos al <strong>simulador</strong> dos pedazos de física que el modelo no tiene.
+Importante: al simulador, no al modelo. La red nunca ve estas ecuaciones, no sabe que
+existen.</p>
+
+<h3>Perturbación 1 — Refractariedad</h3>
+<p class="eq">dI/dt = (1/τ<sub>i</sub>) · ( −I + <strong>(1 − r·I)</strong> · S<sub>i</sub>(u<sub>i</sub>) − k<sub>i</sub> )</p>
+<p>S es la <span class="term">sigmoidea</span>: la función con forma de S que convierte
+“cuánta entrada recibe la población” en “qué fracción de neuronas dispara”. El factor nuevo
+dice que una neurona que acaba de disparar no puede volver a disparar enseguida, así que la
+fracción disponible no es 1 sino (1 − r·I).</p>
+<p><strong>No lo inventamos.</strong> Es el Wilson–Cowan original de 1972. La versión reducida
+que usa todo el mundo lo descarta por simplicidad. Nosotros lo <em>deshicimos</em>, que es
+mucho más defendible que inventar una perturbación arbitraria.</p>
+
+<h3>Perturbación 2 — El actuador optogenético</h3>
+<p class="eq">dP<sub>lag</sub>/dt = (P<sub>cmd</sub> − P<sub>lag</sub>) / τ<sub>act</sub>
+&nbsp;&nbsp;&nbsp; P<sub>ef</sub> = A · tanh( P<sub>lag</sub> / A )</p>
+<p>En optogenética vos comandás <em>intensidad de luz</em>. Lo que la neurona recibe llega
+tarde (el canal tarda en abrirse) y saturado (a mucha luz ya no responde más). El modelo
+asume que son iguales.</p>
+<p>Ésta es la difícil: rompe el supuesto de que el estímulo es perfectamente conocido, que es
+justo el supuesto que ancla la escala de los parámetros.</p>
+
+<figure>
+  <img src="figuras_resumen/fig1_perturbacion.png" alt="perturbación">
+  <figcaption><strong>Figura 1.</strong> Las dos perturbaciones, en datos reales.
+  <em>Izquierda:</em> la actividad del “cerebro real” (naranja) contra la que el modelo
+  espera (azul). El ciclo se deforma pero no desaparece: sigue oscilando con el mismo ritmo,
+  que es lo que queríamos — un mismatch que moleste sin destruir el régimen.
+  <em>Derecha:</em> el estímulo comandado (azul, escalones limpios) contra el que realmente
+  llega a la neurona (naranja, redondeado por el retardo y achatado por la saturación). El
+  modelo sólo conoce el azul.</figcaption>
+</figure>
+
+<div class="nota">
+<p><strong>¿Por qué no le agregamos estos términos al modelo y listo?</strong> Porque en un
+experimento real no sabés qué te falta — si lo supieras, lo agregarías. Todo el montaje
+existe para estudiar qué pasa cuando <em>no</em> lo sabés. Y como nosotros fabricamos el
+simulador, conocemos el Δf exacto y podemos hacer trampa <em>sólo para evaluar</em>:
+preguntarnos si la red aprendió la física correcta. Casi ningún trabajo de este tipo puede
+responder eso.</p>
+</div>
+
+<h2>4. Cómo quedó el modelo</h2>
+<p class="eq">ẋ &nbsp;=&nbsp; f<sub>WC</sub>(x, P, Q; θ) &nbsp;+&nbsp; g<sub>φ</sub>(x)</p>
+<p style="text-align:center;font-size:9pt;color:var(--gris);margin-top:-4pt">
+<strong>backbone</strong>: nuestras ecuaciones, 10 parámetros interpretables &nbsp;&nbsp;+&nbsp;&nbsp;
+<strong>corrección</strong>: la red, no interpretable</p>
+
+<h3>La trampa que esperábamos</h3>
+<p>La red es un aproximador universal sobre el mismo dominio que las ecuaciones. Entonces
+<strong>compite</strong> con los parámetros: para cualquier θ equivocado existe una red que
+compensa. El síntoma esperado era traicionero: <em>el ajuste mejora y los parámetros
+empeoran</em>. Por eso siempre reportamos las dos métricas juntas.</p>
+
+<h2>5. Los resultados</h2>
+
+<h3>1 · Sin corrección, el mismatch destruye los parámetros</h3>
+<figure>
+  <img src="figuras_resumen/fig2_costo_rigidez.png" alt="costo de la rigidez">
+  <figcaption><strong>Figura 2.</strong> Cuánto cuesta que el modelo esté incompleto. Con
+  ε = 0 se reproduce el resultado conocido del proyecto (1 %), así que la maquinaria nueva no
+  rompió nada. A partir de ahí la identificación se degrada rápido. Y <strong>el peor
+  parámetro es siempre w<sub>II</sub></strong>, en los seis niveles: exactamente el que el
+  análisis de identificabilidad del proyecto ya señalaba como el más frágil. Confirmación
+  independiente, por un camino totalmente distinto.</figcaption>
+</figure>
+
+<h3>2 · El hallazgo que explica todo: dos tercios del hueco se disfrazan de parámetros</h3>
+<p>Proyectamos el Δf verdadero sobre lo que un cambio de parámetros podría hacer. En ε = 1:
+<strong>el 67 % de la física faltante es indistinguible de mover los 10 parámetros</strong>.</p>
+
+<figure>
+  <img src="figuras_resumen/fig3_geometria.png" alt="geometría del mismatch">
+  <figcaption><strong>Figura 3.</strong> De qué está hecho el hueco. La parte naranja es la
+  que un cambio de θ podría imitar; la azul es física que <em>ningún</em> ajuste de los 10
+  parámetros puede dar. Cuanto más grande el mismatch, más se parece a mover parámetros
+  (derecha) — o sea que el problema empeora en las dos direcciones a la vez.</figcaption>
+</figure>
+
+<p>Esto reordena todo:</p>
+<ul>
+<li>El sesgo del white-box <em>no es un fallo del optimizador</em>. Es la mejor respuesta que
+un modelo rígido puede dar: hay una dirección de parámetros que imita el 67 % del hueco y el
+ajuste la encuentra. Los 187 % de error en w<sub>II</sub> son el precio de la rigidez.</li>
+<li>Le pone un techo al gray-box: sobre esa fracción, el reparto entre θ y la red
+<strong>no es único</strong>. Cualquier división ajusta igual de bien.</li>
+</ul>
+
+<h3>3 · Encender la corrección: mejora las dos métricas</h3>
+<table>
+<tr><th>ε = 1</th><th class="n">error de θ</th><th class="n">MSE test</th><th class="n">redundante con θ</th></tr>
+<tr><td>white-box (sin red)</td><td class="n">59,5 %</td><td class="n">1,06e-2</td><td class="n">—</td></tr>
+<tr><td>red libre</td><td class="n">35,9 %</td><td class="n">8,51e-3</td><td class="n">0,918</td></tr>
+<tr><td>red restringida al estado</td><td class="n">35,6 %</td><td class="n">9,63e-3</td><td class="n">0,941</td></tr>
+<tr class="tot"><td>+ regularización suave</td><td class="n">30,8 %</td><td class="n">9,26e-3</td><td class="n">0,914</td></tr>
+<tr><td>+ regularización fuerte</td><td class="n">44,6 %</td><td class="n">1,06e-2</td><td class="n">0,385</td></tr>
+</table>
+
+<p><strong>La predicción de la trampa era equivocada.</strong> Esperábamos que mejorara el
+ajuste y empeorara los parámetros. Pasó lo contrario: mejora las dos cosas, de 59,5 % a
+~31 %. Se recupera casi la mitad del daño.</p>
+<p><strong>¿Por qué?</strong> Sin la red, el white-box está <em>obligado</em> a deformar θ
+para absorber física que no puede representar. Darle a esa física otro lugar donde ir libera
+a los parámetros.</p>
+
+<h3>4 · Pero no aprendió la física</h3>
+<figure>
+  <img src="figuras_resumen/fig6_forma.png" alt="forma de la corrección">
+  <figcaption><strong>Figura 4.</strong> Lo que la red debería haber aprendido (azul) contra
+  lo que aprendió (naranja). Le acierta al tamaño y le erra a la forma: va desfasada. El R²
+  negativo significa que, como estimación de la física faltante, es peor que no corregir
+  nada. Y ~90 % de lo que hace lo podría haber hecho un cambio de parámetros.</figcaption>
+</figure>
+<p>O sea: ayuda, pero no por la razón que uno querría. No está aprendiendo la física faltante
+— está haciendo un reacomodamiento parecido a mover parámetros que resulta beneficioso.</p>
+
+<h3>5 · El control decisivo: ¿y si no hay nada que corregir?</h3>
+<figure>
+  <img src="figuras_resumen/fig4_cruce.png" alt="el cruce en eps=0">
+  <figcaption><strong>Figura 5.</strong> El resultado central del trabajo. Cuando al modelo
+  le falta física, la red ayuda (48 % mejor). Cuando el modelo ya es correcto, la misma red
+  <strong>arruina la identificación 17 veces</strong>.</figcaption>
+</figure>
+
+<div class="clave">
+<p><strong>Una corrección neuronal es dañina justo cuando tu modelo ya es correcto, y útil
+justo cuando no lo es.</strong> Y el problema práctico: <strong>mirando el ajuste no podés
+distinguir en cuál de los dos casos estás</strong>, porque en ε = 0 el MSE mejora igual. Hace
+falta una métrica que no dependa del ajuste.</p>
+</div>
+
+<h3>6 · ¿Copia bien el comportamiento?</h3>
+<p>Todo lo anterior mira los <em>parámetros</em>. Ésta es la otra pregunta: si el modelo
+aprendido, soltado a rodar solo, reproduce la actividad del cerebro simulado. La prueba es
+exigente — se le da <strong>sólo el arranque y el estímulo</strong>, y tiene que generar los
+200 ms enteros por su cuenta, sobre estímulos que no vio al entrenar.</p>
+
+<figure>
+  <img src="figuras_resumen/fig5_reproduccion.png" alt="reproducción de trayectorias">
+  <figcaption><strong>Figura 6.</strong> Arriba: con el modelo correcto la copia es casi
+  perfecta (2 % de error después de 200 ms rodando sola). Abajo: al modelo le falta física,
+  arranca bien y se va desfasando — predice una oscilación más lenta que la real. Sirve para
+  entender el sistema; no para predecir con precisión.</figcaption>
+</figure>
+
+<table>
+<tr><th>situación</th><th class="n">error de trayectoria</th><th class="n">correlación</th></tr>
+<tr><td>sin hueco (modelo = planta)</td><td class="n">2,0 %</td><td class="n">0,99</td></tr>
+<tr><td>con hueco, white-box</td><td class="n">15,1 %</td><td class="n">0,82</td></tr>
+<tr><td>con hueco, gray-box</td><td class="n">14,0 %</td><td class="n">0,85</td></tr>
+</table>
+
+<p><strong>El dato más informativo:</strong> la corrección recupera casi la mitad del error de
+los <em>parámetros</em> y casi nada del error de <em>trayectoria</em> (15,1 % → 14,0 %).
+Ayuda a <strong>identificar</strong>, no a <strong>predecir</strong>. Es consistente con lo
+anterior: mueve la responsabilidad de sitio sin agregar física.</p>
+
+<h3>7 · Control: los parámetros sirven, la red no</h3>
+
+<p><strong>Primero, quién es quién</strong> — porque acá es fácil confundirse. En este
+experimento <strong>la planta es siempre la misma</strong>: el simulador real con la física
+agregada, o sea el “cerebro”. <strong>El modelo aprendido no reemplaza al cerebro.</strong>
+Lo único que cambia entre las tres filas es <em>con qué conocimiento se arma el
+controlador</em>.</p>
+
+<figure>
+  <img src="figuras_resumen/fig8_esquema_control.png" alt="esquema del lazo de control">
+  <figcaption><strong>Figura 7.</strong> El lazo. El controlador mide la actividad, la
+  compara con la referencia y decide qué estímulo mandar. Para decidirlo necesita un modelo
+  del cerebro — y ahí es donde entran (o no) las cosas que salieron del entrenamiento.
+  <em>(En otras partes del proyecto sí se usa la Neural ODE como planta, para ver si el
+  modelo aprendido puede hacer de sustituto. Acá no: acá se la evalúa contra el cerebro
+  real, que es la prueba más exigente.)</em></figcaption>
+</figure>
+
+<h4 style="break-after:avoid;page-break-after:avoid;font-size:10.2pt;color:var(--gris);margin:12pt 0 4pt;font-weight:600">
+¿Qué significa “usar los parámetros” y “restar la red”?</h4>
+
+<p>El controlador cancela la no linealidad del cerebro invirtiéndola. Hace tres pasos:
+calcula cuánto tiene que dar la sigmoidea, la invierte para saber cuánta entrada total
+necesita la población, y le resta el acoplamiento interno para saber qué estímulo externo
+comandar. <strong>Los 10 parámetros aparecen en esos tres pasos</strong> — sin ellos no
+puede hacer ninguno.</p>
+
+<p><span class="term">Usar sólo los parámetros</span> — El controlador se arma con los θ̂ que
+salieron del entrenamiento <em>gray-box</em>. Son mejores que los del white-box porque
+durante el entrenamiento la red absorbió parte del hueco y liberó a los parámetros. Pero a la
+hora de controlar, <strong>la red se tira</strong>: no participa. El gray-box se usó como
+andamio.</p>
+
+<p><span class="term">Restar también la red</span> — Además de eso, en cada paso se evalúa
+ĝ(I,E) y se le resta al objetivo. Sale de una cuenta corta: si tu modelo dice que la derivada
+es <em>(1/τ)(−I + S − k) + ĝ</em> y querés que el resultado sea <em>(1/τ)(−I + Ulti)</em>,
+despejando queda <strong>S = Ulti + k − τ·ĝ</strong>. O sea: alcanza con correr el objetivo de
+la sigmoidea por −τ·ĝ. Es una línea de código, y en teoría compensa exactamente el término
+extra.</p>
+
+<figure>
+  <img src="figuras_resumen/fig7_control.png" alt="control en lazo cerrado">
+  <figcaption><strong>Figura 8.</strong> Lo que pasa en la práctica. Usar los parámetros del
+  gray-box mejora respecto del white-box (0,089 → 0,078 en E). Restar la red suena bien y
+  <strong>no funciona</strong>: como acierta la amplitud pero va desfasada, en muchos
+  instantes le resta con el signo equivocado. Arregla el lazo de E y destroza el de I
+  (0,055 → 0,206). Hay que mirar los dos lazos: mirando sólo E parecería que mejora.</figcaption>
+</figure>
+
+<div class="clave">
+<p><strong>La receta:</strong> usá los parámetros del gray-box, no uses la red para cancelar.
+Y el motivo de fondo: la resta es <em>punto a punto</em>, así que necesita que ĝ sea la física
+faltante <em>de verdad</em>. Que ajuste bien los datos globalmente no alcanza — son dos
+requisitos distintos.</p>
+</div>
+
+<h2>6. Las tres formas de usar esto</h2>
+<p>Después de entrenar tenés dos cosas: los <strong>10 números</strong> y la <strong>red</strong>.
+Qué hacés con ellas depende del objetivo.</p>
+<table>
+<tr><th style="width:31%">Si querés…</th><th>Hacés…</th></tr>
+<tr><td>Los parámetros, porque significan algo biológico</td>
+    <td>Entrenás con la red prendida, te quedás con los números, tirás la red. La red fue un
+    andamio. <span class="bien">Funciona</span></td></tr>
+<tr><td>Predecir trayectorias</td>
+    <td>Dejás la red puesta: el modelo completo predice apenas mejor. Ojo: los números pueden
+    estar arruinados y no te enterás.</td></tr>
+<tr><td>Controlar el sistema</td>
+    <td>Usás los números, tirás la red. <span class="mal">Restar la red rompe un
+    canal.</span></td></tr>
+</table>
+
+<h2>7. Lo que hicimos después</h2>
+<p>Tres frentes que quedaron abiertos y ya se cerraron o avanzaron.</p>
+
+<h3>El integrador: absuelto</h3>
+<p>Apareció que el integrador que usan los scripts del proyecto acumula un error de ~1,5e-2,
+del mismo orden que el ruido de los barridos de robustez (σ = 0,01). Como es un error
+<em>sistemático</em>, promediar no lo elimina — había que descartar que estuviera contaminando
+un resultado ya establecido.</p>
+<table>
+<tr><th>integrador</th><th class="n">error de θ con σ=0</th><th class="n">error de θ con σ=0,01</th></tr>
+<tr><td>histórico (el que se usa hoy)</td><td class="n">0,54 %</td><td class="n">8,14 %</td></tr>
+<tr><td>paso fijo (30× más preciso)</td><td class="n">1,05 %</td><td class="n">8,39 %</td></tr>
+<tr><td>referencia de alta precisión</td><td class="n">1,07 %</td><td class="n">8,41 %</td></tr>
+</table>
+<p><strong>No contamina.</strong> Al nivel de ruido que importa los tres coinciden dentro del
+3 %. <strong>Los barridos de robustez son válidos y no hay que rehacerlos.</strong></p>
+
+<h3>Diseño de estímulos: se puede romper la degeneración</h3>
+<p>El 67 % imitable no es una constante: depende de la trayectoria, y la trayectoria la fija
+el estímulo. Optimizando la forma del estímulo <strong>a igual amplitud media</strong>, baja
+del 71 % al <strong>59,5 %</strong>.</p>
+<p><strong>Pero apareció un matiz que cambia la receta.</strong> Un dataset con 20 variantes
+de ese único estímulo diseñado da 73,9 % — <em>peor</em> que el de librería (67,1 %). La razón
+es instructiva: cuando se exige un único cambio de parámetros que explique <em>todos</em> los
+escenarios a la vez, la degeneración se rompe sola si los escenarios son <strong>distintos
+entre sí</strong>. La diversidad pesa más que la calidad de cada uno.</p>
+<div class="clave">
+<p>Hay que diseñar el <strong>experimento entero</strong>, no la señal: elegir un conjunto de
+estímulos cuyas degeneraciones no se solapen. Es diseño de experimentos con una función
+objetivo nueva — separar la red de los parámetros, en vez de sólo informar sobre los
+parámetros.</p>
+</div>
+
+<h3>Corrección estructurada: física en vez de caja negra</h3>
+<p>Como la red no sirve para cancelar, probamos reemplazarla por <strong>3 parámetros con
+significado físico</strong> (refractariedad y saturación) en vez de ~1000 pesos. Ventaja: la
+cancelación en el controlador vuelve a ser exacta.</p>
+<p>Falló, y el diagnóstico es lo interesante: el optimizador encuentra un ajuste
+<strong>mejor que el de la física verdadera</strong> con parámetros equivocados. ¿Por qué? A
+la corrección le falta una componente — el <em>retardo</em> del actuador — y usa las que sí
+tiene para compensar la que le falta.</p>
+<p>La confirmación es limpia: sobre una planta que tiene <em>exactamente</em> la forma que la
+corrección puede representar, recupera la saturación con 1,3 % de error y la pérdida cae
+145 veces.</p>
+<div class="clave">
+<p>La corrección estructurada es <strong>identificable y precisa si la forma está completa</strong>,
+y engañosa si le falta una pieza. Es la misma lección de antes, un nivel más abajo. Advertencia
+práctica: un gray-box estructurado que ajusta bien <strong>no garantiza</strong> que los
+parámetros físicos que reporta sean correctos.</p>
+</div>
+
+<h2>8. Qué agrega esto al proyecto</h2>
+<ul>
+<li><strong>El resultado de siempre, ahora defendible.</strong> Pasamos de “identificamos 10
+parámetros cuando el modelo es exacto” a “identificamos 10 parámetros bajo mismatch
+estructural, y medimos cuánto cuesta”.</li>
+<li><strong>Confirmación independiente del análisis de identificabilidad.</strong> El mismatch
+degrada primero w<sub>II</sub>, que ya sabíamos que era la dirección más débil. Y el 93 % de
+lo que la red le roba a los parámetros va por esa misma dirección.</li>
+<li><strong>Resultados que, hasta donde vimos, nadie reporta:</strong> el 67 % de mismatch
+imitable, el cruce en ε = 0, que <em>ajustar bien no habilita a cancelar</em>, y que
+identificar y predecir mejoran de forma desacoplada.</li>
+</ul>
+<p>Y todos sólo se pueden obtener en un montaje donde el Δf verdadero es conocido — que es
+exactamente la ventaja de haber construido la incertidumbre a mano en vez de tomarla de datos
+reales.</p>
+
+<h2>9. Qué sigue</h2>
+<ol>
+<li><strong>Diseñar el conjunto de estímulos</strong> (no uno solo) que minimice la
+degeneración conjunta, y validar que con él la red <em>sí</em> aprenda la física — o sea, que
+el R² se vuelva positivo. Si eso pasa, la historia da vuelta: pasaríamos de “ayuda sin
+aprender física” a “con el experimento bien diseñado, aprende física”. Es de un día de
+trabajo y el código ya está escrito.</li>
+<li><strong>Completar la corrección estructurada con el retardo.</strong> El diagnóstico ya
+está hecho: falla <em>sólo</em> por esa componente. Sería una corrección de 4 parámetros
+físicos, identificable, interpretable y con cancelación exacta — el camino más prometedor
+para el control.</li>
+<li><strong>Cuando esto vaya a datos reales:</strong> ahí no existe el Δf verdadero, así que
+no hay forma de saber si la red aprendió física o está compitiendo con los parámetros
+<em>mirando el ajuste</em>. Lo mínimo a reportar es la fracción redundante contra una red sin
+entrenar. Sin eso, un gray-box puede estar destruyendo la identificación y parecer un
+éxito.</li>
+</ol>
+
+<p class="pie">Todos los números salen de corridas reales del repositorio
+(<code>results/uncertainty/</code>), reproducibles con
+<code>bash scripts/run_uncertainty_all.sh</code>. Detalle completo en
+<code>docs/graybox_manual_completo.md</code>. · 38 tests automáticos en verde.</p>

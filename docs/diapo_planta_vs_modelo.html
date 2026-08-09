@@ -1,0 +1,209 @@
+<title>Simulador vs. modelo — una diapositiva</title>
+<style>
+  :root {
+    --ground:    #F7F8FA;
+    --panel:     #FFFFFF;
+    --ink:       #171C24;
+    --ink-soft:  #5A6472;
+    --ink-faint: #9AA4B2;
+    --ghost:     #C3CAD4;
+    --rule:      #DDE2E9;
+    --luz:       #B06E12;
+    --luz-bg:    #FAF0DE;
+    --refr:      #B8455C;
+    --refr-bg:   #FBEBEE;
+    --red:       #1F7684;
+    --red-bg:    #E2F1F3;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:#12161C; --panel:#1A1F27; --ink:#E8ECF1; --ink-soft:#A3AEBC;
+      --ink-faint:#6F7B8A; --ghost:#3D4652; --rule:#2C333D;
+      --luz:#E0A94E; --luz-bg:#2C2317; --refr:#E8879B; --refr-bg:#2D1C21;
+      --red:#5FB9C7; --red-bg:#13272B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#12161C; --panel:#1A1F27; --ink:#E8ECF1; --ink-soft:#A3AEBC;
+    --ink-faint:#6F7B8A; --ghost:#3D4652; --rule:#2C333D;
+    --luz:#E0A94E; --luz-bg:#2C2317; --refr:#E8879B; --refr-bg:#2D1C21;
+    --red:#5FB9C7; --red-bg:#13272B;
+  }
+  :root[data-theme="light"] {
+    --ground:#F7F8FA; --panel:#FFFFFF; --ink:#171C24; --ink-soft:#5A6472;
+    --ink-faint:#9AA4B2; --ghost:#C3CAD4; --rule:#DDE2E9;
+    --luz:#B06E12; --luz-bg:#FAF0DE; --refr:#B8455C; --refr-bg:#FBEBEE;
+    --red:#1F7684; --red-bg:#E2F1F3;
+  }
+
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--sans);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 40px 28px;
+  }
+  .slide { width: 100%; max-width: 1180px; }
+
+  h1 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: clamp(24px, 3.2vw, 38px); line-height: 1.15;
+    margin: 0 0 6px; text-align: center; letter-spacing: -.01em; text-wrap: balance;
+  }
+  .kicker {
+    text-align: center; color: var(--ink-soft); font-size: clamp(14px, 1.5vw, 17px);
+    margin: 0 0 44px;
+  }
+
+  .par {
+    display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0;
+    align-items: stretch;
+  }
+  .divisor { background: var(--rule); }
+  .col { padding: 0 clamp(16px, 3vw, 40px); }
+
+  .tag {
+    font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 4px;
+  }
+  .titulo {
+    font-family: var(--serif); font-size: clamp(19px, 2.2vw, 25px);
+    font-weight: 600; margin: 0 0 3px;
+  }
+  .titulo em { font-style: normal; }
+  .sim .titulo em { color: var(--refr); }
+  .mod .titulo em { color: var(--red); }
+  .pie { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 30px; }
+
+  /* ---------- la ecuación ---------- */
+  .eq {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(17px, 2.05vw, 24px); line-height: 1.85;
+    margin: 0 0 30px;
+  }
+  .eq .t {
+    padding: 2px 6px; border-radius: 3px; font-style: italic;
+    white-space: nowrap;
+  }
+  .t.luz  { color: var(--luz);  background: var(--luz-bg);  box-shadow: inset 0 -2px 0 var(--luz); }
+  .t.refr { color: var(--refr); background: var(--refr-bg); box-shadow: inset 0 -2px 0 var(--refr); }
+  .t.red  { color: var(--red);  background: var(--red-bg);  box-shadow: inset 0 -2px 0 var(--red); }
+  .t.ghost {
+    color: var(--ghost); background: none; text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+  }
+
+  /* ---------- anotaciones ---------- */
+  .notas { display: flex; flex-direction: column; gap: 14px; }
+  .nota { display: flex; gap: 12px; align-items: flex-start; }
+  .nota .barra { width: 3px; border-radius: 2px; flex: none; align-self: stretch; }
+  .nota.luz  .barra { background: var(--luz); }
+  .nota.refr .barra { background: var(--refr); }
+  .nota.red  .barra { background: var(--red); }
+  .nota.mudo .barra { background: var(--ghost); }
+  .nota .txt { font-size: 14.5px; line-height: 1.5; }
+  .nota .qué { font-weight: 600; display: block; }
+  .nota.luz  .qué { color: var(--luz); }
+  .nota.refr .qué { color: var(--refr); }
+  .nota.red  .qué { color: var(--red); }
+  .nota.mudo .qué { color: var(--ink-faint); }
+  .nota .cómo { color: var(--ink-soft); }
+
+  /* ---------- cierre ---------- */
+  .cierre {
+    margin-top: 46px; padding-top: 22px; border-top: 1px solid var(--rule);
+    text-align: center; font-size: clamp(14px, 1.6vw, 17px); color: var(--ink-soft);
+  }
+  .cierre b { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 800px) {
+    .par { grid-template-columns: 1fr; }
+    .divisor { height: 1px; width: 100%; margin: 34px 0; }
+    .col { padding: 0; }
+  }
+</style>
+
+<div class="slide">
+
+  <h1>La misma ecuación, dos versiones</h1>
+  <p class="kicker">El simulador usa el Wilson-Cowan completo. El modelo usa una
+  versión simplificada y le suma una red.</p>
+
+  <div class="par">
+
+    <!-- ======================= SIMULADOR ======================= -->
+    <div class="col sim">
+      <p class="tag">Simulador · genera los datos</p>
+      <p class="titulo">Wilson-Cowan <em>completo</em></p>
+      <p class="pie">La ecuación original de 1972.</p>
+
+      <p class="eq">
+        τ&thinsp;dE/dt&nbsp;= −E +
+        <span class="t refr">(1 − r·E)</span>
+        ·&thinsp;S(&thinsp;w·E − w·I +
+        <span class="t luz">P<sub>ef</sub></span>
+        − θ&thinsp;)
+      </p>
+
+      <div class="notas">
+        <div class="nota refr">
+          <div class="barra"></div>
+          <div class="txt">
+            <span class="qué">Refractariedad</span>
+            <span class="cómo">La neurona que acaba de disparar no puede repetir.
+            Frena la respuesta cuanto más activa está.</span>
+          </div>
+        </div>
+        <div class="nota luz">
+          <div class="barra"></div>
+          <div class="txt">
+            <span class="qué">La luz que llega ≠ la que comandás</span>
+            <span class="cómo">El canal óptico tarda en abrirse y satura.
+            Entra <i>P</i><sub>ef</sub>, nunca <i>P</i>.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divisor"></div>
+
+    <!-- ======================= MODELO ======================= -->
+    <div class="col mod">
+      <p class="tag">Modelo · lo que entrenamos</p>
+      <p class="titulo">Wilson-Cowan <em>simplificado</em> + red</p>
+      <p class="pie">Le falta física. La red intenta reponerla.</p>
+
+      <p class="eq">
+        τ&thinsp;dE/dt&nbsp;= −E +
+        <span class="t ghost">(1 − r·E)</span>
+        S(&thinsp;w·E − w·I + P − θ&thinsp;)
+        +&nbsp;<span class="t red">g(I,&hairsp;E)</span>
+      </p>
+
+      <div class="notas">
+        <div class="nota mudo">
+          <div class="barra"></div>
+          <div class="txt">
+            <span class="qué">El factor no está</span>
+            <span class="cómo">Ésa es la simplificación: se descarta y la entrada
+            entra sin deformar.</span>
+          </div>
+        </div>
+        <div class="nota red">
+          <div class="barra"></div>
+          <div class="txt">
+            <span class="qué">Red neuronal</span>
+            <span class="cómo">Se suma a la derivada para tapar el hueco.
+            Ve sólo el estado <i>(I,&hairsp;E)</i>.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="cierre">El hueco entre las dos es lo que la red tiene que aprender
+  &mdash; <b>y por eso se llama gray-box</b>.</p>
+
+</div>

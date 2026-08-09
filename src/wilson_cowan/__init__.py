@@ -17,3 +17,21 @@ from .model import (  # noqa: F401
     poisson_pulse,
     plot_results,
 )
+
+# Incertidumbre dinamica: perturbaciones que vuelven al simulador distinto del
+# modelo que se entrena (lo que le da trabajo real a la correccion gray-box).
+from .uncertainty import (  # noqa: F401
+    Perturbation,
+    NoPerturbation,
+    Refractoriness,
+    Actuator,
+    Adaptation,
+    SynapticDepression,
+    HiddenPopulation,
+    HeterogeneousSigmoid,
+    ProcessNoise,
+    WeightDrift,
+    CompositePerturbation,
+    default_uncertainty,
+    REGISTRY,
+)

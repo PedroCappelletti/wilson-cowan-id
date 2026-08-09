@@ -1,0 +1,304 @@
+=== F7 · techo de lo que g_φ puede capturar, por familia ===
+    (se ajusta la arquitectura real de g_φ contra el Delta f VERDADERO;
+     test = estimulos held-out del propio dataset)
+
+caso                 tipo                 |Df|    R2_x   R2_xpq  veredicto
+------------------------------------------------------------------------------------------
+
+=== refractoriness -> refract_r0.1.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.031] |Df|=0.0002
+  [train] box_a0.8           E=[-0.000, 0.163] |Df|=0.0015
+  [TEST ] box_a1.2           E=[-0.005, 0.765] |Df|=0.0159
+  [train] square_a0.6_f50    E=[-0.002, 0.068] |Df|=0.0002
+  [train] square_a0.6_f100   E=[-0.002, 0.057] |Df|=0.0001
+  [train] square_a0.6_f130   E=[-0.001, 0.051] |Df|=0.0001
+  [train] square_a1.0_f50    E=[-0.009, 0.738] |Df|=0.0068
+  [train] square_a1.0_f100   E=[-0.003, 0.263] |Df|=0.0011
+  [TEST ] square_a1.0_f130   E=[-0.000, 0.176] |Df|=0.0007
+  [train] aprbs_0            E=[-0.000, 0.667] |Df|=0.0021
+  [train] aprbs_1            E=[-0.001, 0.726] |Df|=0.0082
+  [TEST ] aprbs_2            E=[-0.000, 0.147] |Df|=0.0004
+  [train] prbs_0             E=[-0.010, 0.732] |Df|=0.0029
+  [TEST ] prbs_1             E=[-0.010, 0.785] |Df|=0.0215
+  [train] thetagamma_0       E=[-0.005, 0.727] |Df|=0.0027
+  [train] thetagamma_1       E=[-0.008, 0.769] |Df|=0.0030
+  [TEST ] thetagamma_2       E=[-0.002, 0.136] |Df|=0.0003
+  [train] poisson_0          E=[-0.010, 0.740] |Df|=0.0062
+  [TEST ] poisson_1          E=[-0.009, 0.795] |Df|=0.0144
+  [TEST ] chirp              E=[-0.009, 0.769] |Df|=0.0122
+  -> data/processed/uncertain/controls/refract_r0.1.npz
+refract_r0.1         capturable         0.0066   0.967    0.997  CAPTURABLE
+
+=== hetero_sigmoid -> hetero_0.8.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.049] |Df|=0.0090
+  [train] box_a0.8           E=[-0.001, 0.336] |Df|=0.0195
+  [TEST ] box_a1.2           E=[-0.009, 0.784] |Df|=0.0128
+  [train] square_a0.6_f50    E=[-0.004, 0.123] |Df|=0.0068
+  [train] square_a0.6_f100   E=[-0.003, 0.090] |Df|=0.0062
+  [train] square_a0.6_f130   E=[-0.001, 0.076] |Df|=0.0061
+  [train] square_a1.0_f50    E=[-0.016, 0.735] |Df|=0.0120
+  [train] square_a1.0_f100   E=[-0.007, 0.362] |Df|=0.0097
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.241] |Df|=0.0101
+  [train] aprbs_0            E=[-0.000, 0.619] |Df|=0.0126
+  [train] aprbs_1            E=[-0.002, 0.717] |Df|=0.0168
+  [TEST ] aprbs_2            E=[-0.000, 0.291] |Df|=0.0109
+  [train] prbs_0             E=[-0.017, 0.728] |Df|=0.0095
+  [TEST ] prbs_1             E=[-0.017, 0.811] |Df|=0.0220
+  [train] thetagamma_0       E=[-0.009, 0.720] |Df|=0.0071
+  [train] thetagamma_1       E=[-0.014, 0.784] |Df|=0.0083
+  [TEST ] thetagamma_2       E=[-0.005, 0.279] |Df|=0.0063
+  [train] poisson_0          E=[-0.018, 0.753] |Df|=0.0100
+  [TEST ] poisson_1          E=[-0.017, 0.827] |Df|=0.0160
+  [TEST ] chirp              E=[-0.018, 0.796] |Df|=0.0170
+  -> data/processed/uncertain/controls/hetero_0.8.npz
+hetero_0.8           capturable         0.0105   0.768    0.984  CAPTURABLE
+
+=== refractoriness+actuator -> par_nominal.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.030] |Df|=0.0005
+  [train] box_a0.8           E=[-0.000, 0.134] |Df|=0.0044
+  [TEST ] box_a1.2           E=[-0.004, 0.722] |Df|=0.0285
+  [train] square_a0.6_f50    E=[-0.002, 0.064] |Df|=0.0040
+  [train] square_a0.6_f100   E=[-0.001, 0.046] |Df|=0.0069
+  [train] square_a0.6_f130   E=[-0.000, 0.037] |Df|=0.0085
+  [train] square_a1.0_f50    E=[-0.007, 0.662] |Df|=0.0166
+  [train] square_a1.0_f100   E=[-0.002, 0.135] |Df|=0.0182
+  [TEST ] square_a1.0_f130   E=[-0.000, 0.095] |Df|=0.0208
+  [train] aprbs_0            E=[-0.000, 0.525] |Df|=0.0067
+  [train] aprbs_1            E=[-0.000, 0.701] |Df|=0.0196
+  [TEST ] aprbs_2            E=[-0.000, 0.127] |Df|=0.0039
+  [train] prbs_0             E=[-0.008, 0.645] |Df|=0.0153
+  [TEST ] prbs_1             E=[-0.007, 0.775] |Df|=0.0389
+  [train] thetagamma_0       E=[-0.005, 0.713] |Df|=0.0067
+  [train] thetagamma_1       E=[-0.007, 0.759] |Df|=0.0103
+  [TEST ] thetagamma_2       E=[-0.002, 0.113] |Df|=0.0038
+  [train] poisson_0          E=[-0.008, 0.598] |Df|=0.0231
+  [TEST ] poisson_1          E=[-0.008, 0.782] |Df|=0.0400
+  [TEST ] chirp              E=[-0.006, 0.731] |Df|=0.0374
+  -> data/processed/uncertain/controls/par_nominal.npz
+par_nominal          el del roadmap     0.0172  -0.111    0.775  parcial
+
+=== adaptation -> adapt_tau1.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.030] |Df|=0.0008
+  [train] box_a0.8           E=[-0.000, 0.131] |Df|=0.0058
+  [TEST ] box_a1.2           E=[-0.006, 0.800] |Df|=0.0323
+  [train] square_a0.6_f50    E=[-0.002, 0.062] |Df|=0.0008
+  [train] square_a0.6_f100   E=[-0.002, 0.055] |Df|=0.0006
+  [train] square_a0.6_f130   E=[-0.001, 0.050] |Df|=0.0005
+  [train] square_a1.0_f50    E=[-0.009, 0.750] |Df|=0.0102
+  [train] square_a1.0_f100   E=[-0.003, 0.233] |Df|=0.0035
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.164] |Df|=0.0025
+  [train] aprbs_0            E=[-0.000, 0.439] |Df|=0.0045
+  [train] aprbs_1            E=[-0.001, 0.727] |Df|=0.0140
+  [TEST ] aprbs_2            E=[-0.000, 0.114] |Df|=0.0017
+  [train] prbs_0             E=[-0.010, 0.733] |Df|=0.0052
+  [TEST ] prbs_1             E=[-0.010, 0.827] |Df|=0.0261
+  [train] thetagamma_0       E=[-0.005, 0.728] |Df|=0.0044
+  [train] thetagamma_1       E=[-0.009, 0.802] |Df|=0.0045
+  [TEST ] thetagamma_2       E=[-0.002, 0.114] |Df|=0.0011
+  [train] poisson_0          E=[-0.011, 0.759] |Df|=0.0089
+  [TEST ] poisson_1          E=[-0.010, 0.841] |Df|=0.0162
+  [TEST ] chirp              E=[-0.011, 0.813] |Df|=0.0178
+  -> data/processed/uncertain/controls/adapt_tau1.npz
+adapt_tau1           memoria rapida     0.0089   0.913    0.989  CAPTURABLE
+
+=== adaptation -> adapt_tau3.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.030] |Df|=0.0008
+  [train] box_a0.8           E=[-0.001, 0.142] |Df|=0.0057
+  [TEST ] box_a1.2           E=[-0.008, 0.822] |Df|=0.0286
+  [train] square_a0.6_f50    E=[-0.002, 0.064] |Df|=0.0007
+  [train] square_a0.6_f100   E=[-0.002, 0.056] |Df|=0.0005
+  [train] square_a0.6_f130   E=[-0.001, 0.050] |Df|=0.0005
+  [train] square_a1.0_f50    E=[-0.011, 0.781] |Df|=0.0078
+  [train] square_a1.0_f100   E=[-0.004, 0.244] |Df|=0.0029
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.166] |Df|=0.0022
+  [train] aprbs_0            E=[-0.000, 0.542] |Df|=0.0044
+  [train] aprbs_1            E=[-0.001, 0.754] |Df|=0.0121
+  [TEST ] aprbs_2            E=[-0.000, 0.116] |Df|=0.0016
+  [train] prbs_0             E=[-0.012, 0.763] |Df|=0.0044
+  [TEST ] prbs_1             E=[-0.012, 0.844] |Df|=0.0229
+  [train] thetagamma_0       E=[-0.007, 0.766] |Df|=0.0038
+  [train] thetagamma_1       E=[-0.011, 0.824] |Df|=0.0035
+  [TEST ] thetagamma_2       E=[-0.003, 0.118] |Df|=0.0010
+  [train] poisson_0          E=[-0.013, 0.786] |Df|=0.0066
+  [TEST ] poisson_1          E=[-0.013, 0.857] |Df|=0.0141
+  [TEST ] chirp              E=[-0.013, 0.825] |Df|=0.0150
+  -> data/processed/uncertain/controls/adapt_tau3.npz
+adapt_tau3           memoria rapida     0.0069   0.850    0.948  CAPTURABLE
+
+=== adaptation -> adapt_tau10.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.031] |Df|=0.0008
+  [train] box_a0.8           E=[-0.002, 0.158] |Df|=0.0056
+  [TEST ] box_a1.2           E=[-0.011, 0.838] |Df|=0.0266
+  [train] square_a0.6_f50    E=[-0.003, 0.066] |Df|=0.0006
+  [train] square_a0.6_f100   E=[-0.002, 0.056] |Df|=0.0005
+  [train] square_a0.6_f130   E=[-0.001, 0.050] |Df|=0.0005
+  [train] square_a1.0_f50    E=[-0.012, 0.802] |Df|=0.0061
+  [train] square_a1.0_f100   E=[-0.004, 0.241] |Df|=0.0027
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.169] |Df|=0.0022
+  [train] aprbs_0            E=[-0.000, 0.641] |Df|=0.0040
+  [train] aprbs_1            E=[-0.002, 0.773] |Df|=0.0108
+  [TEST ] aprbs_2            E=[-0.001, 0.125] |Df|=0.0015
+  [train] prbs_0             E=[-0.013, 0.782] |Df|=0.0036
+  [TEST ] prbs_1             E=[-0.014, 0.859] |Df|=0.0211
+  [train] thetagamma_0       E=[-0.009, 0.794] |Df|=0.0028
+  [train] thetagamma_1       E=[-0.012, 0.840] |Df|=0.0027
+  [TEST ] thetagamma_2       E=[-0.003, 0.128] |Df|=0.0008
+  [train] poisson_0          E=[-0.014, 0.790] |Df|=0.0056
+  [TEST ] poisson_1          E=[-0.014, 0.866] |Df|=0.0124
+  [TEST ] chirp              E=[-0.013, 0.823] |Df|=0.0135
+  -> data/processed/uncertain/controls/adapt_tau10.npz
+adapt_tau10          memoria media      0.0048   0.615    0.768  parcial
+
+=== adaptation -> adapt_tau30.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.001, 0.031] |Df|=0.0007
+  [train] box_a0.8           E=[-0.002, 0.168] |Df|=0.0051
+  [TEST ] box_a1.2           E=[-0.011, 0.844] |Df|=0.0243
+  [train] square_a0.6_f50    E=[-0.003, 0.067] |Df|=0.0005
+  [train] square_a0.6_f100   E=[-0.002, 0.057] |Df|=0.0005
+  [train] square_a0.6_f130   E=[-0.001, 0.051] |Df|=0.0004
+  [train] square_a1.0_f50    E=[-0.011, 0.808] |Df|=0.0055
+  [train] square_a1.0_f100   E=[-0.004, 0.255] |Df|=0.0025
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.176] |Df|=0.0020
+  [train] aprbs_0            E=[-0.001, 0.696] |Df|=0.0035
+  [train] aprbs_1            E=[-0.003, 0.775] |Df|=0.0100
+  [TEST ] aprbs_2            E=[-0.001, 0.136] |Df|=0.0013
+  [train] prbs_0             E=[-0.012, 0.792] |Df|=0.0031
+  [TEST ] prbs_1             E=[-0.014, 0.865] |Df|=0.0177
+  [train] thetagamma_0       E=[-0.008, 0.805] |Df|=0.0020
+  [train] thetagamma_1       E=[-0.011, 0.847] |Df|=0.0022
+  [TEST ] thetagamma_2       E=[-0.003, 0.135] |Df|=0.0006
+  [train] poisson_0          E=[-0.013, 0.784] |Df|=0.0051
+  [TEST ] poisson_1          E=[-0.014, 0.864] |Df|=0.0107
+  [TEST ] chirp              E=[-0.013, 0.822] |Df|=0.0122
+  -> data/processed/uncertain/controls/adapt_tau30.npz
+adapt_tau30          memoria lenta      0.0040   0.439    0.691  parcial
+
+=== adaptation -> adapt_tau100.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.001, 0.031] |Df|=0.0005
+  [train] box_a0.8           E=[-0.002, 0.174] |Df|=0.0037
+  [TEST ] box_a1.2           E=[-0.007, 0.847] |Df|=0.0170
+  [train] square_a0.6_f50    E=[-0.002, 0.069] |Df|=0.0004
+  [train] square_a0.6_f100   E=[-0.002, 0.058] |Df|=0.0003
+  [train] square_a0.6_f130   E=[-0.001, 0.051] |Df|=0.0003
+  [train] square_a1.0_f50    E=[-0.011, 0.818] |Df|=0.0039
+  [train] square_a1.0_f100   E=[-0.004, 0.270] |Df|=0.0018
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.179] |Df|=0.0014
+  [train] aprbs_0            E=[-0.002, 0.743] |Df|=0.0023
+  [train] aprbs_1            E=[-0.004, 0.790] |Df|=0.0069
+  [TEST ] aprbs_2            E=[-0.001, 0.146] |Df|=0.0009
+  [train] prbs_0             E=[-0.012, 0.805] |Df|=0.0021
+  [TEST ] prbs_1             E=[-0.013, 0.867] |Df|=0.0117
+  [train] thetagamma_0       E=[-0.007, 0.809] |Df|=0.0012
+  [train] thetagamma_1       E=[-0.010, 0.850] |Df|=0.0015
+  [TEST ] thetagamma_2       E=[-0.003, 0.138] |Df|=0.0004
+  [train] poisson_0          E=[-0.012, 0.795] |Df|=0.0033
+  [TEST ] poisson_1          E=[-0.013, 0.870] |Df|=0.0064
+  [TEST ] chirp              E=[-0.012, 0.831] |Df|=0.0086
+  -> data/processed/uncertain/controls/adapt_tau100.npz
+adapt_tau100         memoria lenta      0.0027   0.309    0.543  POBRE
+
+=== depression -> depresion.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.031] |Df|=0.0010
+  [train] box_a0.8           E=[-0.000, 0.142] |Df|=0.0129
+  [TEST ] box_a1.2           E=[-0.000, 0.743] |Df|=0.0731
+  [train] square_a0.6_f50    E=[-0.002, 0.062] |Df|=0.0008
+  [train] square_a0.6_f100   E=[-0.002, 0.055] |Df|=0.0006
+  [train] square_a0.6_f130   E=[-0.001, 0.050] |Df|=0.0006
+  [train] square_a1.0_f50    E=[-0.004, 0.256] |Df|=0.0150
+  [train] square_a1.0_f100   E=[-0.003, 0.193] |Df|=0.0072
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.157] |Df|=0.0055
+  [train] aprbs_0            E=[-0.000, 0.154] |Df|=0.0070
+  [train] aprbs_1            E=[-0.000, 0.479] |Df|=0.0348
+  [TEST ] aprbs_2            E=[-0.000, 0.114] |Df|=0.0027
+  [train] prbs_0             E=[-0.004, 0.459] |Df|=0.0096
+  [TEST ] prbs_1             E=[-0.006, 0.774] |Df|=0.0937
+  [train] thetagamma_0       E=[-0.004, 0.294] |Df|=0.0071
+  [train] thetagamma_1       E=[-0.004, 0.602] |Df|=0.0133
+  [TEST ] thetagamma_2       E=[-0.002, 0.110] |Df|=0.0014
+  [train] poisson_0          E=[-0.006, 0.645] |Df|=0.0203
+  [TEST ] poisson_1          E=[-0.006, 0.577] |Df|=0.0654
+  [TEST ] chirp              E=[-0.001, 0.461] |Df|=0.0667
+  -> data/processed/uncertain/controls/depresion.npz
+depresion            estado oculto      0.0193   0.634    0.717  parcial
+
+=== hidden_population -> poblacion_oculta.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.031] |Df|=0.0003
+  [train] box_a0.8           E=[-0.001, 0.165] |Df|=0.0030
+  [TEST ] box_a1.2           E=[-0.009, 0.835] |Df|=0.0234
+  [train] square_a0.6_f50    E=[-0.002, 0.068] |Df|=0.0003
+  [train] square_a0.6_f100   E=[-0.002, 0.057] |Df|=0.0002
+  [train] square_a0.6_f130   E=[-0.001, 0.051] |Df|=0.0002
+  [train] square_a1.0_f50    E=[-0.012, 0.799] |Df|=0.0058
+  [train] square_a1.0_f100   E=[-0.004, 0.259] |Df|=0.0015
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.175] |Df|=0.0011
+  [train] aprbs_0            E=[-0.000, 0.717] |Df|=0.0028
+  [train] aprbs_1            E=[-0.001, 0.784] |Df|=0.0100
+  [TEST ] aprbs_2            E=[-0.000, 0.140] |Df|=0.0007
+  [train] prbs_0             E=[-0.013, 0.792] |Df|=0.0029
+  [TEST ] prbs_1             E=[-0.014, 0.855] |Df|=0.0237
+  [train] thetagamma_0       E=[-0.009, 0.792] |Df|=0.0026
+  [train] thetagamma_1       E=[-0.013, 0.837] |Df|=0.0026
+  [TEST ] thetagamma_2       E=[-0.003, 0.136] |Df|=0.0004
+  [train] poisson_0          E=[-0.014, 0.792] |Df|=0.0054
+  [TEST ] poisson_1          E=[-0.014, 0.863] |Df|=0.0137
+  [TEST ] chirp              E=[-0.014, 0.821] |Df|=0.0133
+  -> data/processed/uncertain/controls/poblacion_oculta.npz
+poblacion_oculta     estado oculto      0.0049   0.608    0.784  parcial
+
+=== weight_drift -> deriva_wEE.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.033] |Df|=0.0012
+  [train] box_a0.8           E=[-0.000, 0.840] |Df|=0.0222
+  [TEST ] box_a1.2           E=[-0.006, 0.885] |Df|=0.0452
+  [train] square_a0.6_f50    E=[-0.002, 0.098] |Df|=0.0014
+  [train] square_a0.6_f100   E=[-0.002, 0.066] |Df|=0.0010
+  [train] square_a0.6_f130   E=[-0.001, 0.058] |Df|=0.0009
+  [train] square_a1.0_f50    E=[-0.012, 0.908] |Df|=0.0164
+  [train] square_a1.0_f100   E=[-0.003, 0.557] |Df|=0.0109
+  [TEST ] square_a1.0_f130   E=[-0.001, 0.282] |Df|=0.0058
+  [train] aprbs_0            E=[-0.000, 0.692] |Df|=0.0093
+  [train] aprbs_1            E=[-0.001, 0.887] |Df|=0.0270
+  [TEST ] aprbs_2            E=[-0.000, 0.175] |Df|=0.0026
+  [train] prbs_0             E=[-0.005, 0.900] |Df|=0.0093
+  [TEST ] prbs_1             E=[-0.009, 0.924] |Df|=0.0433
+  [train] thetagamma_0       E=[-0.008, 0.865] |Df|=0.0099
+  [train] thetagamma_1       E=[-0.011, 0.870] |Df|=0.0103
+  [TEST ] thetagamma_2       E=[-0.007, 0.757] |Df|=0.0070
+  [train] poisson_0          E=[-0.011, 0.854] |Df|=0.0170
+  [TEST ] poisson_1          E=[-0.011, 0.886] |Df|=0.0219
+  [TEST ] chirp              E=[-0.011, 0.896] |Df|=0.0294
+  -> data/processed/uncertain/controls/deriva_wEE.npz
+deriva_wEE           no autonoma        0.0205   0.234    0.527  POBRE
+
+=== process_noise -> ruido_proceso.npz — 20 escenarios ===
+  [train] box_a0.4           E=[-0.036, 0.091] |Df|=0.0260
+  [train] box_a0.8           E=[-0.032, 0.848] |Df|=0.0254
+  [TEST ] box_a1.2           E=[-0.053, 0.786] |Df|=0.0252
+  [train] square_a0.6_f50    E=[-0.035, 0.584] |Df|=0.0253
+  [train] square_a0.6_f100   E=[-0.039, 0.107] |Df|=0.0242
+  [train] square_a0.6_f130   E=[-0.056, 0.160] |Df|=0.0261
+  [train] square_a1.0_f50    E=[-0.056, 0.824] |Df|=0.0255
+  [train] square_a1.0_f100   E=[-0.033, 0.617] |Df|=0.0228
+  [TEST ] square_a1.0_f130   E=[-0.030, 0.600] |Df|=0.0239
+  [train] aprbs_0            E=[-0.031, 0.785] |Df|=0.0260
+  [train] aprbs_1            E=[-0.029, 0.816] |Df|=0.0245
+  [TEST ] aprbs_2            E=[-0.052, 0.214] |Df|=0.0243
+  [train] prbs_0             E=[-0.043, 0.789] |Df|=0.0245
+  [TEST ] prbs_1             E=[-0.040, 0.907] |Df|=0.0252
+  [train] thetagamma_0       E=[-0.042, 0.850] |Df|=0.0254
+  [train] thetagamma_1       E=[-0.035, 0.861] |Df|=0.0257
+  [TEST ] thetagamma_2       E=[-0.066, 0.458] |Df|=0.0249
+  [train] poisson_0          E=[-0.039, 0.840] |Df|=0.0258
+  [TEST ] poisson_1          E=[-0.037, 0.891] |Df|=0.0258
+  [TEST ] chirp              E=[-0.036, 0.854] |Df|=0.0250
+  -> data/processed/uncertain/controls/ruido_proceso.npz
+ruido_proceso        irreducible        0.0201   0.119    0.112  POBRE
+
+--- La perilla de la memoria: adaptacion con tau_a creciente ---
+    (te = 1 ms, ti = 2 ms son las constantes propias del sistema)
+    tau_a =    1.0 ms   R2 =  0.913  ####################################
+    tau_a =    3.0 ms   R2 =  0.850  #################################
+    tau_a =   10.0 ms   R2 =  0.615  ########################
+    tau_a =   30.0 ms   R2 =  0.439  #################
+    tau_a =  100.0 ms   R2 =  0.309  ############
+
+  -> results/uncertainty/f7_controls.json

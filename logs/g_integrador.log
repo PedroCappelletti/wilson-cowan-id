@@ -1,0 +1,21 @@
+=== G · ¿el integrador contamina los resultados de ruido? ===
+
+  Desvio de la trayectoria contra la referencia de alta precision:
+    historico   RMS = 6.84e-03   max = 1.87e-01
+    paso_fijo   RMS = 1.52e-04   max = 3.24e-03
+    referencia  RMS = 0.00e+00   max = 0.00e+00
+
+  Identificacion de los 10 parametros (arranque ignorante):
+  integrador    sigma  err_medio%   err_max%     peor     wII%
+  historico      0.00        0.54       0.98   thetai     0.95
+  paso_fijo      0.00        1.05       3.67      wII     3.67
+  referencia     0.00        1.07       3.86      wII     3.86
+  historico      0.01        8.14      41.60      wII    41.60
+  paso_fijo      0.01        8.39      41.14      wII    41.14
+  referencia     0.01        8.41      41.35      wII    41.35
+
+=== VEREDICTO ===
+  sigma=0.0: historico 0.54% vs referencia 1.07%  (diferencia 0.53 pp, 49% relativo)
+  sigma=0.01: historico 8.14% vs referencia 8.41%  (diferencia 0.27 pp, 3% relativo)
+
+  -> results/uncertainty/g_integrador.json

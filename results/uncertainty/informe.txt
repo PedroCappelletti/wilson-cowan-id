@@ -1,0 +1,121 @@
+
+==============================================================================
+  F1 · Caracterizacion: cuanto deforma la perturbacion
+==============================================================================
+    eps   D_traj%    D_abs   xSigma   |Df|/|f|%    E_max   cruces
+   0.00      0.00   0.0000      0.0        0.00    0.878       21
+   0.25     11.68   0.0198      1.0        9.45    0.855       21
+   0.50     27.52   0.0467      2.3       18.23    0.832       21
+   1.00     53.95   0.0915      4.6       34.16    0.782       21
+   1.50     66.88   0.1135      5.7       45.66    0.731       20
+   2.00     77.46   0.1314      6.6       52.58    0.676       19
+
+==============================================================================
+  F2 · El costo de la rigidez (white-box sobre planta perturbada)
+==============================================================================
+    eps   err_max%   err_medio%     peor    mse_train     mse_test
+   0.00       3.67         1.05      wII    2.149e-06    9.135e-04
+   0.25      70.46        13.53      wII    8.666e-05    8.324e-03
+   0.50     127.77        27.72      wII    1.879e-04    8.320e-03
+   1.00     187.51        59.53      wII    4.952e-04    1.057e-02
+   1.50     199.48        74.80      wII    1.498e-03    4.251e-02
+   2.00     196.17        93.64      wII    1.330e-04    2.745e-03
+
+  Error por parametro (%):
+    eps      wEE      wEI      wIE      wII       te       ti       ae       ai   thetae   thetai
+   0.00      1.2      1.3      0.3      3.7      0.1      1.0      1.1      0.5      0.6      0.7
+   0.25      8.6     15.5     10.1     70.5      6.3     12.3      4.4      1.5      3.8      2.3
+   0.50     14.2     32.6     27.9    127.8     20.7     18.2      3.4     14.8      4.2     13.5
+   1.00     48.2    101.0     67.8    187.5     38.8     20.6     18.5     42.1     18.9     51.9
+   1.50     25.2    132.4    112.1    199.5    132.7     27.1      5.5     87.6      4.8     21.1
+   2.00     75.0    189.7    114.2    196.2    108.2     42.0     25.5     56.6     29.2     99.8
+
+  Parametro mas castigado en cada nivel: ['wII', 'wII', 'wII', 'wII', 'wII', 'wII']
+  -> SIEMPRE es wII: el mismatch estructural degrada preferentemente
+     la direccion que la FIM ya marcaba como mas debil.
+
+==============================================================================
+  F3 · Gray-box: ¿mejora el ajuste a costa de los parametros?
+==============================================================================
+  LEER LAS DOS METRICAS JUNTAS. Si el mse baja y el error parametrico
+  sube, la red esta tapando parametros malos, no aprendiendo fisica.
+
+  variante     eps     lam   err_max%   err_med%    mse_test    g_rel   redund.
+  A           0.00       -      46.95      26.66   1.244e-03    0.147     0.894
+  B           0.00       -      36.43      18.11   7.724e-04    0.130     0.970
+  A           1.00       -      98.05      35.86   8.513e-03    0.579     0.918
+  B           1.00       -      69.20      35.63   9.626e-03    0.477     0.941
+  C           1.00     0.1      82.07      30.84   9.256e-03    0.201     0.914
+  C           1.00       1      81.65      31.36   8.870e-03    0.069     0.903
+  D           1.00       1      78.33      31.12   8.537e-03    0.075     0.861
+  D           1.00      10     101.43      44.56   1.057e-02    0.010     0.385
+
+  --- eps = 0.0 ---
+  white-box            err_med=   1.05%  mse_test=9.135e-04
+  mejor en PARAMETROS             B  err_med=  18.11%  mse_test=7.724e-04
+  mejor en AJUSTE                 B  err_med=  18.11%  mse_test=7.724e-04
+  -> ninguna variante mejora los parametros respecto del white-box
+
+  --- eps = 1.0 ---
+  white-box            err_med=  59.53%  mse_test=1.057e-02
+  mejor en PARAMETROS    C(lam=0.1)  err_med=  30.84%  mse_test=9.256e-03
+  mejor en AJUSTE                 A  err_med=  35.86%  mse_test=8.513e-03
+  -> el gray-box RECUPERA 48% del error parametrico
+
+==============================================================================
+  F4 · FIM del hibrido: por donde roba identificabilidad g_phi
+==============================================================================
+
+  dataset: eps1.npz   condicion = 1.24e+04
+    sigma10 rel=8.06e-05  wII=+1.00 ai=+0.06 ti=+0.06
+    sigma 9 rel=1.03e-03  ai=-0.69 thetai=+0.51 wIE=+0.49
+    sigma 8 rel=2.11e-03  wEE=+0.53 ae=-0.49 ti=-0.48
+    correccion: f3_B_eps1.pt
+    fraccion de g EXPLICABLE por un cambio de theta = 0.938
+    energia robada en las 3 direcciones mas debiles = 99.5%   (azar = 30%)
+
+==============================================================================
+  F5 · ¿Aprendio la red la fisica correcta?
+==============================================================================
+  modelo                      |g|     |Df|   R2_test    techo    aprov.   R2_lejos
+  f3_A_eps1                0.0170   0.0172    -0.628    0.775    -81.0%     -0.635
+  f3_B_eps1                0.0129   0.0172    -1.211   -0.111 sin techo     -1.588
+  f3_C_eps1_lam1           0.0020   0.0172    -0.066   -0.111 sin techo     -0.109
+  f3_D_eps1_lam1           0.0022   0.0172    -0.067   -0.111 sin techo     -0.112
+  f3_D_eps1_lam10          0.0003   0.0172    -0.066   -0.111 sin techo     -0.109
+
+  'techo' = mejor correccion sin memoria posible (oraculo ajustado al Df real).
+  'sin techo' = el oraculo tampoco puede: el Df no es funcion de esos argumentos,
+  asi que NINGUNA correccion con esos argumentos lo puede recuperar.
+
+==============================================================================
+  F6 · Lazo cerrado contra la planta perturbada
+==============================================================================
+  controlador construido con                RMSE_I    RMSE_E
+  0. planta LIMPIA + theta verdaderos       0.0335    0.0313
+  1. oraculo (theta verdaderos)             0.0570    0.0629
+  2. white-box (theta_hat sin correccion    0.0531    0.0886
+  3a. gray-box theta_hat, SIN cancelar g    0.0550    0.0784
+  3b. gray-box theta_hat + g cancelada      0.2064    0.0645
+
+  Costo de la perturbacion en si (theta verdaderos): 0.0313 -> 0.0629  (+101%)
+  White-box 0.0886  ->  gray-box con cancelacion 0.0645 (-27%)
+
+==============================================================================
+  F7 · Donde deja de funcionar la correccion sin memoria
+==============================================================================
+  caso                   tipo                 |Df|   R2 g(I,E)   R2 g(I,E,P,Q)  veredicto
+  refract_r0.1           capturable         0.0066       0.967           0.997  CAPTURABLE
+  hetero_0.8             capturable         0.0105       0.768           0.984  CAPTURABLE
+  par_nominal            el del roadmap     0.0172      -0.111           0.775  parcial
+  adapt_tau1             memoria rapida     0.0089       0.913           0.989  CAPTURABLE
+  adapt_tau3             memoria rapida     0.0069       0.850           0.948  CAPTURABLE
+  adapt_tau10            memoria media      0.0048       0.615           0.768  parcial
+  adapt_tau30            memoria lenta      0.0040       0.439           0.691  parcial
+  adapt_tau100           memoria lenta      0.0027       0.309           0.543  POBRE
+  depresion              estado oculto      0.0193       0.634           0.717  parcial
+  poblacion_oculta       estado oculto      0.0049       0.608           0.784  parcial
+  deriva_wEE             no autonoma        0.0205       0.234           0.527  POBRE
+  ruido_proceso          irreducible        0.0201       0.119           0.112  POBRE
+
+  Figura: results/figures/informe_incertidumbre.png

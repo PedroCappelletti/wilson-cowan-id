@@ -1,0 +1,32 @@
+=== A · disenar el estimulo que rompe la degeneracion ===
+
+  Referencia (APRBS de libreria):
+    |Delta f| = 0.02229   imitable = 71.4%   RESIDUO = 0.01192
+    amplitud media: P=0.811  Q=0.607  (presupuesto igualado para todos los candidatos)
+
+  Punto de partida (APRBS discretizado en 24 tramos): residuo = 0.00540
+
+   iter    residuo       |Df|   imitable    E_max
+      0    0.01119    0.02468      79.4%    0.752
+      5    0.01677    0.03638      78.7%    0.785
+     10    0.01677    0.03638      78.7%    0.785
+     15    0.01720    0.03412      74.6%    0.784
+     20    0.01817    0.03643      75.1%    0.779
+     25    0.01817    0.03643      75.1%    0.779
+     30    0.01817    0.03643      75.1%    0.779
+     35    0.01829    0.03664      75.1%    0.774
+     40    0.01852    0.03694      74.9%    0.773
+     45    0.01865    0.03645      73.8%    0.774
+     50    0.01914    0.03700      73.2%    0.762
+     55    0.01932    0.03679      72.4%    0.769
+     59    0.01932    0.03679      72.4%    0.769
+
+=== RESULTADO ===
+                           |Delta f|    imitable     RESIDUO
+  APRBS de libreria          0.02229       71.4%     0.01192
+  estimulo DISENADO          0.03763       72.2%     0.01984
+
+  Mejora del residuo (a IGUAL amplitud media): +66.4%
+  Fraccion imitable: 71.4% -> 72.2%
+
+  -> results/uncertainty/a_stimulus_design.json

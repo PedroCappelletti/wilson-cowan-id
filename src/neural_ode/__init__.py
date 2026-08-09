@@ -11,6 +11,8 @@ from .closed_loop import (  # noqa: F401
     IMCController,
     make_true_plant,
     make_neural_plant,
+    make_perturbed_plant,
+    make_graybox_correction,
     simulate_closed_loop,
     theta_gamma_refs,
 )

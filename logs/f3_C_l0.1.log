@@ -1,0 +1,11 @@
+
+=== F3 · variante C · eps1.npz · lam=0.1 ===
+    ep     0 | data=5.771e-03 | err_max= 84.86% g_rms=0.0000 redund=nan
+    ep   300 | data=3.793e-04 | err_max=104.57% g_rms=0.0158 redund=nan
+    ep   600 | data=3.028e-04 | err_max=102.63% g_rms=0.0117 redund=nan
+    ep   900 | data=2.869e-04 | err_max= 91.15% g_rms=0.0097 redund=nan
+    ep  1200 | data=2.512e-04 | err_max=105.78% g_rms=0.0078 redund=nan
+    ep  1499 | data=2.127e-04 | err_max= 82.07% g_rms=0.0052 redund=nan
+
+  RESULTADO C: err_max=82.07% err_medio=30.84% peor=ti mse_test=9.256e-03 g_rel=0.201 redundante=0.914
+  -> results/uncertainty/f3_C_eps1_lam0.1.json

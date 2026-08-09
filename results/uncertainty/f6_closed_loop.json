@@ -1,0 +1,40 @@
+{
+  "eps": 1.0,
+  "filas": [
+    {
+      "nombre": "0. planta LIMPIA + theta verdaderos",
+      "rmse_I": 0.03348346138997688,
+      "rmse_E": 0.03134315225589516,
+      "ok": true,
+      "frac_saturado": 0.0
+    },
+    {
+      "nombre": "1. oraculo (theta verdaderos)",
+      "rmse_I": 0.056988581215391174,
+      "rmse_E": 0.0629495730873324,
+      "ok": true,
+      "frac_saturado": 0.0
+    },
+    {
+      "nombre": "2. white-box (theta_hat sin correccion)",
+      "rmse_I": 0.05307270882367764,
+      "rmse_E": 0.08858531236349587,
+      "ok": true,
+      "frac_saturado": 0.24145585441455855
+    },
+    {
+      "nombre": "3a. gray-box theta_hat, SIN cancelar g",
+      "rmse_I": 0.054952580002629335,
+      "rmse_E": 0.07835406626052406,
+      "ok": true,
+      "frac_saturado": 0.13194680531946806
+    },
+    {
+      "nombre": "3b. gray-box theta_hat + g cancelada",
+      "rmse_I": 0.2064000961039052,
+      "rmse_E": 0.06450077755049514,
+      "ok": true,
+      "frac_saturado": 0.22085791420857914
+    }
+  ]
+}

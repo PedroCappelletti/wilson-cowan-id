@@ -1,0 +1,31 @@
+=== F4 · FIM del hibrido · eps1.npz · 4 escenarios, dt=0.0500 ms ===
+    salidas = 2400   condicion σ1/σ10 = 1.241e+04
+
+--- Espectro (normalizado) y direcciones debiles ---
+  σ 1 rel= 1.00e+00   thetae=+0.87 wEE=-0.33 ae=+0.28
+  σ 2 rel= 1.13e-01   thetai=+0.81 ai=+0.43 thetae=+0.26
+  σ 3 rel= 5.87e-02   wEE=+0.71 ae=+0.67 ti=+0.12
+  σ 4 rel= 2.53e-02   te=-0.72 wEI=+0.54 wEE=-0.24
+  σ 5 rel= 8.42e-03   wIE=+0.67 ti=-0.44 ai=+0.36
+  σ 6 rel= 6.56e-03   wEI=-0.58 te=-0.51 wIE=-0.38
+  σ 7 rel= 4.05e-03   ti=-0.65 wEI=+0.42 te=+0.34
+  σ 8 rel= 2.11e-03   wEE=+0.53 ae=-0.49 ti=-0.48
+  σ 9 rel= 1.03e-03   ai=-0.69 thetai=+0.51 wIE=+0.49
+  σ10 rel= 8.06e-05   wII=+1.00 ai=+0.06 ti=+0.06
+
+--- Correccion aprendida: f3_B_eps1.pt ---
+  ‖Δy por g‖ / ‖y‖            = 0.1830
+  fraccion EXPLICABLE por δθ  = 0.9375
+     (1.0 = todo lo que hace g lo podia hacer un cambio de parametros -> redundante)
+  δθ equivalente (relativo): wEE=+0.622 wEI=+0.282 wIE=+0.562 wII=+4.628 te=-0.376 ti=-0.023 ae=-0.621 ai=+0.150 thetae=+0.431 thetai=-0.007
+
+  Por que direccion roba (fraccion de la energia de δθ):
+    σ10 (rel 8.06e-05)   93.4%   [wII ai ti]
+    σ 8 (rel 2.11e-03)    5.0%   [wEE ae ti]
+    σ 9 (rel 1.03e-03)    1.0%   [ai thetai wIE]
+    σ 7 (rel 4.05e-03)    0.5%   [ti wEI te]
+    σ 5 (rel 8.42e-03)    0.0%   [wIE ti ai]
+
+  Energia robada en las 3 direcciones MAS DEBILES: 99.5%  (azar = 30%)
+
+  -> results/uncertainty/f4_fim.json
