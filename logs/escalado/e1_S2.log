@@ -1,0 +1,11 @@
+=== escalado · e1_S2 · S · refrac1 · W=100 · epochs=1500 ===
+    ep     0 | data=4.396e-05 | err_max= 75.21% 
+    ep   250 | data=1.322e-06 | err_max= 27.53% 
+    ep   500 | data=8.472e-07 | err_max= 13.73% 
+    ep   750 | data=7.960e-07 | err_max= 15.35% 
+    ep  1000 | data=7.911e-07 | err_max= 16.52% 
+    ep  1250 | data=7.908e-07 | err_max= 16.79% 
+    ep  1499 | data=8.505e-07 | err_max= 16.41% 
+
+  RESULTADO e1_S2: NRMSE_test=1.70% (I=1.68 E=1.71) R2df=0.964 err_param=2.42% [13.1 min]
+  -> results/escalado/e1_S2.json

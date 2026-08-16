@@ -207,13 +207,16 @@ def build_model(cfg: TrainConfig) -> GrayBoxWC:
     )
 
 
-def fit(data: dict, cfg: TrainConfig) -> dict:
+def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
     """Entrena una variante y devuelve el resultado + el historial.
 
     `data` necesita: I,E,P,Q (train), I_te,E_te,P_te,Q_te (test), dt, true.
+    `model` opcional: permite arrancar de un modelo ya inicializado (warm-start)
+    en vez del arranque ignorante de build_model.
     """
     torch.manual_seed(cfg.seed)
-    model = build_model(cfg)
+    if model is None:
+        model = build_model(cfg)
 
     x0, Pw, Qw, tgt = make_windows(data["I"], data["E"], data["P"], data["Q"], cfg.window)
     Xs, Ps, Qs = sample_points(data["I"], data["E"], data["P"], data["Q"], seed=cfg.seed)

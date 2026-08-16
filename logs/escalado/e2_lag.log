@@ -1,0 +1,14 @@
+=== escalado · e2_lag · lag · act1 · W=100 · epochs=1500 ===
+/home/pedro/Documentos/investigacion/src/neural_ode/memory.py:101: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:838.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+    ep     0 | data=6.653e-03 | err_max= 84.86% tau=0.455 sat=33.341 alpha=0.030
+    ep   250 | data=6.833e-04 | err_max=101.58% tau=0.550 sat=1000.000 alpha=0.001
+    ep   500 | data=1.118e-04 | err_max=128.08% tau=0.586 sat=1000.000 alpha=0.001
+    ep   750 | data=9.709e-05 | err_max=108.00% tau=0.558 sat=1000.000 alpha=0.001
+    ep  1000 | data=9.606e-05 | err_max=120.42% tau=0.558 sat=1000.000 alpha=0.001
+    ep  1250 | data=9.587e-05 | err_max=131.36% tau=0.559 sat=1000.000 alpha=0.001
+    ep  1499 | data=9.581e-05 | err_max=136.87% tau=0.561 sat=1000.000 alpha=0.001
+
+  RESULTADO e2_lag: NRMSE_test=12.16% (I=12.43 E=11.89) R2df=0.650 err_param=39.20% [18.2 min]
+  -> results/escalado/e2_lag.json

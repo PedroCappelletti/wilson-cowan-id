@@ -1,0 +1,11 @@
+=== escalado · e2_wb · whitebox · act1 · W=100 · epochs=1500 ===
+    ep     0 | data=7.130e-03 | err_max= 84.86% 
+    ep   250 | data=7.947e-04 | err_max= 79.34% 
+    ep   500 | data=2.928e-04 | err_max= 94.59% 
+    ep   750 | data=2.822e-04 | err_max= 70.88% 
+    ep  1000 | data=2.813e-04 | err_max= 70.99% 
+    ep  1250 | data=2.809e-04 | err_max= 71.37% 
+    ep  1499 | data=2.808e-04 | err_max= 71.72% 
+
+  RESULTADO e2_wb: NRMSE_test=15.23% (I=13.96 E=16.51) R2df=-0.006 err_param=30.70% [28.9 min]
+  -> results/escalado/e2_wb.json

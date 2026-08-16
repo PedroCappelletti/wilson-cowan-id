@@ -1,0 +1,11 @@
+=== escalado · e2_lat_w100 · latent · act1 · W=100 · epochs=1500 ===
+    ep     0 | data=7.130e-03 | err_max= 84.86% 
+    ep   250 | data=6.088e-04 | err_max= 58.60% 
+    ep   500 | data=2.377e-04 | err_max= 83.14% 
+    ep   750 | data=2.113e-04 | err_max= 89.31% 
+    ep  1000 | data=1.887e-04 | err_max= 89.41% 
+    ep  1250 | data=1.945e-04 | err_max= 86.50% 
+    ep  1499 | data=1.513e-04 | err_max= 90.31% 
+
+  RESULTADO e2_lat_w100: NRMSE_test=14.92% (I=14.91 E=14.93) R2df=-0.513 err_param=38.89% [1013.7 min]
+  -> results/escalado/e2_lat_w100.json

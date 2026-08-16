@@ -1,0 +1,11 @@
+=== escalado · e1_B_w200 · B · refrac1 · W=200 · epochs=1500 ===
+    ep     0 | data=6.156e-03 | err_max= 84.86% g_rms=0.0000 redund=nan
+    ep   250 | data=2.608e-04 | err_max= 64.91% g_rms=0.0200 redund=nan
+    ep   500 | data=6.877e-05 | err_max= 57.26% g_rms=0.0156 redund=nan
+    ep   750 | data=2.357e-05 | err_max= 49.87% g_rms=0.0124 redund=nan
+    ep  1000 | data=1.401e-05 | err_max= 62.20% g_rms=0.0109 redund=nan
+    ep  1250 | data=1.205e-05 | err_max= 63.69% g_rms=0.0104 redund=nan
+    ep  1499 | data=6.861e-06 | err_max= 61.29% g_rms=0.0101 redund=nan
+
+  RESULTADO e1_B_w200: NRMSE_test=3.31% (I=3.36 E=3.26) R2df=-0.386 err_param=24.63% [1556.3 min]
+  -> results/escalado/e1_B_w200.json

@@ -1,0 +1,11 @@
+=== escalado · e2_lat_w400 · latent · act1 · W=400 · epochs=1500 ===
+    ep     0 | data=8.770e-03 | err_max= 84.86% 
+    ep   250 | data=9.640e-04 | err_max=111.23% 
+    ep   500 | data=4.032e-04 | err_max=132.88% 
+    ep   750 | data=3.530e-04 | err_max=139.72% 
+    ep  1000 | data=3.510e-04 | err_max=142.96% 
+    ep  1250 | data=3.150e-04 | err_max=146.24% 
+    ep  1499 | data=2.666e-04 | err_max=148.25% 
+
+  RESULTADO e2_lat_w400: NRMSE_test=13.28% (I=17.14 E=9.42) R2df=-3.546 err_param=52.56% [63.9 min]
+  -> results/escalado/e2_lat_w400.json
