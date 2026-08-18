@@ -9,6 +9,17 @@
 > Métricas secundarias: R² de la corrección contra el Δf verdadero (¿aprendió
 > la física?) y error de parámetros.
 
+**Cómo leer las etiquetas de las corridas** (`e<etapa>_<variante>[_w<ventana>]`):
+
+| etiqueta | qué modelo es |
+|---|---|
+| `wb` | **white-box**: Wilson-Cowan puro, sin corrección. Solo ajusta los 10 parámetros. |
+| `B` | **gray-box ciego**: WC + red neuronal aditiva `g(I,E)` que solo ve el estado. |
+| `S` | **estructural**: WC + la forma física exacta de la refractariedad, `(1−r·x)·S(u)`, con `r` aprendible (no hay red). `S2` = misma cosa con `r` inicial 0.05 y parámetros WC arrancando desde el white-box. |
+| `lag` | **lag estructural**: WC + estado del actuador `dP̂/dt=(P−P̂)/τ̂` con `τ̂` y saturación aprendibles. `lag2` = misma cosa con el estado inicial de cada ventana computado exacto. |
+| `lat` | **latente**: WC + estados ocultos genéricos `z` con dinámica aprendida y corrección `g(I,E,z)`. |
+| `_w100/200/400` | ventana de multiple shooting en pasos (100 = 5 ms, 200 = 10 ms, 400 = 20 ms). |
+
 ---
 
 ## Resumen ejecutivo

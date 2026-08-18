@@ -31,3 +31,7 @@ results/models/*
 .vscode/
 .idea/
 .DS_Store
+
+# caches de herramientas
+.ua/
+.claude/
