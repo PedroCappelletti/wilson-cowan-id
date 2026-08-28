@@ -36,6 +36,7 @@ from src.wilson_cowan import (
     aprbs_pulse, theta_gamma_pulse, square_wave_pulse, prbs_pulse, poisson_pulse,
 )
 from src.data import generate_dataset
+from src.utils import provenance_str, set_seed
 
 # #############################################################################
 # ##   ZONA EDITABLE                                                         ##
@@ -116,6 +117,7 @@ def build_scenarios():
 
 
 def main():
+    set_seed(SEED)
     scenarios = build_scenarios()
     n = len(scenarios)
     n_test = sum(1 for *_, t in scenarios if t)
@@ -146,6 +148,11 @@ def main():
         # metadatos
         dt=float(t_ref[1] - t_ref[0]), t_span=np.asarray(T_SPAN),
         noise_std=np.asarray(NOISE), seed=np.asarray(SEED),
+        # Con que se genero: sin esto, un .npz pisado no se puede identificar.
+        provenance=np.asarray(provenance_str(
+            __file__, seed=SEED, noise=NOISE, n_eval=N_EVAL,
+            t_span=list(T_SPAN), n_escenarios=n,
+        )),
         **{k: np.asarray(getattr(PARAMS, k)) for k in
            ("te", "ti", "wEE", "wEI", "wIE", "wII", "ae", "ai", "thetae", "thetai")},
     )

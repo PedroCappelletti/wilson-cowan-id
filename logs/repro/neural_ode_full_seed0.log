@@ -1,0 +1,33 @@
+=== Neural ODE — IDENTIFICACION COMPLETA (10 parametros) ===
+    train 13 / test 7 trayectorias
+    arranque ignorante: TODO inicia en 1.0 (no se usan los valores verdaderos)
+    multiple shooting: 507 ventanas de 100 pasos
+      0 | loss=6.915e-03 | wEE=1.03 wEI=1.03 wIE=0.97 wII=1.03 te=1.01 ti=1.01 ae=1.01 ai=0.99 thetae=1.01 thetai=1.01
+    250 | loss=5.999e-05 | wEE=4.78 wEI=4.27 wIE=5.60 wII=1.42 te=1.32 ti=2.24 ae=1.81 ai=1.15 thetae=2.23 thetai=3.65
+    500 | loss=1.715e-05 | wEE=5.64 wEI=4.51 wIE=5.60 wII=1.16 te=1.11 ti=2.09 ae=1.42 ai=1.10 thetae=2.55 thetai=3.75
+    750 | loss=1.055e-05 | wEE=6.09 wEI=4.66 wIE=5.81 wII=1.18 te=1.03 ti=2.04 ae=1.28 ai=1.05 thetae=2.70 thetai=3.89
+   1000 | loss=9.541e-06 | wEE=6.28 wEI=4.74 wIE=5.95 wII=1.19 te=1.01 ti=2.02 ae=1.23 ai=1.02 thetae=2.77 thetai=3.98
+   1250 | loss=9.411e-06 | wEE=6.35 wEI=4.76 wIE=6.02 wII=1.19 te=1.00 ti=2.00 ae=1.21 ai=1.00 thetae=2.79 thetai=4.02
+   1500 | loss=1.043e-05 | wEE=6.36 wEI=4.78 wIE=6.04 wII=1.19 te=0.99 ti=2.00 ae=1.21 ai=1.00 thetae=2.80 thetai=4.04
+   1750 | loss=9.402e-06 | wEE=6.37 wEI=4.77 wIE=6.05 wII=1.19 te=0.99 ti=2.00 ae=1.20 ai=0.99 thetae=2.80 thetai=4.04
+   1999 | loss=9.399e-06 | wEE=6.37 wEI=4.78 wIE=6.05 wII=1.19 te=0.99 ti=1.99 ae=1.20 ai=0.99 thetae=2.80 thetai=4.05
+  --- L-BFGS aplicado ---
+
+=== Parametros identificados (Neural ODE, sin ver los verdaderos) ===
+  param     verdadero   estimado    error %
+  wEE          6.4000     6.3741      0.40%  <-- peso
+  wEI          4.8000     4.7754      0.51%  <-- peso
+  wIE          6.0000     6.0477      0.80%  <-- peso
+  wII          1.2000     1.1872      1.06%  <-- peso
+  te           1.0000     0.9936      0.64%
+  ti           2.0000     1.9949      0.25%
+  ae           1.2000     1.2043      0.36%
+  ai           1.0000     0.9936      0.64%
+  thetae       2.8000     2.7978      0.08%
+  thetai       4.0000     4.0452      1.13%
+
+  MSE open-loop (rollout completo):  train=2.83e-05   test(held-out)=5.48e-04
+  max error parametrico = 1.13%
+
+  Checkpoint: results\models\neural_ode_full.pt
+  Resultados: results\ident_full_10params.json
