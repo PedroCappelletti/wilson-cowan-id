@@ -51,6 +51,10 @@ def main():
                              "K", "lag", "latent"])
     ap.add_argument("--window", type=int, default=100)
     ap.add_argument("--epochs", type=int, default=1500)
+    # Expuesto para el smoke de punta a punta: con el modelo recien inicializado
+    # un solo .step() de L-BFGS agota la busqueda de linea y cuesta mas que el
+    # entrenamiento entero.
+    ap.add_argument("--lbfgs-steps", type=int, default=60)
     ap.add_argument("--lam-norm", type=float, default=0.0)
     ap.add_argument("--lam-orth", type=float, default=0.0)
     ap.add_argument("--seed", type=int, default=0)
@@ -91,7 +95,7 @@ def main():
                           epochs=args.epochs, lam_norm=args.lam_norm,
                           lam_orth=args.lam_orth, seed=args.seed,
                           hist=args.hist, n_fir=args.n_fir,
-                          hidden=args.hidden)
+                          hidden=args.hidden, lbfgs_steps=args.lbfgs_steps)
         warm = None
         if args.init_params or args.r_init is not None:
             # warm-start: mismo modelo que build_model pero con los crudos
@@ -121,6 +125,12 @@ def main():
 
     mins = (time.time() - t0) / 60.0
     model.eval()
+
+    # El checkpoint va antes de evaluar: una falla en la evaluacion no tiene
+    # por que costar la corrida entera.
+    OUT_DIR.joinpath("models").mkdir(parents=True, exist_ok=True)
+    torch.save(ck, OUT_DIR / "models" / f"{args.tag}.pt")
+
     ev = evaluar(model, data["raw"], data["true"])
 
     print(f"\n  RESULTADO {args.tag}: NRMSE_test={ev['nrmse_test']:.2f}% "
@@ -128,8 +138,6 @@ def main():
           f"R2df={ev['r2_delta_test']:.3f} "
           f"err_param={ev['mean_param_error']:.2f}% [{mins:.1f} min]", flush=True)
 
-    OUT_DIR.joinpath("models").mkdir(parents=True, exist_ok=True)
-    torch.save(ck, OUT_DIR / "models" / f"{args.tag}.pt")
     out = {
         "tag": args.tag, "data": args.data, "data_sha256": data_sha,
         "variant": args.variant,

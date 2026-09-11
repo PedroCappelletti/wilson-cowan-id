@@ -79,6 +79,16 @@ def _wc_plano(params: dict) -> GrayBoxWC:
 # =============================================================================
 #  SECCION 2: ROLLOUT OPEN-LOOP  (con o sin estados ocultos)
 # =============================================================================
+# Variantes cuya g recibe la historia del comando en vez del valor actual.
+CON_MEMORIA = ("xhist", "xconv")
+
+
+def largo_historia(m) -> int:
+    """K de la historia que el modelo espera, 0 si no usa historia."""
+    return (getattr(m, "hist_len", 0)
+            if getattr(m, "correction_inputs", "") in CON_MEMORIA else 0)
+
+
 @torch.no_grad()
 def _hist_seq(u, K):
     """(T,) -> (T,1,K) con [u(t), u(t-1), ..., u(t-K+1)], cero antes del inicio."""
@@ -93,7 +103,7 @@ def _rollout_traj(m, I0, E0, P, Q, dt):
     T = len(P)
     x0 = torch.tensor([[I0, E0]], dtype=torch.float32)
     # El modelo con historia necesita los K retardos en cada paso, no el escalar.
-    K = getattr(m, "hist_len", 0) if getattr(m, "correction_inputs", "") == "xhist" else 0
+    K = largo_historia(m)
     if K:
         Ps, Qs = _hist_seq(P, K), _hist_seq(Q, K)
     else:
@@ -169,8 +179,7 @@ def r2_delta(m, d, solo_test=True):
     for s in range(len(I)):
         T = I.shape[1]
         x = torch.tensor(np.stack([I[s], E[s]], 1), dtype=torch.float32)
-        K = (getattr(m, "hist_len", 0)
-             if getattr(m, "correction_inputs", "") == "xhist" else 0)
+        K = largo_historia(m)
         if K:
             Ps, Qs = _hist_seq(P[s], K)[:, 0], _hist_seq(Q[s], K)[:, 0]
         else:
