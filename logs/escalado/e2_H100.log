@@ -1,0 +1,7 @@
+usage: esc_run.py [-h] --data DATA
+                  --variant {whitebox,A,B,C,D,S,Sg,lag,latent}
+                  [--window WINDOW] [--epochs EPOCHS] [--lam-norm LAM_NORM]
+                  [--lam-orth LAM_ORTH] [--seed SEED] [--n-hidden N_HIDDEN]
+                  [--init-params INIT_PARAMS] [--r-init R_INIT] [--hist HIST]
+                  --tag TAG
+esc_run.py: error: argument --variant: invalid choice: 'H' (choose from whitebox, A, B, C, D, S, Sg, lag, latent)

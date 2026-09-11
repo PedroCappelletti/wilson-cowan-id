@@ -340,21 +340,35 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
         "param_errors": errs,
         "max_param_error": mx,
         "mean_param_error": float(np.mean(list(errs.values()))),
-        "mse_train": open_loop_mse(model, data["I"], data["E"], data["P"], data["Q"], dt),
+        "mse_train": open_loop_mse(model, data["I"], data["E"], data["P"],
+                                   data["Q"], dt, hist=cfg.hist),
         "mse_test": open_loop_mse(model, data["I_te"], data["E_te"],
-                                  data["P_te"], data["Q_te"], dt),
+                                  data["P_te"], data["Q_te"], dt,
+                                  hist=cfg.hist),
         "model": model,
         "hist": hist,
     }
     if model.structured:
         out["structured"] = model.structured_dict()
     if model.use_correction:
+        # Los puntos sueltos no tienen historia de comando, asi que con la
+        # variante H el diagnostico se calcula sobre las propias ventanas, que
+        # si la tienen. Se submuestrea para que cueste lo mismo que antes.
+        Xd, Pd, Qd = Xs, Ps, Qs
+        if model.correction_inputs == "xhist":
+            with torch.no_grad():
+                Xd = tgt[:-1].reshape(-1, 2)
+                Pd = Pw.reshape(-1, Pw.shape[-1])
+                Qd = Qw.reshape(-1, Qw.shape[-1])
+                if len(Xd) > len(Xs):
+                    idx = torch.randperm(len(Xd))[:len(Xs)]
+                    Xd, Pd, Qd = Xd[idx], Pd[idx], Qd[idx]
         with torch.no_grad():
-            gv = model.g_out(Xs, Ps, Qs)
-            fb = model.backbone(Xs, Ps, Qs)
+            gv = model.g_out(Xd, Pd, Qd)
+            fb = model.backbone(Xd, Pd, Qd)
         out["g_rms"] = float(gv.pow(2).mean().sqrt())
         out["g_rel"] = out["g_rms"] / float(fb.pow(2).mean().sqrt())
-        S = model.backbone_sensitivities(Xs, Ps, Qs)
+        S = model.backbone_sensitivities(Xd, Pd, Qd)
         Ao, Sfo = projection_operator(S)
         _, frac = projected_fraction(gv, Ao, Sfo)
         # Cuanto de la correccion aprendida es REDUNDANTE con los parametros:

@@ -47,8 +47,8 @@ def main():
     ap.add_argument("--data", required=True,
                     help="nombre del .npz en data/processed/uncertain (sin extension)")
     ap.add_argument("--variant", required=True,
-                    choices=["whitebox", "A", "B", "C", "D", "S", "Sg", "lag",
-                             "latent"])
+                    choices=["whitebox", "A", "B", "C", "D", "S", "Sg", "H",
+                             "lag", "latent"])
     ap.add_argument("--window", type=int, default=100)
     ap.add_argument("--epochs", type=int, default=1500)
     ap.add_argument("--lam-norm", type=float, default=0.0)
