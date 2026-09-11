@@ -47,6 +47,7 @@ import numpy as np
 import torch
 
 from src.neural_ode import GrayBoxWC, rollout
+from src.neural_ode.graybox_train import VARIANTS
 
 F_LO, F_HI = 0.5, 19.0
 WARMUP_S = 1.0
@@ -62,14 +63,28 @@ def fft_bandpass(x: torch.Tensor, fs: float, f_lo=F_LO, f_hi=F_HI) -> torch.Tens
     return torch.fft.irfft(X * mask, n=T, dim=0)
 
 
+# v0 y v1 son los nombres viejos de este script; el resto son las variantes del
+# escalado, para que un resultado sobre datos reales sea comparable con uno del
+# simulador sin traducir nada.
+VARIANTES_REALES = {
+    "v0": dict(use_correction=False, correction_inputs="x"),
+    "v1": dict(use_correction=True,  correction_inputs="x"),
+    **VARIANTS,
+}
+
+
 class OutputModel(torch.nn.Module):
     """WC gray-box + ganancias c_P (u->E), c_out (LFP). x0 latentes se guardan aparte."""
-    def __init__(self, variant: str):
+    def __init__(self, variant: str, hist: int = 0):
         super().__init__()
+        # Los tiempos son de decenas de ms, no de 1-2 ms como en el simulador:
+        # la banda util de esta grabacion llega a 19 Hz.
         fixed = dict(te=0.02, ti=0.04, ae=1.2, ai=1.0, thetae=2.8, thetai=4.0, ke=0.0, ki=0.0)
         w_init = dict(wEE=6.4, wEI=4.8, wIE=6.0, wII=1.2)
+        spec = VARIANTES_REALES[variant]
         self.wc = GrayBoxWC(fixed, w_init, learnable_weights=True,
-                            learnable_params=True, use_correction=(variant == "v1"))
+                            learnable_params=True, hist_len=hist, **spec)
+        self.hist = hist
         self.c_P = torch.nn.Parameter(torch.tensor(3.0))
         self.c_out = torch.nn.Parameter(torch.tensor(0.05))
 
@@ -80,17 +95,30 @@ class OutputModel(torch.nn.Module):
 # ---------------------------------------------------------------------------
 #  Ventanas: para cada grabacion, trocea en ventanas de W pasos.
 # ---------------------------------------------------------------------------
-def build_windows(recs, us, ss, W):
+def historia(u, K):
+    """(T,) -> (T,K) con [u(t), u(t-1), ..., u(t-K+1)], cero antes del inicio."""
+    T = len(u)
+    out = torch.zeros(T, K)
+    for k in range(K):
+        out[k:, k] = u[:T - k]
+    return out
+
+
+def build_windows(recs, us, ss, W, hist=0):
     Pw, Sw, meta = [], [], []            # meta: (rec, k) para continuidad
     for r in recs:
         u, s = us[r], ss[r]
+        uh = historia(u, hist) if hist else None
         T = len(u); nwin = (T - 1) // W
         for k in range(nwin):
             a = k * W
-            Pw.append(u[a:a + W])
+            Pw.append(u[a:a + W] if uh is None else uh[a:a + W])
             Sw.append(s[a:a + W + 1])
             meta.append((r, k))
-    Pw = torch.stack(Pw).T.unsqueeze(-1)          # (W, Nw, 1)
+    if hist:
+        Pw = torch.stack(Pw).permute(1, 0, 2)     # (W, Nw, K)
+    else:
+        Pw = torch.stack(Pw).T.unsqueeze(-1)      # (W, Nw, 1)
     Sw = torch.stack(Sw).T                         # (W+1, Nw)
     return Pw, Sw, meta
 
@@ -122,7 +150,7 @@ def fit_windows(model, X0, Pw, Sw, pairs, dt, epochs, lr_w, lr_phys, lr_gain,
     pi = torch.tensor([p[0] for p in pairs]); pj = torch.tensor([p[1] for p in pairs])
 
     def losses():
-        traj = rollout(model.wc, X0, Pw, Qw, dt)      # (W+1,Nw,2)
+        traj = rollout(model.wc, X0, model.c_P * Pw, Qw, dt)   # (W+1,Nw,2)
         y = model.y_of(traj)                           # (W+1,Nw)
         data = ((demean(y) - demean(Sw)) ** 2).mean()
         cont = ((X0[pj] - traj[-1][pi]) ** 2).mean()
@@ -158,7 +186,10 @@ def fit_windows(model, X0, Pw, Sw, pairs, dt, epochs, lr_w, lr_phys, lr_gain,
 def free_rollout(model, u, dt):
     """Rollout LIBRE de toda la grabacion desde reposo. Devuelve y (T,)."""
     T = len(u)
-    P = (model.c_P * u).reshape(T, 1, 1)
+    if model.hist:
+        P = (model.c_P * historia(u, model.hist)).unsqueeze(1)   # (T,1,K)
+    else:
+        P = (model.c_P * u).reshape(T, 1, 1)
     x0 = torch.zeros(1, 2)
     traj = rollout(model.wc, x0, P, torch.zeros_like(P), dt)[:-1, 0, :]   # (T,2)
     return model.y_of(traj)
@@ -195,7 +226,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["single", "loo", "forecast"], default="single")
     ap.add_argument("--rec", type=int, default=0)
-    ap.add_argument("--variant", choices=["v0", "v1"], default="v0")
+    ap.add_argument("--variant", default="v0",
+                    choices=sorted(set(["v0", "v1"]) | set(VARIANTS)))
+    ap.add_argument("--hist", type=int, default=0,
+                    help="largo de la historia de comando (variante H)")
     ap.add_argument("--fs", type=int, default=125)
     ap.add_argument("--W", type=int, default=96)
     ap.add_argument("--epochs", type=int, default=800)
@@ -216,8 +250,8 @@ def main():
           f"fs={fs:.0f}Hz W={args.W}({args.W/fs:.2f}s) ===")
 
     if args.mode == "single":
-        model = OutputModel(args.variant)
-        Pw, Sw, meta = build_windows([args.rec], us, ss, args.W)
+        model = OutputModel(args.variant, hist=args.hist)
+        Pw, Sw, meta = build_windows([args.rec], us, ss, args.W, hist=args.hist)
         X0 = torch.nn.Parameter(torch.zeros(len(meta), 2))
         print(f"    {len(meta)} ventanas")
         fit_windows(model, X0, Pw, Sw, cont_pairs(meta), dt, args.epochs,
@@ -232,8 +266,8 @@ def main():
         print("  Protocolo A (leave-one-out): params compartidos, held-out por rollout libre")
         for held in range(n_rec):
             tr = [r for r in range(n_rec) if r != held]
-            model = OutputModel(args.variant)
-            Pw, Sw, meta = build_windows(tr, us, ss, args.W)
+            model = OutputModel(args.variant, hist=args.hist)
+            Pw, Sw, meta = build_windows(tr, us, ss, args.W, hist=args.hist)
             X0 = torch.nn.Parameter(torch.zeros(len(meta), 2))
             fit_windows(model, X0, Pw, Sw, cont_pairs(meta), dt, args.epochs,
                         args.lr_w, args.lr_phys, args.lr_gain, args.lam_cont, args.lbfgs, verbose=False)
@@ -246,7 +280,7 @@ def main():
                   f"wIE={p['wIE']:.2f} wII={p['wII']:.2f}")
 
     elif args.mode == "forecast":
-        model = OutputModel(args.variant)
+        model = OutputModel(args.variant, hist=args.hist)
         n = len(us[args.rec]); nfit = int(n * args.frac)
         u_fit, s_fit = us[args.rec][:nfit], ss[args.rec][:nfit]
         Pw, Sw, meta = build_windows([0], [u_fit], [s_fit], args.W)
