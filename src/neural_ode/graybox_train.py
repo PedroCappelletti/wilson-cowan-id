@@ -271,6 +271,18 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
     if model.structured:
         struct_raw = [model.raw_r_i, model.raw_r_e, model.raw_alpha]
         groups.append({"params": struct_raw, "lr": cfg.lr_phys})
+    # Un parametro que esta en el modelo y no en el optimizador se queda en su
+    # inicializacion sin que nada avise: la corrida termina, reporta, y el
+    # resultado es peor que no tener correccion. Paso con el FIR de la variante
+    # K, que era hermano de self.g y no hijo. Barato de chequear, caro de no
+    # chequear.
+    en_opt = {id(q) for gr in groups for q in gr["params"]}
+    huerfanos = [n for n, q in model.named_parameters()
+                 if q.requires_grad and id(q) not in en_opt]
+    if huerfanos:
+        raise RuntimeError(
+            f"parametros entrenables fuera del optimizador: {huerfanos}")
+
     opt = torch.optim.Adam(groups)
 
     A = Sf = None

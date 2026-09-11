@@ -26,6 +26,26 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+class _FIRMLP(nn.Module):
+    """Filtro FIR sobre la historia del comando, y despues la MLP de siempre.
+
+    Entrada [I, E, P(t-K..t), Q(t-K..t)]. El FIR reduce los 2K retardos a
+    n_fir canales, asi que la primera capa densa no crece con K: a K=400 son
+    3 mil pesos en el filtro contra 26 mil si la MLP viera los retardos
+    crudos. Cada fila del kernel es graficable contra la exponencial del
+    actuador, que es lo que hace medible el largo efectivo de la memoria.
+    """
+
+    def __init__(self, hist_len: int, n_fir: int, mlp: nn.Module):
+        super().__init__()
+        self.fir = nn.Linear(2 * hist_len, n_fir, bias=False)
+        self.mlp = mlp
+
+    def forward(self, inp: torch.Tensor) -> torch.Tensor:
+        x, u = inp[..., :2], inp[..., 2:]
+        return self.mlp(torch.cat([x, self.fir(u)], dim=-1))
+
+
 class GrayBoxWC(nn.Module):
     WEIGHTS = ("wEE", "wEI", "wIE", "wII")
     # Parametros "fisicos" que tambien se pueden identificar (ademas de los pesos).
@@ -135,24 +155,22 @@ class GrayBoxWC(nn.Module):
         self.correction_inputs = correction_inputs
         self.hist_len = hist_len
         self.n_fir = n_fir
-        if use_correction and correction_inputs == "xconv":
-            # Filtro FIR aprendido sobre la historia de (P,Q), en lugar de darle
-            # los 2K retardos crudos a la MLP. Con K=400 la primera capa densa
-            # pesa 25 mil parametros y el FIR pesa 3 mil, y cada fila del kernel
-            # se puede graficar contra la exponencial del actuador.
-            self.fir = nn.Linear(2 * hist_len, n_fir, bias=False)
         if use_correction:
             n_in = {"xpq": 4, "x": 2, "xconv": 2 + n_fir}.get(
                 correction_inputs, 2 + 2 * hist_len)
-            self.g = nn.Sequential(
+            mlp = nn.Sequential(
                 nn.Linear(n_in, hidden), nn.Tanh(),
                 nn.Linear(hidden, hidden), nn.Tanh(),
                 nn.Linear(hidden, 2),
             )
-            for m in self.g:
+            for m in mlp:
                 if isinstance(m, nn.Linear):
                     nn.init.zeros_(m.bias)
-            nn.init.zeros_(self.g[-1].weight)   # salida 0 al inicio
+            nn.init.zeros_(mlp[-1].weight)      # salida 0 al inicio
+            # El filtro va ADENTRO de self.g, no al lado: el optimizador y los
+            # diagnosticos recogen la correccion con model.g.parameters(), asi
+            # que un modulo hermano nunca se entrena.
+            self.g = _FIRMLP(hist_len, n_fir, mlp) if correction_inputs == "xconv" else mlp
 
     # Pesos reales (positivos).
     def weights(self) -> torch.Tensor:
@@ -250,7 +268,7 @@ class GrayBoxWC(nn.Module):
             # P,Q ya vienen como (...,K): valor actual mas K-1 retardos.
             inp = torch.cat([I, E, P, Q], dim=-1)
         elif self.correction_inputs == "xconv":
-            inp = torch.cat([I, E, self.fir(torch.cat([P, Q], dim=-1))], dim=-1)
+            inp = torch.cat([I, E, P, Q], dim=-1)
         else:
             P = torch.as_tensor(P, dtype=x.dtype, device=x.device) * torch.ones_like(I)
             Q = torch.as_tensor(Q, dtype=x.dtype, device=x.device) * torch.ones_like(I)

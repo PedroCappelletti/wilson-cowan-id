@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # Prueba rapida de las dos variantes nuevas, sin entrenar de verdad:
-#   Sg = forma exacta + red        (eje 2)
+#   Sg = forma exacta + red          (eje 2)
 #   H  = red con historia de comando (eje 1.2)
+#   K  = la historia filtrada por un FIR aprendido (eje 1.3)
 # Comprueba que se construyen, que el gradiente llega a donde tiene que llegar
 # y que el rollout de evaluacion corre.
 #
@@ -19,7 +20,7 @@ _ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_ROOT))
 sys.path.insert(0, str(_ROOT / "scripts"))
 
-from src.neural_ode.graybox_train import (TrainConfig, build_model,
+from src.neural_ode.graybox_train import (PHYS, TrainConfig, build_model,
                                           make_windows, apilar_historia)
 from src.neural_ode.integrate import rollout
 from esc_eval import _rollout_traj
@@ -45,6 +46,13 @@ def probar(variant, hist=0):
     esperado = hist if hist else 1
     assert Pw.shape[-1] == esperado, f"{variant}: Pw tiene {Pw.shape[-1]} canales"
 
+    # La ultima capa de g arranca en cero, asi que en el primer backward
+    # ninguna capa anterior recibe gradiente y el chequeo de cableado no
+    # distinguiria un parametro huerfano de uno sano. Se la despierta.
+    if m.use_correction:
+        with torch.no_grad():
+            list(m.g.parameters())[-2].normal_(0.0, 0.1)
+
     pred = rollout(m, x0, Pw, Qw, DT)
     assert pred.shape == tgt.shape, f"{variant}: {pred.shape} vs {tgt.shape}"
 
@@ -55,9 +63,13 @@ def probar(variant, hist=0):
     assert m.raw_w.grad is not None and m.raw_w.grad.abs().sum() > 0, \
         f"{variant}: el backbone no recibe gradiente"
     if m.use_correction:
-        gg = sum(float(p.grad.abs().sum()) for p in m.g.parameters()
-                 if p.grad is not None)
-        assert gg > 0, f"{variant}: la red no recibe gradiente"
+        # Por parametro y no sumado. Con el FIR de la variante K fuera del
+        # optimizador la suma daba positiva igual, porque la MLP si recibia
+        # gradiente, y la corrida terminaba con el filtro en su inicializacion
+        # aleatoria las 1500 epocas.
+        for n, q in m.g.named_parameters():
+            assert q.grad is not None and float(q.grad.abs().sum()) > 0, \
+                f"{variant}: g.{n} no recibe gradiente"
     if m.structured:
         assert m.raw_r_i.grad is not None, f"{variant}: r_i no recibe gradiente"
 
@@ -66,6 +78,17 @@ def probar(variant, hist=0):
     with torch.no_grad():
         traj = _rollout_traj(m, 0.1, 0.1, d["P"][0], d["Q"][0], DT)
     assert traj.shape == (len(d["P"][0]), 2), f"{variant}: rollout {traj.shape}"
+
+    # Mismo criterio que el guarda de fit(): lo que es entrenable tiene que
+    # estar en algun grupo del optimizador.
+    conocidos = {id(m.raw_w)} | {id(getattr(m, f"raw_{k}")) for k in PHYS}
+    if m.use_correction:
+        conocidos |= {id(q) for q in m.g.parameters()}
+    if m.structured:
+        conocidos |= {id(m.raw_r_i), id(m.raw_r_e), id(m.raw_alpha)}
+    sueltos = [n for n, q in m.named_parameters()
+               if q.requires_grad and id(q) not in conocidos]
+    assert not sueltos, f"{variant}: parametros fuera del optimizador: {sueltos}"
 
     n_g = sum(p.numel() for p in m.g.parameters()) if m.use_correction else 0
     print(f"  {variant:4} hist={hist:<3} Pw{tuple(Pw.shape)}  "
@@ -80,7 +103,8 @@ def main():
     assert h[0, 1, 3] == 0, "apilar_historia deberia rellenar con cero"
     print("  apilar_historia: alineacion y relleno ok")
 
-    for v, h in (("whitebox", 0), ("B", 0), ("S", 0), ("Sg", 0), ("H", K)):
+    for v, h in (("whitebox", 0), ("B", 0), ("S", 0), ("Sg", 0),
+                 ("H", K), ("K", K)):
         probar(v, h)
     print("\ntodo bien")
 
