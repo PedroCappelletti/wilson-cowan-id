@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -61,6 +62,9 @@ def main():
     args = ap.parse_args()
 
     data_path = Path("data/processed/uncertain") / f"{args.data}.npz"
+    # Hash del dataset: sin esto, un .npz regenerado deja los resultados viejos
+    # sin forma de saber si salieron de los mismos bytes.
+    data_sha = hashlib.sha256(data_path.read_bytes()).hexdigest()[:16]
     data = load_split(data_path)
     t0 = time.time()
 
@@ -117,7 +121,8 @@ def main():
     OUT_DIR.joinpath("models").mkdir(parents=True, exist_ok=True)
     torch.save(ck, OUT_DIR / "models" / f"{args.tag}.pt")
     out = {
-        "tag": args.tag, "data": args.data, "variant": args.variant,
+        "tag": args.tag, "data": args.data, "data_sha256": data_sha,
+        "variant": args.variant,
         "window": args.window, "epochs": args.epochs,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,

@@ -27,6 +27,14 @@ results/models/*
 *.ckpt
 *.h5
 
+# Excepcion: los datasets y checkpoints del escalado si se versionan. Pesan
+# 5,3 MB y 13 KB, y son lo unico que ata cada numero publicado a sus bytes.
+!data/processed/uncertain/
+!data/processed/uncertain/act1.npz
+!data/processed/uncertain/refrac1.npz
+!results/escalado/models/
+!results/escalado/models/*.pt
+
 # IDE / OS
 .vscode/
 .idea/
