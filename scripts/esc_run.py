@@ -133,6 +133,9 @@ def main():
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},
         "params": res["params"],
+        # g_rms y la fraccion de redundancia miden la ambiguedad entre beta y g:
+        # quedaban solo en el dict que devuelve fit y no llegaban al artefacto.
+        **{k: res[k] for k in ("g_rms", "g_rel", "frac_redundante") if k in res},
         **({"extras": res["extras"]} if "extras" in res else {}),
     }
     (OUT_DIR / f"{args.tag}.json").write_text(json.dumps(out, indent=2))

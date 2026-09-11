@@ -1,7 +1,11 @@
-usage: esc_run.py [-h] --data DATA
-                  --variant {whitebox,A,B,C,D,S,Sg,lag,latent}
-                  [--window WINDOW] [--epochs EPOCHS] [--lam-norm LAM_NORM]
-                  [--lam-orth LAM_ORTH] [--seed SEED] [--n-hidden N_HIDDEN]
-                  [--init-params INIT_PARAMS] [--r-init R_INIT] [--hist HIST]
-                  --tag TAG
-esc_run.py: error: argument --variant: invalid choice: 'H' (choose from whitebox, A, B, C, D, S, Sg, lag, latent)
+=== escalado · e2_H100 · H · act1 · W=100 · epochs=1500 ===
+    ep     0 | data=7.130e-03 | err_max= 84.86% 
+    ep   250 | data=4.132e-04 | err_max= 81.10% 
+    ep   500 | data=1.431e-04 | err_max= 92.15% 
+    ep   750 | data=1.218e-04 | err_max= 94.58% 
+    ep  1000 | data=5.885e-05 | err_max= 95.51% 
+    ep  1250 | data=3.835e-05 | err_max= 95.69% 
+    ep  1499 | data=3.222e-05 | err_max= 95.96% 
+
+  RESULTADO e2_H100: NRMSE_test=12.92% (I=14.12 E=11.72) R2df=0.250 err_param=26.31% [40.0 min]
+  -> results\escalado\e2_H100.json
