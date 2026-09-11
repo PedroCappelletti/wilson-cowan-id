@@ -47,7 +47,8 @@ def main():
     ap.add_argument("--data", required=True,
                     help="nombre del .npz en data/processed/uncertain (sin extension)")
     ap.add_argument("--variant", required=True,
-                    choices=["whitebox", "A", "B", "C", "D", "S", "lag", "latent"])
+                    choices=["whitebox", "A", "B", "C", "D", "S", "Sg", "lag",
+                             "latent"])
     ap.add_argument("--window", type=int, default=100)
     ap.add_argument("--epochs", type=int, default=1500)
     ap.add_argument("--lam-norm", type=float, default=0.0)
@@ -58,6 +59,8 @@ def main():
                     help="json de una corrida previa: warm-start de los 10 θ")
     ap.add_argument("--r-init", type=float, default=None,
                     help="valor inicial de r_i, r_e (variante S)")
+    ap.add_argument("--hist", type=int, default=0,
+                    help="largo de la historia de comando (variante H)")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
 
@@ -82,7 +85,8 @@ def main():
     else:
         cfg = TrainConfig(variant=args.variant, window=args.window,
                           epochs=args.epochs, lam_norm=args.lam_norm,
-                          lam_orth=args.lam_orth, seed=args.seed)
+                          lam_orth=args.lam_orth, seed=args.seed,
+                          hist=args.hist)
         warm = None
         if args.init_params or args.r_init is not None:
             # warm-start: mismo modelo que build_model pero con los crudos
@@ -107,6 +111,7 @@ def main():
         ck = {"kind": "graybox", "state": model.state_dict(),
               "use_correction": model.use_correction,
               "correction_inputs": model.correction_inputs,
+              "hist_len": getattr(model, "hist_len", 0),
               "structured": model.structured}
 
     mins = (time.time() - t0) / 60.0
@@ -123,7 +128,7 @@ def main():
     out = {
         "tag": args.tag, "data": args.data, "data_sha256": data_sha,
         "variant": args.variant,
-        "window": args.window, "epochs": args.epochs,
+        "window": args.window, "epochs": args.epochs, "hist": args.hist,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},

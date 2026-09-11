@@ -279,11 +279,78 @@ enmascaraba las causas.
 
 ---
 
-## Eje 5 — Del estado al LFP
+## Eje 5 — Los datos reales, y qué se puede medir con ellos
 
-Sin cambios. El ajuste llega al estado $(I,E)$ de un simulador y el modelo de
-observación $s = c_{\text{out}}(E-I)$ es una proyección de rango uno, así que
-hay un problema de observabilidad que todavía no se atacó.
+Los datos que nos pasaron **están en el repo**, en
+`data/processed/real/data8_fs{125,250}.npz`. Son tres estimulaciones chirp de 1 a
+10 Hz con sus respuestas, de 16 a 20 s cada una, filtradas entre 0,5 y 19 Hz,
+originales a 1250 Hz y remuestreadas a 125 o 250.
+
+Traen **`u` y `s` nada más**: el estímulo y el LFP. No hay estado $(I,E)$. Eso
+no es un detalle de formato, cambia qué preguntas se pueden hacer.
+
+### Qué métrica sobrevive y cuál no
+
+**El $R^2$ de la corrección no sobrevive.** Compara $\hat g$ contra el
+$\Delta f$ verdadero, y el $\Delta f$ verdadero solo existe porque el simulador
+lo genera. Sobre datos reales no hay planta conocida contra la cual restar. La
+métrica que responde «¿aprendió el mecanismo?», que es la pregunta central del
+proyecto, **no se puede evaluar fuera del simulador**. Conviene decirlo así en
+cualquier informe, porque es una limitación del experimento y no del método.
+
+**El NRMSE de corrida libre sobrevive pero es inútil acá**, y eso ya está
+medido. La tanda de julio ajustó un ARX lineal $u \to s$ y encontró el techo:
+
+| modo | $R^2$ |
+|---|---|
+| predicción a un paso, con el pasado real de `s` | 0,99 a 1,00 |
+| **simulación libre, solo con `u`** | **0,04 a 0,11** |
+
+`s` está dominada por su propia dinámica recurrente, no por el estímulo, que
+explica alrededor del 10 % de la varianza en simulación libre. Ordenar variantes
+por corrida libre sobre estos datos es ordenarlas adentro del ruido.
+
+**Lo que sí transfiere es la predicción a horizonte corto.** Con ventanas de
+unos 128 ms el WC llega a $R^2 \approx 0{,}85$. Ese es el marco donde la
+dinámica es identificable y donde una corrección con memoria puede mostrar que
+mejora algo.
+
+### Qué variante se puede probar y cuál no
+
+**El eje 1 tal cual no se puede validar acá.** El retardo del actuador tiene
+$\tau = 1$ ms, y estos datos están filtrados a 19 Hz y muestreados a 4 u 8 ms.
+El fenómeno que la `g` convolucional aprende en `act1` es literalmente invisible
+en esta banda. Si se corre igual, el núcleo aprendido va a estar midiendo otra
+memoria, más lenta, no la del actuador.
+
+Lo que sí se puede probar es **la misma arquitectura con otra pregunta**: si
+darle a `g` la historia del estímulo mejora la predicción a horizonte corto
+sobre `s`. Es un resultado legítimo, pero es una afirmación distinta de la del
+eje 1 y no hay que mezclarlas.
+
+### Lo que hay que resolver para correr cualquier cosa
+
+Sin estado, el modelo de observación deja de ser opcional. Hay que ajustar
+$s = c_{\text{out}}(E - I)$ con $c_{\text{out}}$ como incógnita más, y decidir
+qué hacer con el filtrado de 0,5 a 19 Hz, que le sacó a la señal la componente
+de continua sobre la que están definidos los offsets $k_e, k_i$ del backbone.
+
+Las escalas ya están resueltas, aunque a mano. `train_real_output.py` trabaja en
+segundos y fija $\tau_e = 20$ ms y $\tau_i = 40$ ms, contra 1 y 2 ms del
+simulador. Es el orden correcto para una banda de 0,5 a 19 Hz. Lo que queda
+abierto no es la escala sino si esos valores son identificables desde `s`, o si
+hay que dejarlos fijos y ajustar solo el resto.
+
+Vale la pena tenerlo presente al comparar: **los parámetros ajustados sobre
+datos reales no son comparables numéricamente con los del escalado**, porque el
+régimen temporal es otro. Lo comparable son las métricas, no los diez números.
+
+### Protocolo
+
+Tres grabaciones, todas chirp, así que no hay familias de estímulo para separar
+como en el escalado. Lo único honesto es **dejar una afuera**: entrenar con dos
+y evaluar en la tercera, rotando las tres. Con $n = 3$ el resultado es
+indicativo, no concluyente, y así hay que reportarlo.
 
 ---
 

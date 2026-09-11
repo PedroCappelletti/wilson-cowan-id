@@ -42,6 +42,7 @@ class GrayBoxWC(nn.Module):
         hidden: int = 32,
         correction_inputs: str = "xpq",   # "xpq" -> g(I,E,P,Q) | "x" -> g(I,E)
         structured: bool = False,         # True -> correccion FISICA en vez de red
+        hist_len: int = 0,                # K de correction_inputs="xhist"
     ) -> None:
         super().__init__()
 
@@ -124,11 +125,14 @@ class GrayBoxWC(nn.Module):
         #
         # Ver docs/incertidumbre_dinamica_graybox.md, seccion 6.
         self.use_correction = use_correction
-        if correction_inputs not in ("xpq", "x"):
-            raise ValueError("correction_inputs debe ser 'xpq' o 'x'")
+        if correction_inputs not in ("xpq", "x", "xhist"):
+            raise ValueError("correction_inputs debe ser 'xpq', 'x' o 'xhist'")
+        if correction_inputs == "xhist" and hist_len < 1:
+            raise ValueError("correction_inputs='xhist' necesita hist_len >= 1")
         self.correction_inputs = correction_inputs
+        self.hist_len = hist_len
         if use_correction:
-            n_in = 4 if correction_inputs == "xpq" else 2
+            n_in = {"xpq": 4, "x": 2}.get(correction_inputs, 2 + 2 * hist_len)
             self.g = nn.Sequential(
                 nn.Linear(n_in, hidden), nn.Tanh(),
                 nn.Linear(hidden, hidden), nn.Tanh(),
@@ -167,6 +171,10 @@ class GrayBoxWC(nn.Module):
     def backbone(self, x: torch.Tensor, P: torch.Tensor, Q: torch.Tensor) -> torch.Tensor:
         I = x[..., 0:1]
         E = x[..., 1:2]
+        # Con historia de comando P y Q llegan como (...,K) y el valor actual es
+        # el primer canal. Para las demas variantes esto es un no-op.
+        if torch.is_tensor(P) and P.dim() > 0 and P.shape[-1] > 1:
+            P, Q = P[..., :1], Q[..., :1]
         P = torch.as_tensor(P, dtype=x.dtype, device=x.device) * torch.ones_like(I)
         Q = torch.as_tensor(Q, dtype=x.dtype, device=x.device) * torch.ones_like(I)
 
@@ -227,6 +235,9 @@ class GrayBoxWC(nn.Module):
         E = x[..., 1:2]
         if self.correction_inputs == "x":
             inp = torch.cat([I, E], dim=-1)
+        elif self.correction_inputs == "xhist":
+            # P,Q ya vienen como (...,K): valor actual mas K-1 retardos.
+            inp = torch.cat([I, E, P, Q], dim=-1)
         else:
             P = torch.as_tensor(P, dtype=x.dtype, device=x.device) * torch.ones_like(I)
             Q = torch.as_tensor(Q, dtype=x.dtype, device=x.device) * torch.ones_like(I)
