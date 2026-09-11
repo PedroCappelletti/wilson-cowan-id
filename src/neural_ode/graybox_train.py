@@ -202,7 +202,8 @@ class TrainConfig:
     lam_orth: float = 0.0         # peso de  ‖proj de g‖²  (variante D)
     init_value: float = 1.0       # arranque ignorante
     hidden: int = 32
-    hist: int = 0                 # K de la historia de comando (variante H)
+    hist: int = 0                 # K de la historia de comando (variantes H, K)
+    n_fir: int = 4                # canales del FIR (variante K)
     seed: int = 0
     sens_every: int = 25          # cada cuantas epocas se recalculan ∂f/∂θ
     log_every: int = 250
@@ -226,6 +227,10 @@ VARIANTS = {
     # H = la red ve el estado Y la historia del comando. Con la historia adentro
     # Delta f SI es funcion de la entrada, que es lo que g(I,E) no podia ser.
     "H":        dict(use_correction=True,  correction_inputs="xhist"),
+    # K = la misma historia que H pero filtrada por un FIR aprendido antes de
+    # entrar a la MLP. Mismo campo receptivo con un orden de magnitud menos de
+    # parametros, y el kernel queda legible.
+    "K":        dict(use_correction=True,  correction_inputs="xconv"),
 }
 
 
@@ -237,7 +242,7 @@ def build_model(cfg: TrainConfig) -> GrayBoxWC:
     return GrayBoxWC(
         init, {k: cfg.init_value for k in WEIGHTS},
         learnable_weights=True, learnable_params=True,
-        hidden=cfg.hidden, hist_len=cfg.hist, **spec,
+        hidden=cfg.hidden, hist_len=cfg.hist, n_fir=cfg.n_fir, **spec,
     )
 
 
@@ -275,7 +280,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
         """Devuelve (penalizacion_total, diagnosticos)."""
         if not model.use_correction:
             return torch.zeros((), dtype=torch.float32), {}
-        if model.correction_inputs == "xhist":
+        if model.correction_inputs in ("xhist", "xconv"):
             # Los puntos sueltos no tienen historia, asi que no se puede evaluar
             # g fuera de la trayectoria. Las variantes con historia no usan
             # penalizaciones (lam_norm y lam_orth en cero).
@@ -355,7 +360,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
         # variante H el diagnostico se calcula sobre las propias ventanas, que
         # si la tienen. Se submuestrea para que cueste lo mismo que antes.
         Xd, Pd, Qd = Xs, Ps, Qs
-        if model.correction_inputs == "xhist":
+        if model.correction_inputs in ("xhist", "xconv"):
             with torch.no_grad():
                 Xd = tgt[:-1].reshape(-1, 2)
                 Pd = Pw.reshape(-1, Pw.shape[-1])

@@ -32,6 +32,10 @@ results/models/*
 !data/processed/uncertain/
 !data/processed/uncertain/act1.npz
 !data/processed/uncertain/refrac1.npz
+# Versiones con ruido del eje 6: derivadas de act1 con semilla fija, pero se
+# guardan igual porque la comparabilidad muestra a muestra depende de ellas.
+!data/processed/uncertain/act1_n01.npz
+!data/processed/uncertain/act1_n05.npz
 !results/escalado/models/
 !results/escalado/models/*.pt
 

@@ -42,7 +42,8 @@ class GrayBoxWC(nn.Module):
         hidden: int = 32,
         correction_inputs: str = "xpq",   # "xpq" -> g(I,E,P,Q) | "x" -> g(I,E)
         structured: bool = False,         # True -> correccion FISICA en vez de red
-        hist_len: int = 0,                # K de correction_inputs="xhist"
+        hist_len: int = 0,                # K de correction_inputs="xhist"/"xconv"
+        n_fir: int = 4,                   # canales del filtro FIR de "xconv"
     ) -> None:
         super().__init__()
 
@@ -125,14 +126,24 @@ class GrayBoxWC(nn.Module):
         #
         # Ver docs/incertidumbre_dinamica_graybox.md, seccion 6.
         self.use_correction = use_correction
-        if correction_inputs not in ("xpq", "x", "xhist"):
-            raise ValueError("correction_inputs debe ser 'xpq', 'x' o 'xhist'")
-        if correction_inputs == "xhist" and hist_len < 1:
-            raise ValueError("correction_inputs='xhist' necesita hist_len >= 1")
+        if correction_inputs not in ("xpq", "x", "xhist", "xconv"):
+            raise ValueError(
+                "correction_inputs debe ser 'xpq', 'x', 'xhist' o 'xconv'")
+        if correction_inputs in ("xhist", "xconv") and hist_len < 1:
+            raise ValueError(
+                f"correction_inputs='{correction_inputs}' necesita hist_len >= 1")
         self.correction_inputs = correction_inputs
         self.hist_len = hist_len
+        self.n_fir = n_fir
+        if use_correction and correction_inputs == "xconv":
+            # Filtro FIR aprendido sobre la historia de (P,Q), en lugar de darle
+            # los 2K retardos crudos a la MLP. Con K=400 la primera capa densa
+            # pesa 25 mil parametros y el FIR pesa 3 mil, y cada fila del kernel
+            # se puede graficar contra la exponencial del actuador.
+            self.fir = nn.Linear(2 * hist_len, n_fir, bias=False)
         if use_correction:
-            n_in = {"xpq": 4, "x": 2}.get(correction_inputs, 2 + 2 * hist_len)
+            n_in = {"xpq": 4, "x": 2, "xconv": 2 + n_fir}.get(
+                correction_inputs, 2 + 2 * hist_len)
             self.g = nn.Sequential(
                 nn.Linear(n_in, hidden), nn.Tanh(),
                 nn.Linear(hidden, hidden), nn.Tanh(),
@@ -238,6 +249,8 @@ class GrayBoxWC(nn.Module):
         elif self.correction_inputs == "xhist":
             # P,Q ya vienen como (...,K): valor actual mas K-1 retardos.
             inp = torch.cat([I, E, P, Q], dim=-1)
+        elif self.correction_inputs == "xconv":
+            inp = torch.cat([I, E, self.fir(torch.cat([P, Q], dim=-1))], dim=-1)
         else:
             P = torch.as_tensor(P, dtype=x.dtype, device=x.device) * torch.ones_like(I)
             Q = torch.as_tensor(Q, dtype=x.dtype, device=x.device) * torch.ones_like(I)

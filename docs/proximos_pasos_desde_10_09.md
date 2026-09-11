@@ -37,6 +37,8 @@ cancelar de forma exacta y explícita.
 | regularizar `g` está agotado | manual, 15.2 | suave ayuda, fuerte perjudica, ninguna la vuelve física |
 | memoria genérica no sirve acá | `e2_lat_w100` | 14,92 % NRMSE, $R^2 = -0{,}51$ |
 | idem con ventana larga | `e2_lat_w400` | 13,28 % NRMSE, $R^2 = -3{,}55$ |
+| el ruido de proceso es irreducible | F7 | $R^2$ del oráculo 0,12 con estado, 0,11 con comando |
+| el escalado corre sin ruido de observación | `gen_uncertain_dataset.py` | `noise_std = 0.0` en los dos datasets |
 
 De la primera fila se sigue lo más importante para el eje 1: **más capas o más
 unidades sobre `g(I,E)` no pueden pasar ese techo.** Es una limitación de
@@ -191,6 +193,42 @@ Con $K = 400$ y dos canales son 802 entradas, así que la primera capa crece a
 unos 26 mil pesos. Es la versión cara y sin ninguna estructura impuesta, y por
 eso mismo es la que mide el principio en su forma pura.
 
+### 1.2 y 1.3 medidos el 11-09: el eje 1 funciona
+
+Corridas sobre `act1`, ventana 100, 1500 épocas, semilla 0:
+
+| variante | entrada de `g` | NRMSE | $R^2$ | err. param |
+|---|---|---|---|---|
+| white-box | sin `g` | 15,23 | −0,006 | 30,7 |
+| B | $(I,E)$ | 15,40 | −1,875 | 34,4 |
+| A | $(I,E,P,Q)$ | 15,18 | −0,714 | 32,9 |
+| H, $K=100$ | $(I,E)$ + 100 retardos | 12,92 | +0,250 | 26,3 |
+| H, $K=400$ | $(I,E)$ + 400 retardos | **11,48** | +0,146 | 22,7 |
+| forma estructural | sin `g`, 3 parámetros | 2,96 | 0,942 | 5,1 |
+
+Las dos corridas con historia rompen el techo state-only de $R^2 = -0{,}11$ y
+son las primeras correcciones genéricas que le ganan al white-box en NRMSE. El
+error de parámetros baja monótonamente con el campo receptivo.
+
+**La inversión entre las dos.** $K=400$ reproduce mejor y recupera menos física
+que $K=100$. El plan predecía que el campo receptivo más grande ganaría en las
+dos métricas. Es la firma de la ambigüedad entre $\beta$ y `g`: con más
+capacidad hay más formas de tapar el término faltante sin aprenderlo. Eso
+convierte al eje 2 en la medición que corresponde hacer ahora.
+
+### La prioridad, fijada el 11-09: NRMSE
+
+El objetivo del gray-box es reproducir la dinámica. El $R^2$ de la corrección
+pasa a ser diagnóstico, no criterio de aceptación, y una variante que baje el
+NRMSE con $R^2$ pobre se toma como avance. Eso reordena lo que sigue: los ejes
+que atacan el NRMSE (1.3, 1.4) suben, y el eje 2 se corre por lo que explica,
+no por lo que decide.
+
+Criterio nuevo, sobre `act1`: **NRMSE por debajo de 11,48 %**, el mejor gray-box
+medido, con el white-box (15,23 %) como piso de comparación y la forma
+estructural (2,96 %) como referencia de cuánto falta. El $R^2$ se reporta
+siempre y no bloquea nada.
+
 ### 1.3 Convolución, la misma información con menos parámetros
 
 ```
@@ -205,8 +243,10 @@ forma tiene el núcleo.
 Es también el que permite el resultado interesante, porque el núcleo aprendido
 se puede graficar y comparar con la exponencial.
 
-Criterio de éxito para 1.2 y 1.3, sobre `act1`: **$R^2$ de la corrección
-positivo** y NRMSE por debajo del white-box (15,23 %).
+Implementado el 11-09 como variante `K` (`correction_inputs="xconv"`): un FIR
+de cuatro canales sobre los $2K$ retardos, seguido de la misma MLP. Con $K=400$
+son 3200 pesos en el filtro contra los 26 mil de la primera capa densa de `H`.
+El ancho del FIR se controla con `--n-fir`.
 
 Banco de prueba para el campo receptivo: la perturbación `Adaptation` tiene una
 perilla continua entre capturable y no capturable, ya medida con `g(I,E,P,Q)`:
@@ -222,10 +262,13 @@ crecer $K$. Es la validación más limpia y no necesita tocar el actuador.
 
 ### 1.4 Capacidad, y recién acá
 
-Más capas, más unidades, otra activación. Solo si 1.2 y 1.3 mejoraron
-parcialmente y hay motivo para creer que falta capacidad y no información.
-Nunca antes: sobre `g(I,E)` está probado que no sirve, y el teorema explica por
-qué no podía servir.
+Más capas, más unidades, otra activación, y $K$ más grande. Habilitada: 1.2
+mejoró y la mejora crece con el campo receptivo, así que ahora hay motivo para
+creer que falta capacidad y no información. La condición sigue siendo que se
+barra sobre `xhist` o `xconv`, nunca sobre `g(I,E)`, que tiene techo medido.
+
+El barrido mínimo son tres ejes, uno por vez: $K \in \{400, 800\}$,
+`hidden` $\in \{32, 64\}$ y `n_fir` $\in \{4, 8\}$.
 
 ## Eje 2 — Medir la ambigüedad entre $\beta$ y `g` (barato y falsable)
 
@@ -354,6 +397,51 @@ indicativo, no concluyente, y así hay que reportarlo.
 
 ---
 
+## Eje 6 — El ruido, que hasta acá está apagado
+
+Todo el escalado corre sobre datos limpios. Los dos datasets se generan con
+`noise_std = 0.0` (`scripts/gen_uncertain_dataset.py:53`), a propósito: con
+ruido encima no se puede saber si el residuo que `g` tiene que aprender es el
+término omitido o la medición. Los 11,48 % de NRMSE de `H400` son sobre
+trayectorias exactas.
+
+El ruido se estudió antes, en una línea aparte y sobre el white-box de 10
+parámetros. Barrido de ruido de observación gaussiano, con el error máximo de
+parámetro en porcentaje:
+
+| $\sigma$ | 10 parámetros | subconjunto de 4 |
+|---|---|---|
+| 0 | 0,8 | 0,1 |
+| 0,01 | 4,5 | 0,6 |
+| 0,05 | 19,3 | 1,2 |
+| 0,10 | 41,3 | 8,9 |
+
+Las dos columnas ya tienen el suavizado aplicado: una media móvil sobre $I$ y
+$E$ antes de ajustar, de 7 muestras hasta $\sigma = 0{,}05$ y de 11 por encima.
+Lo que separa las columnas es fijar los parámetros no identificables en lugar de
+pelearlos, y el efecto es grande: el problema no era el ruido sino la
+combinación de ruido y parámetros mal condicionados.
+
+El método sin suavizar, sobre otro conjunto de escenarios y por eso no
+directamente comparable, llegaba a 106 % de error máximo en $\sigma = 0{,}10$
+(`scripts/noise_final.py:38`).
+
+Hay un caso que no se mitiga y conviene tenerlo presente como piso. El ruido de
+proceso, el que entra dentro de la ODE, da $R^2$ del oráculo de 0,12 con el
+estado y 0,11 con estado más comando. No es función de nada, así que ninguna
+corrección lo puede aprender, ni con historia ni con capacidad. Es el control
+negativo del proyecto.
+
+**Lo que hay que medir.** Repetir `H400` y `K` sobre `act1` con
+$\sigma = 0{,}01$ y $\sigma = 0{,}05$. La hipótesis es que la historia cruda
+sufre más que el FIR, porque 802 entradas con 26 mil pesos en la primera capa
+es exactamente la configuración que ajusta ruido, mientras que el FIR promedia
+$K$ muestras y eso es un filtro pasabajos por construcción. Si se confirma, el
+argumento a favor de la convolución deja de ser solo el costo.
+
+Va después del eje 1.4 y antes de los datos reales, porque los datos reales
+tienen ruido y no se sabe cuánto.
+
 ## Lo que parecía un bloqueante y no lo es
 
 Las tres corridas ciegas sobre `refrac1` informan unas 25 horas cada una. **No
@@ -391,17 +479,20 @@ variante B sobre cada dataset, para tener una referencia real.
 
 ## Orden sugerido
 
-1. Cronometrar una corrida sola de la variante B sobre `refrac1` y sobre `act1`,
-   para tener una referencia de costo real. Es una tarde, no un bloqueante.
-2. Eje 2, forma exacta + red sobre `refrac1`. 13 min, resultado falsable, cierra
-   una afirmación que hoy está sin medir.
-3. Eje 1.1, la variante A, que ya está escrita.
-4. Eje 1.2, el MLP con la historia del comando en la entrada. Es el test limpio
-   del principio y la apuesta principal.
-5. Eje 1.3, la versión convolucional, si 1.2 funciona pero sale cara o ruidosa.
-   Es la que permite graficar el núcleo aprendido.
-6. Eje 3, la rama estructural completa.
-7. Eje 4, la planta combinada, regenerando antes sus líneas de base.
+Los puntos 1, 2 y 3 de la versión anterior (costo de la variante B, eje 1.1 y
+eje 1.2) se corrieron el 11-09 y están arriba.
+
+1. Eje 1.3, la variante `K`. Es el mejor candidato a bajar el NRMSE, porque el
+   mismo campo receptivo cuesta un orden de magnitud menos de parámetros, y de
+   paso da el núcleo aprendido para graficar contra $e^{-t/\tau}$.
+2. Eje 1.4, el barrido de capacidad y de $K$, empezando por $K=800$, que es la
+   extrapolación directa de la tendencia medida.
+3. Eje 6, las mismas dos variantes con ruido de observación. Decide si el FIR
+   gana por costo o también por robustez.
+4. Eje 2, forma exacta + red sobre `refrac1`. 13 min. Ahora explica la inversión
+   entre $K=100$ y $K=400$ en vez de decidir nada.
+5. Eje 3, la rama estructural completa.
+6. Eje 4, la planta combinada, regenerando antes sus líneas de base.
 
 ## Lo que no haría
 

@@ -48,7 +48,7 @@ def main():
                     help="nombre del .npz en data/processed/uncertain (sin extension)")
     ap.add_argument("--variant", required=True,
                     choices=["whitebox", "A", "B", "C", "D", "S", "Sg", "H",
-                             "lag", "latent"])
+                             "K", "lag", "latent"])
     ap.add_argument("--window", type=int, default=100)
     ap.add_argument("--epochs", type=int, default=1500)
     ap.add_argument("--lam-norm", type=float, default=0.0)
@@ -60,7 +60,11 @@ def main():
     ap.add_argument("--r-init", type=float, default=None,
                     help="valor inicial de r_i, r_e (variante S)")
     ap.add_argument("--hist", type=int, default=0,
-                    help="largo de la historia de comando (variante H)")
+                    help="largo de la historia de comando (variantes H, K)")
+    ap.add_argument("--n-fir", type=int, default=4,
+                    help="canales del filtro FIR (variante K)")
+    ap.add_argument("--hidden", type=int, default=32,
+                    help="ancho de la MLP de g (eje 1.4)")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
 
@@ -86,7 +90,8 @@ def main():
         cfg = TrainConfig(variant=args.variant, window=args.window,
                           epochs=args.epochs, lam_norm=args.lam_norm,
                           lam_orth=args.lam_orth, seed=args.seed,
-                          hist=args.hist)
+                          hist=args.hist, n_fir=args.n_fir,
+                          hidden=args.hidden)
         warm = None
         if args.init_params or args.r_init is not None:
             # warm-start: mismo modelo que build_model pero con los crudos
@@ -128,7 +133,8 @@ def main():
     out = {
         "tag": args.tag, "data": args.data, "data_sha256": data_sha,
         "variant": args.variant,
-        "window": args.window, "epochs": args.epochs, "hist": args.hist,
+        "window": args.window, "epochs": args.epochs, "hist": args.hist, "n_fir": args.n_fir,
+        "hidden": args.hidden,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},
