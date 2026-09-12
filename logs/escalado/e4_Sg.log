@@ -1,2 +1,11 @@
 === escalado · e4_Sg · Sg · refrac1 · W=100 · epochs=1500 ===
     ep     0 | data=4.396e-05 | err_max= 75.21% g_rms=0.0000 redund=nan
+    ep   250 | data=1.850e-06 | err_max= 54.19% g_rms=0.0008 redund=nan
+    ep   500 | data=1.154e-06 | err_max= 32.82% g_rms=0.0011 redund=nan
+    ep   750 | data=9.771e-07 | err_max= 20.74% g_rms=0.0012 redund=nan
+    ep  1000 | data=9.217e-07 | err_max= 15.93% g_rms=0.0011 redund=nan
+    ep  1250 | data=8.824e-07 | err_max= 14.38% g_rms=0.0009 redund=nan
+    ep  1499 | data=8.473e-07 | err_max= 13.78% g_rms=0.0008 redund=nan
+
+  RESULTADO e4_Sg: NRMSE_test=1.82% (I=1.83 E=1.81) R2df=0.954 err_param=3.64% [47.0 min]
+  -> results\escalado\e4_Sg.json

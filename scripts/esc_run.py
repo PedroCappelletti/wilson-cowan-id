@@ -42,6 +42,24 @@ from esc_eval import evaluar
 OUT_DIR = Path("results/escalado")
 
 
+def suavizar(data: dict, k: int) -> dict:
+    """Media movil de ancho k sobre I y E, en train, test y el crudo de la
+    evaluacion. P y Q quedan intactos: son el comando y se conocen sin ruido."""
+    ker = np.ones(k, dtype=np.float32) / k
+
+    def mm(x):
+        return np.stack([np.convolve(f, ker, mode="same") for f in x])
+
+    for c in ("I", "E", "I_te", "E_te"):
+        if c in data:
+            data[c] = mm(data[c])
+    # raw es el NpzFile, que es de solo lectura: se copia a un dict plano.
+    crudo = {k: data["raw"][k] for k in data["raw"].files}
+    crudo["I"], crudo["E"] = mm(crudo["I"]), mm(crudo["E"])
+    data["raw"] = crudo
+    return data
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True,
@@ -71,6 +89,8 @@ def main():
                     help="ancho de la MLP de g (eje 1.4)")
     ap.add_argument("--wd-fir", type=float, default=0.0,
                     help="decaimiento de pesos sobre el FIR (variante K)")
+    ap.add_argument("--smooth", type=int, default=0,
+                    help="ancho de la media movil sobre I y E (0 = sin suavizar)")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
 
@@ -79,6 +99,8 @@ def main():
     # sin forma de saber si salieron de los mismos bytes.
     data_sha = hashlib.sha256(data_path.read_bytes()).hexdigest()[:16]
     data = load_split(data_path)
+    if args.smooth > 1:
+        data = suavizar(data, args.smooth)
     t0 = time.time()
 
     print(f"=== escalado · {args.tag} · {args.variant} · {args.data} "
@@ -146,6 +168,7 @@ def main():
         "variant": args.variant,
         "window": args.window, "epochs": args.epochs, "hist": args.hist, "n_fir": args.n_fir,
         "hidden": args.hidden, "wd_fir": args.wd_fir,
+        "smooth": args.smooth,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},

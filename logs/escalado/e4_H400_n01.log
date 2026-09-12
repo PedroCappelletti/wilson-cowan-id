@@ -1,0 +1,3 @@
+=== escalado · e4_H400_n01 · H · act1_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=7.238e-03 | err_max= 84.86% 
+    ep   250 | data=6.780e-04 | err_max= 57.66% 
