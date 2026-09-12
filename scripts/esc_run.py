@@ -69,6 +69,8 @@ def main():
                     help="canales del filtro FIR (variante K)")
     ap.add_argument("--hidden", type=int, default=32,
                     help="ancho de la MLP de g (eje 1.4)")
+    ap.add_argument("--wd-fir", type=float, default=0.0,
+                    help="decaimiento de pesos sobre el FIR (variante K)")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
 
@@ -95,7 +97,8 @@ def main():
                           epochs=args.epochs, lam_norm=args.lam_norm,
                           lam_orth=args.lam_orth, seed=args.seed,
                           hist=args.hist, n_fir=args.n_fir,
-                          hidden=args.hidden, lbfgs_steps=args.lbfgs_steps)
+                          hidden=args.hidden, lbfgs_steps=args.lbfgs_steps,
+                          wd_fir=args.wd_fir)
         warm = None
         if args.init_params or args.r_init is not None:
             # warm-start: mismo modelo que build_model pero con los crudos
@@ -142,7 +145,7 @@ def main():
         "tag": args.tag, "data": args.data, "data_sha256": data_sha,
         "variant": args.variant,
         "window": args.window, "epochs": args.epochs, "hist": args.hist, "n_fir": args.n_fir,
-        "hidden": args.hidden,
+        "hidden": args.hidden, "wd_fir": args.wd_fir,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},

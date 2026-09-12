@@ -204,6 +204,7 @@ class TrainConfig:
     hidden: int = 32
     hist: int = 0                 # K de la historia de comando (variantes H, K)
     n_fir: int = 4                # canales del FIR (variante K)
+    wd_fir: float = 0.0           # decaimiento de pesos, solo sobre el FIR
     seed: int = 0
     sens_every: int = 25          # cada cuantas epocas se recalculan ∂f/∂θ
     log_every: int = 250
@@ -266,7 +267,13 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
     groups = [{"params": [model.raw_w], "lr": cfg.lr_w},
               {"params": phys_raw, "lr": cfg.lr_phys}]
     if model.use_correction:
-        groups.append({"params": list(model.g.parameters()), "lr": cfg.lr_g})
+        fir = [q for n, q in model.g.named_parameters() if n.startswith("fir.")]
+        resto = [q for n, q in model.g.named_parameters()
+                 if not n.startswith("fir.")]
+        groups.append({"params": resto, "lr": cfg.lr_g})
+        if fir:
+            groups.append({"params": fir, "lr": cfg.lr_g,
+                           "weight_decay": cfg.wd_fir})
     struct_raw = []
     if model.structured:
         struct_raw = [model.raw_r_i, model.raw_r_e, model.raw_alpha]
