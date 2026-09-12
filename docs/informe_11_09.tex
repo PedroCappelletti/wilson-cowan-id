@@ -1,0 +1,496 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+
+% babel-spanish redefine \% para insertar un espacio fino antes del signo, y esa
+% redefinicion usa aritmetica de \lastskip que rompe dentro de minipage.
+\AtBeginDocument{\def\%{\char37\relax}}
+
+\definecolor{acento}{HTML}{1F4E79}
+\definecolor{suave}{HTML}{F2F5F8}
+
+\titleformat{\section}{\large\bfseries\color{acento}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+
+\newcommand{\term}[1]{\textbf{#1}}
+\setlist[itemize]{leftmargin=1.2em,itemsep=2pt,topsep=3pt}
+
+\title{\vspace{-1.5cm}\textbf{Gray-box Wilson-Cowan: del plan del 10-09 a las
+primeras correcciones que funcionan}}
+\author{Informe de trabajo}
+\date{11 de septiembre de 2026}
+
+\begin{document}
+\maketitle
+\vspace{-0.6cm}
+
+\noindent\fcolorbox{acento!30}{suave}{%
+\begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule}
+\small
+El plan del 10 de septiembre afirmaba que la corrección neuronal fracasaba por
+falta de información y no de capacidad, y que darle la historia del comando la
+haría funcionar. Se implementó y se midió. El NRMSE sobre la planta con
+actuador bajó de $15{,}23\,\%$ a $10{,}16\,\%$ y el $R^2$ de la corrección
+rompió el techo teórico que ninguna función del estado observado podía superar.
+Quedan corriendo doce experimentos más. Este documento recorre lo hecho desde
+la escritura del plan, explica cada término y el motivo de cada decisión.
+\end{minipage}}
+
+\section{De qué trata el proyecto}
+
+El objetivo es identificar la dinámica de una población neuronal a partir de
+datos, combinando una ecuación conocida con una parte aprendida. La ecuación
+conocida es el \term{modelo de Wilson-Cowan}, un modelo de masa neuronal que
+describe dos poblaciones acopladas, una excitatoria y una inhibitoria, mediante
+dos ecuaciones diferenciales ordinarias. Sus variables de estado son $E$, la
+actividad de la población excitatoria, e $I$, la de la inhibitoria. El estado
+del sistema es el vector $x = (I, E)^{\mathsf{T}}$. Las entradas externas son
+$P$ y $Q$, los estímulos que recibe cada población.
+
+El modelo tiene diez parámetros que se agrupan en el vector
+$\beta \in \mathbb{R}^{10}$: cuatro pesos de acoplamiento
+($w_{EE}$, $w_{EI}$, $w_{IE}$, $w_{II}$), dos constantes de tiempo
+($\tau_e$, $\tau_i$), dos pendientes de la función de activación
+($a_e$, $a_i$) y dos umbrales ($\theta_e$, $\theta_i$). El nombre $\beta$ se
+eligió porque la letra $\theta$, la habitual para un vector de parámetros,
+colisiona con los umbrales $\theta_e$ y $\theta_i$ del propio modelo.
+
+\subsection{Qué es un gray-box y por qué no un black-box}
+
+Un \term{black-box} aprende la dinámica entera con una red neuronal, sin
+suponer nada. Reproduce bien y no explica nada: los pesos aprendidos no
+corresponden a ninguna cantidad física. Un \term{white-box} escribe la ecuación
+completa a mano y ajusta solo sus parámetros. Explica todo lo que acierta, pero
+si la planta real tiene algo que la ecuación no contempla, ese algo no se puede
+representar y el error queda.
+
+El \term{gray-box} es la combinación:
+\begin{equation}
+  \dot{x} = \underbrace{f_{WC}(x, P, Q; \beta)}_{\text{física escrita a mano}}
+          + \underbrace{g_\varphi(\cdot)}_{\text{red neuronal}}
+\end{equation}
+El primer término aporta la estructura conocida y sus parámetros conservan
+significado físico. El segundo, con parámetros $\varphi$, absorbe lo que la
+estructura no cubre. La promesa es tener las dos cosas: reproducción de un
+black-box e interpretabilidad de un white-box.
+
+El problema central del proyecto es que esa promesa venía sin cumplirse. En las
+dos únicas configuraciones que reproducían bien la dinámica, la red estaba
+literalmente apagada (\texttt{use\_correction=False}) y todo el trabajo lo hacía
+física escrita a mano. Eso es lo que disparó el plan del 10 de septiembre.
+
+\subsection{La planta simulada}
+
+Los datos son de simulador, no experimentales. Se genera una trayectoria con
+Wilson-Cowan más una \term{perturbación} que el modelo reducido no contempla, y
+después se pide identificar el sistema usando solo el modelo reducido más la
+corrección. La diferencia entre la dinámica verdadera y la que el modelo
+reducido puede representar se llama $\Delta f$, y es exactamente lo que $g$
+tendría que aprender.
+
+Se usan dos plantas, cada una con una sola perturbación activa, para atacar la
+dificultad de a una por vez:
+
+\begin{itemize}
+\item \texttt{refrac1}: \term{refractariedad}. Después de disparar, una neurona
+  no puede volver a hacerlo de inmediato. Se modela con un factor
+  $(1 - r\,x)$ que reduce la respuesta cuando la actividad es alta. Es una
+  función del estado actual y de nada más.
+\item \texttt{act1}: \term{actuador}. El estímulo que llega a la población no es
+  el comando $u$ que se ordena, sino una versión filtrada y saturada de él. En
+  concreto un \term{sistema de Wiener}, que es un filtro lineal seguido de una
+  no linealidad sin memoria:
+  \begin{equation}
+    \frac{dP_{\text{lag}}}{dt} = \frac{P - P_{\text{lag}}}{\tau},
+    \qquad \tau = 1~\text{ms},
+    \qquad P_{\text{efectivo}} = A \tanh\!\left(\frac{P_{\text{lag}}}{A}\right),
+    \qquad A = 3.
+  \end{equation}
+  Acá está la dificultad: el estímulo efectivo depende del \emph{pasado} del
+  comando, no solo de su valor actual.
+\end{itemize}
+
+\subsection{Las métricas y qué mide cada una}
+
+\begin{itemize}
+\item \term{NRMSE de corrida libre} (\emph{free-run rollout}). Se le da al
+  modelo identificado el estado inicial y la secuencia de estímulos, y se lo
+  deja integrar la trayectoria entera sin volver a mirar los datos. Se compara
+  contra la trayectoria verdadera y se normaliza. Mide reproducción de la
+  dinámica. Es la métrica principal.
+\item \term{$R^2$ de la corrección}. Compara, muestra a muestra, lo que la
+  corrección aprendida $\hat{g}$ produce contra el término omitido verdadero
+  $\Delta f$:
+  \begin{equation}
+    R^2 = 1 - \frac{\sum \lVert \hat{g} - \Delta f \rVert^2}
+                   {\sum \lVert \Delta f - \overline{\Delta f} \rVert^2}
+  \end{equation}
+  Mide recuperación de física, no reproducción. Un modelo puede copiar la
+  trayectoria con $R^2$ pésimo, si la corrección compensa por un camino
+  distinto del verdadero.
+\item \term{Error de parámetros}. Distancia relativa entre el $\beta$
+  identificado y el $\beta$ verdadero del simulador. Es el control que dice si
+  la corrección está deformando la física en vez de complementarla.
+\item \term{Fracción de redundancia}. Cuánto de lo que hace la corrección lo
+  podría haber hecho un cambio de parámetros. El punto de comparación no es
+  cero: el $\Delta f$ verdadero ya puntúa $0{,}67$, y una red con pesos
+  aleatorios puntúa $0{,}47$ solo por ser una función suave del estado.
+\end{itemize}
+
+\subsection{Cómo se entrena}
+
+Se usa \term{multiple shooting}: la trayectoria se parte en ventanas cortas y
+cada ventana se integra desde el estado observado en su comienzo, en vez de
+integrar los 4000 pasos de un tirón. El motivo es de condicionamiento numérico.
+Integrar una trayectoria larga y derivar respecto de los parámetros hace que el
+gradiente explote o se desvanezca, porque el error se propaga multiplicativamente
+a lo largo de la integración. Reiniciando cada 100 pasos el problema queda mucho
+mejor planteado.
+
+Después de la fase de descenso por gradiente viene una fase de \term{L-BFGS}, un
+método de segundo orden que converge mucho más rápido cerca del mínimo pero que
+necesita arrancar razonablemente cerca.
+
+\section{El plan del 10-09 y su razonamiento}
+
+\subsection{El hallazgo que lo disparó}
+
+Preparando el póster de la Jornada se verificó en el código que en las dos
+correcciones que funcionaban, la red estaba apagada. La primera,
+\emph{forma exacta}, agrega la refractariedad al backbone como tres parámetros
+físicos más. La segunda, \emph{estado de filtro}, aumenta el estado con dos
+variables que siguen la dinámica del actuador, y son doce parámetros en total,
+sin ninguna red. Las dos reproducen bien. Ninguna de las dos usa $g$.
+
+Eso vacía el argumento del gray-box. Si lo único que funciona es escribir la
+ecuación a mano, el proyecto es un white-box con pasos extra.
+
+\subsection{El teorema y qué dice exactamente}
+
+El \term{Teorema de Aproximación Universal} dice que una red neuronal
+suficientemente ancha puede aproximar cualquier función continua \emph{de sus
+entradas}, con la precisión que se quiera. La palabra que hace todo el trabajo
+es \emph{de sus entradas}.
+
+Sobre \texttt{act1}, $\Delta f$ depende del pasado del comando. Una red que solo
+ve $(I, E)$ no puede representarla, porque $\Delta f$ \emph{no es una función}
+de $(I,E)$: para un mismo estado observado, $\Delta f$ toma valores distintos
+según lo que haya pasado antes. Esto no es una limitación de capacidad. Es una
+limitación de información, y ninguna cantidad de capas la arregla.
+
+Está medido. El \term{oráculo}, que es la mejor función posible de $(I,E)$
+ajustada directamente contra $\Delta f$ sin ninguna restricción de
+optimización, llega a $R^2 = -0{,}11$ sobre la planta nominal. Ese es un techo
+duro para toda variante que le dé a la red solo el estado.
+
+\subsection{La decisión: memoria en la entrada, no en el estado}
+
+Hay dos formas de darle memoria a un modelo. La primera es un estado interno
+propio que el modelo infiere y propaga, que es la \term{latent ODE}. Ya estaba
+medida y fracasó: $R^2 = -0{,}51$, la peor de todas y la más cara. El motivo es
+que ese estado latente hay que inferirlo de los datos, que es un problema mucho
+más difícil que el original.
+
+La segunda es \term{memoria en la entrada}: se le pasan a la red las últimas
+$K$ muestras del comando, que son conocidas y no hay que inferir nada. En
+identificación de sistemas esto es un modelo \term{NARX} o un \term{FIR} sobre
+la entrada. Con la historia adentro, $\Delta f$ \emph{sí} es una función
+continua de la entrada de la red, y el teorema aplica sin asteriscos.
+
+\subsection{Una corrección al propio plan}
+
+La primera versión fijaba $K = 100$ muestras, justificado como $5\tau$. Eso es
+darle física a la red, aunque sea poca: usa el valor de $\tau$, que es justo lo
+que tendría que descubrir. Se reemplazó por $K = 400$ muestras (20~ms), muy por
+encima de cualquier constante de tiempo plausible, dejando que el núcleo
+aprendido decaiga solo. El largo efectivo de la memoria pasa de ser un supuesto
+a ser una medición.
+
+\section{Lo que se midió}
+
+Todas las corridas usan ventana de 100 pasos, 1500 épocas, semilla 0, y el mismo
+dataset, para que sean comparables entre sí.
+
+\subsection{Eje 1: la historia del comando}
+
+\begin{center}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+\textbf{corrida} & \textbf{qué ve $g$} & \textbf{pesos} &
+\textbf{NRMSE} & \textbf{$R^2$} & \textbf{err.\ param} \\
+\midrule
+\texttt{e2\_wb}   & nada, sin corrección      & 0 & 15{,}23 & $-0{,}006$ & 30{,}7 \\
+\texttt{e2\_B}    & $(I,E)$                   & 1\,218 & 15{,}40 & $-1{,}875$ & 34{,}4 \\
+\texttt{e2\_A}    & $(I,E,P,Q)$ instantáneo   & 1\,346 & 15{,}18 & $-0{,}714$ & 32{,}9 \\
+\texttt{e2\_H100} & $(I,E)$ + 100 retardos    & 7\,618 & 12{,}92 & $+0{,}250$ & 26{,}3 \\
+\texttt{e2\_H400} & $(I,E)$ + 400 retardos    & 26\,818 & 11{,}48 & $+0{,}146$ & 22{,}7 \\
+\rowcolor{suave}
+\texttt{e3\_K400} & ídem, filtrado por un FIR & 4\,546 & \textbf{10{,}16} & $-0{,}640$ & \textbf{16{,}7} \\
+\midrule
+\texttt{e2\_lag2} & forma estructural, sin red & 12 & 2{,}96 & $+0{,}942$ & 5{,}1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Lo que confirma la predicción central.} Las tres variantes sin
+memoria empatan o empeoran respecto de no corregir nada. Las variantes con
+memoria le ganan al white-box por primera vez, y el $R^2$ se vuelve positivo,
+rompiendo el techo de $-0{,}11$ que ninguna función del estado observado podía
+superar. La información faltante era la que se predijo.
+
+\noindent\textbf{Lo que no se predijo.} Las tres métricas se mueven en
+direcciones distintas al aumentar el campo receptivo. El NRMSE mejora de forma
+monótona ($12{,}92 \to 11{,}48 \to 10{,}16$) y el error de parámetros también
+($26{,}3 \to 22{,}7 \to 16{,}7$), pero el $R^2$ se degrada y termina negativo
+($+0{,}250 \to +0{,}146 \to -0{,}640$).
+
+La lectura habitual de un $R^2$ negativo es que la corrección absorbe física en
+el lugar equivocado. Bajo esa lectura el $\beta$ identificado se tendría que
+degradar, y está mejorando casi a la mitad del error. Las dos cosas no pueden
+ser ciertas a la vez.
+
+La explicación más plausible es que el $R^2$ se calcula punto a punto contra
+$\Delta f$, mientras que el NRMSE mide el efecto acumulado sobre la trayectoria.
+Un término que difiere punto a punto pero produce el mismo efecto dinámico
+puntúa mal en el primero y bien en el segundo. La sección siguiente da evidencia
+directa de por dónde va esa diferencia.
+
+\subsection{Eje 1.3: por qué un filtro y no más entradas crudas}
+
+La variante \texttt{H} le da a la red los $2K$ retardos crudos. Con $K=400$ son
+802 entradas, y solo la primera capa densa pesa 26\,mil parámetros. Esa capa
+aprende un peso independiente por cada retardo, lo cual no supone nada pero
+cuesta mucho y deja mucho margen para ajustar cualquier cosa.
+
+La variante \texttt{K} interpone un \term{FIR} (\emph{finite impulse response},
+un filtro de respuesta finita al impulso) de cuatro canales antes de la red. Un
+FIR calcula $\sum_k w_k\,u(t-k)$, que es una convolución con un núcleo libre.
+No se le dice qué forma tiene el núcleo. Lo único que se supone es
+\term{invarianza temporal}, o sea que el efecto de un retardo dado no cambia
+según el instante absoluto. Eso es un supuesto de estructura, no de física.
+
+El resultado es 4546 parámetros contra 26818, casi seis veces menos, y mejor
+NRMSE. Y hay un beneficio adicional que ninguna otra variante ofrece: el núcleo
+aprendido se puede graficar y comparar con la física verdadera.
+
+\subsection{El núcleo aprendido}
+
+
+
+\noindent Tres lecturas, en orden de importancia:
+
+\begin{enumerate}
+\item \textbf{El filtro encontró el pico en retardo cero.} La relación entre la
+  cola (más allá de 10~ms) y el pico pasó de $1{,}27$ sin entrenar a $0{,}20$
+  entrenado. El entrenamiento concentró energía en los retardos cortos, que es
+  donde está la física. Eso es aprendizaje real, no ruido.
+\item \textbf{Pero nunca suprimió la cola.} El $34{,}0\,\%$ de la energía cae en
+  los primeros 5~ms, contra $25{,}2\,\%$ de un filtro sin entrenar y
+  $99{,}3\,\%$ de la exponencial verdadera. El centroide temporal del núcleo
+  aprendido está en $8{,}73$~ms; el de la exponencial, en $0{,}98$~ms.
+\item \textbf{Eso da una explicación concreta del $R^2$ negativo.} Los pesos de
+  retardo largo quedan casi libres, porque la función de costo depende muy poco
+  de ellos. Su contribución a $\hat{g}$ es una componente esencialmente
+  arbitraria que no se parece a $\Delta f$ y que el $R^2$ castiga punto a punto,
+  mientras que el optimizador ya la ajustó para que no dañe la trayectoria.
+\end{enumerate}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.82\textwidth]{../results/figures/fir_kernel.pdf}
+\caption{Energía del núcleo FIR aprendido en función del retardo, sobre
+\texttt{act1}, corrida \texttt{e3\_K400} (cuatro canales, $K = 400$ muestras,
+$20$~ms). La energía es la norma sobre los cuatro canales para cada retardo,
+normalizada a su máximo; los canales por separado no son comparables porque la
+red que sigue puede reescalar cualquiera de ellos sin cambiar la función. La
+curva gris es el mismo filtro sin entrenar, y sirve de control para distinguir
+estructura de ruido. La curva negra punteada es la respuesta al impulso del
+actuador verdadero, $e^{-t/\tau}$ con $\tau = 1{,}0$~ms, que el entrenamiento
+nunca vio.}
+\end{figure}
+
+Esto convierte una anomalía en un experimento. Si el diagnóstico es correcto,
+penalizar los pesos del filtro tiene que levantar el $R^2$ sin arruinar el
+NRMSE. Quedó implementado (\texttt{-{}-wd-fir}) y encolado con dos intensidades.
+
+\section{Los errores encontrados}
+
+Cuatro fallas de cableado aparecieron en esta tanda. Todas comparten una forma:
+una lista de variantes escrita en más de un lugar del código, que se actualizó
+en uno y no en los otros. Vale registrarlas porque tres de ellas no daban
+síntoma.
+
+\begin{enumerate}
+\item \textbf{La variante \texttt{H} no estaba en la lista de argumentos
+  válidos.} Las dos corridas murieron al instante. Es la falla barata: se ve
+  enseguida.
+\item \textbf{El cálculo del error open-loop no recibía el largo de la
+  historia.} La red terminaba con cuatro entradas en vez de $2 + 2K$.
+\item \textbf{El diagnóstico final evaluaba $g$ sobre 3000 puntos sueltos}, que
+  por definición no tienen historia asociada. Se cambió para que use las propias
+  ventanas de entrenamiento, que sí la tienen.
+\item \textbf{El filtro FIR nunca se entrenó.} Esta es la cara. La corrida
+  \texttt{e3\_K400} reportó NRMSE $20{,}90\,\%$, peor que no corregir nada,
+  porque el filtro era módulo hermano de \texttt{self.g} y el optimizador arma
+  su grupo con \texttt{model.g.parameters()}. Se quedó 1500 épocas en su
+  inicialización aleatoria, y la red trabajó sobre cuatro proyecciones fijas y
+  arbitrarias de la historia. Cuarenta y tres minutos de cómputo para un
+  resultado que medía otra cosa.
+\end{enumerate}
+
+\subsection{Qué se cambió para que no se repita}
+
+\begin{itemize}
+\item \textbf{El filtro pasó a vivir dentro de \texttt{g}.} Seis lugares del
+  repositorio toman \texttt{model.g.parameters()} como ``toda la corrección''.
+  Hacer al filtro hijo de \texttt{g} arregla los seis a la vez, en lugar de
+  agregarlo a mano en uno solo y dejar cinco mal.
+\item \textbf{Un guarda en la función de entrenamiento.} Antes de construir el
+  optimizador compara los parámetros entrenables del modelo contra los que
+  están en sus grupos, y aborta si sobra alguno. Un parámetro fuera del
+  optimizador no da síntoma: la corrida termina, reporta y guarda un número
+  plausible que mide otra cosa.
+\item \textbf{El checkpoint se guarda antes de evaluar.} Con el orden anterior,
+  cualquier error en las últimas líneas del script costaba la corrida entera.
+\item \textbf{El test de variantes chequea el gradiente por parámetro.} Antes
+  sumaba sobre toda la corrección, y esa suma daba positiva igual porque la red
+  sí recibía gradiente. Eso obligó a un detalle: la última capa arranca en cero
+  a propósito, así que en el primer paso ninguna capa anterior recibe gradiente
+  y el chequeo no distinguiría un huérfano de uno sano. Se la despierta antes de
+  medir.
+\item \textbf{Las decisiones de ``necesita historia'' salen de una sola
+  función.} Es la causa raíz común de tres de los cuatro errores.
+\end{itemize}
+
+\section{El ruido, que hasta acá está apagado}
+
+\subsection{Por qué no estaba}
+
+Todo el escalado corre sobre datos limpios. Los dos datasets se generan con
+\texttt{noise\_std = 0.0}, a propósito. Con ruido encima no se puede distinguir
+si el residuo que la corrección tiene que aprender es el término omitido o la
+medición, y el $R^2$ de la corrección dejaría de significar algo. Los
+$10{,}16\,\%$ de NRMSE son sobre trayectorias exactas.
+
+\subsection{Lo que sí está medido}
+
+En una línea de trabajo anterior, sobre el white-box de diez parámetros. Error
+máximo de parámetro, con media móvil aplicada en los cuatro niveles:
+
+\begin{center}
+\small
+\begin{tabular}{lrr}
+\toprule
+$\sigma$ & \textbf{10 parámetros} & \textbf{subconjunto de 4} \\
+\midrule
+0     & 0{,}8\,\%  & 0{,}1\,\% \\
+0{,}01 & 4{,}5\,\%  & 0{,}6\,\% \\
+0{,}05 & 19{,}3\,\% & 1{,}2\,\% \\
+0{,}10 & 41{,}3\,\% & 8{,}9\,\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La mitigación fue promediar antes de ajustar, con una media móvil de siete
+muestras hasta $\sigma = 0{,}05$ y de once por encima. Lo que separa las dos
+columnas es fijar los parámetros no identificables en lugar de pelearlos, y el
+efecto es grande. El problema nunca fue el ruido solo, sino el ruido sobre
+parámetros mal condicionados.
+
+Hay un caso que no se mitiga y sirve de control negativo. El \term{ruido de
+proceso}, el que entra dentro de la ecuación diferencial en vez de sumarse a la
+medición, da $R^2$ del oráculo de $0{,}12$ con el estado y $0{,}11$ agregando el
+comando. No es función de nada, así que ninguna corrección lo puede aprender, ni
+con historia ni con capacidad.
+
+\subsection{La hipótesis que se va a probar}
+
+La variante \texttt{H} le da a la red 802 entradas y 26\,mil pesos en la primera
+capa, que es exactamente la configuración que ajusta ruido. El FIR promedia $K$
+muestras, y eso es un filtro pasabajos por construcción. Si el FIR se degrada
+menos al subir el ruido, el argumento a favor de la convolución deja de ser solo
+el costo.
+
+Se prepararon \texttt{act1\_n01} ($\sigma = 0{,}01$, el $5{,}7\,\%$ del desvío de
+$E$) y \texttt{act1\_n05} ($\sigma = 0{,}05$, el $27{,}5\,\%$). El ruido se suma
+al dataset ya generado en vez de regenerar las trayectorias, por dos motivos: la
+trayectoria queda idéntica a la limpia, así que las corridas son comparables
+muestra a muestra, y el $\Delta f$ de referencia sigue calculado sobre la
+trayectoria exacta, que es lo único que hace válido el $R^2$.
+
+\section{Qué quedó corriendo}
+
+Doce corridas encoladas en secuencia, nunca en paralelo. La bitácora ya
+registra que cuatro carriles sobre ocho núcleos convirtieron corridas de 25
+minutos en corridas de 25 horas. El lote entero son unas ocho horas y media de
+reloj, contando desde el mediodía del 11 de septiembre.
+
+\begin{center}
+\small
+\begin{tabular}{llp{7.4cm}}
+\toprule
+\textbf{corrida} & \textbf{planta} & \textbf{qué contesta} \\
+\midrule
+\texttt{e3\_K800} & \texttt{act1} & Si el campo receptivo más largo sigue mejorando. \\
+\texttt{e3\_K400\_h64} & \texttt{act1} & Si falta capacidad en la red posterior al filtro. \\
+\texttt{e3\_K400\_f8} & \texttt{act1} & Si el filtro de cuatro canales es el cuello de botella. Con ocho canales, si la hipótesis del rango es correcta, el $R^2$ tiene que recuperarse. \\
+\texttt{e4\_Sg} & \texttt{refrac1} & Cuánto se tapan entre sí los parámetros y la red, sobre la planta donde la forma exacta está completa. Si la red no aprende nada, su magnitud queda cerca de cero. \\
+\texttt{e4\_S2ver} & \texttt{refrac1} & Verificación del dataset. Tiene que reproducir NRMSE $1{,}70$ y $R^2$ $0{,}964$. \\
+\texttt{e4\_wb\_n05}, \texttt{e4\_K400\_n05}, \texttt{e4\_H400\_n05} & \texttt{act1\_n05} & El eje 6 con $\sigma = 0{,}05$, con el white-box como referencia. \\
+\texttt{e4\_K400\_n01}, \texttt{e4\_H400\_n01} & \texttt{act1\_n01} & Ídem con $\sigma = 0{,}01$. \\
+\texttt{e5\_K400\_wd1e-4}, \texttt{e5\_K400\_wd1e-3} & \texttt{act1} & Si penalizar los pesos del filtro levanta el $R^2$ sin arruinar el NRMSE. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Dónde está el proyecto}
+
+La escala honesta: la forma estructural sigue ganando por lejos, $2{,}96$ contra
+$10{,}16$ en NRMSE y $0{,}942$ contra $-0{,}640$ en $R^2$. El camino
+generalizable funciona y rompió el techo teórico, pero todavía está a un tercio
+del camino en reproducción. Escribir la ecuación a mano sigue siendo mucho mejor
+que aprenderla.
+
+Lo que cambió respecto del 10 de septiembre es que ahora hay un camino que
+mejora al agrandarlo, y una explicación medible de por qué todavía no llega.
+Antes del eje 1 no había ninguno de los dos.
+
+\subsection{Lo que queda decidido}
+
+La prioridad pasó a ser el NRMSE. El $R^2$ de la corrección se reporta siempre y
+no bloquea nada. El criterio de aceptación es NRMSE por debajo de $10{,}16\,\%$,
+con el white-box ($15{,}23$) como piso y la forma estructural ($2{,}96$) como
+referencia de cuánto falta.
+
+El control que mantiene honesta esa degradación es el error de parámetros. Si la
+corrección mejorara el NRMSE absorbiendo física en el lugar equivocado, el
+$\beta$ identificado se degradaría. Está mejorando. Mientras las dos cosas se
+muevan juntas, la mejora es real y no un canje.
+
+\subsection{Lo que queda pendiente de una decisión}
+
+\begin{itemize}
+\item \textbf{Los datos reales.} Para probar cualquier variante sobre una
+  grabación hay que estimar el estado inicial de cada ventana, porque lo que se
+  observa no es $(I,E)$ sino una proyección escalar $s = c\,(E - I)$. La
+  recomendación es optimizar solo el estado inicial con los parámetros
+  congelados, pero es una decisión de método y no se tomó.
+\item \textbf{La revisión del repositorio limpio} antes de hacerlo público. Ya
+  aparecieron tres afirmaciones falsas en su README, así que conviene asumir que
+  hay más.
+\end{itemize}
+
+\end{document}

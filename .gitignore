@@ -47,3 +47,9 @@ results/models/*
 # caches de herramientas
 .ua/
 .claude/
+
+# Auxiliares de LaTeX
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.toc

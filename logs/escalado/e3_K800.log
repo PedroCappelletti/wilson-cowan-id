@@ -3,3 +3,4 @@
     ep   250 | data=3.360e-04 | err_max= 76.01% 
     ep   500 | data=8.995e-05 | err_max= 77.17% 
     ep   750 | data=3.560e-05 | err_max= 80.14% 
+    ep  1000 | data=2.691e-05 | err_max= 80.86% 
