@@ -9,6 +9,30 @@
     "energia_primeros_5ms_nulo": 0.25192043854632956,
     "energia_primeros_5ms_exp": 0.9932704743134082,
     "cola_P_sobre_pico": 0.19807960093021393,
-    "cola_nulo_sobre_pico": 1.2709636840660397
+    "cola_nulo_sobre_pico": 1.2709636840660397,
+    "tau_P_ms": 10.876311228036027,
+    "piso_P": 0.19807960093021393,
+    "n_ajuste": 58,
+    "tau_nulo_ms": NaN,
+    "t_1e_ms": 0.30007501875468867,
+    "t_1e_nulo_ms": 0.0
+  },
+  "e3_K400_f8": {
+    "n_fir": 8,
+    "K": 400,
+    "centroide_P_ms": 8.450036719844276,
+    "centroide_Q_ms": 9.704482072343776,
+    "centroide_exponencial_ms": 0.9752021362597837,
+    "energia_primeros_5ms_P": 0.37880223989486694,
+    "energia_primeros_5ms_nulo": 0.24935421542238717,
+    "energia_primeros_5ms_exp": 0.9932704743134082,
+    "cola_P_sobre_pico": 0.15979227423667908,
+    "cola_nulo_sobre_pico": 1.0141810968157443,
+    "tau_P_ms": 4.6692769870314805,
+    "piso_P": 0.15979227423667908,
+    "n_ajuste": 43,
+    "tau_nulo_ms": -26.922496444928342,
+    "t_1e_ms": 0.5001250312578145,
+    "t_1e_nulo_ms": 0.0
   }
 }

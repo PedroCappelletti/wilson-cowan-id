@@ -53,6 +53,27 @@ def energia(k: np.ndarray) -> np.ndarray:
     return e / e.max()
 
 
+def tau_estimado(e: np.ndarray, t: np.ndarray, piso_desde: float = 10.0):
+    """Constante de tiempo del nucleo, despues de restarle su piso.
+
+    Los pesos de retardo largo son casi libres y forman un piso plano que no
+    corresponde a ninguna fisica. Restarlo es lo que permite preguntar si lo
+    que queda decae, y con que constante. El ajuste es una recta sobre el
+    logaritmo, en el tramo donde la curva todavia esta por encima del piso.
+    """
+    piso = float(e[t >= piso_desde].mean())
+    y = e - piso
+    # Tiempo hasta 1/e del pico. No supone que el nucleo SEA exponencial, que
+    # es justo lo que esta en duda, asi que es el descriptor primario.
+    bajo = np.where(y < y[0] / np.e)[0]
+    t_1e = float(t[bajo[0]]) if len(bajo) else float("nan")
+    usable = (y > 0.15 * y[0]) & (t < piso_desde)
+    if usable.sum() < 5:
+        return float("nan"), piso, 0, t_1e
+    c = np.polyfit(t[usable], np.log(y[usable]), 1)
+    return float(-1.0 / c[0]), piso, int(usable.sum()), t_1e
+
+
 def largo_efectivo(e: np.ndarray, t: np.ndarray) -> float:
     """Centroide temporal: el retardo medio ponderado por energia."""
     return float((t * e).sum() / e.sum())
@@ -94,6 +115,11 @@ def main(tags):
             "cola_P_sobre_pico": float(eP[t > 10].mean() / eP[0]),
             "cola_nulo_sobre_pico": float(eN[t > 10].mean() / eN[0]),
         }
+        tau_ap, piso, n, t1e = tau_estimado(eP, t)
+        tau_nulo, _, _, t1e_nulo = tau_estimado(eN, t)
+        resumen[tag].update(tau_P_ms=tau_ap, piso_P=piso, n_ajuste=n,
+                            tau_nulo_ms=tau_nulo, t_1e_ms=t1e,
+                            t_1e_nulo_ms=t1e_nulo)
 
     fig.savefig(FIG / "fir_kernel.pdf")
     fig.savefig(FIG / "fir_kernel.png", dpi=150)
@@ -105,7 +131,10 @@ def main(tags):
               f"{r['energia_primeros_5ms_P']:.1%}, sin entrenar "
               f"{r['energia_primeros_5ms_nulo']:.1%}, exponencial "
               f"{r['energia_primeros_5ms_exp']:.1%}  |  cola/pico: "
-              f"{r['cola_P_sobre_pico']:.2f} vs {r['cola_nulo_sobre_pico']:.2f}")
+              f"{r['cola_P_sobre_pico']:.2f} vs {r['cola_nulo_sobre_pico']:.2f}"
+              f"  |  t hasta 1/e: {r['t_1e_ms']:.2f} ms "
+              f"(verdadero {TAU}, sin entrenar {r['t_1e_nulo_ms']:.2f})  |  "
+              f"ajuste exponencial {r['tau_P_ms']:.2f} ms, piso {r['piso_P']:.2f}")
     print(f"-> {FIG / 'fir_kernel.pdf'}")
 
 

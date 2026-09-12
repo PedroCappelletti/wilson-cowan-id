@@ -42,10 +42,12 @@ primeras correcciones que funcionan}}
 El plan del 10 de septiembre afirmaba que la corrección neuronal fracasaba por
 falta de información y no de capacidad, y que darle la historia del comando la
 haría funcionar. Se implementó y se midió. El NRMSE sobre la planta con
-actuador bajó de $15{,}23\,\%$ a $10{,}16\,\%$ y el $R^2$ de la corrección
+actuador bajó de $15{,}23\,\%$ a $9{,}12\,\%$ y el $R^2$ de la corrección
 rompió el techo teórico que ninguna función del estado observado podía superar.
-Quedan corriendo doce experimentos más. Este documento recorre lo hecho desde
-la escritura del plan, explica cada término y el motivo de cada decisión.
+El barrido de capacidad dio un resultado más fino que el previsto: agrandar el
+filtro ayuda, agrandar la red o la ventana de historia perjudica. Quedan ocho
+experimentos corriendo. Este documento recorre lo hecho desde la escritura del
+plan, explica cada término y el motivo de cada decisión.
 \end{minipage}}
 
 \section{De qué trata el proyecto}
@@ -237,21 +239,22 @@ dataset, para que sean comparables entre sí.
 \texttt{e2\_A}    & $(I,E,P,Q)$ instantáneo   & 1\,346 & 15{,}18 & $-0{,}714$ & 32{,}9 \\
 \texttt{e2\_H100} & $(I,E)$ + 100 retardos    & 7\,618 & 12{,}92 & $+0{,}250$ & 26{,}3 \\
 \texttt{e2\_H400} & $(I,E)$ + 400 retardos    & 26\,818 & 11{,}48 & $+0{,}146$ & 22{,}7 \\
+\texttt{e3\_K400} & ídem, filtrado por un FIR & 4\,546 & 10{,}16 & $-0{,}640$ & \textbf{16{,}7} \\
 \rowcolor{suave}
-\texttt{e3\_K400} & ídem, filtrado por un FIR & 4\,546 & \textbf{10{,}16} & $-0{,}640$ & \textbf{16{,}7} \\
+\texttt{e3\_K400\_f8} & ídem, filtro de 8 canales & 7\,874 & \textbf{9{,}12} & $+0{,}127$ & 21{,}4 \\
 \midrule
 \texttt{e2\_lag2} & forma estructural, sin red & 12 & 2{,}96 & $+0{,}942$ & 5{,}1 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent\textbf{Lo que confirma la predicción central.} Las tres variantes sin
+\smallskip\par\textbf{Lo que confirma la predicción central.} Las tres variantes sin
 memoria empatan o empeoran respecto de no corregir nada. Las variantes con
 memoria le ganan al white-box por primera vez, y el $R^2$ se vuelve positivo,
 rompiendo el techo de $-0{,}11$ que ninguna función del estado observado podía
 superar. La información faltante era la que se predijo.
 
-\noindent\textbf{Lo que no se predijo.} Las tres métricas se mueven en
+\smallskip\par\textbf{Lo que no se predijo.} Las tres métricas se mueven en
 direcciones distintas al aumentar el campo receptivo. El NRMSE mejora de forma
 monótona ($12{,}92 \to 11{,}48 \to 10{,}16$) y el error de parámetros también
 ($26{,}3 \to 22{,}7 \to 16{,}7$), pero el $R^2$ se degrada y termina negativo
@@ -286,45 +289,117 @@ El resultado es 4546 parámetros contra 26818, casi seis veces menos, y mejor
 NRMSE. Y hay un beneficio adicional que ninguna otra variante ofrece: el núcleo
 aprendido se puede graficar y comparar con la física verdadera.
 
+\subsection{Eje 1.4: dónde agregar capacidad y dónde no}
+
+Con la variante \texttt{K} funcionando queda una pregunta que el plan dejaba
+condicionada: si lo que falta es capacidad. Hay tres perillas independientes y
+se movió una por vez desde \texttt{e3\_K400}.
+
+\begin{center}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+\textbf{corrida} & \textbf{qué cambió} & \textbf{pesos} &
+\textbf{NRMSE} & \textbf{$R^2$} & \textbf{err.\ param} \\
+\midrule
+\texttt{e3\_K400}     & referencia                  & 4\,546 & 10{,}16 & $-0{,}640$ & \textbf{16{,}7} \\
+\texttt{e3\_K800}     & doble ventana de historia   & 7\,746 & 12{,}48 & $-0{,}397$ & 16{,}4 \\
+\texttt{e3\_K400\_h64} & doble ancho de la red      & 7\,938 & 10{,}98 & $-0{,}861$ & 25{,}7 \\
+\rowcolor{suave}
+\texttt{e3\_K400\_f8}  & doble rango del filtro     & 7\,874 & \textbf{9{,}12} & $+0{,}127$ & 21{,}4 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Las tres tienen un número de parámetros casi idéntico, entre 7{,}7 y 8~mil, así
+que la comparación aísla \emph{dónde} se agrega la capacidad y no cuánta.
+
+\smallskip\par\textbf{Más ventana de historia perjudica.} Con $K = 800$ el campo
+receptivo llega a 40~ms y la física ocupa los primeros 5. Los 795 retardos
+restantes son capacidad libre para ajustar lo que no hay que ajustar, y el
+NRMSE sube de $10{,}16$ a $12{,}48$.
+
+\smallskip\par\textbf{Más ancho de red perjudica más.} El NRMSE empeora poco pero
+el error de parámetros salta de $16{,}7$ a $25{,}7$. Es la ambigüedad entre
+$\beta$ y $g$ apareciendo limpia: con más capacidad la red absorbe lo que los
+parámetros deberían explicar. Y no es un canje, porque las dos métricas
+empeoran a la vez.
+
+\smallskip\par\textbf{Más canales de filtro es lo único que ayuda}, y confirma una
+predicción. Al ver el $R^2$ negativo de \texttt{e3\_K400} se había planteado
+que con cuatro canales el filtro solo puede formar un subespacio de rango 4 de
+la historia, y que si esa era la restricción, ampliarlo tenía que recuperar el
+$R^2$. Pasó de $-0{,}640$ a $+0{,}127$, y el NRMSE bajó al mejor valor de toda
+la serie.
+
+Queda una tensión sin explicar. La corrida de ocho canales reproduce mejor y
+recupera más física, pero identifica peor los parámetros ($21{,}4$ contra
+$16{,}7$). Las tres métricas no se ordenan de la misma manera en ninguna de las
+cuatro corridas, y eso todavía no tiene una lectura única.
+
+\smallskip\par\textbf{Una advertencia sobre los tiempos.} El campo de duración es
+reloj de pared, no tiempo de cómputo. La corrida de ocho canales figura con 938
+minutos porque arrancó a las 23:55 y terminó a las 15:34 del día siguiente, con
+la máquina probablemente dormida en el medio. No se puede verificar después del
+hecho, así que esa cifra no se debe comparar con las otras.
+
 \subsection{El núcleo aprendido}
 
+El FIR es la única variante que permite mirar lo que la corrección aprendió
+sobre el tiempo, porque sus pesos son directamente el peso que se le da a cada
+retardo. Se comparan contra la respuesta al impulso del actuador verdadero, que
+el entrenamiento nunca vio.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{../results/figures/fir_kernel.pdf}
+\caption{Energía del núcleo FIR aprendido en función del retardo, sobre
+\texttt{act1}. Izquierda, \texttt{e3\_K400}, cuatro canales. Derecha,
+\texttt{e3\_K400\_f8}, ocho canales. En los dos casos $K = 400$ muestras, o sea
+$20$~ms de campo receptivo. La energía es la norma sobre los canales para cada
+retardo, normalizada a su máximo; los canales por separado no son comparables
+porque la red que sigue puede reescalar cualquiera de ellos sin cambiar la
+función. La curva gris es el mismo filtro sin entrenar, y sirve de control para
+distinguir estructura de ruido. La curva negra punteada es la respuesta al
+impulso del actuador verdadero, $e^{-t/\tau}$ con $\tau = 1{,}0$~ms.}
+\end{figure}
 
-\noindent Tres lecturas, en orden de importancia:
+\noindent Cuatro lecturas, en orden de importancia:
 
 \begin{enumerate}
 \item \textbf{El filtro encontró el pico en retardo cero.} La relación entre la
   cola (más allá de 10~ms) y el pico pasó de $1{,}27$ sin entrenar a $0{,}20$
-  entrenado. El entrenamiento concentró energía en los retardos cortos, que es
-  donde está la física. Eso es aprendizaje real, no ruido.
-\item \textbf{Pero nunca suprimió la cola.} El $34{,}0\,\%$ de la energía cae en
-  los primeros 5~ms, contra $25{,}2\,\%$ de un filtro sin entrenar y
-  $99{,}3\,\%$ de la exponencial verdadera. El centroide temporal del núcleo
-  aprendido está en $8{,}73$~ms; el de la exponencial, en $0{,}98$~ms.
-\item \textbf{Eso da una explicación concreta del $R^2$ negativo.} Los pesos de
-  retardo largo quedan casi libres, porque la función de costo depende muy poco
-  de ellos. Su contribución a $\hat{g}$ es una componente esencialmente
-  arbitraria que no se parece a $\Delta f$ y que el $R^2$ castiga punto a punto,
-  mientras que el optimizador ya la ajustó para que no dañe la trayectoria.
+  con cuatro canales y $0{,}16$ con ocho. El entrenamiento concentró energía en
+  los retardos cortos, que es donde está la física. Eso es aprendizaje real, no
+  ruido.
+\item \textbf{Con ocho canales la caída inicial sigue a la exponencial.} Es
+  visible en el panel derecho hasta unos 2~ms, y no lo es en el izquierdo. La
+  fracción de energía en los primeros 5~ms sube de $34{,}0\,\%$ a $37{,}9\,\%$,
+  contra $25\,\%$ de un filtro sin entrenar y $99{,}3\,\%$ de la exponencial.
+\item \textbf{Pero ninguno suprime la cola, y el núcleo no es una exponencial
+  sola.} Dos descriptores del mismo núcleo dan respuestas distintas, y esa
+  discrepancia es el resultado. El tiempo hasta caer a $1/e$ del pico, que no
+  supone ninguna forma, da $0{,}50$~ms con ocho canales ($0{,}30$ con cuatro)
+  contra $1{,}0$ verdadero. El ajuste de una exponencial sobre el tramo previo
+  al piso da $4{,}67$~ms ($10{,}88$ con cuatro). Uno queda por debajo del valor
+  verdadero y el otro muy por encima, porque la curva tiene una caída rápida
+  seguida de un piso plano y ninguna exponencial describe las dos cosas. Lo
+  defendible es que la componente rápida está en el orden de magnitud correcto,
+  dentro de un factor dos, y que ampliar el filtro la acercó. No se puede
+  afirmar que se recuperó $\tau$.
+\item \textbf{El piso da una explicación concreta del $R^2$ negativo con cuatro
+  canales.} Los pesos de retardo largo quedan casi libres, porque la función de
+  costo depende muy poco de ellos. Su contribución a $\hat{g}$ es una
+  componente esencialmente arbitraria que no se parece a $\Delta f$ y que el
+  $R^2$ castiga punto a punto, mientras que el optimizador ya la ajustó para
+  que no dañe la trayectoria. Es consistente con que $K = 800$, que duplica esos
+  pesos libres, empeore el NRMSE.
 \end{enumerate}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.82\textwidth]{../results/figures/fir_kernel.pdf}
-\caption{Energía del núcleo FIR aprendido en función del retardo, sobre
-\texttt{act1}, corrida \texttt{e3\_K400} (cuatro canales, $K = 400$ muestras,
-$20$~ms). La energía es la norma sobre los cuatro canales para cada retardo,
-normalizada a su máximo; los canales por separado no son comparables porque la
-red que sigue puede reescalar cualquiera de ellos sin cambiar la función. La
-curva gris es el mismo filtro sin entrenar, y sirve de control para distinguir
-estructura de ruido. La curva negra punteada es la respuesta al impulso del
-actuador verdadero, $e^{-t/\tau}$ con $\tau = 1{,}0$~ms, que el entrenamiento
-nunca vio.}
-\end{figure}
-
 Esto convierte una anomalía en un experimento. Si el diagnóstico es correcto,
-penalizar los pesos del filtro tiene que levantar el $R^2$ sin arruinar el
-NRMSE. Quedó implementado (\texttt{-{}-wd-fir}) y encolado con dos intensidades.
+penalizar los pesos del filtro tiene que levantar el $R^2$ y bajar el piso sin
+arruinar el NRMSE. Quedó implementado (\texttt{-{}-wd-fir}) y encolado con dos
+intensidades.
 
 \section{Los errores encontrados}
 
@@ -433,10 +508,9 @@ trayectoria exacta, que es lo único que hace válido el $R^2$.
 
 \section{Qué quedó corriendo}
 
-Doce corridas encoladas en secuencia, nunca en paralelo. La bitácora ya
-registra que cuatro carriles sobre ocho núcleos convirtieron corridas de 25
-minutos en corridas de 25 horas. El lote entero son unas ocho horas y media de
-reloj, contando desde el mediodía del 11 de septiembre.
+Las cuatro del eje 1.4 ya terminaron y están arriba. Quedan ocho, en secuencia
+y nunca en paralelo. La bitácora ya registra que cuatro carriles sobre ocho
+núcleos convirtieron corridas de 25 minutos en corridas de 25 horas.
 
 \begin{center}
 \small
@@ -444,9 +518,6 @@ reloj, contando desde el mediodía del 11 de septiembre.
 \toprule
 \textbf{corrida} & \textbf{planta} & \textbf{qué contesta} \\
 \midrule
-\texttt{e3\_K800} & \texttt{act1} & Si el campo receptivo más largo sigue mejorando. \\
-\texttt{e3\_K400\_h64} & \texttt{act1} & Si falta capacidad en la red posterior al filtro. \\
-\texttt{e3\_K400\_f8} & \texttt{act1} & Si el filtro de cuatro canales es el cuello de botella. Con ocho canales, si la hipótesis del rango es correcta, el $R^2$ tiene que recuperarse. \\
 \texttt{e4\_Sg} & \texttt{refrac1} & Cuánto se tapan entre sí los parámetros y la red, sobre la planta donde la forma exacta está completa. Si la red no aprende nada, su magnitud queda cerca de cero. \\
 \texttt{e4\_S2ver} & \texttt{refrac1} & Verificación del dataset. Tiene que reproducir NRMSE $1{,}70$ y $R^2$ $0{,}964$. \\
 \texttt{e4\_wb\_n05}, \texttt{e4\_K400\_n05}, \texttt{e4\_H400\_n05} & \texttt{act1\_n05} & El eje 6 con $\sigma = 0{,}05$, con el white-box como referencia. \\
@@ -459,26 +530,32 @@ reloj, contando desde el mediodía del 11 de septiembre.
 \section{Dónde está el proyecto}
 
 La escala honesta: la forma estructural sigue ganando por lejos, $2{,}96$ contra
-$10{,}16$ en NRMSE y $0{,}942$ contra $-0{,}640$ en $R^2$. El camino
-generalizable funciona y rompió el techo teórico, pero todavía está a un tercio
-del camino en reproducción. Escribir la ecuación a mano sigue siendo mucho mejor
-que aprenderla.
+$9{,}12$ en NRMSE y $0{,}942$ contra $0{,}127$ en $R^2$. El camino generalizable
+funciona y rompió el techo teórico, pero todavía está a un tercio del camino en
+reproducción. Escribir la ecuación a mano sigue siendo mucho mejor que
+aprenderla.
 
-Lo que cambió respecto del 10 de septiembre es que ahora hay un camino que
-mejora al agrandarlo, y una explicación medible de por qué todavía no llega.
-Antes del eje 1 no había ninguno de los dos.
+Lo que cambió respecto del 10 de septiembre son tres cosas que antes no
+existían. Hay un camino que mejora al agrandarlo por una dirección concreta, el
+rango del filtro. Hay una explicación medible de por qué todavía no llega, que
+es el piso de pesos libres en los retardos largos. Y hay una predicción que se
+hizo antes de medirla y se cumplió, la del rango del filtro sobre el $R^2$.
 
 \subsection{Lo que queda decidido}
 
 La prioridad pasó a ser el NRMSE. El $R^2$ de la corrección se reporta siempre y
-no bloquea nada. El criterio de aceptación es NRMSE por debajo de $10{,}16\,\%$,
+no bloquea nada. El criterio de aceptación es NRMSE por debajo de $9{,}12\,\%$,
 con el white-box ($15{,}23$) como piso y la forma estructural ($2{,}96$) como
 referencia de cuánto falta.
 
-El control que mantiene honesta esa degradación es el error de parámetros. Si la
+El control que mantiene honesta esa prioridad es el error de parámetros. Si la
 corrección mejorara el NRMSE absorbiendo física en el lugar equivocado, el
-$\beta$ identificado se degradaría. Está mejorando. Mientras las dos cosas se
-muevan juntas, la mejora es real y no un canje.
+$\beta$ identificado se degradaría. En la serie con memoria bajó de $30{,}7$ a
+$16{,}7$ junto con el NRMSE, así que la mejora es real y no un canje. La corrida
+de ocho canales rompe esa correlación: mejora el NRMSE y el $R^2$ pero empeora
+el error de parámetros a $21{,}4$. Vale la pena vigilarlo, porque una variante
+que gane NRMSE devolviendo el error de parámetros al nivel del white-box no
+sirve para el propósito del gray-box.
 
 \subsection{Lo que queda pendiente de una decisión}
 
