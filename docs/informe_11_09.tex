@@ -41,7 +41,7 @@ primeras correcciones que funcionan}}
 \small
 El plan del 10 de septiembre afirmaba que la corrección neuronal fracasaba por
 falta de información y no de capacidad, y que darle la historia del comando la
-haría funcionar. Se implementó y se midió sobre trece corridas. El NRMSE sobre
+haría funcionar. Se implementó y se midió sobre quince corridas. El NRMSE sobre
 la planta con actuador bajó de $15{,}23\,\%$ a $9{,}12\,\%$ y el $R^2$ de la
 corrección rompió el techo teórico que ninguna función del estado observado
 podía superar. El barrido de capacidad dio un resultado más fino que el
@@ -667,22 +667,57 @@ gray-box no tolere ruido.
 
 Se agregó \texttt{-{}-smooth}, que aplica la media móvil a $I$ y $E$ en
 entrenamiento y evaluación, dejando $P$ y $Q$ intactos. Es preprocesado de la
-medición, no un truco del entrenador. Sobre el white-box con $\sigma = 0{,}05$ y
-ventana de siete, el error de parámetros baja de $33{,}2$ a $27{,}4$, o sea que
-la mitigación funciona como se esperaba. Falta la misma medición sobre las dos
-variantes con memoria, que es lo único pendiente del lote.
+medición, no un truco del entrenador. Con $\sigma = 0{,}05$ y ventana de siete:
 
-\section{Qué quedó corriendo}
+\begin{center}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{variante} & \textbf{NRMSE} & \textbf{$R^2$} & \textbf{err.\ param} &
+\textbf{$\lVert g \rVert$} \\
+\midrule
+\multicolumn{5}{l}{\emph{Sin mitigación}} \\
+white-box              & 13{,}88 & $-0{,}006$ & 33{,}2 & --- \\
+\texttt{K400}, FIR     & 14{,}76 & $-17{,}2$  & 30{,}1 & 0{,}0879 \\
+\texttt{H400}, crudo   & 16{,}26 & $-2{,}96$  & 36{,}3 & 0{,}0461 \\
+\midrule
+\multicolumn{5}{l}{\emph{Con media móvil de siete muestras}} \\
+white-box              & 14{,}08 & $-0{,}006$ & 27{,}4 & --- \\
+\rowcolor{suave}
+\texttt{K400}, FIR     & \textbf{12{,}69} & $-1{,}44$ & \textbf{21{,}0} & 0{,}0194 \\
+\texttt{H400}, crudo   & 14{,}13 & $\mathbf{-0{,}112}$ & 25{,}8 & 0{,}0181 \\
+\midrule
+\emph{\texttt{K400} sin ruido} & \emph{10{,}16} & \emph{$-0{,}640$} & \emph{16{,}7} & \emph{0{,}0157} \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-Las doce corridas del lote terminaron y están arriba. Queda una tríada, la del
-eje 6 con la mitigación puesta: white-box, FIR e historia cruda sobre
-\texttt{act1\_n05} con media móvil de siete muestras. El white-box ya salió y
-bajó el error de parámetros de $33{,}2$ a $27{,}4$. Faltan las dos variantes con
-memoria, que son las que dicen si el umbral de ruido se corre.
+\smallskip\par\textbf{La mitigación rescata la corrección.} Sin ella el FIR
+perdía contra el white-box en reproducción. Con ella le gana por $1{,}4$ puntos
+de NRMSE y por $6{,}4$ de error de parámetros, y recupera buena parte de lo que
+alcanzaba sobre datos limpios.
 
-Todo corre en secuencia y nunca en paralelo. La bitácora ya registra que cuatro
-carriles sobre ocho núcleos convirtieron corridas de 25 minutos en corridas de
-25 horas.
+\smallskip\par\textbf{Y confirma el diagnóstico del colapso.} Se había
+caracterizado como la red ajustando la medición en vez de la física, apoyándose
+en que la magnitud de la corrección se multiplicaba por $5{,}6$ sin que
+$\Delta f$ cambiara. Con el suavizado vuelve a $0{,}0194$, un $24\,\%$ por
+encima del valor limpio en lugar de un $460\,\%$.
+
+\smallskip\par\textbf{El FIR es la variante que conviene bajo ruido.} Con la
+mitigación puesta, la historia cruda queda en $14{,}13$, que es empatar al
+white-box, mientras el filtro baja a $12{,}69$. La predicción de que el FIR
+resistiría mejor se sostiene también con mitigación, aunque el mecanismo que se
+había propuesto para explicarla sea falso.
+
+\smallskip\par\textbf{Lo que la mitigación no recupera es el $R^2$}, que queda
+en $-1{,}44$ contra el $-0{,}640$ del caso limpio. Recupera reproducción e
+identificación, no semejanza punto a punto con $\Delta f$.
+
+\section{Sobre cómo se corrió todo esto}
+
+Las quince corridas terminaron. Todas en secuencia y nunca en paralelo: la
+bitácora ya registra que cuatro carriles sobre ocho núcleos convirtieron
+corridas de 25 minutos en corridas de 25 horas.
 
 \smallskip\par\textbf{Sobre los tiempos reportados.} El campo de duración es
 reloj de pared y no tiempo de cómputo. Dos corridas del lote figuran con 938 y
@@ -690,7 +725,7 @@ reloj de pared y no tiempo de cómputo. Dos corridas del lote figuran con 938 y
 medio. No se puede verificar después del hecho, así que esas dos cifras no se
 deben comparar con las otras.
 
-\section{Un resumen de las trece corridas}
+\section{Un resumen de las quince corridas}
 
 \begin{center}
 \small
@@ -723,6 +758,8 @@ deben comparar con las otras.
 \midrule
 \multicolumn{5}{l}{\emph{Eje 6 con mitigación, sobre \texttt{act1\_n05} suavizado}} \\
 \texttt{e6\_wb\_n05\_s7} & white-box, ventana 7      & 14{,}08 & $-0{,}006$ & 27{,}4 \\
+\texttt{e6\_K400\_n05\_s7} & FIR, ventana 7           & 12{,}69 & $-1{,}44$  & 21{,}0 \\
+\texttt{e6\_H400\_n05\_s7} & crudo, ventana 7         & 14{,}13 & $-0{,}112$ & 25{,}8 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -759,7 +796,9 @@ y ninguna quedó cerrada.
   en NRMSE y en error de parámetros, pero el mecanismo que se había propuesto es
   falso, porque la entrada del filtro no tiene ruido.
 \item \textbf{Dónde cae exactamente el umbral de ruido}, en algún punto entre el
-  $6\,\%$ y el $28\,\%$ del desvío de la señal, y si la mitigación lo corre.
+  $6\,\%$ y el $28\,\%$ del desvío de la señal. La mitigación lo corre lo
+  suficiente como para que el $28\,\%$ deje de romper, pero no se barrió más
+  allá.
 \end{itemize}
 
 \subsection{Lo que queda decidido}

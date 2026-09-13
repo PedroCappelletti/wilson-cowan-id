@@ -1,2 +1,11 @@
 === escalado · e6_K400_n05_s7 · K · act1_n05 · W=100 · epochs=1500 ===
     ep     0 | data=7.487e-03 | err_max= 84.86% 
+    ep   250 | data=6.472e-04 | err_max= 84.52% 
+    ep   500 | data=5.147e-04 | err_max= 72.80% 
+    ep   750 | data=5.092e-04 | err_max= 80.73% 
+    ep  1000 | data=4.512e-04 | err_max= 84.36% 
+    ep  1250 | data=4.500e-04 | err_max= 87.43% 
+    ep  1499 | data=4.248e-04 | err_max= 89.85% 
+
+  RESULTADO e6_K400_n05_s7: NRMSE_test=12.69% (I=13.57 E=11.82) R2df=-1.441 err_param=20.99% [54.0 min]
+  -> results\escalado\e6_K400_n05_s7.json
