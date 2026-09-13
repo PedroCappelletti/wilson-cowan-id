@@ -1,3 +1,11 @@
 === escalado · e4_H400_n01 · H · act1_n01 · W=100 · epochs=1500 ===
     ep     0 | data=7.238e-03 | err_max= 84.86% 
     ep   250 | data=6.780e-04 | err_max= 57.66% 
+    ep   500 | data=2.103e-04 | err_max= 72.52% 
+    ep   750 | data=1.663e-04 | err_max= 78.46% 
+    ep  1000 | data=1.555e-04 | err_max= 81.48% 
+    ep  1250 | data=1.478e-04 | err_max= 83.39% 
+    ep  1499 | data=1.475e-04 | err_max= 84.53% 
+
+  RESULTADO e4_H400_n01: NRMSE_test=11.70% (I=12.15 E=11.25) R2df=0.082 err_param=25.28% [48.8 min]
+  -> results\escalado\e4_H400_n01.json

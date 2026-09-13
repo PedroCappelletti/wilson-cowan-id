@@ -41,13 +41,14 @@ primeras correcciones que funcionan}}
 \small
 El plan del 10 de septiembre afirmaba que la corrección neuronal fracasaba por
 falta de información y no de capacidad, y que darle la historia del comando la
-haría funcionar. Se implementó y se midió. El NRMSE sobre la planta con
-actuador bajó de $15{,}23\,\%$ a $9{,}12\,\%$ y el $R^2$ de la corrección
-rompió el techo teórico que ninguna función del estado observado podía superar.
-El barrido de capacidad dio un resultado más fino que el previsto: agrandar el
-filtro ayuda, agrandar la red o la ventana de historia perjudica. Quedan ocho
-experimentos corriendo. Este documento recorre lo hecho desde la escritura del
-plan, explica cada término y el motivo de cada decisión.
+haría funcionar. Se implementó y se midió sobre trece corridas. El NRMSE sobre
+la planta con actuador bajó de $15{,}23\,\%$ a $9{,}12\,\%$ y el $R^2$ de la
+corrección rompió el techo teórico que ninguna función del estado observado
+podía superar. El barrido de capacidad dio un resultado más fino que el
+previsto: agrandar el filtro ayuda, agrandar la red o la ventana de historia
+perjudica. Este documento recorre lo hecho desde la escritura del plan, explica
+cada término y el motivo de cada decisión, y deja anotado lo que quedó sin
+explicar.
 \end{minipage}}
 
 \section{De qué trata el proyecto}
@@ -396,10 +397,99 @@ impulso del actuador verdadero, $e^{-t/\tau}$ con $\tau = 1{,}0$~ms.}
   pesos libres, empeore el NRMSE.
 \end{enumerate}
 
-Esto convierte una anomalía en un experimento. Si el diagnóstico es correcto,
-penalizar los pesos del filtro tiene que levantar el $R^2$ y bajar el piso sin
-arruinar el NRMSE. Quedó implementado (\texttt{-{}-wd-fir}) y encolado con dos
-intensidades.
+Esto convierte una anomalía en un experimento con una predicción escrita antes
+de medirla: penalizar los pesos del filtro tiene que levantar el $R^2$ y bajar
+el piso, sin arruinar el NRMSE.
+
+\subsection{La regularización del núcleo, y por qué se descarta}
+
+Se midió con dos intensidades de decaimiento de pesos aplicado solo al filtro.
+
+\begin{center}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{penalización} & \textbf{NRMSE} & \textbf{$R^2$} &
+\textbf{err.\ param} & \textbf{$\lVert g \rVert$} & \textbf{redundancia} \\
+\midrule
+ninguna     & \textbf{10{,}16} & $-0{,}640$ & \textbf{16{,}7} & 0{,}0157 & 0{,}631 \\
+$10^{-4}$   & 12{,}40 & $\mathbf{+0{,}155}$ & 22{,}9 & 0{,}0109 & 0{,}266 \\
+$10^{-3}$   & 16{,}88 & $-0{,}404$ & 38{,}6 & 0{,}0172 & 0{,}633 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\smallskip\par\textbf{La predicción acertó a medias.} El $R^2$ subió de
+$-0{,}640$ a $+0{,}155$ con la penalización suave, que era la parte falsable.
+Pero no salió gratis: el NRMSE empeora de $10{,}16$ a $12{,}40$ y el error de
+parámetros de $16{,}7$ a $22{,}9$.
+
+\smallskip\par\textbf{El mecanismo propuesto no se verifica.} La predicción
+decía que el piso del núcleo iba a bajar. Subió, de $0{,}198$ a $0{,}241$, y la
+energía en los primeros 5~ms cayó de $34{,}0\,\%$ a $29{,}8\,\%$. El núcleo
+quedó más plano y no más concentrado, así que el $R^2$ mejoró por otra vía. La
+explicación del $R^2$ negativo sigue sin confirmar.
+
+\smallskip\par\textbf{Y no hay curva de canje.} Con la penalización diez veces
+más fuerte empeora todo a la vez, incluido el $R^2$. El NRMSE de $16{,}88$ queda
+por debajo del white-box, o sea que la corrección vuelve a restar, y la
+redundancia regresa a $0{,}633$, casi idéntica a la de no penalizar. No es que
+se compre $R^2$ pagando NRMSE de forma monótona: hay un óptimo estrecho cerca de
+$10^{-4}$ y fuera de ahí no se gana nada.
+
+\smallskip\par\textbf{Un número que parecía bueno y se descarta.} El ajuste
+exponencial del núcleo con penalización suave da $1{,}36$~ms contra el $1{,}0$
+verdadero, cuando sin penalizar daba $10{,}88$. El ajuste se hace sobre el tramo
+que queda por encima del piso, y al subir el piso ese tramo pasó de 58 puntos a
+24. El estimador está mirando solo la parte más rápida de la curva, así que la
+mejora es de la ventana de ajuste y no del núcleo.
+
+Bajo la prioridad de reproducción, la conclusión es no penalizar.
+
+\subsection{Eje 2: la red no agarra trabajo que no le corresponde}
+
+Sobre \texttt{refrac1} la forma exacta está completa, porque la refractariedad
+es función del estado actual y el backbone extendido la representa sin resto.
+Correr la forma exacta \emph{y} la red al mismo tiempo es el control que mide
+cuánto se tapan entre sí. Es barato y falsable: si no queda nada por explicar,
+la red debería quedarse en cero sola.
+
+\begin{center}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+\textbf{corrida} & \textbf{qué tiene} & \textbf{NRMSE} & \textbf{$R^2$} &
+\textbf{err.\ param} & \textbf{$\lVert g \rVert$} \\
+\midrule
+\texttt{e1\_wb}  & nada                  & 5{,}93 & $-0{,}266$ & 11{,}5 & --- \\
+\texttt{e1\_S2}  & forma exacta sola     & \textbf{1{,}70} & $\mathbf{+0{,}964}$ & \textbf{2{,}4} & --- \\
+\texttt{e4\_Sg}  & forma exacta y red    & 1{,}82 & $+0{,}954$ & 3{,}6 & $0{,}0008$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La magnitud de la corrección quedó en $8 \times 10^{-4}$, veinte veces menor que
+la que la misma red alcanza sobre \texttt{act1}, donde sí hay residuo. Y la
+fracción de redundancia dio $0{,}935$ contra $0{,}67$ del $\Delta f$ verdadero:
+lo poco que hace, lo podría haber hecho un cambio de parámetros.
+
+Esto descarta un miedo razonable sobre la arquitectura. Si una red suelta al
+lado de una física ya completa se quedara igual con parte del residuo, los
+parámetros identificados nunca serían confiables y el gray-box sería frágil por
+diseño. No pasa. La ambigüedad entre $\beta$ y $g$ aparece cuando hay residuo
+sin explicar, no por el solo hecho de tener una red disponible.
+
+El costo de dejarla encendida sin necesidad es chico pero no nulo: un punto de
+error de parámetros, de $2{,}4$ a $3{,}6$, y 34 minutos más de cómputo.
+
+\subsection{Verificación de la procedencia de los datos}
+
+Los resultados de agosto y los de esta semana solo tienen sentido como serie si
+los datasets son los mismos. Se verificó repitiendo una corrida vieja sobre cada
+uno. \texttt{act1} ya había reproducido \texttt{e2\_lag2} a cuatro cifras.
+\texttt{refrac1} reprodujo \texttt{e1\_S2} a tres: NRMSE $1{,}69$ contra
+$1{,}70$, $R^2$ $0{,}964$ contra $0{,}964$, error de parámetros $2{,}4$ contra
+$2{,}4$. La pregunta queda cerrada para los dos.
 
 \section{Los errores encontrados}
 
@@ -491,13 +581,7 @@ medición, da $R^2$ del oráculo de $0{,}12$ con el estado y $0{,}11$ agregando 
 comando. No es función de nada, así que ninguna corrección lo puede aprender, ni
 con historia ni con capacidad.
 
-\subsection{La hipótesis que se va a probar}
-
-La variante \texttt{H} le da a la red 802 entradas y 26\,mil pesos en la primera
-capa, que es exactamente la configuración que ajusta ruido. El FIR promedia $K$
-muestras, y eso es un filtro pasabajos por construcción. Si el FIR se degrada
-menos al subir el ruido, el argumento a favor de la convolución deja de ser solo
-el costo.
+\subsection{Cómo se prepararon los datos con ruido}
 
 Se prepararon \texttt{act1\_n01} ($\sigma = 0{,}01$, el $5{,}7\,\%$ del desvío de
 $E$) y \texttt{act1\_n05} ($\sigma = 0{,}05$, el $27{,}5\,\%$). El ruido se suma
@@ -506,23 +590,139 @@ trayectoria queda idéntica a la limpia, así que las corridas son comparables
 muestra a muestra, y el $\Delta f$ de referencia sigue calculado sobre la
 trayectoria exacta, que es lo único que hace válido el $R^2$.
 
-\section{Qué quedó corriendo}
+Se agrega solo a $I$ y $E$. El comando $P$, $Q$ queda idéntico al limpio, porque
+es lo que se ordena y se conoce sin error de medición.
 
-Las cuatro del eje 1.4 ya terminaron y están arriba. Quedan ocho, en secuencia
-y nunca en paralelo. La bitácora ya registra que cuatro carriles sobre ocho
-núcleos convirtieron corridas de 25 minutos en corridas de 25 horas.
+\subsection{Dos advertencias antes de leer los números}
+
+\smallskip\par\textbf{El NRMSE con ruido no se compara contra el limpio.} La
+normalización es por el rango pico a pico de la señal real, y el ruido infla ese
+rango: un factor $1{,}89$ en $I$ y $1{,}52$ en $E$ con $\sigma = 0{,}05$
+($1{,}16$ y $1{,}09$ con $\sigma = 0{,}01$). El denominador crece más rápido que
+el error, así que el índice puede bajar aunque el ajuste empeore. La tabla se lee
+solo en columna, comparando variantes al mismo nivel de ruido. El error de
+parámetros sí es comparable entre datasets, porque se mide contra el $\beta$
+verdadero y no depende de la escala de la señal.
+
+\smallskip\par\textbf{La corrida libre arranca del estado observado}, que ahora
+está corrido por ruido. Parte del error extra viene de arrancar en el lugar
+equivocado y no de haber identificado mal. Con $\sigma = 0{,}05$ sobre un rango
+limpio de $0{,}33$ en $I$, ese corrimiento no es despreciable.
+
+\subsection{El resultado: hay un umbral, y es estrecho}
 
 \begin{center}
 \small
-\begin{tabular}{llp{7.4cm}}
+\begin{tabular}{lccc}
 \toprule
-\textbf{corrida} & \textbf{planta} & \textbf{qué contesta} \\
+\textbf{variante} & \textbf{limpio} & \textbf{$\sigma = 0{,}01$} &
+\textbf{$\sigma = 0{,}05$} \\
 \midrule
-\texttt{e4\_Sg} & \texttt{refrac1} & Cuánto se tapan entre sí los parámetros y la red, sobre la planta donde la forma exacta está completa. Si la red no aprende nada, su magnitud queda cerca de cero. \\
-\texttt{e4\_S2ver} & \texttt{refrac1} & Verificación del dataset. Tiene que reproducir NRMSE $1{,}70$ y $R^2$ $0{,}964$. \\
-\texttt{e4\_wb\_n05}, \texttt{e4\_K400\_n05}, \texttt{e4\_H400\_n05} & \texttt{act1\_n05} & El eje 6 con $\sigma = 0{,}05$, con el white-box como referencia. \\
-\texttt{e4\_K400\_n01}, \texttt{e4\_H400\_n01} & \texttt{act1\_n01} & Ídem con $\sigma = 0{,}01$. \\
-\texttt{e5\_K400\_wd1e-4}, \texttt{e5\_K400\_wd1e-3} & \texttt{act1} & Si penalizar los pesos del filtro levanta el $R^2$ sin arruinar el NRMSE. \\
+white-box              & $15{,}23$ / $30{,}7$ & ---                  & $13{,}88$ / $33{,}2$ \\
+\texttt{K400}, FIR     & $10{,}16$ / $16{,}7$ & $10{,}03$ / $\mathbf{18{,}6}$ & $14{,}76$ / $30{,}1$ \\
+\texttt{H400}, crudo   & $11{,}48$ / $22{,}7$ & $11{,}70$ / $25{,}3$ & $16{,}26$ / $36{,}3$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\small NRMSE / error de parámetros.\normalsize
+
+\smallskip\par\textbf{Con $\sigma = 0{,}01$ no cambia nada}, ni siquiera el orden
+entre variantes. El FIR sigue ganando en NRMSE y en parámetros, la historia cruda
+sigue ganando en $R^2$ ($+0{,}082$ contra $-0{,}747$), igual que con datos
+limpios. Las dos le sacan diez puntos de error de parámetros al white-box. La
+magnitud de la corrección del FIR se movió un $7\,\%$ respecto del caso limpio.
+
+\smallskip\par\textbf{Con $\sigma = 0{,}05$ las dos pierden contra el
+white-box.} La corrección pasa de aportar a restar. La magnitud de la corrección
+del FIR se multiplica por $5{,}6$ sin que $\Delta f$ haya cambiado, porque el
+dataset es la misma trayectoria con ruido sumado encima, y el $R^2$ cae a
+$-17{,}2$. Es la firma de ajustar la medición en vez de la física.
+
+El umbral entre los dos niveles es más estrecho de lo previsto. Queda sin acotar
+dónde cae exactamente, aunque para decidir alcanza con saber que existe entre el
+$6\,\%$ y el $28\,\%$ del desvío de la señal.
+
+\subsection{Una hipótesis propia que resultó falsa}
+
+Antes de medir se había escrito que el FIR iba a resistir mejor porque promedia
+$K$ muestras y eso es un pasabajos por construcción. El mecanismo es falso. El
+ruido se agrega solo a $I$ y $E$, así que la entrada del filtro está limpia y un
+pasabajos sobre una señal sin ruido no protege de nada. El ruido entra por otros
+tres lados, ninguno de los cuales pasa por el filtro: los blancos del
+entrenamiento, las entradas $(I,E)$ de la red, y el estado inicial de cada
+ventana.
+
+La predicción igual se cumplió en NRMSE y error de parámetros, donde el FIR
+aguanta mejor ($14{,}76$ y $30{,}1$ contra $16{,}26$ y $36{,}3$), y se invirtió
+en $R^2$ y en magnitud de la corrección. Se cumplió por un motivo que no está
+identificado.
+
+\subsection{Lo que faltaba: medirlo con la mitigación puesta}
+
+El pipeline del escalado no aplica ninguna mitigación de ruido, ni una. La línea
+del barrido de $\sigma$ sí la tenía, y era lo que hacía la diferencia. Así que
+todo lo anterior mide el gray-box \emph{sin defensa}, y de ahí no se sigue que el
+gray-box no tolere ruido.
+
+Se agregó \texttt{-{}-smooth}, que aplica la media móvil a $I$ y $E$ en
+entrenamiento y evaluación, dejando $P$ y $Q$ intactos. Es preprocesado de la
+medición, no un truco del entrenador. Sobre el white-box con $\sigma = 0{,}05$ y
+ventana de siete, el error de parámetros baja de $33{,}2$ a $27{,}4$, o sea que
+la mitigación funciona como se esperaba. Falta la misma medición sobre las dos
+variantes con memoria, que es lo único pendiente del lote.
+
+\section{Qué quedó corriendo}
+
+Las doce corridas del lote terminaron y están arriba. Queda una tríada, la del
+eje 6 con la mitigación puesta: white-box, FIR e historia cruda sobre
+\texttt{act1\_n05} con media móvil de siete muestras. El white-box ya salió y
+bajó el error de parámetros de $33{,}2$ a $27{,}4$. Faltan las dos variantes con
+memoria, que son las que dicen si el umbral de ruido se corre.
+
+Todo corre en secuencia y nunca en paralelo. La bitácora ya registra que cuatro
+carriles sobre ocho núcleos convirtieron corridas de 25 minutos en corridas de
+25 horas.
+
+\smallskip\par\textbf{Sobre los tiempos reportados.} El campo de duración es
+reloj de pared y no tiempo de cómputo. Dos corridas del lote figuran con 938 y
+1212 minutos porque arrancaron de noche y la máquina probablemente durmió en el
+medio. No se puede verificar después del hecho, así que esas dos cifras no se
+deben comparar con las otras.
+
+\section{Un resumen de las trece corridas}
+
+\begin{center}
+\small
+\begin{tabular}{llrrr}
+\toprule
+\textbf{corrida} & \textbf{qué prueba} & \textbf{NRMSE} & \textbf{$R^2$} &
+\textbf{err.\ param} \\
+\midrule
+\multicolumn{5}{l}{\emph{Eje 1.4, capacidad, sobre \texttt{act1} limpio}} \\
+\texttt{e3\_K400}       & referencia                 & 10{,}16 & $-0{,}640$ & \textbf{16{,}7} \\
+\texttt{e3\_K800}       & doble historia             & 12{,}48 & $-0{,}397$ & 16{,}4 \\
+\texttt{e3\_K400\_h64}  & doble ancho de red         & 10{,}98 & $-0{,}861$ & 25{,}7 \\
+\rowcolor{suave}
+\texttt{e3\_K400\_f8}   & doble rango del filtro     & \textbf{9{,}12} & $+0{,}127$ & 21{,}4 \\
+\midrule
+\multicolumn{5}{l}{\emph{Eje 2 y verificación, sobre \texttt{refrac1}}} \\
+\texttt{e4\_Sg}         & forma exacta y red         & 1{,}82 & $+0{,}954$ & 3{,}6 \\
+\texttt{e4\_S2ver}      & verificación del dataset   & 1{,}69 & $+0{,}964$ & 2{,}4 \\
+\midrule
+\multicolumn{5}{l}{\emph{Eje 6, ruido, sin mitigación}} \\
+\texttt{e4\_wb\_n05}    & white-box, $\sigma=0{,}05$ & 13{,}88 & $-0{,}006$ & 33{,}2 \\
+\texttt{e4\_K400\_n05}  & FIR, $\sigma=0{,}05$       & 14{,}76 & $-17{,}2$  & 30{,}1 \\
+\texttt{e4\_H400\_n05}  & crudo, $\sigma=0{,}05$     & 16{,}26 & $-2{,}96$  & 36{,}3 \\
+\texttt{e4\_K400\_n01}  & FIR, $\sigma=0{,}01$       & 10{,}03 & $-0{,}747$ & 18{,}6 \\
+\texttt{e4\_H400\_n01}  & crudo, $\sigma=0{,}01$     & 11{,}70 & $+0{,}082$ & 25{,}3 \\
+\midrule
+\multicolumn{5}{l}{\emph{Regularización del núcleo, sobre \texttt{act1} limpio}} \\
+\texttt{e5\_K400\_wd1e-4} & penalización suave       & 12{,}40 & $+0{,}155$ & 22{,}9 \\
+\texttt{e5\_K400\_wd1e-3} & penalización fuerte      & 16{,}88 & $-0{,}404$ & 38{,}6 \\
+\midrule
+\multicolumn{5}{l}{\emph{Eje 6 con mitigación, sobre \texttt{act1\_n05} suavizado}} \\
+\texttt{e6\_wb\_n05\_s7} & white-box, ventana 7      & 14{,}08 & $-0{,}006$ & 27{,}4 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -535,11 +735,32 @@ funciona y rompió el techo teórico, pero todavía está a un tercio del camino
 reproducción. Escribir la ecuación a mano sigue siendo mucho mejor que
 aprenderla.
 
-Lo que cambió respecto del 10 de septiembre son tres cosas que antes no
-existían. Hay un camino que mejora al agrandarlo por una dirección concreta, el
-rango del filtro. Hay una explicación medible de por qué todavía no llega, que
-es el piso de pesos libres en los retardos largos. Y hay una predicción que se
-hizo antes de medirla y se cumplió, la del rango del filtro sobre el $R^2$.
+Lo que cambió respecto del 10 de septiembre. Antes no había ninguna dirección
+en la que agrandar el modelo mejorara nada. Ahora hay una, el rango del filtro,
+y está separada de dos que empeoran, la ventana de historia y el ancho de la
+red. Y hay una predicción escrita antes de medirla que se cumplió: que ampliar
+el rango del filtro iba a recuperar el $R^2$.
+
+\subsection{Lo que quedó sin explicar}
+
+Conviene dejarlo escrito, porque son las preguntas con las que sigue el trabajo
+y ninguna quedó cerrada.
+
+\begin{itemize}
+\item \textbf{Por qué el $R^2$ se vuelve negativo cuando el NRMSE mejora.} La
+  hipótesis era el piso de pesos casi libres en los retardos largos, y el
+  experimento de regularización la desmintió: la penalización levantó el $R^2$
+  pero subió el piso en vez de bajarlo. El mecanismo sigue sin identificar.
+\item \textbf{Por qué el filtro de ocho canales identifica peor los
+  parámetros.} Reproduce mejor y recupera más física que el de cuatro, y sin
+  embargo el error de parámetros sube de $16{,}7$ a $21{,}4$. Las tres métricas
+  no se ordenan igual en ninguna de las corridas del eje 1.4.
+\item \textbf{Por qué el FIR aguanta mejor el ruido.} La predicción se cumplió
+  en NRMSE y en error de parámetros, pero el mecanismo que se había propuesto es
+  falso, porque la entrada del filtro no tiene ruido.
+\item \textbf{Dónde cae exactamente el umbral de ruido}, en algún punto entre el
+  $6\,\%$ y el $28\,\%$ del desvío de la señal, y si la mitigación lo corre.
+\end{itemize}
 
 \subsection{Lo que queda decidido}
 
