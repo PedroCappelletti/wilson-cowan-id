@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import hashlib
 import json
 import sys
@@ -32,7 +33,10 @@ sys.path.insert(0, str(_ROOT / "scripts"))
 import numpy as np
 import torch
 
-torch.set_num_threads(4)
+# Hilos por corrida. La máquina tiene 4 núcleos físicos, así que corridas en
+# paralelo por hilos no debe pasar de 4: con 4 corridas de 4 hilos cada una, un
+# lote de 25 minutos por corrida tardó 25 horas.
+torch.set_num_threads(int(os.environ.get("WC_THREADS", "4")))
 
 from src.neural_ode.graybox_train import TrainConfig, fit, load_split
 from src.neural_ode.memory import (AugTrainConfig, LagGrayBox, LatentGrayBox,
