@@ -29,6 +29,7 @@ FILAS = [
     ("act1", "historia cruda, 400", "e2_H400", "e8_H400_n01", "e6_H400_n05_s7", False),
     ("act1", "FIR, 4 canales", "e3_K400", "e8_K400_n01", "e6_K400_n05_s7", False),
     ("act1", "FIR, 8 canales", "e3_K400_f8", "e8_K400f8_n01", "e8_K400f8_n05", False),
+    ("act1", "FIR, 16 canales", "e9_K400f16", "e9_K400f16_n01", "e9_K400f16_n05", False),
     ("act1", "FIR, 800 retardos", "e3_K800", None, None, False),
     ("act1", "FIR, red de ancho 64", "e3_K400_h64", None, None, False),
     ("act1", "FIR, L2 1e-4", "e5_K400_wd1e-4", "e8_K400wd4_n01", "e8_K400wd4_n05", False),

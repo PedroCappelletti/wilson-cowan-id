@@ -442,6 +442,26 @@ argumento a favor de la convolución deja de ser solo el costo.
 Va después del eje 1.4 y antes de los datos reales, porque los datos reales
 tienen ruido y no se sabe cuánto.
 
+## Para después del congreso (anotado el 28-09)
+
+Hasta el viernes 2-10 el trabajo es validar con ruido lo que ya está y
+actualizar el póster. Queda para después:
+
+- **Partición con validación.** Hoy los datasets tienen 13 escenarios de
+  entrenamiento y 7 de test, sin validación, y todas las elecciones de
+  arquitectura (400 contra 800 retardos, 4 contra 8 canales, el ancho de la red)
+  se hicieron mirando el test. Separar 3 escenarios de entrenamiento como
+  validación, uno por tipo de estímulo, y rehacer la comparación final.
+- **Penalización de la antigüedad del núcleo**, el centroide
+  $\sum_k k\,w_k^2 / \sum_k w_k^2$. Solo con su intensidad elegida por NRMSE de
+  validación y probada también en una planta con memoria larga (adaptación con
+  $	au_a$ de 30 o 100 ms), para que no le pase a la red el valor de $	au$.
+- **Ruido realista.** El ruido blanco actual da 27 y 41 dB dentro de la banda de
+  la señal; las grabaciones reales, una cota de unos −7 dB. Falta ruido dentro de
+  banda a niveles alrededor del real y una componente de ruido de proceso.
+- **Semillas** de las configuraciones que se comparen, para saber qué diferencias
+  son reales.
+
 ## Lo que parecía un bloqueante y no lo es
 
 Las tres corridas ciegas sobre `refrac1` informan unas 25 horas cada una. **No
