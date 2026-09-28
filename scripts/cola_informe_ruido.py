@@ -10,6 +10,10 @@
 # e6_wb_n05_s7. La verificación del dataset (e4_S2ver) no se repite: la forma
 # exacta con ruido ya está en el lote del póster.
 #
+# No espera a que termine el lote del póster: arranca apenas ese lote lanzó sus
+# últimas corridas, y cuenta las que siguen andando como lugares ocupados. Al
+# final van las tres del filtro de 16 canales, que antes tenían su propia cola.
+#
 # Tampoco se repiten las que salieron negativas sin ruido, porque el ruido no
 # tiene cómo darlas vuelta: la variante A no tiene la información que falta, y
 # K800 y la red de ancho 64 agregan capacidad, que con ruido empeora. La
@@ -57,5 +61,15 @@ if __name__ == "__main__":
                 continue
             args, dep = lote(n)[nombre]
             pendientes.append((f"e8_{nombre}_n{n}", args, dep))
-    correr(pendientes, marca="DONE_informe_ruido", esperar="DONE_poster_ruido",
-           extra=("--smooth", "7"))
+    K16 = ["--variant", "K", "--hist", "400", "--n-fir", "16"]
+    pendientes += [
+        ("e9_K400f16_n05", ["--data", "act1_n05", *K16], None),
+        ("e9_K400f16_n01", ["--data", "act1_n01", *K16], None),
+    ]
+    todas = [(t, [*a, "--smooth", "7"], d) for t, a, d in pendientes]
+    todas.append(("e9_K400f16", ["--data", "act1", *K16], None))
+
+    poster = [f"e7_{c}_n{n}" for n in ("05", "01")
+              for c in ("e1wb", "e1B400", "e1S2", "e2wb", "e2B", "e2lag")]
+    correr(todas, marca="DONE_informe_ruido",
+           esperar=["e7_e1S2_n05.log", "e7_e1S2_n01.log"], ajenas=poster)

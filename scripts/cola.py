@@ -28,15 +28,23 @@ def terminada(tag: str) -> bool:
     return log.exists() and "Traceback" in log.read_text(errors="ignore")
 
 
-def correr(pendientes, marca: str, lugares: int = 4, esperar: str | None = None,
-           extra: tuple[str, ...] = ()):
+def ocupando(tag: str) -> bool:
+    """Una corrida de otro lote que arrancó (tiene log) y todavía no terminó."""
+    return (LOG / f"{tag}.log").exists() and not terminada(tag)
+
+
+def correr(pendientes, marca: str, lugares: int = 4, esperar=(), extra=(),
+           ajenas=()):
     """pendientes: lista de (tag, argumentos de esc_run, tag del que depende o None).
 
-    esperar: nombre de un archivo en logs/escalado que tiene que existir antes de
-    arrancar, para encadenar lotes. extra: argumentos que llevan todas.
+    esperar: archivos en logs/escalado que tienen que existir antes de arrancar,
+    para encadenar lotes. extra: argumentos que llevan todas. ajenas: tags de
+    otro lote que corre en paralelo; mientras estén andando ocupan lugar, así
+    las dos colas juntas no pasan de `lugares` corridas.
     """
     LOG.mkdir(parents=True, exist_ok=True)
-    while esperar and not (LOG / esperar).exists():
+    esperar = [esperar] if isinstance(esperar, str) else list(esperar)
+    while not all((LOG / e).exists() for e in esperar):
         time.sleep(60)
 
     env = {**os.environ, "WC_THREADS": "1"}
@@ -47,7 +55,7 @@ def correr(pendientes, marca: str, lugares: int = 4, esperar: str | None = None,
     while pendientes or propias:
         for t in [t for t, p in propias.items() if p.poll() is not None]:
             del propias[t]
-        while len(propias) < lugares:
+        while len(propias) + sum(map(ocupando, ajenas)) < lugares:
             listas = [j for j in pendientes if j[2] is None or terminada(j[2])]
             if not listas:
                 break
