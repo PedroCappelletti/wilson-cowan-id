@@ -4,7 +4,12 @@
 # filtro decae con la constante de tiempo verdadera sin que se le haya dicho
 # nada, la correccion descubrio la escala temporal de la fisica omitida.
 #
-#   python scripts/plot_fir_kernel.py e3_K400 [e3_K400_f8 ...]
+#   python scripts/plot_fir_kernel.py e3_K400 [e3_K400_f8 ...] [--out nombre]
+#
+# Sin --out escribe fir_kernel.pdf, que es la figura del informe del 11-09
+# (e3_K400 contra e3_K400_f8). Cualquier otra comparación tiene que ir con su
+# propio nombre: una vez se pisó esa figura y el informe salió con el panel
+# equivocado debajo de un pie que describía otra corrida.
 
 from __future__ import annotations
 
@@ -79,7 +84,7 @@ def largo_efectivo(e: np.ndarray, t: np.ndarray) -> float:
     return float((t * e).sum() / e.sum())
 
 
-def main(tags):
+def main(tags, nombre="fir_kernel"):
     FIG.mkdir(parents=True, exist_ok=True)
     fig, axes = plt.subplots(1, len(tags), figsize=(6 * len(tags), 4.2),
                              squeeze=False, layout="constrained")
@@ -121,9 +126,9 @@ def main(tags):
                             tau_nulo_ms=tau_nulo, t_1e_ms=t1e,
                             t_1e_nulo_ms=t1e_nulo)
 
-    fig.savefig(FIG / "fir_kernel.pdf")
-    fig.savefig(FIG / "fir_kernel.png", dpi=150)
-    (RES / "fir_kernel.json").write_text(json.dumps(resumen, indent=2))
+    fig.savefig(FIG / f"{nombre}.pdf")
+    fig.savefig(FIG / f"{nombre}.png", dpi=150)
+    (RES / f"{nombre}.json").write_text(json.dumps(resumen, indent=2))
     for tag, r in resumen.items():
         print(f"{tag}: centroide {r['centroide_P_ms']:.2f} ms "
               f"(exponencial {r['centroide_exponencial_ms']:.2f})  |  "
@@ -135,8 +140,14 @@ def main(tags):
               f"  |  t hasta 1/e: {r['t_1e_ms']:.2f} ms "
               f"(verdadero {TAU}, sin entrenar {r['t_1e_nulo_ms']:.2f})  |  "
               f"ajuste exponencial {r['tau_P_ms']:.2f} ms, piso {r['piso_P']:.2f}")
-    print(f"-> {FIG / 'fir_kernel.pdf'}")
+    print(f"-> {FIG / (nombre + '.pdf')}")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:] or ["e3_K400"])
+    args = sys.argv[1:]
+    nombre = "fir_kernel"
+    if "--out" in args:
+        i = args.index("--out")
+        nombre = args[i + 1]
+        del args[i:i + 2]
+    main(args or ["e3_K400"], nombre)
