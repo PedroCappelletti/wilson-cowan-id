@@ -9,6 +9,12 @@
 # Ya existen con el protocolo y no se repiten: e6_H400_n05_s7, e6_K400_n05_s7 y
 # e6_wb_n05_s7. La verificación del dataset (e4_S2ver) no se repite: la forma
 # exacta con ruido ya está en el lote del póster.
+#
+# Tampoco se repiten las que salieron negativas sin ruido, porque el ruido no
+# tiene cómo darlas vuelta: la variante A no tiene la información que falta, y
+# K800 y la red de ancho 64 agregan capacidad, que con ruido empeora. La
+# excepción es la penalización del filtro, que sirve justamente para no ajustar
+# ruido y sin ruido no tenía contra qué actuar.
 
 from __future__ import annotations
 
@@ -41,8 +47,7 @@ def lote(n: str):
 YA_HECHAS = {("H400", "05"), ("K400", "05")}
 
 # De la más larga a la más corta, intercalando los dos niveles de ruido.
-ORDEN = ["K800", "K400h64", "K400f8", "K400wd4", "K400wd3", "K400", "H400",
-         "Sg", "H100", "A"]
+ORDEN = ["K400f8", "K400wd4", "K400wd3", "K400", "H400", "Sg", "H100"]
 
 if __name__ == "__main__":
     pendientes = []
