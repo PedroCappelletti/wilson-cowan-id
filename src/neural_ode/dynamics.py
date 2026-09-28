@@ -26,6 +26,26 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+class _FIRMLP(nn.Module):
+    """Filtro FIR sobre la historia del comando, y despues la MLP de siempre.
+
+    Entrada [I, E, P(t-K..t), Q(t-K..t)]. El FIR reduce los 2K retardos a
+    n_fir canales, asi que la primera capa densa no crece con K: a K=400 son
+    3 mil pesos en el filtro contra 26 mil si la MLP viera los retardos
+    crudos. Cada fila del kernel es graficable contra la exponencial del
+    actuador, que es lo que hace medible el largo efectivo de la memoria.
+    """
+
+    def __init__(self, hist_len: int, n_fir: int, mlp: nn.Module):
+        super().__init__()
+        self.fir = nn.Linear(2 * hist_len, n_fir, bias=False)
+        self.mlp = mlp
+
+    def forward(self, inp: torch.Tensor) -> torch.Tensor:
+        x, u = inp[..., :2], inp[..., 2:]
+        return self.mlp(torch.cat([x, self.fir(u)], dim=-1))
+
+
 class GrayBoxWC(nn.Module):
     WEIGHTS = ("wEE", "wEI", "wIE", "wII")
     # Parametros "fisicos" que tambien se pueden identificar (ademas de los pesos).
@@ -42,6 +62,8 @@ class GrayBoxWC(nn.Module):
         hidden: int = 32,
         correction_inputs: str = "xpq",   # "xpq" -> g(I,E,P,Q) | "x" -> g(I,E)
         structured: bool = False,         # True -> correccion FISICA en vez de red
+        hist_len: int = 0,                # K de correction_inputs="xhist"/"xconv"
+        n_fir: int = 4,                   # canales del filtro FIR de "xconv"
     ) -> None:
         super().__init__()
 
@@ -124,20 +146,31 @@ class GrayBoxWC(nn.Module):
         #
         # Ver docs/incertidumbre_dinamica_graybox.md, seccion 6.
         self.use_correction = use_correction
-        if correction_inputs not in ("xpq", "x"):
-            raise ValueError("correction_inputs debe ser 'xpq' o 'x'")
+        if correction_inputs not in ("xpq", "x", "xhist", "xconv"):
+            raise ValueError(
+                "correction_inputs debe ser 'xpq', 'x', 'xhist' o 'xconv'")
+        if correction_inputs in ("xhist", "xconv") and hist_len < 1:
+            raise ValueError(
+                f"correction_inputs='{correction_inputs}' necesita hist_len >= 1")
         self.correction_inputs = correction_inputs
+        self.hist_len = hist_len
+        self.n_fir = n_fir
         if use_correction:
-            n_in = 4 if correction_inputs == "xpq" else 2
-            self.g = nn.Sequential(
+            n_in = {"xpq": 4, "x": 2, "xconv": 2 + n_fir}.get(
+                correction_inputs, 2 + 2 * hist_len)
+            mlp = nn.Sequential(
                 nn.Linear(n_in, hidden), nn.Tanh(),
                 nn.Linear(hidden, hidden), nn.Tanh(),
                 nn.Linear(hidden, 2),
             )
-            for m in self.g:
+            for m in mlp:
                 if isinstance(m, nn.Linear):
                     nn.init.zeros_(m.bias)
-            nn.init.zeros_(self.g[-1].weight)   # salida 0 al inicio
+            nn.init.zeros_(mlp[-1].weight)      # salida 0 al inicio
+            # El filtro va ADENTRO de self.g, no al lado: el optimizador y los
+            # diagnosticos recogen la correccion con model.g.parameters(), asi
+            # que un modulo hermano nunca se entrena.
+            self.g = _FIRMLP(hist_len, n_fir, mlp) if correction_inputs == "xconv" else mlp
 
     # Pesos reales (positivos).
     def weights(self) -> torch.Tensor:
@@ -167,6 +200,10 @@ class GrayBoxWC(nn.Module):
     def backbone(self, x: torch.Tensor, P: torch.Tensor, Q: torch.Tensor) -> torch.Tensor:
         I = x[..., 0:1]
         E = x[..., 1:2]
+        # Con historia de comando P y Q llegan como (...,K) y el valor actual es
+        # el primer canal. Para las demas variantes esto es un no-op.
+        if torch.is_tensor(P) and P.dim() > 0 and P.shape[-1] > 1:
+            P, Q = P[..., :1], Q[..., :1]
         P = torch.as_tensor(P, dtype=x.dtype, device=x.device) * torch.ones_like(I)
         Q = torch.as_tensor(Q, dtype=x.dtype, device=x.device) * torch.ones_like(I)
 
@@ -227,6 +264,11 @@ class GrayBoxWC(nn.Module):
         E = x[..., 1:2]
         if self.correction_inputs == "x":
             inp = torch.cat([I, E], dim=-1)
+        elif self.correction_inputs == "xhist":
+            # P,Q ya vienen como (...,K): valor actual mas K-1 retardos.
+            inp = torch.cat([I, E, P, Q], dim=-1)
+        elif self.correction_inputs == "xconv":
+            inp = torch.cat([I, E, P, Q], dim=-1)
         else:
             P = torch.as_tensor(P, dtype=x.dtype, device=x.device) * torch.ones_like(I)
             Q = torch.as_tensor(Q, dtype=x.dtype, device=x.device) * torch.ones_like(I)

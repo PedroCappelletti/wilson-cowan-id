@@ -27,6 +27,20 @@ results/models/*
 *.ckpt
 *.h5
 
+# Excepcion: los datasets y checkpoints del escalado si se versionan. Pesan
+# 5,3 MB y 13 KB, y son lo unico que ata cada numero publicado a sus bytes.
+!data/processed/uncertain/
+!data/processed/uncertain/act1.npz
+!data/processed/uncertain/refrac1.npz
+# Versiones con ruido del eje 6: derivadas de act1 con semilla fija, pero se
+# guardan igual porque la comparabilidad muestra a muestra depende de ellas.
+!data/processed/uncertain/act1_n01.npz
+!data/processed/uncertain/act1_n05.npz
+!data/processed/uncertain/refrac1_n01.npz
+!data/processed/uncertain/refrac1_n05.npz
+!results/escalado/models/
+!results/escalado/models/*.pt
+
 # IDE / OS
 .vscode/
 .idea/
@@ -35,3 +49,9 @@ results/models/*
 # caches de herramientas
 .ua/
 .claude/
+
+# Auxiliares de LaTeX
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.toc

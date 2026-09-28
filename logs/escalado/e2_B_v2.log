@@ -1,0 +1,11 @@
+=== escalado · e2_B_v2 · B · act1 · W=100 · epochs=1500 ===
+    ep     0 | data=7.130e-03 | err_max= 84.86% g_rms=0.0000 redund=nan
+    ep   250 | data=5.064e-04 | err_max= 81.05% g_rms=0.0231 redund=nan
+    ep   500 | data=3.911e-04 | err_max= 78.11% g_rms=0.0192 redund=nan
+    ep   750 | data=3.675e-04 | err_max= 71.96% g_rms=0.0179 redund=nan
+    ep  1000 | data=3.582e-04 | err_max= 72.02% g_rms=0.0170 redund=nan
+    ep  1250 | data=3.111e-04 | err_max= 70.10% g_rms=0.0167 redund=nan
+    ep  1499 | data=2.918e-04 | err_max= 63.50% g_rms=0.0157 redund=nan
+
+  RESULTADO e2_B_v2: NRMSE_test=15.91% (I=16.33 E=15.49) R2df=-1.835 err_param=33.13% [41.7 min]
+  -> results\escalado\e2_B_v2.json

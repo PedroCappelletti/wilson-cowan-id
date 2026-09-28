@@ -1,0 +1,11 @@
+=== escalado · e6_H400_n05_s7 · H · act1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=7.487e-03 | err_max= 84.86% 
+    ep   250 | data=7.287e-04 | err_max= 63.26% 
+    ep   500 | data=4.665e-04 | err_max= 72.69% 
+    ep   750 | data=5.372e-04 | err_max= 81.98% 
+    ep  1000 | data=4.308e-04 | err_max= 86.49% 
+    ep  1250 | data=4.136e-04 | err_max= 89.40% 
+    ep  1499 | data=4.202e-04 | err_max= 91.56% 
+
+  RESULTADO e6_H400_n05_s7: NRMSE_test=14.13% (I=14.79 E=13.47) R2df=-0.112 err_param=25.77% [48.7 min]
+  -> results\escalado\e6_H400_n05_s7.json

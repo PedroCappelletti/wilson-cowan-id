@@ -79,12 +79,36 @@ def _wc_plano(params: dict) -> GrayBoxWC:
 # =============================================================================
 #  SECCION 2: ROLLOUT OPEN-LOOP  (con o sin estados ocultos)
 # =============================================================================
+# Variantes cuya g recibe la historia del comando en vez del valor actual.
+CON_MEMORIA = ("xhist", "xconv")
+
+
+def largo_historia(m) -> int:
+    """K de la historia que el modelo espera, 0 si no usa historia."""
+    return (getattr(m, "hist_len", 0)
+            if getattr(m, "correction_inputs", "") in CON_MEMORIA else 0)
+
+
 @torch.no_grad()
+def _hist_seq(u, K):
+    """(T,) -> (T,1,K) con [u(t), u(t-1), ..., u(t-K+1)], cero antes del inicio."""
+    T = len(u)
+    out = np.zeros((T, K), dtype=np.float32)
+    for k in range(K):
+        out[k:, k] = u[:T - k]
+    return torch.tensor(out).unsqueeze(1)
+
+
 def _rollout_traj(m, I0, E0, P, Q, dt):
     T = len(P)
     x0 = torch.tensor([[I0, E0]], dtype=torch.float32)
-    Ps = torch.tensor(P, dtype=torch.float32).reshape(T, 1, 1)
-    Qs = torch.tensor(Q, dtype=torch.float32).reshape(T, 1, 1)
+    # El modelo con historia necesita los K retardos en cada paso, no el escalar.
+    K = largo_historia(m)
+    if K:
+        Ps, Qs = _hist_seq(P, K), _hist_seq(Q, K)
+    else:
+        Ps = torch.tensor(P, dtype=torch.float32).reshape(T, 1, 1)
+        Qs = torch.tensor(Q, dtype=torch.float32).reshape(T, 1, 1)
     if getattr(m, "n_hidden", 0) > 0:
         x0 = torch.cat([x0, m.h0(x0, Ps[0], Qs[0])], dim=-1)
     return rollout(m, x0, Ps[:-1], Qs[:-1], dt)[:, 0, :2].numpy()
@@ -155,8 +179,12 @@ def r2_delta(m, d, solo_test=True):
     for s in range(len(I)):
         T = I.shape[1]
         x = torch.tensor(np.stack([I[s], E[s]], 1), dtype=torch.float32)
-        Ps = torch.tensor(P[s], dtype=torch.float32).reshape(T, 1)
-        Qs = torch.tensor(Q[s], dtype=torch.float32).reshape(T, 1)
+        K = largo_historia(m)
+        if K:
+            Ps, Qs = _hist_seq(P[s], K)[:, 0], _hist_seq(Q[s], K)[:, 0]
+        else:
+            Ps = torch.tensor(P[s], dtype=torch.float32).reshape(T, 1)
+            Qs = torch.tensor(Q[s], dtype=torch.float32).reshape(T, 1)
         if getattr(m, "n_hidden", 0) > 0:
             hs = _hidden_teacher_forced(m, I[s], E[s], P[s], Q[s], dt)
             y = torch.cat([x, hs], dim=-1)

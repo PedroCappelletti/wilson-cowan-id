@@ -1,0 +1,11 @@
+=== escalado · e4_wb_n05 · whitebox · act1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=9.831e-03 | err_max= 84.86% 
+    ep   250 | data=5.294e-03 | err_max=213.66% 
+    ep   500 | data=4.692e-03 | err_max= 64.54% 
+    ep   750 | data=4.654e-03 | err_max= 94.18% 
+    ep  1000 | data=4.650e-03 | err_max= 97.20% 
+    ep  1250 | data=4.649e-03 | err_max= 98.27% 
+    ep  1499 | data=4.649e-03 | err_max= 98.80% 
+
+  RESULTADO e4_wb_n05: NRMSE_test=13.88% (I=14.19 E=13.56) R2df=-0.006 err_param=33.22% [16.5 min]
+  -> results\escalado\e4_wb_n05.json

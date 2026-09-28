@@ -28,10 +28,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+import json
+
 import numpy as np
 import torch
 
 from src.neural_ode import GrayBoxWC, rollout
+from src.utils import provenance, set_seed
 
 # #############################################################################
 # ##   ZONA EDITABLE                                                         ##
@@ -39,6 +42,7 @@ from src.neural_ode import GrayBoxWC, rollout
 
 DATA_PATH = Path("data/processed/control/multi_dataset.npz")
 
+SEED = 0             # defensivo: hoy este script ya es determinista (ver src/utils/seed.py)
 INIT_VALUE = 1.0     # arranque ignorante: TODO (pesos y fisicos) parte de aca
 
 WINDOW   = 100       # ventana de multiple shooting (pasos) -> ~5 ms con dt=0.05
@@ -103,6 +107,7 @@ def open_loop_mse(model, I, E, P, Q, dt):
 
 
 def main():
+    set_seed(SEED)
     d, true, dt = load()
     is_test = d["is_test"].astype(bool)
     I, E, P, Q = d["I"], d["E"], d["P"], d["Q"]
@@ -158,23 +163,49 @@ def main():
     p = model.params_dict()
     print("\n=== Parametros identificados (Neural ODE, sin ver los verdaderos) ===")
     print(f"  {'param':8} {'verdadero':>10} {'estimado':>10} {'error %':>10}")
-    max_err = 0.0
+    errs = {}
     for k in ALL_P:
         err = 100.0 * abs(p[k] - true[k]) / abs(true[k])
-        max_err = max(max_err, err)
+        errs[k] = err
         marca = "  <-- peso" if k in WEIGHTS else ""
         print(f"  {k:8} {true[k]:10.4f} {p[k]:10.4f} {err:9.2f}%{marca}")
+    max_err = max(errs.values())
 
     mse_tr = open_loop_mse(model, Itr, Etr, Ptr, Qtr, dt)
     mse_te = open_loop_mse(model, Ite, Ete, Pte, Qte, dt)
     print(f"\n  MSE open-loop (rollout completo):  train={mse_tr:.2e}   test(held-out)={mse_te:.2e}")
     print(f"  max error parametrico = {max_err:.2f}%")
 
+    # Procedencia: con que se genero esto, para que se pueda recomputar.
+    prov = provenance(
+        __file__, seed=SEED, data=str(DATA_PATH), init=INIT_VALUE,
+        window=WINDOW, epochs=EPOCHS, lbfgs_steps=LBFGS_STEPS,
+        lr_w=LR_W, lr_phys=LR_PHYS,
+    )
+    # Encadenar con la del dataset, para saber tambien de donde salieron los datos.
+    if "provenance" in d.files:
+        prov["dataset_provenance"] = json.loads(str(d["provenance"]))
+
     ckpt = OUT_DIR / "models" / "neural_ode_full.pt"
     ckpt.parent.mkdir(parents=True, exist_ok=True)
     torch.save({"state": model.state_dict(), "init": init,
-                "learn_params": True, "learn_weights": True}, ckpt)
+                "learn_params": True, "learn_weights": True,
+                "provenance": prov}, ckpt)
     print(f"\n  Checkpoint: {ckpt}")
+
+    out = OUT_DIR / "ident_full_10params.json"
+    out.write_text(json.dumps({
+        **prov,
+        "n_train": int((~is_test).sum()), "n_test": int(is_test.sum()),
+        "max_param_error": max_err,
+        "mean_param_error": float(np.mean(list(errs.values()))),
+        "param_errors": errs,
+        "params": {k: p[k] for k in ALL_P},
+        "true": true,
+        "mse_open_loop_train": mse_tr,
+        "mse_open_loop_test": mse_te,
+    }, indent=2))
+    print(f"  Resultados: {out}")
 
 
 if __name__ == "__main__":

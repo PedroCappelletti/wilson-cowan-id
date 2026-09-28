@@ -1,0 +1,72 @@
+{
+  "script": "train_neural_ode_full.py",
+  "generado": "2026-08-28T15:09:54",
+  "python": "3.13.5",
+  "commit": "915f49c",
+  "dirty": true,
+  "seed": 0,
+  "data": "data\\processed\\control\\multi_dataset.npz",
+  "init": 1.0,
+  "window": 100,
+  "epochs": 2000,
+  "lbfgs_steps": 80,
+  "lr_w": 0.05,
+  "lr_phys": 0.02,
+  "dataset_provenance": {
+    "script": "gen_multi_dataset.py",
+    "generado": "2026-08-28T14:47:05",
+    "python": "3.13.5",
+    "commit": "915f49c",
+    "dirty": true,
+    "seed": 42,
+    "noise": 0.0,
+    "n_eval": 4000,
+    "t_span": [
+      0.0,
+      200.0
+    ],
+    "n_escenarios": 20
+  },
+  "n_train": 13,
+  "n_test": 7,
+  "max_param_error": 1.1298418045043945,
+  "mean_param_error": 0.587337535052072,
+  "param_errors": {
+    "wEE": 0.40401369333267767,
+    "wEI": 0.5114734172821008,
+    "wIE": 0.7956822713216146,
+    "wII": 1.0628163814544642,
+    "te": 0.6448984146118164,
+    "ti": 0.2533137798309326,
+    "ae": 0.35625100135803595,
+    "ai": 0.6371796131134033,
+    "thetae": 0.07790497371127993,
+    "thetai": 1.1298418045043945
+  },
+  "params": {
+    "wEE": 6.374143123626709,
+    "wEI": 4.775449275970459,
+    "wIE": 6.047740936279297,
+    "wII": 1.1872462034225464,
+    "te": 0.9935510158538818,
+    "ti": 1.9949337244033813,
+    "ae": 1.2042750120162964,
+    "ai": 0.993628203868866,
+    "thetae": 2.797818660736084,
+    "thetai": 4.045193672180176
+  },
+  "true": {
+    "wEE": 6.4,
+    "wEI": 4.8,
+    "wIE": 6.0,
+    "wII": 1.2,
+    "te": 1.0,
+    "ti": 2.0,
+    "ae": 1.2,
+    "ai": 1.0,
+    "thetae": 2.8,
+    "thetai": 4.0
+  },
+  "mse_open_loop_train": 2.829749039807876e-05,
+  "mse_open_loop_test": 0.0005481221545713717
+}

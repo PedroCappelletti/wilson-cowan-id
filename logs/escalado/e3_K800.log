@@ -1,0 +1,11 @@
+=== escalado · e3_K800 · K · act1 · W=100 · epochs=1500 ===
+    ep     0 | data=7.130e-03 | err_max= 84.86% 
+    ep   250 | data=3.360e-04 | err_max= 76.01% 
+    ep   500 | data=8.995e-05 | err_max= 77.17% 
+    ep   750 | data=3.560e-05 | err_max= 80.14% 
+    ep  1000 | data=2.691e-05 | err_max= 80.86% 
+    ep  1250 | data=3.780e-05 | err_max= 80.46% 
+    ep  1499 | data=1.854e-05 | err_max= 80.31% 
+
+  RESULTADO e3_K800: NRMSE_test=12.48% (I=12.56 E=12.40) R2df=-0.397 err_param=16.44% [202.6 min]
+  -> results\escalado\e3_K800.json

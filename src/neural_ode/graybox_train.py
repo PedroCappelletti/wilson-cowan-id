@@ -43,7 +43,20 @@ ALL_P = WEIGHTS + PHYS
 #  SECCION 1: PREPARAR LOS DATOS
 # =============================================================================
 
-def make_windows(I, E, P, Q, W):
+def apilar_historia(u, K):
+    """(n,T) -> (n,T,K) con [u(t), u(t-1), ..., u(t-K+1)], cero antes del inicio.
+
+    Es la unica forma de que g vea el pasado sin darle estado propio. Cuesta
+    memoria: con K=400, 20 escenarios y 4000 pasos son ~128 MB por canal.
+    """
+    n, T = u.shape
+    out = np.zeros((n, T, K), dtype=np.float32)
+    for k in range(K):
+        out[:, k:, k] = u[:, :T - k]
+    return out
+
+
+def make_windows(I, E, P, Q, W, hist=0):
     """Parte las trayectorias en ventanas cortas (multiple shooting).
 
     Por que ventanas y no la trayectoria entera: integrar 4000 pasos de un tiron
@@ -54,17 +67,24 @@ def make_windows(I, E, P, Q, W):
     """
     n, T = I.shape
     nwin = (T - 1) // W
+    Ph = apilar_historia(P, hist) if hist else None
+    Qh = apilar_historia(Q, hist) if hist else None
     x0, Pw, Qw, tgt = [], [], [], []
     for s in range(n):
         for w in range(nwin):
             a = w * W
             x0.append([I[s, a], E[s, a]])
-            Pw.append(P[s, a:a + W])
-            Qw.append(Q[s, a:a + W])
+            Pw.append(P[s, a:a + W] if Ph is None else Ph[s, a:a + W])
+            Qw.append(Q[s, a:a + W] if Qh is None else Qh[s, a:a + W])
             tgt.append(np.stack([I[s, a:a + W + 1], E[s, a:a + W + 1]], axis=1))
     x0 = torch.tensor(np.asarray(x0), dtype=torch.float32)
-    Pw = torch.tensor(np.asarray(Pw), dtype=torch.float32).T.unsqueeze(-1)
-    Qw = torch.tensor(np.asarray(Qw), dtype=torch.float32).T.unsqueeze(-1)
+    if hist:
+        # (Nw,W,K) -> (W,Nw,K), que es lo que consume el integrador.
+        Pw = torch.tensor(np.asarray(Pw), dtype=torch.float32).permute(1, 0, 2)
+        Qw = torch.tensor(np.asarray(Qw), dtype=torch.float32).permute(1, 0, 2)
+    else:
+        Pw = torch.tensor(np.asarray(Pw), dtype=torch.float32).T.unsqueeze(-1)
+        Qw = torch.tensor(np.asarray(Qw), dtype=torch.float32).T.unsqueeze(-1)
     tgt = torch.tensor(np.asarray(tgt), dtype=torch.float32).permute(1, 0, 2)
     return x0, Pw, Qw, tgt
 
@@ -136,16 +156,22 @@ def projected_fraction(g_vals: torch.Tensor, A: torch.Tensor, Sf: torch.Tensor):
 # =============================================================================
 
 @torch.no_grad()
-def open_loop_mse(model, I, E, P, Q, dt):
+def open_loop_mse(model, I, E, P, Q, dt, hist=0):
     """Rollout COMPLETO de cada trayectoria (sin reinicios) -> MSE.
     Es el test de generalizacion real: si el modelo solo funciona en ventanas
     cortas, no sirve como planta."""
     n, T = I.shape
+    Ph = apilar_historia(P, hist) if hist else None
+    Qh = apilar_historia(Q, hist) if hist else None
     errs = []
     for s in range(n):
         x0 = torch.tensor([[I[s, 0], E[s, 0]]], dtype=torch.float32)
-        Ps = torch.tensor(P[s], dtype=torch.float32).reshape(T, 1, 1)
-        Qs = torch.tensor(Q[s], dtype=torch.float32).reshape(T, 1, 1)
+        if hist:
+            Ps = torch.tensor(Ph[s], dtype=torch.float32).unsqueeze(1)
+            Qs = torch.tensor(Qh[s], dtype=torch.float32).unsqueeze(1)
+        else:
+            Ps = torch.tensor(P[s], dtype=torch.float32).reshape(T, 1, 1)
+            Qs = torch.tensor(Q[s], dtype=torch.float32).reshape(T, 1, 1)
         traj = rollout(model, x0, Ps[:-1], Qs[:-1], dt)[:, 0, :]
         tgt = torch.tensor(np.stack([I[s], E[s]], axis=1), dtype=torch.float32)
         errs.append(float(((traj - tgt) ** 2).mean()))
@@ -176,6 +202,9 @@ class TrainConfig:
     lam_orth: float = 0.0         # peso de  ‖proj de g‖²  (variante D)
     init_value: float = 1.0       # arranque ignorante
     hidden: int = 32
+    hist: int = 0                 # K de la historia de comando (variantes H, K)
+    n_fir: int = 4                # canales del FIR (variante K)
+    wd_fir: float = 0.0           # decaimiento de pesos, solo sobre el FIR
     seed: int = 0
     sens_every: int = 25          # cada cuantas epocas se recalculan ∂f/∂θ
     log_every: int = 250
@@ -192,6 +221,17 @@ VARIANTS = {
     # de una red. No es un termino aditivo sino una extension del propio
     # backbone, asi que el controlador puede invertirla exactamente.
     "S":        dict(use_correction=False, correction_inputs="x", structured=True),
+    # Sg = la forma exacta Y la red al mismo tiempo. No es una variante para
+    # ganar: es el control que mide cuanto se tapan entre si. Sobre refrac1, que
+    # es donde la forma esta completa, la red no deberia aprender nada.
+    "Sg":       dict(use_correction=True,  correction_inputs="x", structured=True),
+    # H = la red ve el estado Y la historia del comando. Con la historia adentro
+    # Delta f SI es funcion de la entrada, que es lo que g(I,E) no podia ser.
+    "H":        dict(use_correction=True,  correction_inputs="xhist"),
+    # K = la misma historia que H pero filtrada por un FIR aprendido antes de
+    # entrar a la MLP. Mismo campo receptivo con un orden de magnitud menos de
+    # parametros, y el kernel queda legible.
+    "K":        dict(use_correction=True,  correction_inputs="xconv"),
 }
 
 
@@ -203,7 +243,7 @@ def build_model(cfg: TrainConfig) -> GrayBoxWC:
     return GrayBoxWC(
         init, {k: cfg.init_value for k in WEIGHTS},
         learnable_weights=True, learnable_params=True,
-        hidden=cfg.hidden, **spec,
+        hidden=cfg.hidden, hist_len=cfg.hist, n_fir=cfg.n_fir, **spec,
     )
 
 
@@ -218,7 +258,8 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
     if model is None:
         model = build_model(cfg)
 
-    x0, Pw, Qw, tgt = make_windows(data["I"], data["E"], data["P"], data["Q"], cfg.window)
+    x0, Pw, Qw, tgt = make_windows(data["I"], data["E"], data["P"], data["Q"],
+                                   cfg.window, hist=cfg.hist)
     Xs, Ps, Qs = sample_points(data["I"], data["E"], data["P"], data["Q"], seed=cfg.seed)
     dt = data["dt"]
 
@@ -226,11 +267,29 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
     groups = [{"params": [model.raw_w], "lr": cfg.lr_w},
               {"params": phys_raw, "lr": cfg.lr_phys}]
     if model.use_correction:
-        groups.append({"params": list(model.g.parameters()), "lr": cfg.lr_g})
+        fir = [q for n, q in model.g.named_parameters() if n.startswith("fir.")]
+        resto = [q for n, q in model.g.named_parameters()
+                 if not n.startswith("fir.")]
+        groups.append({"params": resto, "lr": cfg.lr_g})
+        if fir:
+            groups.append({"params": fir, "lr": cfg.lr_g,
+                           "weight_decay": cfg.wd_fir})
     struct_raw = []
     if model.structured:
         struct_raw = [model.raw_r_i, model.raw_r_e, model.raw_alpha]
         groups.append({"params": struct_raw, "lr": cfg.lr_phys})
+    # Un parametro que esta en el modelo y no en el optimizador se queda en su
+    # inicializacion sin que nada avise: la corrida termina, reporta, y el
+    # resultado es peor que no tener correccion. Paso con el FIR de la variante
+    # K, que era hermano de self.g y no hijo. Barato de chequear, caro de no
+    # chequear.
+    en_opt = {id(q) for gr in groups for q in gr["params"]}
+    huerfanos = [n for n, q in model.named_parameters()
+                 if q.requires_grad and id(q) not in en_opt]
+    if huerfanos:
+        raise RuntimeError(
+            f"parametros entrenables fuera del optimizador: {huerfanos}")
+
     opt = torch.optim.Adam(groups)
 
     A = Sf = None
@@ -239,6 +298,11 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
     def penalties():
         """Devuelve (penalizacion_total, diagnosticos)."""
         if not model.use_correction:
+            return torch.zeros((), dtype=torch.float32), {}
+        if model.correction_inputs in ("xhist", "xconv"):
+            # Los puntos sueltos no tienen historia, asi que no se puede evaluar
+            # g fuera de la trayectoria. Las variantes con historia no usan
+            # penalizaciones (lam_norm y lam_orth en cero).
             return torch.zeros((), dtype=torch.float32), {}
         gv = model.g_out(Xs, Ps, Qs)
         norm = (gv ** 2).mean()
@@ -300,21 +364,35 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
         "param_errors": errs,
         "max_param_error": mx,
         "mean_param_error": float(np.mean(list(errs.values()))),
-        "mse_train": open_loop_mse(model, data["I"], data["E"], data["P"], data["Q"], dt),
+        "mse_train": open_loop_mse(model, data["I"], data["E"], data["P"],
+                                   data["Q"], dt, hist=cfg.hist),
         "mse_test": open_loop_mse(model, data["I_te"], data["E_te"],
-                                  data["P_te"], data["Q_te"], dt),
+                                  data["P_te"], data["Q_te"], dt,
+                                  hist=cfg.hist),
         "model": model,
         "hist": hist,
     }
     if model.structured:
         out["structured"] = model.structured_dict()
     if model.use_correction:
+        # Los puntos sueltos no tienen historia de comando, asi que con la
+        # variante H el diagnostico se calcula sobre las propias ventanas, que
+        # si la tienen. Se submuestrea para que cueste lo mismo que antes.
+        Xd, Pd, Qd = Xs, Ps, Qs
+        if model.correction_inputs in ("xhist", "xconv"):
+            with torch.no_grad():
+                Xd = tgt[:-1].reshape(-1, 2)
+                Pd = Pw.reshape(-1, Pw.shape[-1])
+                Qd = Qw.reshape(-1, Qw.shape[-1])
+                if len(Xd) > len(Xs):
+                    idx = torch.randperm(len(Xd))[:len(Xs)]
+                    Xd, Pd, Qd = Xd[idx], Pd[idx], Qd[idx]
         with torch.no_grad():
-            gv = model.g_out(Xs, Ps, Qs)
-            fb = model.backbone(Xs, Ps, Qs)
+            gv = model.g_out(Xd, Pd, Qd)
+            fb = model.backbone(Xd, Pd, Qd)
         out["g_rms"] = float(gv.pow(2).mean().sqrt())
         out["g_rel"] = out["g_rms"] / float(fb.pow(2).mean().sqrt())
-        S = model.backbone_sensitivities(Xs, Ps, Qs)
+        S = model.backbone_sensitivities(Xd, Pd, Qd)
         Ao, Sfo = projection_operator(S)
         _, frac = projected_fraction(gv, Ao, Sfo)
         # Cuanto de la correccion aprendida es REDUNDANTE con los parametros:

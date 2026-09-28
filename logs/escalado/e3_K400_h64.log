@@ -1,0 +1,11 @@
+=== escalado · e3_K400_h64 · K · act1 · W=100 · epochs=1500 ===
+    ep     0 | data=7.130e-03 | err_max= 84.86% 
+    ep   250 | data=3.578e-04 | err_max= 80.21% 
+    ep   500 | data=1.047e-04 | err_max= 77.53% 
+    ep   750 | data=5.950e-05 | err_max= 83.14% 
+    ep  1000 | data=4.904e-05 | err_max= 86.39% 
+    ep  1250 | data=3.228e-05 | err_max= 87.23% 
+    ep  1499 | data=2.923e-05 | err_max= 85.46% 
+
+  RESULTADO e3_K400_h64: NRMSE_test=10.98% (I=11.62 E=10.34) R2df=-0.861 err_param=25.73% [126.9 min]
+  -> results\escalado\e3_K400_h64.json

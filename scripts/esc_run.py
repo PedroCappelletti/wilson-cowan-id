@@ -19,6 +19,8 @@
 from __future__ import annotations
 
 import argparse
+import os
+import hashlib
 import json
 import sys
 import time
@@ -31,7 +33,10 @@ sys.path.insert(0, str(_ROOT / "scripts"))
 import numpy as np
 import torch
 
-torch.set_num_threads(4)
+# Hilos por corrida. La máquina tiene 4 núcleos físicos, así que corridas en
+# paralelo por hilos no debe pasar de 4: con 4 corridas de 4 hilos cada una, un
+# lote de 25 minutos por corrida tardó 25 horas.
+torch.set_num_threads(int(os.environ.get("WC_THREADS", "4")))
 
 from src.neural_ode.graybox_train import TrainConfig, fit, load_split
 from src.neural_ode.memory import (AugTrainConfig, LagGrayBox, LatentGrayBox,
@@ -41,14 +46,37 @@ from esc_eval import evaluar
 OUT_DIR = Path("results/escalado")
 
 
+def suavizar(data: dict, k: int) -> dict:
+    """Media movil de ancho k sobre I y E, en train, test y el crudo de la
+    evaluacion. P y Q quedan intactos: son el comando y se conocen sin ruido."""
+    ker = np.ones(k, dtype=np.float32) / k
+
+    def mm(x):
+        return np.stack([np.convolve(f, ker, mode="same") for f in x])
+
+    for c in ("I", "E", "I_te", "E_te"):
+        if c in data:
+            data[c] = mm(data[c])
+    # raw es el NpzFile, que es de solo lectura: se copia a un dict plano.
+    crudo = {k: data["raw"][k] for k in data["raw"].files}
+    crudo["I"], crudo["E"] = mm(crudo["I"]), mm(crudo["E"])
+    data["raw"] = crudo
+    return data
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True,
                     help="nombre del .npz en data/processed/uncertain (sin extension)")
     ap.add_argument("--variant", required=True,
-                    choices=["whitebox", "A", "B", "C", "D", "S", "lag", "latent"])
+                    choices=["whitebox", "A", "B", "C", "D", "S", "Sg", "H",
+                             "K", "lag", "latent"])
     ap.add_argument("--window", type=int, default=100)
     ap.add_argument("--epochs", type=int, default=1500)
+    # Expuesto para el smoke de punta a punta: con el modelo recien inicializado
+    # un solo .step() de L-BFGS agota la busqueda de linea y cuesta mas que el
+    # entrenamiento entero.
+    ap.add_argument("--lbfgs-steps", type=int, default=60)
     ap.add_argument("--lam-norm", type=float, default=0.0)
     ap.add_argument("--lam-orth", type=float, default=0.0)
     ap.add_argument("--seed", type=int, default=0)
@@ -57,11 +85,26 @@ def main():
                     help="json de una corrida previa: warm-start de los 10 θ")
     ap.add_argument("--r-init", type=float, default=None,
                     help="valor inicial de r_i, r_e (variante S)")
+    ap.add_argument("--hist", type=int, default=0,
+                    help="largo de la historia de comando (variantes H, K)")
+    ap.add_argument("--n-fir", type=int, default=4,
+                    help="canales del filtro FIR (variante K)")
+    ap.add_argument("--hidden", type=int, default=32,
+                    help="ancho de la MLP de g (eje 1.4)")
+    ap.add_argument("--wd-fir", type=float, default=0.0,
+                    help="decaimiento de pesos sobre el FIR (variante K)")
+    ap.add_argument("--smooth", type=int, default=0,
+                    help="ancho de la media movil sobre I y E (0 = sin suavizar)")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
 
     data_path = Path("data/processed/uncertain") / f"{args.data}.npz"
+    # Hash del dataset: sin esto, un .npz regenerado deja los resultados viejos
+    # sin forma de saber si salieron de los mismos bytes.
+    data_sha = hashlib.sha256(data_path.read_bytes()).hexdigest()[:16]
     data = load_split(data_path)
+    if args.smooth > 1:
+        data = suavizar(data, args.smooth)
     t0 = time.time()
 
     print(f"=== escalado · {args.tag} · {args.variant} · {args.data} "
@@ -78,7 +121,10 @@ def main():
     else:
         cfg = TrainConfig(variant=args.variant, window=args.window,
                           epochs=args.epochs, lam_norm=args.lam_norm,
-                          lam_orth=args.lam_orth, seed=args.seed)
+                          lam_orth=args.lam_orth, seed=args.seed,
+                          hist=args.hist, n_fir=args.n_fir,
+                          hidden=args.hidden, lbfgs_steps=args.lbfgs_steps,
+                          wd_fir=args.wd_fir)
         warm = None
         if args.init_params or args.r_init is not None:
             # warm-start: mismo modelo que build_model pero con los crudos
@@ -103,10 +149,17 @@ def main():
         ck = {"kind": "graybox", "state": model.state_dict(),
               "use_correction": model.use_correction,
               "correction_inputs": model.correction_inputs,
+              "hist_len": getattr(model, "hist_len", 0),
               "structured": model.structured}
 
     mins = (time.time() - t0) / 60.0
     model.eval()
+
+    # El checkpoint va antes de evaluar: una falla en la evaluacion no tiene
+    # por que costar la corrida entera.
+    OUT_DIR.joinpath("models").mkdir(parents=True, exist_ok=True)
+    torch.save(ck, OUT_DIR / "models" / f"{args.tag}.pt")
+
     ev = evaluar(model, data["raw"], data["true"])
 
     print(f"\n  RESULTADO {args.tag}: NRMSE_test={ev['nrmse_test']:.2f}% "
@@ -114,15 +167,19 @@ def main():
           f"R2df={ev['r2_delta_test']:.3f} "
           f"err_param={ev['mean_param_error']:.2f}% [{mins:.1f} min]", flush=True)
 
-    OUT_DIR.joinpath("models").mkdir(parents=True, exist_ok=True)
-    torch.save(ck, OUT_DIR / "models" / f"{args.tag}.pt")
     out = {
-        "tag": args.tag, "data": args.data, "variant": args.variant,
-        "window": args.window, "epochs": args.epochs,
+        "tag": args.tag, "data": args.data, "data_sha256": data_sha,
+        "variant": args.variant,
+        "window": args.window, "epochs": args.epochs, "hist": args.hist, "n_fir": args.n_fir,
+        "hidden": args.hidden, "wd_fir": args.wd_fir,
+        "smooth": args.smooth,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},
         "params": res["params"],
+        # g_rms y la fraccion de redundancia miden la ambiguedad entre beta y g:
+        # quedaban solo en el dict que devuelve fit y no llegaban al artefacto.
+        **{k: res[k] for k in ("g_rms", "g_rel", "frac_redundante") if k in res},
         **({"extras": res["extras"]} if "extras" in res else {}),
     }
     (OUT_DIR / f"{args.tag}.json").write_text(json.dumps(out, indent=2))
