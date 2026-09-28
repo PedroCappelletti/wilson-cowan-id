@@ -12,7 +12,7 @@
 #
 # No espera a que termine el lote del póster: arranca apenas ese lote lanzó sus
 # últimas corridas, y cuenta las que siguen andando como lugares ocupados. Al
-# final van las tres del filtro de 16 canales, que antes tenían su propia cola.
+# principio van las tres del filtro de 16 canales, que antes tenían su propia cola.
 #
 # Tampoco se repiten las que salieron negativas sin ruido, porque el ruido no
 # tiene cómo darlas vuelta: la variante A no tiene la información que falta, y
@@ -62,12 +62,14 @@ if __name__ == "__main__":
             args, dep = lote(n)[nombre]
             pendientes.append((f"e8_{nombre}_n{n}", args, dep))
     K16 = ["--variant", "K", "--hist", "400", "--n-fir", "16"]
-    pendientes += [
+    # Los 16 canales van primero: son las corridas más largas y las que hacen
+    # falta antes para decidir cuántos canales lleva el filtro.
+    f16 = [
         ("e9_K400f16_n05", ["--data", "act1_n05", *K16], None),
         ("e9_K400f16_n01", ["--data", "act1_n01", *K16], None),
     ]
-    todas = [(t, [*a, "--smooth", "7"], d) for t, a, d in pendientes]
-    todas.append(("e9_K400f16", ["--data", "act1", *K16], None))
+    todas = [(t, [*a, "--smooth", "7"], d) for t, a, d in f16 + pendientes]
+    todas.insert(2, ("e9_K400f16", ["--data", "act1", *K16], None))
 
     poster = [f"e7_{c}_n{n}" for n in ("05", "01")
               for c in ("e1wb", "e1B400", "e1S2", "e2wb", "e2B", "e2lag")]
