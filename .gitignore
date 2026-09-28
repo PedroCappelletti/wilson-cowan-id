@@ -36,6 +36,8 @@ results/models/*
 # guardan igual porque la comparabilidad muestra a muestra depende de ellas.
 !data/processed/uncertain/act1_n01.npz
 !data/processed/uncertain/act1_n05.npz
+!data/processed/uncertain/refrac1_n01.npz
+!data/processed/uncertain/refrac1_n05.npz
 !results/escalado/models/
 !results/escalado/models/*.pt
 
