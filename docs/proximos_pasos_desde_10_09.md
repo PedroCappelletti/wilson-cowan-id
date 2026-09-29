@@ -469,6 +469,11 @@ actualizar el póster. Queda para después:
   penalización con el gradiente antes de escalarlo; probar `AdamW`. Aparte, evaluar
   el modelo de menor pérdida de entrenamiento y no el de la última época, que no
   usa el test. `scripts/divergencia.py` detecta los casos.
+  Dato a favor: la única L2 con ruido que no divergió, `e8_K400wd3_n05`
+  ($\lambda = 10^{-3}$, $\sigma = 0{,}05$), dio NRMSE 11,16, la mejor reproducción de
+  todas las correcciones agnósticas a ese nivel y 0,7 puntos mejor que el estado de
+  filtro. Una semilla. Si se sostiene con semillas y con `AdamW`, la penalización
+  pasa a ser la opción con ruido.
 
 ## Lo que parecía un bloqueante y no lo es
 
