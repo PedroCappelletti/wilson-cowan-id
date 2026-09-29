@@ -12,13 +12,13 @@
 | `act1` | comando actual (A) |  | 15,18 / -0,71 / 32,9 | no se repite | no se repite |
 | `act1` | historia cruda, 100 |  | 12,92 / +0,25 / 26,3 | 7,39 / +0,23 / 26,5 | 12,57 / -0,02 / 26,3 |
 | `act1` | historia cruda, 400 |  | 11,48 / +0,15 / 22,7 | 10,78 / +0,13 / 22,1 | 14,13 / -0,11 / 25,8 |
-| `act1` | FIR, 4 canales |  | 10,16 / -0,64 / 16,7 | 11,01 / -0,64 / 17,1 | 12,69 / -1,44 / 21,0 |
-| `act1` | FIR, 8 canales |  | 9,12 / +0,13 / 21,4 | 9,81 / +0,10 / 26,6 | 12,36 / +0,11 / 23,6 |
-| `act1` | FIR, 16 canales |  | 11,72 / -0,15 / 22,7 | 11,29 / -0,14 / 22,5 | 15,36 / -0,37 / 26,7 |
-| `act1` | FIR, 800 retardos |  | 12,48 / -0,40 / 16,4 | no se repite | no se repite |
-| `act1` | FIR, red de ancho 64 |  | 10,98 / -0,86 / 25,7 | no se repite | no se repite |
-| `act1` | FIR, L2 1e-4 |  | 12,40 / +0,15 / 22,9 † | 22,24 / -4,20 / 114,9 † | 12,94 / -1,39 / 22,5 |
-| `act1` | FIR, L2 1e-3 |  | 16,88 / -0,40 / 38,6 † | 6,45 / -0,90 / 28,3 | 11,16 / -1,20 / 24,7 |
+| `act1` | filtro entrenable, 4 canales |  | 10,16 / -0,64 / 16,7 | 11,01 / -0,64 / 17,1 | 12,69 / -1,44 / 21,0 |
+| `act1` | filtro entrenable, 8 canales |  | 9,12 / +0,13 / 21,4 | 9,81 / +0,10 / 26,6 | 12,36 / +0,11 / 23,6 |
+| `act1` | filtro entrenable, 16 canales |  | 11,72 / -0,15 / 22,7 | 11,29 / -0,14 / 22,5 | 15,36 / -0,37 / 26,7 |
+| `act1` | filtro entrenable, 800 retardos |  | 12,48 / -0,40 / 16,4 | no se repite | no se repite |
+| `act1` | filtro entrenable, red de ancho 64 |  | 10,98 / -0,86 / 25,7 | no se repite | no se repite |
+| `act1` | filtro entrenable, L2 1e-4 |  | 12,40 / +0,15 / 22,9 † | 22,24 / -4,20 / 114,9 † | 12,94 / -1,39 / 22,5 |
+| `act1` | filtro entrenable, L2 1e-3 |  | 16,88 / -0,40 / 38,6 † | 6,45 / -0,90 / 28,3 | 11,16 / -1,20 / 24,7 |
 | `act1` | latent ODE, ventana 100 |  | 14,92 / -0,51 / 38,9 | no se repite | no se repite |
 | `act1` | latent ODE, ventana 400 |  | 13,28 / -3,55 / 52,6 | no se repite | no se repite |
 
