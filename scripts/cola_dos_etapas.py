@@ -47,12 +47,21 @@ def corrida(nombre, suf, congelar):
     return tag, a, None
 
 
+# Orden de prioridad. La primera versión de la cola corría primero todas las de
+# refractariedad; se reordenó a las 14:20 del 29/9 porque la máquina se apaga a
+# las 19:15 y así las del filtro con ruido entran antes que las sin ruido.
+ORDEN = [("B400", "_n01", True), ("B400", "_n01", False),
+         ("B400", "_n05", True), ("B400", "_n05", False),
+         ("K400f8", "_n01", True), ("K400f8", "_n05", True),
+         ("K400f8", "_n01", False), ("K400f8", "_n05", False),
+         ("B400", "", True), ("K400f8", "", True),
+         ("K400f8", "", False), ("B400", "", False)]
+
+# Las que ya estaban andando cuando se relanzó la cola: no se vuelven a lanzar,
+# y mientras sigan vivas ocupan lugar.
+EN_CURSO = ["e10_B400_frz_n01", "e10_B400_wrm_n01",
+            "e10_B400_frz_n05", "e10_B400_wrm_n05"]
+
 if __name__ == "__main__":
-    # La agnóstica de refractariedad con ventana de 400 tarda unas 7 horas y el
-    # filtro unas 2: van primero las largas, y dentro de cada una, con ruido
-    # primero, que es lo que decide si entra al póster.
-    todas = [corrida(n, s, c)
-             for n in ("B400", "K400f8")
-             for s in ("_n01", "_n05", "")
-             for c in (True, False)]
-    correr(todas, marca="DONE_dos_etapas")
+    todas = [c for c in (corrida(*o) for o in ORDEN) if c[0] not in EN_CURSO]
+    correr(todas, marca="DONE_dos_etapas", ajenas=EN_CURSO)
