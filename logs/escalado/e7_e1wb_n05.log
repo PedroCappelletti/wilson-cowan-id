@@ -1,0 +1,11 @@
+=== escalado · e7_e1wb_n05 · whitebox · refrac1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=5.572e-03 | err_max= 83.88% 
+    ep   250 | data=6.040e-04 | err_max= 51.27% 
+    ep   500 | data=5.609e-04 | err_max= 43.18% 
+    ep   750 | data=5.546e-04 | err_max= 68.58% 
+    ep  1000 | data=5.530e-04 | err_max= 80.06% 
+    ep  1250 | data=5.525e-04 | err_max= 86.51% 
+    ep  1499 | data=5.523e-04 | err_max= 90.36% 
+
+  RESULTADO e7_e1wb_n05: NRMSE_test=10.09% (I=11.62 E=8.55) R2df=-0.266 err_param=17.24% [36.7 min]
+  -> results\escalado\e7_e1wb_n05.json

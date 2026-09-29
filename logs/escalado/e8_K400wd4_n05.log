@@ -1,0 +1,11 @@
+=== escalado · e8_K400wd4_n05 · K · act1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=7.487e-03 | err_max= 84.86% 
+    ep   250 | data=6.592e-04 | err_max= 83.35% 
+    ep   500 | data=5.602e-04 | err_max= 73.54% 
+    ep   750 | data=5.163e-04 | err_max= 83.45% 
+    ep  1000 | data=4.748e-04 | err_max= 87.21% 
+    ep  1250 | data=4.544e-04 | err_max= 89.47% 
+    ep  1499 | data=4.650e-04 | err_max= 91.05% 
+
+  RESULTADO e8_K400wd4_n05: NRMSE_test=12.94% (I=13.90 E=11.99) R2df=-1.386 err_param=22.55% [134.9 min]
+  -> results\escalado\e8_K400wd4_n05.json

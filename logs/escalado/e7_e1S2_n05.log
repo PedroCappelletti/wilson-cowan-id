@@ -1,0 +1,11 @@
+=== escalado · e7_e1S2_n05 · S · refrac1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=5.855e-04 | err_max= 89.89% 
+    ep   250 | data=5.367e-04 | err_max= 97.83% 
+    ep   500 | data=5.358e-04 | err_max= 99.07% 
+    ep   750 | data=5.357e-04 | err_max= 99.46% 
+    ep  1000 | data=5.357e-04 | err_max= 99.64% 
+    ep  1250 | data=5.357e-04 | err_max= 99.74% 
+    ep  1499 | data=5.357e-04 | err_max= 99.81% 
+
+  RESULTADO e7_e1S2_n05: NRMSE_test=9.87% (I=11.29 E=8.45) R2df=0.866 err_param=17.68% [233.0 min]
+  -> results\escalado\e7_e1S2_n05.json

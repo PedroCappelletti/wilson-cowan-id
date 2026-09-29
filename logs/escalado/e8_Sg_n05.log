@@ -1,0 +1,11 @@
+=== escalado · e8_Sg_n05 · Sg · refrac1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=5.855e-04 | err_max= 89.89% g_rms=0.0000 redund=nan
+    ep   250 | data=5.333e-04 | err_max= 95.57% g_rms=0.0034 redund=nan
+    ep   500 | data=5.280e-04 | err_max= 97.74% g_rms=0.0057 redund=nan
+    ep   750 | data=5.178e-04 | err_max= 98.47% g_rms=0.0062 redund=nan
+    ep  1000 | data=5.086e-04 | err_max= 98.79% g_rms=0.0110 redund=nan
+    ep  1250 | data=5.233e-04 | err_max= 98.86% g_rms=0.0141 redund=nan
+    ep  1499 | data=4.933e-04 | err_max= 98.69% g_rms=0.0153 redund=nan
+
+  RESULTADO e8_Sg_n05: NRMSE_test=10.00% (I=11.15 E=8.85) R2df=-1.768 err_param=17.95% [80.1 min]
+  -> results\escalado\e8_Sg_n05.json

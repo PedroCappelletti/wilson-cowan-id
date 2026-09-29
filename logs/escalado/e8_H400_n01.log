@@ -1,0 +1,11 @@
+=== escalado · e8_H400_n01 · H · act1_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=7.134e-03 | err_max= 84.86% 
+    ep   250 | data=1.060e-03 | err_max= 56.22% 
+    ep   500 | data=2.497e-04 | err_max= 72.17% 
+    ep   750 | data=1.499e-04 | err_max= 75.33% 
+    ep  1000 | data=4.766e-05 | err_max= 74.95% 
+    ep  1250 | data=4.256e-05 | err_max= 76.23% 
+    ep  1499 | data=5.456e-05 | err_max= 73.19% 
+
+  RESULTADO e8_H400_n01: NRMSE_test=10.78% (I=11.25 E=10.31) R2df=0.131 err_param=22.05% [99.8 min]
+  -> results\escalado\e8_H400_n01.json
