@@ -35,7 +35,9 @@ def leer(tag):
 
 
 def main():
-    filas = [f for f in FILAS if f[3] is not None]          # las que tienen ruido
+    # Todas las variantes. Las que salieron negativas sin ruido no se repitieron
+    # con ruido y muestran un solo punto.
+    filas = list(FILAS)
     wb = {f[0]: [leer(t) for t in f[2:5]] for f in filas if f[1] == "white-box"}
 
     fig, (a, b) = plt.subplots(1, 2, figsize=(11, 0.42 * len(filas) + 1.6),
@@ -71,6 +73,7 @@ def main():
     a.set_yticks([y for y, _ in etiquetas], [e for _, e in etiquetas])
     a.set_xlabel("error de parámetros [%]")
     b.set_xlabel("NRMSE / NRMSE del white-box, misma planta y ruido")
+    b.set_xlim(left=0)
     a.set_title("identificación", loc="left", color=TINTA)
     b.set_title("reproducción", loc="left", color=TINTA)
     for ax in (a, b):

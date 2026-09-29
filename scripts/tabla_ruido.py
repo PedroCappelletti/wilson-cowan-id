@@ -34,6 +34,8 @@ FILAS = [
     ("act1", "FIR, red de ancho 64", "e3_K400_h64", None, None, False),
     ("act1", "FIR, L2 1e-4", "e5_K400_wd1e-4", "e8_K400wd4_n01", "e8_K400wd4_n05", False),
     ("act1", "FIR, L2 1e-3", "e5_K400_wd1e-3", "e8_K400wd3_n01", "e8_K400wd3_n05", False),
+    ("act1", "latent ODE, ventana 100", "e2_lat_w100", None, None, False),
+    ("act1", "latent ODE, ventana 400", "e2_lat_w400", None, None, False),
 ]
 
 
