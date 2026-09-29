@@ -50,11 +50,21 @@ def cargar(ckpt_path):
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
     kind = ck.get("kind", "graybox")
     if kind == "graybox":
+        # El checkpoint no guarda los canales del filtro ni el ancho de la red,
+        # así que salen de la forma de los pesos.
+        st = ck["state"]
+        extra = {}
+        if "g.fir.weight" in st:
+            extra["n_fir"] = st["g.fir.weight"].shape[0]
+        capa0 = next((k for k in ("g.mlp.0.weight", "g.0.weight") if k in st), None)
+        if capa0:
+            extra["hidden"] = st[capa0].shape[0]
         m = GrayBoxWC({k: 1.0 for k in ALL_P}, {k: 1.0 for k in WEIGHTS},
                       learnable_weights=True, learnable_params=True,
                       use_correction=ck.get("use_correction", False),
                       correction_inputs=ck.get("correction_inputs", "x"),
-                      structured=ck.get("structured", False))
+                      structured=ck.get("structured", False),
+                      hist_len=ck.get("hist_len", 0), **extra)
     elif kind == "lag":
         m = LagGrayBox()
     elif kind == "latent":
