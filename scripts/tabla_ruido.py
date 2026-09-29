@@ -39,6 +39,26 @@ FILAS = [
 ]
 
 
+def piso(planta: str, nivel: str | None) -> float:
+    """NRMSE de un modelo perfecto: la trayectoria verdadera contra los datos con
+    ruido suavizados, que es contra lo que se evalúa. Ningún modelo baja de acá.
+    Sin ruido vale 0."""
+    import numpy as np
+    if nivel is None:
+        return 0.0
+    base = RAIZ / "data/processed/uncertain"
+    c = np.load(base / f"{planta}.npz", allow_pickle=True)
+    r = np.load(base / f"{planta}_n{nivel}.npz", allow_pickle=True)
+    ker = np.ones(7) / 7
+    vals = []
+    for s in np.where(c["is_test"].astype(bool))[0]:
+        obs = np.stack([np.convolve(r[k][s], ker, mode="same") for k in ("I", "E")], 1)
+        verdad = np.stack([c["I"][s], c["E"][s]], 1)
+        rango = obs.max(0) - obs.min(0)
+        vals.append((100 * np.sqrt(((verdad - obs) ** 2).mean(0)) / rango).mean())
+    return float(np.mean(vals))
+
+
 def celda(tag):
     if tag is None:
         return "no se repite"
@@ -55,10 +75,16 @@ def main():
         "| planta | configuración | póster | sin ruido | σ = 0,01 | σ = 0,05 |",
         "|---|---|---|---|---|---|",
     ]
-    for planta, conf, *tags, poster in FILAS:
+    for i, (planta, conf, *tags, poster) in enumerate(FILAS):
+        if i == 0 or FILAS[i - 1][0] != planta:
+            pisos = [f"{piso(planta, n):.2f}".replace(".", ",") for n in (None, "01", "05")]
+            lineas.append(f"| `{planta}` | *modelo perfecto (piso del NRMSE)* |  | "
+                          + " | ".join(f"*{x}*" for x in pisos) + " |")
         lineas.append(f"| `{planta}` | {conf} | {'sí' if poster else ''} | "
                       + " | ".join(celda(t) for t in tags) + " |")
     pie = ("\n*Cada celda: NRMSE (%) / R² de la corrección / error de parámetros (%). "
+           "El piso es el NRMSE que sacaría la trayectoria verdadera contra los datos con "
+           "ruido suavizados: lo mejor posible en ese nivel. "
            "Con ruido, media móvil de 7 muestras sobre I y E. El NRMSE se compara "
            "solo dentro de una columna; el error de parámetros también entre columnas. "
            "Una semilla por celda.*\n")
