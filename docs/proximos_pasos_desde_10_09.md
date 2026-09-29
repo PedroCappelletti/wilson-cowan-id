@@ -461,6 +461,14 @@ actualizar el póster. Queda para después:
   banda a niveles alrededor del real y una componente de ruido de proceso.
 - **Semillas** de las configuraciones que se comparen, para saber qué diferencias
   son reales.
+- **La penalización L2 del filtro no está medida.** Las tres corridas con L2
+  (`e5_K400_wd1e-4`, `e5_K400_wd1e-3`, `e8_K400wd4_n01`) divergieron al final del
+  entrenamiento: la pérdida terminó entre 3 y 12 veces por encima de su mínimo, y
+  el pipeline evalúa el modelo de la última época. Ninguna otra corrida con ruido
+  lo hizo. Sospecha sin verificar: `torch.optim.Adam` con `weight_decay` mezcla la
+  penalización con el gradiente antes de escalarlo; probar `AdamW`. Aparte, evaluar
+  el modelo de menor pérdida de entrenamiento y no el de la última época, que no
+  usa el test. `scripts/divergencia.py` detecta los casos.
 
 ## Lo que parecía un bloqueante y no lo es
 

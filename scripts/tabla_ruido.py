@@ -10,10 +10,13 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
 RES = RAIZ / "results/escalado"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from divergencia import divergio
 
 # (planta, configuración, sin ruido, sigma 0.01, sigma 0.05, en el póster)
 FILAS = [
@@ -66,8 +69,9 @@ def celda(tag):
     if not f.exists():
         return "pendiente"
     d = json.loads(f.read_text())
+    marca = " †" if divergio(tag) else ""
     return (f"{d['nrmse_test']:.2f} / {d['r2_delta_test']:+.2f} / "
-            f"{d['mean_param_error']:.1f}").replace(".", ",")
+            f"{d['mean_param_error']:.1f}").replace(".", ",") + marca
 
 
 def main():
@@ -87,7 +91,10 @@ def main():
            "ruido suavizados: lo mejor posible en ese nivel. "
            "Con ruido, media móvil de 7 muestras sobre I y E. El NRMSE se compara "
            "solo dentro de una columna; el error de parámetros también entre columnas. "
-           "Una semilla por celda.*\n")
+           "Una semilla por celda. † El entrenamiento divergió al final: la "
+           "pérdida terminó más de 1,5 veces por encima de su mínimo y el "
+           "resultado es el de un modelo ya degradado, así que no mide la "
+           "configuración.*\n")
     texto = "\n".join(lineas) + "\n" + pie
     (RAIZ / "results/tabla_ruido.md").write_text(texto, encoding="utf-8")
     print(texto)

@@ -10,6 +10,8 @@ import sys
 from pathlib import Path
 
 DIR = Path("results/escalado")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from divergencia import divergio
 
 
 def linea(tag: str) -> str:
@@ -25,6 +27,9 @@ def linea(tag: str) -> str:
     for k, fmt in (("g_rms", "{:.4f}"), ("frac_redundante", "{:.3f}")):
         if k in d:
             campos.append(f"{k}=" + fmt.format(d[k]))
+    r = divergio(tag)
+    if r:
+        campos.append(f"DIVERGIO (pérdida final x{r:.1f} sobre su mínimo)")
     return "  ".join(campos)
 
 
