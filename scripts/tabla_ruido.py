@@ -18,11 +18,11 @@ RES = RAIZ / "results/escalado"
 # (planta, configuración, sin ruido, sigma 0.01, sigma 0.05, en el póster)
 FILAS = [
     ("refrac1", "white-box", "e1_wb", "e7_e1wb_n01", "e7_e1wb_n05", True),
-    ("refrac1", "corrección ciega, ventana 400", "e1_B_w400", "e7_e1B400_n01", "e7_e1B400_n05", True),
+    ("refrac1", "corrección agnóstica, ventana 400", "e1_B_w400", "e7_e1B400_n01", "e7_e1B400_n05", True),
     ("refrac1", "forma exacta", "e1_S2", "e7_e1S2_n01", "e7_e1S2_n05", True),
     ("refrac1", "forma exacta y red", "e4_Sg", "e8_Sg_n01", "e8_Sg_n05", False),
     ("act1", "white-box", "e2_wb", "e7_e2wb_n01", "e6_wb_n05_s7", True),
-    ("act1", "corrección ciega", "e2_B", "e7_e2B_n01", "e7_e2B_n05", True),
+    ("act1", "corrección agnóstica", "e2_B", "e7_e2B_n01", "e7_e2B_n05", True),
     ("act1", "estado de filtro", "e2_lag2", "e7_e2lag_n01", "e7_e2lag_n05", True),
     ("act1", "comando actual (A)", "e2_A", None, None, False),
     ("act1", "historia cruda, 100", "e2_H100", "e8_H100_n01", "e8_H100_n05", False),
