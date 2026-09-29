@@ -205,6 +205,7 @@ class TrainConfig:
     hist: int = 0                 # K de la historia de comando (variantes H, K)
     n_fir: int = 4                # canales del FIR (variante K)
     wd_fir: float = 0.0           # decaimiento de pesos, solo sobre el FIR
+    freeze_phys: bool = False     # β fijo en su valor inicial; solo se entrena g
     seed: int = 0
     sens_every: int = 25          # cada cuantas epocas se recalculan ∂f/∂θ
     log_every: int = 250
@@ -264,8 +265,16 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
     dt = data["dt"]
 
     phys_raw = [getattr(model, f"raw_{k}") for k in PHYS]
-    groups = [{"params": [model.raw_w], "lr": cfg.lr_w},
-              {"params": phys_raw, "lr": cfg.lr_phys}]
+    if cfg.freeze_phys:
+        # Entrenamiento en dos etapas: β viene ya ajustado (--init-params) y
+        # queda fijo. Sin requires_grad=False el control de huérfanos de abajo
+        # frenaría la corrida, y con él β no recibe gradiente.
+        for q in [model.raw_w] + phys_raw:
+            q.requires_grad_(False)
+        groups = []
+    else:
+        groups = [{"params": [model.raw_w], "lr": cfg.lr_w},
+                  {"params": phys_raw, "lr": cfg.lr_phys}]
     if model.use_correction:
         fir = [q for n, q in model.g.named_parameters() if n.startswith("fir.")]
         resto = [q for n, q in model.g.named_parameters()
@@ -343,7 +352,9 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
 
     # --- Refinamiento L-BFGS (solo sobre los parametros fisicos: es lo que
     #     mas se beneficia de un metodo de segundo orden).
-    if cfg.lbfgs_steps > 0:
+    # Con β congelado se saltea: L-BFGS mueve solo los parámetros físicos, que
+    # es justo lo que tiene que quedar fijo.
+    if cfg.lbfgs_steps > 0 and not cfg.freeze_phys:
         params = [model.raw_w] + phys_raw + struct_raw
         opt2 = torch.optim.LBFGS(params, lr=1.0, max_iter=20,
                                  line_search_fn="strong_wolfe")

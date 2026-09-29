@@ -175,10 +175,19 @@ def _hidden_teacher_forced(m, I, E, P, Q, dt):
 
 
 @torch.no_grad()
-def r2_delta(m, d, solo_test=True):
+def r2_delta(m, d, solo_test=True, contra="delta", true=None):
     """R2 de (f_modelo − f_WC(θ̂)) contra el (dfI, dfE) guardado en el dataset.
-    Se evalua punto a punto sobre las trayectorias reales."""
+    Se evalua punto a punto sobre las trayectorias reales.
+
+    contra="residuo" compara contra lo que le falta al backbone con SUS
+    parametros, f_planta − f_WC(θ̂) = Δf + f_WC(θ) − f_WC(θ̂). Con θ̂ = θ es el
+    mismo R2. Con θ̂ congelado en el white-box, Δf deja de ser lo que la
+    correccion tiene que aprender y este es el R2 que dice si lo aprendio."""
     plano = _wc_plano(m.params_dict())
+    if contra == "residuo":
+        if true is None:
+            true = {k: float(d[k]) for k in ALL_P}
+        plano_true = _wc_plano(true)
     sel = d["is_test"].astype(bool)
     if not solo_test:
         sel = ~sel
@@ -203,7 +212,10 @@ def r2_delta(m, d, solo_test=True):
         f_full = m(y, Ps, Qs)[..., :2]
         f_wc = plano.backbone(x, Ps, Qs)
         preds.append((f_full - f_wc).numpy())
-        tgts.append(np.stack([dfI[s], dfE[s]], 1))
+        tgt_s = np.stack([dfI[s], dfE[s]], 1)
+        if contra == "residuo":
+            tgt_s = tgt_s + (plano_true.backbone(x, Ps, Qs) - f_wc).numpy()
+        tgts.append(tgt_s)
     pred = np.concatenate(preds)
     tgt = np.concatenate(tgts)
     ss_res = ((pred - tgt) ** 2).sum()
@@ -225,6 +237,7 @@ def evaluar(m, d, true: dict | None = None) -> dict:
         "nrmse_I": float(np.mean([f["nrmse_I"] for f in filas])),
         "nrmse_E": float(np.mean([f["nrmse_E"] for f in filas])),
         "r2_delta_test": r2_delta(m, d),
+        "r2_residuo_test": r2_delta(m, d, contra="residuo", true=true),
         "mean_param_error": float(np.mean(list(perr.values()))),
         "max_param_error": float(max(perr.values())),
         "param_errors": perr,

@@ -95,8 +95,13 @@ def main():
                     help="decaimiento de pesos sobre el FIR (variante K)")
     ap.add_argument("--smooth", type=int, default=0,
                     help="ancho de la media movil sobre I y E (0 = sin suavizar)")
+    ap.add_argument("--freeze-phys", action="store_true",
+                    help="β fijo en el de --init-params; solo se entrena g")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
+    if args.freeze_phys and not args.init_params:
+        ap.error("--freeze-phys necesita --init-params: congelar el arranque "
+                 "ignorante dejaría β en 1,0")
 
     data_path = Path("data/processed/uncertain") / f"{args.data}.npz"
     # Hash del dataset: sin esto, un .npz regenerado deja los resultados viejos
@@ -124,7 +129,7 @@ def main():
                           lam_orth=args.lam_orth, seed=args.seed,
                           hist=args.hist, n_fir=args.n_fir,
                           hidden=args.hidden, lbfgs_steps=args.lbfgs_steps,
-                          wd_fir=args.wd_fir)
+                          wd_fir=args.wd_fir, freeze_phys=args.freeze_phys)
         warm = None
         if args.init_params or args.r_init is not None:
             # warm-start: mismo modelo que build_model pero con los crudos
@@ -173,6 +178,7 @@ def main():
         "window": args.window, "epochs": args.epochs, "hist": args.hist, "n_fir": args.n_fir,
         "hidden": args.hidden, "wd_fir": args.wd_fir,
         "smooth": args.smooth,
+        "init_params": args.init_params, "freeze_phys": args.freeze_phys,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},
