@@ -455,7 +455,7 @@ actualizar el póster. Queda para después:
 - **Penalización de la antigüedad del núcleo**, el centroide
   $\sum_k k\,w_k^2 / \sum_k w_k^2$. Solo con su intensidad elegida por NRMSE de
   validación y probada también en una planta con memoria larga (adaptación con
-  $	au_a$ de 30 o 100 ms), para que no le pase a la red el valor de $	au$.
+  $\tau_a$ de 30 o 100 ms), para que no le pase a la red el valor de $\tau$.
 - **Ruido realista.** El ruido blanco actual da 27 y 41 dB dentro de la banda de
   la señal; las grabaciones reales, una cota de unos −7 dB. Falta ruido dentro de
   banda a niveles alrededor del real y una componente de ruido de proceso.
@@ -474,6 +474,19 @@ actualizar el póster. Queda para después:
   todas las correcciones agnósticas a ese nivel y 0,7 puntos mejor que el estado de
   filtro. Una semilla. Si se sostiene con semillas y con `AdamW`, la penalización
   pasa a ser la opción con ruido.
+- **Arranque desde el white-box** (corrido el 29 y 30-09, fuera del póster por
+  decisión del 30-09). Entrenar todo junto, pero partiendo del β del white-box ya
+  ajustado en lugar del arranque ignorante. En refractariedad la corrección
+  agnóstica pasa a identificar β (con $\sigma = 0{,}01$, error de 26,4 a 5,5 % con
+  ventana de 20 ms y de 23,7 a 4,2 % con 5 ms; $R^2$ contra $\Delta f$ de −0,46 a
+  0,79). Con $\sigma = 0{,}05$ solo se sostiene con ventana de 20 ms. En el
+  actuador no identifica en ninguna variante y la reproducción cambia en los dos
+  sentidos sin patrón. Congelar β es peor que no congelar. Falta: semillas, la
+  versión sin ruido que divergió (`e10_B400_wrm`), el estado de filtro desde el
+  white-box (`fit_aug` no acepta `--init-params`), y probar si la diferencia entre
+  plantas es por cuán deformado sale el β del white-box. Tablas en
+  `results/tabla_arranque.md` (`scripts/tabla_arranque.py`); corridas `e10_*` y
+  `e11_*`, colas `cola_dos_etapas.py` y `cola_arranque_wb.py`.
 
 ## Lo que parecía un bloqueante y no lo es
 
