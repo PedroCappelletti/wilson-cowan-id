@@ -1,0 +1,11 @@
+=== escalado · e10_B400_frz · B · refrac1 · W=400 · epochs=1500 ===
+    ep     0 | data=2.731e-05 | err_max= 71.56% g_rms=0.0000 redund=nan
+    ep   250 | data=2.134e-05 | err_max= 71.56% g_rms=0.0013 redund=nan
+    ep   500 | data=1.932e-05 | err_max= 71.56% g_rms=0.0014 redund=nan
+    ep   750 | data=1.637e-05 | err_max= 71.56% g_rms=0.0017 redund=nan
+    ep  1000 | data=1.560e-05 | err_max= 71.56% g_rms=0.0019 redund=nan
+    ep  1250 | data=1.508e-05 | err_max= 71.56% g_rms=0.0020 redund=nan
+    ep  1499 | data=1.555e-05 | err_max= 71.56% g_rms=0.0020 redund=nan
+
+  RESULTADO e10_B400_frz: NRMSE_test=3.51% (I=3.52 E=3.49) R2df=0.223 err_param=11.50% [160.0 min]
+  -> results\escalado\e10_B400_frz.json

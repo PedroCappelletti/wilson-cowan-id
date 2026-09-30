@@ -1,0 +1,11 @@
+=== escalado · e10_K400f8_frz_n01 · K · act1_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=3.240e-04 | err_max= 69.56% 
+    ep   250 | data=1.054e-04 | err_max= 69.56% 
+    ep   500 | data=8.068e-05 | err_max= 69.56% 
+    ep   750 | data=5.977e-05 | err_max= 69.56% 
+    ep  1000 | data=1.514e-04 | err_max= 69.56% 
+    ep  1250 | data=4.399e-05 | err_max= 69.56% 
+    ep  1499 | data=4.514e-05 | err_max= 69.56% 
+
+  RESULTADO e10_K400f8_frz_n01: NRMSE_test=14.00% (I=14.08 E=13.91) R2df=0.139 err_param=29.28% [110.4 min]
+  -> results\escalado\e10_K400f8_frz_n01.json

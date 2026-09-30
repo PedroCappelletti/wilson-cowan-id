@@ -22,51 +22,53 @@ RES = RAIZ / "results" / "escalado"
 NOTA = Path(r"C:\Users\User\Desktop\Vault\01-Projects\Investigación Neurociencia"
             r"\Validación de arquitecturas\Arranque desde el white-box.md")
 
-# (planta, corrección, {arranque: (tag σ=0.01, tag σ=0.05)})
+# (planta, corrección, {arranque: (tag sin ruido, σ=0.01, σ=0.05)}); None = no se corrió
 FILAS = [
     ("refrac1", "agnóstica, ventana 20 ms", {
-        "desde cero": ("e7_e1B400_n01", "e7_e1B400_n05"),
-        "desde el white-box": ("e10_B400_wrm_n01", "e10_B400_wrm_n05"),
-        "congelada": ("e10_B400_frz_n01", "e10_B400_frz_n05")}),
+        "desde cero": ("e1_B_w400", "e7_e1B400_n01", "e7_e1B400_n05"),
+        "desde el white-box": ("e10_B400_wrm", "e10_B400_wrm_n01", "e10_B400_wrm_n05"),
+        "congelada": ("e10_B400_frz", "e10_B400_frz_n01", "e10_B400_frz_n05")}),
     ("refrac1", "agnóstica, ventana 5 ms", {
-        "desde cero": ("e11_B100_cero_n01", "e11_B100_cero_n05"),
-        "desde el white-box": ("e11_B100_wrm_n01", "e11_B100_wrm_n05")}),
+        "desde cero": ("e1_B_w100", "e11_B100_cero_n01", "e11_B100_cero_n05"),
+        "desde el white-box": (None, "e11_B100_wrm_n01", "e11_B100_wrm_n05")}),
     ("act1", "agnóstica g(I, E)", {
-        "desde cero": ("e7_e2B_n01", "e7_e2B_n05"),
-        "desde el white-box": ("e11_e2B_wrm_n01", "e11_e2B_wrm_n05")}),
+        "desde cero": ("e2_B", "e7_e2B_n01", "e7_e2B_n05"),
+        "desde el white-box": (None, "e11_e2B_wrm_n01", "e11_e2B_wrm_n05")}),
     ("act1", "historia del comando, 100", {
-        "desde cero": ("e8_H100_n01", "e8_H100_n05"),
-        "desde el white-box": ("e11_H100_wrm_n01", "e11_H100_wrm_n05")}),
+        "desde cero": ("e2_H100", "e8_H100_n01", "e8_H100_n05"),
+        "desde el white-box": (None, "e11_H100_wrm_n01", "e11_H100_wrm_n05")}),
     ("act1", "historia del comando, 400", {
-        "desde cero": ("e8_H400_n01", "e6_H400_n05_s7"),
-        "desde el white-box": ("e11_H400_wrm_n01", "e11_H400_wrm_n05")}),
+        "desde cero": ("e2_H400", "e8_H400_n01", "e6_H400_n05_s7"),
+        "desde el white-box": (None, "e11_H400_wrm_n01", "e11_H400_wrm_n05")}),
     ("act1", "filtro entrenable, 4 canales", {
-        "desde cero": ("e8_K400_n01", "e6_K400_n05_s7"),
-        "desde el white-box": ("e11_K400_wrm_n01", "e11_K400_wrm_n05")}),
+        "desde cero": ("e3_K400", "e8_K400_n01", "e6_K400_n05_s7"),
+        "desde el white-box": (None, "e11_K400_wrm_n01", "e11_K400_wrm_n05")}),
     ("act1", "filtro entrenable, 8 canales", {
-        "desde cero": ("e8_K400f8_n01", "e8_K400f8_n05"),
-        "desde el white-box": ("e10_K400f8_wrm_n01", "e10_K400f8_wrm_n05"),
-        "congelada": ("e10_K400f8_frz_n01", "e10_K400f8_frz_n05")}),
+        "desde cero": ("e3_K400_f8", "e8_K400f8_n01", "e8_K400f8_n05"),
+        "desde el white-box": ("e10_K400f8_wrm", "e10_K400f8_wrm_n01", "e10_K400f8_wrm_n05"),
+        "congelada": ("e10_K400f8_frz", "e10_K400f8_frz_n01", "e10_K400f8_frz_n05")}),
     ("act1", "filtro entrenable, 16 canales", {
-        "desde cero": ("e9_K400f16_n01", "e9_K400f16_n05"),
-        "desde el white-box": ("e11_K400f16_wrm_n01", "e11_K400f16_wrm_n05")}),
+        "desde cero": ("e9_K400f16", "e9_K400f16_n01", "e9_K400f16_n05"),
+        "desde el white-box": (None, "e11_K400f16_wrm_n01", "e11_K400f16_wrm_n05")}),
     ("act1", "filtro, 4 canales, L2 1e-4", {
-        "desde cero": ("e8_K400wd4_n01", "e8_K400wd4_n05"),
-        "desde el white-box": ("e11_K400wd4_wrm_n01", "e11_K400wd4_wrm_n05")}),
+        "desde cero": ("e5_K400_wd1e-4", "e8_K400wd4_n01", "e8_K400wd4_n05"),
+        "desde el white-box": (None, "e11_K400wd4_wrm_n01", "e11_K400wd4_wrm_n05")}),
     ("act1", "filtro, 4 canales, L2 1e-3", {
-        "desde cero": ("e8_K400wd3_n01", "e8_K400wd3_n05"),
-        "desde el white-box": ("e11_K400wd3_wrm_n01", "e11_K400wd3_wrm_n05")}),
+        "desde cero": ("e5_K400_wd1e-3", "e8_K400wd3_n01", "e8_K400wd3_n05"),
+        "desde el white-box": (None, "e11_K400wd3_wrm_n01", "e11_K400wd3_wrm_n05")}),
 ]
 # Referencias sin red, para leer las filas.
 REFERENCIAS = [
-    ("refrac1", "white-box", ("e7_e1wb_n01", "e7_e1wb_n05")),
-    ("refrac1", "forma exacta (backbone expandido)", ("e7_e1S2_n01", "e7_e1S2_n05")),
-    ("act1", "white-box", ("e7_e2wb_n01", "e6_wb_n05_s7")),
-    ("act1", "estado de filtro (backbone expandido)", ("e7_e2lag_n01", "e7_e2lag_n05")),
+    ("refrac1", "white-box", ("e1_wb", "e7_e1wb_n01", "e7_e1wb_n05")),
+    ("refrac1", "forma exacta (backbone expandido)", ("e1_S2", "e7_e1S2_n01", "e7_e1S2_n05")),
+    ("act1", "white-box", ("e2_wb", "e7_e2wb_n01", "e6_wb_n05_s7")),
+    ("act1", "estado de filtro (backbone expandido)", ("e2_lag2", "e7_e2lag_n01", "e7_e2lag_n05")),
 ]
 
 
 def celda(tag, r2=True):
+    if tag is None:
+        return "no se corrió"
     f = RES / f"{tag}.json"
     if not f.exists():
         return "…"
@@ -77,17 +79,17 @@ def celda(tag, r2=True):
 
 
 def tabla():
-    lin = ["| planta | corrección | arranque | σ = 0,01 | σ = 0,05 |",
-           "|---|---|---|---|---|"]
+    lin = ["| planta | corrección | arranque | sin ruido | σ = 0,01 | σ = 0,05 |",
+           "|---|---|---|---|---|---|"]
     for planta, corr, brazos in FILAS:
-        for i, (arranque, (t1, t5)) in enumerate(brazos.items()):
+        for i, (arranque, (t0, t1, t5)) in enumerate(brazos.items()):
             lin.append(f"| {'`' + planta + '`' if i == 0 else ''} | {corr if i == 0 else ''} "
-                       f"| {arranque} | {celda(t1)} | {celda(t5)} |")
-    lin.append("| | *referencias sin red* | | | |")
-    for planta, nombre, (t1, t5) in REFERENCIAS:
+                       f"| {arranque} | {celda(t0)} | {celda(t1)} | {celda(t5)} |")
+    lin.append("| | *referencias sin red* | | | | |")
+    for planta, nombre, (t0, t1, t5) in REFERENCIAS:
         r2 = "white-box" not in nombre
-        lin.append(f"| `{planta}` | {nombre} | | {celda(t1, r2)} | {celda(t5, r2)} |")
-    faltan = sum(celda(t) == "…" for _, _, b in FILAS for par in b.values() for t in par)
+        lin.append(f"| `{planta}` | {nombre} | | {celda(t0, r2)} | {celda(t1, r2)} | {celda(t5, r2)} |")
+    faltan = sum(celda(t) == "…" for _, _, b in FILAS for par in b.values() for t in par[1:])
     return "\n".join(lin), faltan
 
 
