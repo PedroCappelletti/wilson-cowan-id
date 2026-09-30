@@ -1,0 +1,11 @@
+=== escalado · e11_e2B_wrm_n05 · B · act1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=1.259e-03 | err_max= 96.81% g_rms=0.0000 redund=nan
+    ep   250 | data=1.240e-03 | err_max= 99.58% g_rms=0.0098 redund=nan
+    ep   500 | data=1.224e-03 | err_max= 99.83% g_rms=0.0119 redund=nan
+    ep   750 | data=1.108e-03 | err_max= 99.85% g_rms=0.0154 redund=nan
+    ep  1000 | data=1.076e-03 | err_max= 99.84% g_rms=0.0136 redund=nan
+    ep  1250 | data=1.029e-03 | err_max= 99.83% g_rms=0.0139 redund=nan
+    ep  1499 | data=1.016e-03 | err_max= 99.83% g_rms=0.0160 redund=nan
+
+  RESULTADO e11_e2B_wrm_n05: NRMSE_test=15.16% (I=15.42 E=14.90) R2df=-0.988 err_param=27.88% [59.8 min]
+  -> results\escalado\e11_e2B_wrm_n05.json

@@ -1,0 +1,11 @@
+=== escalado · e11_K400f16_wrm_n01 · K · act1_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=3.240e-04 | err_max= 68.54% 
+    ep   250 | data=8.603e-05 | err_max= 66.83% 
+    ep   500 | data=6.270e-05 | err_max= 63.32% 
+    ep   750 | data=5.499e-05 | err_max= 60.74% 
+    ep  1000 | data=3.991e-04 | err_max= 57.80% 
+    ep  1250 | data=3.128e-05 | err_max= 55.84% 
+    ep  1499 | data=2.952e-05 | err_max= 54.74% 
+
+  RESULTADO e11_K400f16_wrm_n01: NRMSE_test=11.61% (I=12.34 E=10.89) R2df=-0.049 err_param=28.76% [111.6 min]
+  -> results\escalado\e11_K400f16_wrm_n01.json

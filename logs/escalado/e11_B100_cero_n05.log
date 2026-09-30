@@ -1,0 +1,11 @@
+=== escalado · e11_B100_cero_n05 · B · refrac1_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=5.572e-03 | err_max= 83.88% g_rms=0.0000 redund=nan
+    ep   250 | data=6.794e-04 | err_max= 61.98% g_rms=0.0233 redund=nan
+    ep   500 | data=5.496e-04 | err_max= 53.03% g_rms=0.0146 redund=nan
+    ep   750 | data=5.354e-04 | err_max= 47.74% g_rms=0.0125 redund=nan
+    ep  1000 | data=5.298e-04 | err_max= 54.97% g_rms=0.0113 redund=nan
+    ep  1250 | data=5.566e-04 | err_max= 63.89% g_rms=0.0124 redund=nan
+    ep  1499 | data=5.108e-04 | err_max= 73.74% g_rms=0.0130 redund=nan
+
+  RESULTADO e11_B100_cero_n05: NRMSE_test=9.88% (I=11.11 E=8.65) R2df=-1.058 err_param=33.26% [57.8 min]
+  -> results\escalado\e11_B100_cero_n05.json
