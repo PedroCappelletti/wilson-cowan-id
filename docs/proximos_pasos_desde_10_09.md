@@ -447,11 +447,91 @@ tienen ruido y no se sabe cuánto.
 Hasta el viernes 2-10 el trabajo es validar con ruido lo que ya está y
 actualizar el póster. Queda para después:
 
+- **Cuántos canales hacen falta, sin barrerlos.** Hoy el ancho del filtro se
+  elige por barrido (4, 8, 16) mirando el test. Tres alternativas, de la más
+  barata a la más cara:
+
+  1. **SVD de la historia del comando. No cuesta ninguna corrida.** El banco FIR
+     mira 400 muestras por canal; si esa matriz tiene rango efectivo bajo, los
+     canales de más caen en direcciones casi nulas y el barrido sobra. Tomarle la
+     SVD al regresor y leer cuántos valores singulares son apreciables cierra la
+     pregunta en una tarde, y contrasta de frente la hipótesis de por qué 16
+     anda peor que 8. La maquinaria ya existe para los parámetros en
+     `exp_subset_selection.py` (QR con pivoteo y SVD sobre la matriz de
+     sensibilidad); sería la misma idea sobre el regresor del filtro.
+  2. **Esparsidad de grupo**, si la SVD dice que hay algo que podar. Cada canal
+     es un grupo y una penalización L2,1 manda canales enteros a cero exacto.
+     Se entrena una vez con 16 y se cuentan los que sobreviven. El repo está a
+     un paso: `--wd-fir` ya aplica L2 sobre el FIR, que encoge todo pero no
+     anula nada. **Dos advertencias:** las corridas con L2 que ya existen
+     salieron inestables (`filtro, 4 canales, L2 1e-3` divergió en varias y una
+     llegó a 187 % de error de parámetros), y se cambia un barrido discreto de
+     tres valores por un λ continuo que también hay que elegir, aunque se pueda
+     elegir con validación.
+  3. **Dropout sobre los canales: no.** Sirve contra la coadaptación en redes
+     sobreparametrizadas con datos de sobra. Acá el problema es el opuesto, los
+     canales de más no se coadaptan sino que ven direcciones casi nulas, así que
+     matarlos al azar agrega ruido al gradiente sin tocar la causa.
+
+- **La familia de escalones es demasiado chica, y un escenario decide
+  comparaciones.** `box_a1.2` es el único escalón de test; en entrenamiento solo
+  están `box_a0.4` y `box_a0.8`. Es el caso de extrapolación y el escenario más
+  difícil y más disperso de los siete: sobre las 63 corridas de `act1` su mediana
+  es 27,7 % contra 8 a 13 % de los demás, con desvío 8,0. Con un séptimo del peso
+  aporta cerca de un tercio del promedio, y alcanza para invertir una comparación
+  (el filtro de 8 canales con arranque desde el white-box parece mejorar solo con
+  `σ = 0,01`; sacando ese escenario el orden es monótono y la diferencia
+  desaparece). Haría falta una familia de amplitudes graduada con más de una en
+  test. **Es la intervención más cara:** rehacer los datasets cambia su
+  `data_sha256` e invalida las 63 corridas. Antes conviene lo barato, que es
+  reportar la mediana o separar el escenario de extrapolación, porque
+  `por_escenario` ya está guardado en cada JSON y no hace falta correr nada.
+
+  **Dos predicciones falsables**, para que esto no quede en «más datos es mejor»:
+
+  - *El óptimo de canales del filtro debería subir.* El banco FIR mira 400
+    muestras de comando, y con estímulos suaves esa historia es de rango bajo:
+    los canales de más caen en direcciones casi nulas, donde el gradiente no
+    distingue nada. Más estímulos y más variados abren direcciones
+    independientes y vuelven identificables los canales extra. O sea que «16 es
+    peor que 8» puede ser una afirmación sobre tener 13 escenarios y no sobre
+    que 16 canales sean demasiados.
+  - *El óptimo de ventana debería alargarse.* Con 4000 muestras y 13
+    trayectorias, la ventana de 5 ms da 507 ventanas de gradiente por época y la
+    de 20 ms solo 117. La ventana larga acerca el objetivo de entrenamiento al
+    criterio de corrida libre, pero paga en condicionamiento y en cantidad de
+    muestras; más trayectorias compensan justo esa parte.
+
+  Si al duplicar los escenarios ninguno de los dos óptimos se mueve, el tamaño
+  del dataset no era el límite y conviene mirar otra cosa.
+
+  **Ojo con cómo se amplía, que esto ya se midió** (`exp_a_set_design.py`).
+  Optimizar *un* estímulo bajó la fracción imitable del 71,4 % del mejor de
+  librería al 59,5 %. Pero armar un dataset con 20 variantes de ese diseño
+  óptimo subió la fracción **conjunta** a 73,9 %, peor que la librería (67,1 %).
+  Cuando se exige un único δθ que explique todos los escenarios a la vez, la
+  degeneración se rompe sola si los escenarios son **distintos entre sí**, y las
+  siete familias de la librería hacen ese trabajo gratis. O sea que hay dos
+  palancas y la segunda pesa más: que cada estímulo sea bueno, y que sean
+  complementarios. Engordar la familia de escalones es la palanca débil.
+
+  Conviene separar los dos objetivos, que empujan distinto:
+  - *Identificabilidad:* familias nuevas, o correr `exp_a_set_design.py`, que
+    optimiza el conjunto y ya está escrito.
+  - *El peso de `box_a1.2`:* ese sí pide más miembros en la familia de
+    escalones, porque el problema es que la extrapolación la decide un punto
+    único. Es diseño del conjunto de **test**, no de identificabilidad.
 - **Partición con validación.** Hoy los datasets tienen 13 escenarios de
   entrenamiento y 7 de test, sin validación, y todas las elecciones de
   arquitectura (400 contra 800 retardos, 4 contra 8 canales, el ancho de la red)
   se hicieron mirando el test. Separar 3 escenarios de entrenamiento como
   validación, uno por tipo de estímulo, y rehacer la comparación final.
+  **Además el presupuesto de ajuste fue desparejo:** la ventana se barrió solo
+  para la agnóstica (100, 200 y 400 muestras), la historia y el filtro barrieron
+  su propio hiperparámetro, y la forma exacta y el estado de filtro corrieron sin
+  ningún barrido, en los valores por defecto. Eso juega en contra del resultado
+  principal y no a favor, porque las dos variantes que ganan son las únicas sin
+  afinar; donde sí infla es adentro de la familia entrenable.
 - **Penalización de la antigüedad del núcleo**, el centroide
   $\sum_k k\,w_k^2 / \sum_k w_k^2$. Solo con su intensidad elegida por NRMSE de
   validación y probada también en una planta con memoria larga (adaptación con
