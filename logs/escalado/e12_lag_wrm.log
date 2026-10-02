@@ -1,0 +1,14 @@
+=== escalado · e12_lag_wrm · lag · act1 · W=100 · epochs=1500 ===
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:123: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+    ep     0 | data=1.714e-04 | err_max= 72.76% tau=0.445 sat=12.494 alpha=0.080
+    ep   250 | data=1.107e-05 | err_max= 34.26% tau=0.884 sat=1000.000 alpha=0.001
+    ep   500 | data=4.953e-06 | err_max= 21.13% tau=0.922 sat=1000.000 alpha=0.001
+    ep   750 | data=2.240e-06 | err_max= 13.91% tau=0.956 sat=1000.000 alpha=0.001
+    ep  1000 | data=1.743e-06 | err_max= 11.50% tau=0.972 sat=1000.000 alpha=0.001
+    ep  1250 | data=3.413e-06 | err_max= 10.67% tau=0.978 sat=1000.000 alpha=0.001
+    ep  1499 | data=1.691e-06 | err_max= 10.40% tau=0.980 sat=1000.000 alpha=0.001
+
+  RESULTADO e12_lag_wrm: NRMSE_test=3.03% (I=3.10 E=2.97) R2df=0.941 err_param=5.70% [248.9 min]
+  -> results\escalado\e12_lag_wrm.json
