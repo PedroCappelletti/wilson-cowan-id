@@ -46,6 +46,19 @@ from esc_eval import evaluar
 OUT_DIR = Path("results/escalado")
 
 
+def cargar_params(core, ruta: str) -> None:
+    """Copia los diez parametros fisicos de una corrida previa a los crudos del
+    backbone. Sirve igual para el GrayBoxWC suelto y para el .core de los
+    modelos de estado aumentado, que es el mismo objeto."""
+    ph = json.loads(Path(ruta).read_text())["params"]
+    with torch.no_grad():
+        w = torch.tensor([ph[k] for k in ("wEE", "wEI", "wIE", "wII")])
+        core.raw_w.copy_(torch.log(torch.expm1(w)))
+        for k in ("te", "ti", "ae", "ai", "thetae", "thetai"):
+            getattr(core, f"raw_{k}").copy_(
+                torch.log(torch.expm1(torch.tensor(float(ph[k])))))
+
+
 def suavizar(data: dict, k: int) -> dict:
     """Media movil de ancho k sobre I y E, en train, test y el crudo de la
     evaluacion. P y Q quedan intactos: son el comando y se conocen sin ruido."""
@@ -102,6 +115,9 @@ def main():
     if args.freeze_phys and not args.init_params:
         ap.error("--freeze-phys necesita --init-params: congelar el arranque "
                  "ignorante dejaría β en 1,0")
+    if args.freeze_phys and args.variant in ("lag", "latent"):
+        ap.error("--freeze-phys no está implementado para el estado aumentado: "
+                 "fit_aug siempre entrena β")
 
     data_path = Path("data/processed/uncertain") / f"{args.data}.npz"
     # Hash del dataset: sin esto, un .npz regenerado deja los resultados viejos
@@ -118,6 +134,10 @@ def main():
     if args.variant in ("lag", "latent"):
         model = (LagGrayBox() if args.variant == "lag"
                  else LatentGrayBox(n_hidden=args.n_hidden))
+        # El estado aumentado tambien arranca del beta del white-box. fit_aug
+        # no congela beta, asi que --freeze-phys no aplica aca.
+        if args.init_params:
+            cargar_params(model.core, args.init_params)
         cfg = AugTrainConfig(window=args.window, epochs=args.epochs,
                              seed=args.seed)
         res = fit_aug(data, model, cfg)
@@ -138,13 +158,7 @@ def main():
             torch.manual_seed(args.seed)
             warm = build_model(cfg)
             if args.init_params:
-                ph = json.loads(Path(args.init_params).read_text())["params"]
-                with torch.no_grad():
-                    w = torch.tensor([ph[k] for k in ("wEE", "wEI", "wIE", "wII")])
-                    warm.raw_w.copy_(torch.log(torch.expm1(w)))
-                    for k in ("te", "ti", "ae", "ai", "thetae", "thetai"):
-                        getattr(warm, f"raw_{k}").copy_(
-                            torch.log(torch.expm1(torch.tensor(float(ph[k])))))
+                cargar_params(warm, args.init_params)
             if args.r_init is not None and warm.structured:
                 with torch.no_grad():
                     warm.raw_r_i.fill_(args.r_init)
