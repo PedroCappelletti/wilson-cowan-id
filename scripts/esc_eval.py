@@ -109,34 +109,56 @@ def _hist_seq(u, K):
     return torch.tensor(out).unsqueeze(1)
 
 
-def _rollout_traj(m, I0, E0, P, Q, dt):
-    T = len(P)
-    x0 = torch.tensor([[I0, E0]], dtype=torch.float32)
+@torch.no_grad()
+def _rollout_lote(m, I0, E0, P, Q, dt):
+    """Corrida libre de n escenarios a la vez. I0, E0: (n,); P, Q: (n, T).
+    Devuelve (T, n, 2). En lote tarda un séptimo que de a uno, y la validación
+    se mide dieciséis veces por corrida."""
+    T = P.shape[1]
+    x0 = torch.tensor(np.stack([I0, E0], 1), dtype=torch.float32)
     # El modelo con historia necesita los K retardos en cada paso, no el escalar.
     K = largo_historia(m)
     if K:
-        Ps, Qs = _hist_seq(P, K), _hist_seq(Q, K)
+        Ps = torch.cat([_hist_seq(p, K) for p in P], dim=1)
+        Qs = torch.cat([_hist_seq(q, K) for q in Q], dim=1)
     else:
-        Ps = torch.tensor(P, dtype=torch.float32).reshape(T, 1, 1)
-        Qs = torch.tensor(Q, dtype=torch.float32).reshape(T, 1, 1)
+        Ps = torch.tensor(P.T, dtype=torch.float32).unsqueeze(-1)
+        Qs = torch.tensor(Q.T, dtype=torch.float32).unsqueeze(-1)
     if getattr(m, "n_hidden", 0) > 0:
         x0 = torch.cat([x0, m.h0(x0, Ps[0], Qs[0])], dim=-1)
-    return rollout(m, x0, Ps[:-1], Qs[:-1], dt)[:, 0, :2].numpy()
+    return rollout(m, x0, Ps[:-1], Qs[:-1], dt)[:, :, :2].numpy()
+
+
+def _rollout_traj(m, I0, E0, P, Q, dt):
+    return _rollout_lote(m, np.array([I0]), np.array([E0]),
+                         np.asarray(P)[None], np.asarray(Q)[None], dt)[:, 0]
+
+
+def _tiene(d, clave) -> bool:
+    """d puede ser el NpzFile o el dict plano que arma suavizar."""
+    return clave in getattr(d, "files", d)
+
+
+def seleccion(d, conjunto="test"):
+    """Mascara de escenarios de "test", "val" o "train". Sin is_val (los
+    datasets anteriores a la ampliacion), "train" es todo lo que no es test."""
+    te = d["is_test"].astype(bool)
+    va = d["is_val"].astype(bool) if _tiene(d, "is_val") else np.zeros_like(te)
+    return {"test": te, "val": va, "train": ~te & ~va}[conjunto]
 
 
 @torch.no_grad()
-def nrmse_test(m, d, solo_test=True):
-    """NRMSE % por escenario de test (mismas convenciones que exp_reproduccion:
+def nrmse_test(m, d, conjunto="test"):
+    """NRMSE % por escenario (mismas convenciones que exp_reproduccion:
     normalizado por el rango pico-a-pico de la senal real, por canal)."""
-    sel = d["is_test"].astype(bool)
-    if not solo_test:
-        sel = ~sel
+    sel = seleccion(d, conjunto)
     I, E, P, Q = d["I"][sel], d["E"][sel], d["P"][sel], d["Q"][sel]
     labels = [str(x) for x in d["labels"][sel]]
     dt = float(d["dt"])
+    preds = _rollout_lote(m, I[:, 0], E[:, 0], P, Q, dt)
     filas = []
     for s in range(len(I)):
-        pred = _rollout_traj(m, I[s, 0], E[s, 0], P[s], Q[s], dt)
+        pred = preds[:, s]
         real = np.stack([I[s], E[s]], 1)
         rng_ = real.max(0) - real.min(0)
         rng_[rng_ < 1e-9] = 1.0
@@ -175,7 +197,7 @@ def _hidden_teacher_forced(m, I, E, P, Q, dt):
 
 
 @torch.no_grad()
-def r2_delta(m, d, solo_test=True, contra="delta", true=None):
+def r2_delta(m, d, conjunto="test", contra="delta", true=None):
     """R2 de (f_modelo − f_WC(θ̂)) contra el (dfI, dfE) guardado en el dataset.
     Se evalua punto a punto sobre las trayectorias reales.
 
@@ -188,9 +210,7 @@ def r2_delta(m, d, solo_test=True, contra="delta", true=None):
         if true is None:
             true = {k: float(d[k]) for k in ALL_P}
         plano_true = _wc_plano(true)
-    sel = d["is_test"].astype(bool)
-    if not solo_test:
-        sel = ~sel
+    sel = seleccion(d, conjunto)
     I, E, P, Q = d["I"][sel], d["E"][sel], d["P"][sel], d["Q"][sel]
     dfI, dfE = d["dfI"][sel], d["dfE"][sel]
     dt = float(d["dt"])
@@ -241,8 +261,20 @@ def evaluar(m, d, true: dict | None = None) -> dict:
         "mean_param_error": float(np.mean(list(perr.values()))),
         "max_param_error": float(max(perr.values())),
         "param_errors": perr,
+        "nrmse_test_mediana": float(np.median([f["nrmse"] for f in filas])),
         "por_escenario": filas,
     }
+    extrap = ({str(lab) for lab, x in zip(d["labels"], d["is_extrap"]) if x}
+              if _tiene(d, "is_extrap") else set())
+    if extrap:
+        # box_a1.2 aparte: es el unico que pide extrapolar en amplitud y solo
+        # alcanzaba para invertir comparaciones.
+        interp = [f["nrmse"] for f in filas if f["label"] not in extrap]
+        out["nrmse_test_interp"] = float(np.mean(interp))
+        out["nrmse_extrap"] = float(np.mean(
+            [f["nrmse"] for f in filas if f["label"] in extrap]))
+    if seleccion(d, "val").any():
+        out["nrmse_val"] = float(np.mean([f["nrmse"] for f in nrmse_test(m, d, "val")]))
     if hasattr(m, "extras_dict"):
         out["extras"] = m.extras_dict()
     return out

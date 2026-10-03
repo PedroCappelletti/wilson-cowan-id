@@ -185,6 +185,38 @@ def param_errors(model, true: dict) -> tuple[dict, float]:
     return errs, max(errs.values())
 
 
+class MejorVal:
+    """Guarda el estado del modelo con menor NRMSE de validacion.
+
+    Se evalua la corrida libre sobre los escenarios de validacion cada tantas
+    epocas. Hasta la ampliacion del dataset se evaluaba la ultima epoca, y las
+    corridas que divergian al final quedaban medidas ya degradadas."""
+
+    def __init__(self, model, val_fn):
+        self.model, self.val_fn = model, val_fn
+        self.mejor = float("inf")
+        self.ep = None
+        self.estado = None
+        self.historia = []
+
+    def evaluar(self, ep) -> float:
+        v = float(self.val_fn(self.model))
+        self.historia.append({"ep": ep, "nrmse_val": v})
+        # Una corrida libre que explota da NaN, y NaN < x es falso: no se guarda.
+        if v < self.mejor:
+            self.mejor, self.ep = v, ep
+            self.estado = {k: t.detach().clone()
+                           for k, t in self.model.state_dict().items()}
+        return v
+
+    def restaurar(self) -> dict:
+        ultima = self.historia[-1]["nrmse_val"] if self.historia else float("nan")
+        if self.estado is not None:
+            self.model.load_state_dict(self.estado)
+        return {"nrmse_val_mejor": self.mejor, "ep_mejor_val": self.ep,
+                "nrmse_val_ultima": ultima, "historia_val": self.historia}
+
+
 # =============================================================================
 #  SECCION 4: EL ENTRENAMIENTO
 # =============================================================================
@@ -206,6 +238,7 @@ class TrainConfig:
     n_fir: int = 4                # canales del FIR (variante K)
     wd_fir: float = 0.0           # decaimiento de pesos, solo sobre el FIR
     freeze_phys: bool = False     # β fijo en su valor inicial; solo se entrena g
+    val_every: int = 100          # cada cuantas epocas se mide la validacion
     seed: int = 0
     sens_every: int = 25          # cada cuantas epocas se recalculan ∂f/∂θ
     log_every: int = 250
@@ -248,16 +281,20 @@ def build_model(cfg: TrainConfig) -> GrayBoxWC:
     )
 
 
-def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
+def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
+        val_fn=None) -> dict:
     """Entrena una variante y devuelve el resultado + el historial.
 
     `data` necesita: I,E,P,Q (train), I_te,E_te,P_te,Q_te (test), dt, true.
     `model` opcional: permite arrancar de un modelo ya inicializado (warm-start)
     en vez del arranque ignorante de build_model.
+    `val_fn(model) -> NRMSE` opcional: con ella el modelo devuelto es el de
+    mejor validacion, no el de la ultima epoca.
     """
     torch.manual_seed(cfg.seed)
     if model is None:
         model = build_model(cfg)
+    seg = MejorVal(model, val_fn) if val_fn is not None else None
 
     x0, Pw, Qw, tgt = make_windows(data["I"], data["E"], data["P"], data["Q"],
                                    cfg.window, hist=cfg.hist)
@@ -349,6 +386,10 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
                   f"| err_max={mx:6.2f}% {extra}", flush=True)
         hist.append({"ep": ep, "data": float(data_loss.detach()),
                      "pen": float(pen.detach()) if torch.is_tensor(pen) else 0.0})
+        if seg and ((ep + 1) % cfg.val_every == 0 or ep == cfg.epochs - 1):
+            v = seg.evaluar(ep)
+            if cfg.verbose:
+                print(f"    ep {ep:5d} | val={v:6.2f}%", flush=True)
 
     # --- Refinamiento L-BFGS (solo sobre los parametros fisicos: es lo que
     #     mas se beneficia de un metodo de segundo orden).
@@ -366,6 +407,10 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
             return loss
         for _ in range(cfg.lbfgs_steps):
             opt2.step(closure)
+        if seg:
+            seg.evaluar("lbfgs")
+
+    val = seg.restaurar() if seg else {}
 
     # --- Resultados
     errs, mx = param_errors(model, data["true"])
@@ -382,6 +427,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
                                   hist=cfg.hist),
         "model": model,
         "hist": hist,
+        **val,
     }
     if model.structured:
         out["structured"] = model.structured_dict()
@@ -422,17 +468,23 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None) -> dict:
 # =============================================================================
 
 def load_split(path) -> dict:
-    """Carga un .npz multi-escenario y lo parte en train/test segun is_test."""
+    """Carga un .npz multi-escenario y lo parte en train/val/test.
+
+    Los datasets anteriores a la ampliacion no traen is_val: ahi la validacion
+    queda vacia y el entrenamiento ve lo mismo que antes."""
     d = np.load(path, allow_pickle=True)
     is_test = d["is_test"].astype(bool)
+    is_val = (d["is_val"].astype(bool) if "is_val" in d.files
+              else np.zeros_like(is_test))
+    tr = ~is_test & ~is_val
     out = {
-        "I": d["I"][~is_test], "E": d["E"][~is_test],
-        "P": d["P"][~is_test], "Q": d["Q"][~is_test],
+        "I": d["I"][tr], "E": d["E"][tr],
+        "P": d["P"][tr], "Q": d["Q"][tr],
         "I_te": d["I"][is_test], "E_te": d["E"][is_test],
         "P_te": d["P"][is_test], "Q_te": d["Q"][is_test],
         "dt": float(d["dt"]),
         "true": {k: float(d[k]) for k in ALL_P},
-        "labels": d["labels"], "is_test": is_test,
+        "labels": d["labels"], "is_test": is_test, "is_val": is_val,
         "raw": d,
     }
     return out

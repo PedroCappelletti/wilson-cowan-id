@@ -111,6 +111,80 @@ def build_scenarios():
 
     return S
 
+
+# Escenarios de build_scenarios que piden mas que interpolar: box_a1.2 tiene una
+# amplitud por encima de todas las de entrenamiento. Se reporta aparte porque,
+# siendo el escenario mas dificil, decidia comparaciones el solo.
+EXTRAPOLACION = {"box_a1.2"}
+
+
+def build_scenarios_ampliado():
+    """Los 20 de build_scenarios sin tocar, mas 29 nuevos, con validacion.
+
+    Devuelve (label, P, Q, rol) con rol en {"train", "val", "test"}. Los
+    originales conservan su rol, asi que el test viejo queda contenido en el
+    nuevo y las corridas viejas se pueden evaluar contra el. Cada familia queda
+    con un escenario de validacion y dos de test, y el chirp, que antes solo
+    estaba en test, pasa a tener tres de entrenamiento. Total 28 / 7 / 14.
+
+    Se amplia dentro de las siete familias y no con variantes de un estimulo
+    solo: exp_a_set_design.py midio que la identificabilidad conjunta la da la
+    diversidad entre familias.
+    """
+    S = [(lab, Pf, Qf, "test" if te else "train")
+         for lab, Pf, Qf, te in build_scenarios()]
+    ton, toff = 10.0, 190.0
+
+    for amp, rol in ((0.6, "train"), (1.0, "train"), (0.7, "val"), (0.5, "test")):
+        S.append((f"box_a{amp}", box_pulse(amp, ton, toff),
+                  box_pulse(0.7 * amp, ton + 5, toff - 5), rol))
+
+    for amp, fhz, rol in ((0.8, 50, "train"), (0.8, 100, "train"),
+                          (0.8, 80, "val"), (0.8, 115, "test")):
+        S.append((f"square_a{amp}_f{fhz}",
+                  square_wave_pulse(amp, hz(fhz), ton, toff, 0.4),
+                  square_wave_pulse(0.7 * amp, hz(0.8 * fhz), ton, toff, 0.5), rol))
+
+    for i, (amp, dmin, dmax, s, rol) in enumerate(
+            [(1.2, 2, 7, 74, "train"), (0.6, 2.5, 9, 75, "train"),
+             (1.1, 2, 8, 76, "val"), (0.9, 1.5, 7, 77, "test")], start=3):
+        S.append((f"aprbs_{i}",
+                  aprbs_pulse(amp, ton, toff, dmin, dmax, seed=s, amp_min=0.2 * amp),
+                  aprbs_pulse(0.8 * amp, ton, toff, dmin * 1.3, dmax * 1.2, seed=s + 10, amp_min=0.1 * amp),
+                  rol))
+
+    for i, (amp, bp, s, rol) in enumerate(
+            [(0.8, 5, 83, "train"), (1.15, 3, 84, "train"),
+             (1.1, 4.5, 85, "val"), (0.9, 5.5, 86, "test")], start=2):
+        S.append((f"prbs_{i}", prbs_pulse(amp, ton, toff, bp, seed=s),
+                  prbs_pulse(0.8 * amp, ton, toff, bp * 1.2, seed=s + 10), rol))
+
+    for i, (amp, fg, ft, rol) in enumerate(
+            [(1.1, 45, 9, "train"), (0.9, 55, 11, "train"),
+             (1.05, 50, 10, "val"), (0.95, 48, 11, "test")], start=3):
+        S.append((f"thetagamma_{i}",
+                  theta_gamma_pulse(amp, hz(fg), hz(ft), ton, toff, 0.5),
+                  theta_gamma_pulse(0.7 * amp, hz(0.9 * fg), hz(ft), ton, toff, 0.5), rol))
+
+    for i, (amp, rate, pw, s, rol) in enumerate(
+            [(1.0, 0.08, 6.0, 93, "train"), (1.3, 0.11, 4.5, 94, "train"),
+             (1.25, 0.10, 5.0, 95, "val"), (1.1, 0.09, 5.5, 96, "test")], start=2):
+        S.append((f"poisson_{i}", poisson_pulse(amp, rate, ton, toff, pw, seed=s),
+                  poisson_pulse(0.8 * amp, rate * 0.8, ton, toff, pw, seed=s + 10), rol))
+
+    # Los tres de entrenamiento cubren entre todos la banda del chirp de test
+    # (10 a 150 Hz) sin que ninguno la recorra entera.
+    for i, (amp, f0, f1, aq, g0, g1, rol) in enumerate(
+            [(0.8, 10, 80, 0.6, 15, 70, "train"),
+             (0.7, 60, 150, 0.5, 50, 120, "train"),
+             (1.0, 20, 120, 0.75, 25, 100, "train"),
+             (0.9, 15, 140, 0.65, 20, 110, "val"),
+             (0.7, 30, 130, 0.5, 25, 110, "test")], start=1):
+        S.append((f"chirp_{i}", chirp_pulse(amp, hz(f0), hz(f1), ton, toff),
+                  chirp_pulse(aq, hz(g0), hz(g1), ton, toff), rol))
+
+    return S
+
 # #############################################################################
 # ##   FIN ZONA EDITABLE                                                     ##
 # #############################################################################

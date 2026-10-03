@@ -35,7 +35,8 @@ import torch.nn.functional as F
 
 from .dynamics import GrayBoxWC
 from .integrate import rollout
-from .graybox_train import make_windows, param_errors, ALL_P, WEIGHTS, PHYS
+from .graybox_train import (make_windows, param_errors, MejorVal, ALL_P,
+                            WEIGHTS, PHYS)
 
 
 def _inv_softplus(v: float) -> torch.Tensor:
@@ -194,10 +195,12 @@ class AugTrainConfig:
     lr_g: float = 3e-3          # redes g y h (LatentGrayBox)
     seed: int = 0
     log_every: int = 250
+    val_every: int = 100
     verbose: bool = True
 
 
-def fit_aug(data: dict, model: nn.Module, cfg: AugTrainConfig) -> dict:
+def fit_aug(data: dict, model: nn.Module, cfg: AugTrainConfig,
+            val_fn=None) -> dict:
     """Entrena un modelo de estado aumentado con multiple shooting.
 
     Identico en espiritu a graybox_train.fit: ventanas de W pasos reiniciadas
@@ -206,6 +209,7 @@ def fit_aug(data: dict, model: nn.Module, cfg: AugTrainConfig) -> dict:
     comando, o z=0) y la perdida se evalua SOLO sobre (I,E).
     """
     torch.manual_seed(cfg.seed)
+    seg = MejorVal(model, val_fn) if val_fn is not None else None
 
     x0, Pw, Qw, tgt = make_windows(data["I"], data["E"], data["P"], data["Q"], cfg.window)
     dt = data["dt"]
@@ -259,7 +263,12 @@ def fit_aug(data: dict, model: nn.Module, cfg: AugTrainConfig) -> dict:
             print(f"    ep {ep:5d} | data={float(loss.detach()):.3e} "
                   f"| err_max={mx:6.2f}% {extra}", flush=True)
         hist.append({"ep": ep, "data": float(loss.detach())})
+        if seg and ((ep + 1) % cfg.val_every == 0 or ep == cfg.epochs - 1):
+            v = seg.evaluar(ep)
+            if cfg.verbose:
+                print(f"    ep {ep:5d} | val={v:6.2f}%", flush=True)
 
+    val = seg.restaurar() if seg else {}
     errs, mx = param_errors(model, data["true"])
     return {
         "params": model.params_dict(),
@@ -269,4 +278,5 @@ def fit_aug(data: dict, model: nn.Module, cfg: AugTrainConfig) -> dict:
         "mean_param_error": float(np.mean(list(errs.values()))),
         "model": model,
         "hist": hist,
+        **val,
     }

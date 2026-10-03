@@ -42,7 +42,8 @@ from scipy.special import expit
 from src.wilson_cowan import WilsonCowanParams, NoPerturbation, default_uncertainty
 from src.data import generate_dataset
 
-from gen_multi_dataset import build_scenarios, T_SPAN, N_EVAL, I0, E0, SEED
+from gen_multi_dataset import (build_scenarios, EXTRAPOLACION, T_SPAN, N_EVAL,
+                               I0, E0, SEED)
 
 # #############################################################################
 # ##   ZONA EDITABLE                                                         ##
@@ -91,22 +92,28 @@ def delta_f_verdadero(params, pert, Pf, Qf, t, I, E, P_cmd, Q_cmd, extra):
     return dfI, dfE
 
 
-def generar_con(pert_factory, out_path: Path, extra_meta: dict | None = None):
+def generar_con(pert_factory, out_path: Path, extra_meta: dict | None = None,
+                escenarios=build_scenarios):
     """Genera el dataset multi-escenario con la perturbacion que devuelva
     `pert_factory()`. Se llama a la fabrica UNA VEZ POR ESCENARIO: las
     perturbaciones con estado interno pre-generado (el ruido, por ejemplo) no
-    deben compartirse entre trayectorias."""
+    deben compartirse entre trayectorias.
+
+    `escenarios` devuelve tuplas cuyo cuarto campo es un bool de test
+    (build_scenarios) o un rol "train" / "val" / "test"
+    (build_scenarios_ampliado)."""
     pert_ref = pert_factory()
-    scenarios = build_scenarios()
+    scenarios = [(lab, Pf, Qf, ("test" if r else "train") if isinstance(r, bool) else r)
+                 for lab, Pf, Qf, r in escenarios()]
     print(f"\n=== {pert_ref.metadata()['pert_name']} -> {out_path.name} — "
           f"{len(scenarios)} escenarios ===")
 
     I_all, E_all, P_all, Q_all = [], [], [], []
     Pe_all, Qe_all, dfI_all, dfE_all = [], [], [], []
-    labels, is_test = [], []
+    labels, roles = [], []
     t_ref = None
 
-    for label, Pf, Qf, test in scenarios:
+    for label, Pf, Qf, rol in scenarios:
         pert = pert_factory()
         ds = generate_dataset(params=PARAMS, P=Pf, Q=Qf, I0=I0, E0=E0,
                               t_span=T_SPAN, n_eval=N_EVAL, noise_std=NOISE,
@@ -121,10 +128,10 @@ def generar_con(pert_factory, out_path: Path, extra_meta: dict | None = None):
         P_all.append(ds["P"]); Q_all.append(ds["Q"])
         Pe_all.append(ds.get("P_eff", ds["P"])); Qe_all.append(ds.get("Q_eff", ds["Q"]))
         dfI_all.append(dfI); dfE_all.append(dfE)
-        labels.append(label); is_test.append(test)
+        labels.append(label); roles.append(rol)
 
         rel = np.sqrt(dfI ** 2 + dfE ** 2).mean()
-        flag = "TEST " if test else "train"
+        flag = f"{rol:5}"
         print(f"  [{flag}] {label:18} E=[{ds['E'].min():6.3f},{ds['E'].max():6.3f}] "
               f"|Df|={rel:.4f}")
 
@@ -137,7 +144,10 @@ def generar_con(pert_factory, out_path: Path, extra_meta: dict | None = None):
         # diagnostico (NUNCA se usa para entrenar)
         P_eff=np.stack(Pe_all), Q_eff=np.stack(Qe_all),
         dfI=np.stack(dfI_all), dfE=np.stack(dfE_all),
-        is_test=np.asarray(is_test), labels=np.asarray(labels),
+        is_test=np.asarray([r == "test" for r in roles]),
+        is_val=np.asarray([r == "val" for r in roles]),
+        is_extrap=np.asarray([lab in EXTRAPOLACION for lab in labels]),
+        labels=np.asarray(labels),
         dt=float(t_ref[1] - t_ref[0]), t_span=np.asarray(T_SPAN),
         noise_std=np.asarray(NOISE), seed=np.asarray(SEED),
         **{k: np.asarray(v) for k, v in (extra_meta or {}).items()},

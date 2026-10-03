@@ -521,6 +521,35 @@ actualizar el póster. Queda para después:
   - *El peso de `box_a1.2`:* ese sí pide más miembros en la familia de
     escalones, porque el problema es que la extrapolación la decide un punto
     único. Es diseño del conjunto de **test**, no de identificabilidad.
+- **Hecho el 3-10: dataset ampliado con validación.** `refrac1_amp` y
+  `act1_amp` (más sus `_n01` y `_n05`), generados con
+  `scripts/esc_gen_ampliado.py` sobre `build_scenarios_ampliado` de
+  `gen_multi_dataset.py`. Son 49 escenarios: 28 de entrenamiento, 7 de
+  validación (uno por familia) y 14 de test (dos por familia). Los 20 originales
+  están adentro sin cambios, con el mismo rol y trayectorias idénticas bit a bit,
+  así que el test viejo es un subconjunto del nuevo. El chirp, que antes solo
+  estaba en test, tiene ahora tres escenarios de entrenamiento que cubren entre
+  todos su banda. `box_a1.2` queda marcado con `is_extrap` y se reporta aparte
+  (`nrmse_test_interp`, `nrmse_extrap`).
+
+  **Lo que explica el peso de `box_a1.2`.** La familia de escalones tiene dos
+  regímenes: hasta amplitud 0,8 la actividad pico de E queda por debajo de 0,17,
+  y desde 1,0 salta a 0,7 u 0,8. En el dataset original los dos escalones de
+  entrenamiento (0,4 y 0,8) estaban en el régimen bajo y el de test (1,2) en el
+  alto, así que no era solo extrapolar en amplitud sino caer en un régimen que
+  la familia nunca mostró. Con `box_a1.0` en entrenamiento eso cambia. El
+  escalón de validación (0,7) y el de test nuevo (0,5) están en el régimen bajo.
+
+  **Cómo se usa la validación.** `esc_run.py` mide el NRMSE de corrida libre
+  sobre los 7 de validación cada `--val-every` épocas (100 por defecto) y otra
+  vez después de L-BFGS, y se queda con el estado de menor validación
+  (`MejorVal`, en `graybox_train.py`, compartido con `fit_aug`). El JSON guarda
+  `nrmse_val_mejor`, `ep_mejor_val`, `nrmse_val_ultima` y la historia. Eso
+  también cubre las corridas que divergían al final: ya no se evalúa la última
+  época. Las elecciones de arquitectura se hacen por `nrmse_val_mejor`, nunca
+  por test.
+
+  Los datasets viejos no traen `is_val`, y con ellos todo corre igual que antes.
 - **Partición con validación.** Hoy los datasets tienen 13 escenarios de
   entrenamiento y 7 de test, sin validación, y todas las elecciones de
   arquitectura (400 contra 800 retardos, 4 contra 8 canales, el ancho de la red)

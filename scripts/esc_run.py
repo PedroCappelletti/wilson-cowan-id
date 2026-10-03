@@ -41,7 +41,7 @@ torch.set_num_threads(int(os.environ.get("WC_THREADS", "4")))
 from src.neural_ode.graybox_train import TrainConfig, fit, load_split
 from src.neural_ode.memory import (AugTrainConfig, LagGrayBox, LatentGrayBox,
                                    fit_aug)
-from esc_eval import evaluar
+from esc_eval import evaluar, nrmse_test
 
 OUT_DIR = Path("results/escalado")
 
@@ -110,6 +110,8 @@ def main():
                     help="ancho de la media movil sobre I y E (0 = sin suavizar)")
     ap.add_argument("--freeze-phys", action="store_true",
                     help="β fijo en el de --init-params; solo se entrena g")
+    ap.add_argument("--val-every", type=int, default=100,
+                    help="épocas entre mediciones de validación (si el dataset la tiene)")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
     if args.freeze_phys and not args.init_params:
@@ -128,6 +130,13 @@ def main():
         data = suavizar(data, args.smooth)
     t0 = time.time()
 
+    # Con validación, el modelo que se evalúa y se guarda es el de menor NRMSE
+    # de validación en corrida libre, no el de la última época.
+    val_fn = None
+    if data["is_val"].any():
+        crudo = data["raw"]
+        val_fn = lambda m: np.mean([f["nrmse"] for f in nrmse_test(m, crudo, "val")])
+
     print(f"=== escalado · {args.tag} · {args.variant} · {args.data} "
           f"· W={args.window} · epochs={args.epochs} ===", flush=True)
 
@@ -139,8 +148,8 @@ def main():
         if args.init_params:
             cargar_params(model.core, args.init_params)
         cfg = AugTrainConfig(window=args.window, epochs=args.epochs,
-                             seed=args.seed)
-        res = fit_aug(data, model, cfg)
+                             seed=args.seed, val_every=args.val_every)
+        res = fit_aug(data, model, cfg, val_fn=val_fn)
         ck = {"kind": args.variant, "state": model.state_dict(),
               "n_hidden": getattr(model, "n_hidden", 0)}
     else:
@@ -149,7 +158,8 @@ def main():
                           lam_orth=args.lam_orth, seed=args.seed,
                           hist=args.hist, n_fir=args.n_fir,
                           hidden=args.hidden, lbfgs_steps=args.lbfgs_steps,
-                          wd_fir=args.wd_fir, freeze_phys=args.freeze_phys)
+                          wd_fir=args.wd_fir, freeze_phys=args.freeze_phys,
+                          val_every=args.val_every)
         warm = None
         if args.init_params or args.r_init is not None:
             # warm-start: mismo modelo que build_model pero con los crudos
@@ -163,7 +173,7 @@ def main():
                 with torch.no_grad():
                     warm.raw_r_i.fill_(args.r_init)
                     warm.raw_r_e.fill_(args.r_init)
-        res = fit(data, cfg, model=warm)
+        res = fit(data, cfg, model=warm, val_fn=val_fn)
         model = res["model"]
         ck = {"kind": "graybox", "state": model.state_dict(),
               "use_correction": model.use_correction,
@@ -199,7 +209,9 @@ def main():
         "params": res["params"],
         # g_rms y la fraccion de redundancia miden la ambiguedad entre beta y g:
         # quedaban solo en el dict que devuelve fit y no llegaban al artefacto.
-        **{k: res[k] for k in ("g_rms", "g_rel", "frac_redundante") if k in res},
+        **{k: res[k] for k in ("g_rms", "g_rel", "frac_redundante",
+                               "nrmse_val_mejor", "ep_mejor_val",
+                               "nrmse_val_ultima", "historia_val") if k in res},
         **({"extras": res["extras"]} if "extras" in res else {}),
     }
     (OUT_DIR / f"{args.tag}.json").write_text(json.dumps(out, indent=2))
