@@ -28,7 +28,10 @@ SIN_ARRANQUE = {"e1wb", "e2wb"}
 
 # Las de cola_ampliado.py que estaban andando al cambiar de cola: ocupan lugar
 # hasta que terminan y no se vuelven a lanzar.
-AJENAS = ["e13_K400f16_n05", "e13_K400f8_n05", "e13_K400_n05", "e13_H400_n05"]
+AJENAS = ["e13_K400f16_n05", "e13_K400f8_n05", "e13_K400_n05", "e13_H400_n05",
+          # al relanzar la cola el 4-10 para bajarla a 3 lugares
+          "e13_B400_wrm_n05", "e13_H100_wrm_n05", "e13_e2B_wrm_n05",
+          "e13_B100_wrm_n05"]
 
 
 def desde_wb(suf):

@@ -15,6 +15,8 @@ import sys
 import time
 from pathlib import Path
 
+from pausar import pausadas, anotar, cambiar
+
 RAIZ = Path(__file__).resolve().parents[1]
 RES = RAIZ / "results/escalado"
 LOG = RAIZ / "logs/escalado"
@@ -29,8 +31,20 @@ def terminada(tag: str) -> bool:
 
 
 def ocupando(tag: str) -> bool:
-    """Una corrida de otro lote que arrancó (tiene log) y todavía no terminó."""
-    return (LOG / f"{tag}.log").exists() and not terminada(tag)
+    """Una corrida de otro lote que arrancó (tiene log), todavía no terminó y no
+    está congelada con pausar.py --tag."""
+    return ((LOG / f"{tag}.log").exists() and not terminada(tag)
+            and tag not in pausadas())
+
+
+def lugares_ahora(por_defecto: int) -> int:
+    """logs/escalado/LUGARES, si existe, manda sobre el valor del lote. Se lee
+    en cada vuelta, así se puede bajar o subir con la cola andando."""
+    f = LOG / "LUGARES"
+    try:
+        return int(f.read_text().strip()) if f.exists() else por_defecto
+    except ValueError:
+        return por_defecto
 
 
 def correr(pendientes, marca: str, lugares: int = 4, esperar=(), extra=(),
@@ -55,7 +69,17 @@ def correr(pendientes, marca: str, lugares: int = 4, esperar=(), extra=(),
     while pendientes or propias:
         for t in [t for t, p in propias.items() if p.poll() is not None]:
             del propias[t]
-        while len(propias) + sum(map(ocupando, ajenas)) < lugares:
+        while (sum(t not in pausadas() for t in propias)
+               + sum(map(ocupando, ajenas)) < lugares_ahora(lugares)):
+            # Antes que una nueva, la que se congeló para hacer lugar.
+            congeladas = pausadas()
+            if congeladas:
+                tag, pid = next(iter(congeladas.items()))
+                cambiar(pid, tag, reanudar=True)
+                congeladas.pop(tag)
+                anotar(congeladas)
+                print(f"{time.strftime('%H:%M')} reanuda {tag}", flush=True)
+                continue
             listas = [j for j in pendientes if j[2] is None or terminada(j[2])]
             if not listas:
                 break
