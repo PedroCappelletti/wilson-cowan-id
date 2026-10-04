@@ -38,6 +38,13 @@ results/models/*
 !data/processed/uncertain/act1_n05.npz
 !data/processed/uncertain/refrac1_n01.npz
 !data/processed/uncertain/refrac1_n05.npz
+# Dataset ampliado con validación (esc_gen_ampliado.py), 43 MB entre los seis.
+!data/processed/uncertain/act1_amp.npz
+!data/processed/uncertain/act1_amp_n01.npz
+!data/processed/uncertain/act1_amp_n05.npz
+!data/processed/uncertain/refrac1_amp.npz
+!data/processed/uncertain/refrac1_amp_n01.npz
+!data/processed/uncertain/refrac1_amp_n05.npz
 !results/escalado/models/
 !results/escalado/models/*.pt
 
