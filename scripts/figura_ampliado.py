@@ -241,8 +241,53 @@ def figura_vs_poster():
                      "La forma exacta va desde el white-box en los dos, como en el póster.")
 
 
+# Las corridas desde el white-box sobre el dataset del póster (cola_dos_etapas.py,
+# cola_arranque_wb.py, cola_lag_wb.py). Solo con ruido: sin ruido hay dos, y la
+# agnóstica de 20 ms divergió.
+POSTER_WRM = {
+    "e13_B100": "e11_B100_wrm", "e13_B400": "e10_B400_wrm",
+    "e13_e2B": "e11_e2B_wrm", "e13_H100": "e11_H100_wrm", "e13_H400": "e11_H400_wrm",
+    "e13_K400": "e11_K400_wrm", "e13_K400f8": "e10_K400f8_wrm",
+    "e13_K400f16": "e11_K400f16_wrm", "e13_lag": "e12_lag_wrm",
+}
+
+
+def figura_vs_poster_wrm():
+    """Como figura_vs_poster, pero las correcciones arrancan desde el white-box
+    en los dos datasets, cada una desde el white-box de su propio dataset."""
+    series = [("dataset del póster (20 escenarios)", C["cero"], True, "o"),
+              ("dataset ampliado (49 escenarios)", "#104281", True, "D")]
+    for k_ruido, (suf, titulo) in enumerate(NIVELES[:2]):
+        filas = []
+        for planta, confs in PLANTAS:
+            filas.append(planta)
+            for rot, cero, _ in confs:
+                if rot == "white-box":
+                    viejo, nuevo = leer(POSTER[cero][k_ruido + 1]), leer(cero + suf)
+                elif cero == "e13_e1S_cero":
+                    viejo, nuevo = leer(POSTER["e13_e1S2"][k_ruido + 1]), leer("e13_e1S2" + suf)
+                else:
+                    viejo, nuevo = leer(POSTER_WRM[cero] + suf), leer(cero + "_wrm" + suf)
+                puntos = []
+                for d in (viejo, nuevo):
+                    if d is None:
+                        puntos.append(None)
+                        continue
+                    r2 = None if rot == "white-box" else d["r2_delta_test"]
+                    puntos.append((nrmse_viejo(d), d["mean_param_error"], r2))
+                filas.append((rot, puntos))
+        tres_paneles(filas, f"Desde el white-box, {titulo}: póster contra ampliado",
+                     series, f"ampliado_vs_poster_wrm{suf}",
+                     "Todas las correcciones arrancan del β del white-box de su propio dataset y "
+                     "su mismo nivel de ruido; la fila del white-box es ese punto de partida. "
+                     "NRMSE sobre los 7 escenarios de test que comparten los dos datasets, "
+                     "incluido box_a1.2. El póster evalúa la última época; el ampliado, la de "
+                     "mejor validación. El R² se mide sobre el test de cada dataset. Una semilla.")
+
+
 if __name__ == "__main__":
     estilo()
     for suf, titulo in NIVELES:
         figura_arranque(suf, titulo)
     figura_vs_poster()
+    figura_vs_poster_wrm()
