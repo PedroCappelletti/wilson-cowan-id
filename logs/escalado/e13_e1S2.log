@@ -1,0 +1,26 @@
+=== escalado · e13_e1S2 · S · refrac1_amp · W=100 · epochs=1500 ===
+    ep     0 | data=7.281e-05 | err_max= 65.23% 
+    ep    99 | val=  0.56%
+    ep   199 | val=  0.43%
+    ep   250 | data=1.691e-06 | err_max= 29.96% 
+    ep   299 | val=  0.43%
+    ep   399 | val=  0.44%
+    ep   499 | val=  0.44%
+    ep   500 | data=1.535e-06 | err_max= 22.14% 
+    ep   599 | val=  0.44%
+    ep   699 | val=  0.44%
+    ep   750 | data=1.528e-06 | err_max= 22.02% 
+    ep   799 | val=  0.44%
+    ep   899 | val=  0.44%
+    ep   999 | val=  0.44%
+    ep  1000 | data=1.527e-06 | err_max= 22.05% 
+    ep  1099 | val=  0.44%
+    ep  1199 | val=  0.44%
+    ep  1250 | data=1.527e-06 | err_max= 22.02% 
+    ep  1299 | val=  0.44%
+    ep  1399 | val=  0.44%
+    ep  1499 | data=1.527e-06 | err_max= 21.97% 
+    ep  1499 | val=  0.44%
+
+  RESULTADO e13_e1S2: NRMSE_test=0.51% (I=0.55 E=0.47) R2df=0.969 err_param=3.77% [58.8 min]
+  -> results\escalado\e13_e1S2.json

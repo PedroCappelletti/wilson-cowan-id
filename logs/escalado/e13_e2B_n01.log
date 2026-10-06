@@ -1,0 +1,26 @@
+=== escalado · e13_e2B_n01 · B · act1_amp_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=9.234e-03 | err_max= 84.86% g_rms=0.0000 redund=nan
+    ep    99 | val= 30.75%
+    ep   199 | val= 13.35%
+    ep   250 | data=7.619e-04 | err_max= 79.09% g_rms=0.0329 redund=nan
+    ep   299 | val= 12.92%
+    ep   399 | val= 12.46%
+    ep   499 | val= 12.14%
+    ep   500 | data=6.493e-04 | err_max= 86.63% g_rms=0.0291 redund=nan
+    ep   599 | val= 11.86%
+    ep   699 | val= 10.61%
+    ep   750 | data=5.256e-04 | err_max= 80.71% g_rms=0.0226 redund=nan
+    ep   799 | val=  9.48%
+    ep   899 | val=  8.15%
+    ep   999 | val=  8.89%
+    ep  1000 | data=4.506e-04 | err_max= 72.18% g_rms=0.0126 redund=nan
+    ep  1099 | val=  8.91%
+    ep  1199 | val=  8.54%
+    ep  1250 | data=4.431e-04 | err_max= 80.56% g_rms=0.0105 redund=nan
+    ep  1299 | val=  8.48%
+    ep  1399 | val=  8.08%
+    ep  1499 | data=4.323e-04 | err_max= 85.31% g_rms=0.0106 redund=nan
+    ep  1499 | val=  8.22%
+
+  RESULTADO e13_e2B_n01: NRMSE_test=10.37% (I=10.10 E=10.64) R2df=-0.190 err_param=26.89% [78.8 min]
+  -> results\escalado\e13_e2B_n01.json

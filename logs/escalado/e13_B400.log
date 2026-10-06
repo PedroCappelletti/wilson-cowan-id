@@ -1,0 +1,26 @@
+=== escalado · e13_B400 · B · refrac1_amp · W=400 · epochs=1500 ===
+    ep     0 | data=8.221e-03 | err_max= 83.88% g_rms=0.0000 redund=nan
+    ep    99 | val= 16.58%
+    ep   199 | val=  3.19%
+    ep   250 | data=1.333e-04 | err_max= 78.82% g_rms=0.0213 redund=nan
+    ep   299 | val=  2.84%
+    ep   399 | val=  2.70%
+    ep   499 | val=  2.57%
+    ep   500 | data=1.012e-04 | err_max= 61.19% g_rms=0.0180 redund=nan
+    ep   599 | val=  2.32%
+    ep   699 | val=  2.24%
+    ep   750 | data=4.565e-05 | err_max= 50.43% g_rms=0.0162 redund=nan
+    ep   799 | val=  1.99%
+    ep   899 | val=  2.04%
+    ep   999 | val=  1.86%
+    ep  1000 | data=3.978e-05 | err_max= 41.87% g_rms=0.0155 redund=nan
+    ep  1099 | val=  1.69%
+    ep  1199 | val=  1.73%
+    ep  1250 | data=2.526e-05 | err_max= 35.64% g_rms=0.0151 redund=nan
+    ep  1299 | val=  1.47%
+    ep  1399 | val=  2.22%
+    ep  1499 | data=1.898e-05 | err_max= 34.22% g_rms=0.0144 redund=nan
+    ep  1499 | val=  1.45%
+
+  RESULTADO e13_B400: NRMSE_test=1.30% (I=1.43 E=1.16) R2df=0.054 err_param=17.67% [234.3 min]
+  -> results\escalado\e13_B400.json

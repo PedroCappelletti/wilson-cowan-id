@@ -1,0 +1,26 @@
+=== escalado · e13_H100_n01 · H · act1_amp_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=9.234e-03 | err_max= 84.86% 
+    ep    99 | val= 14.90%
+    ep   199 | val=  9.30%
+    ep   250 | data=6.034e-04 | err_max= 91.73% 
+    ep   299 | val=  8.92%
+    ep   399 | val=  8.03%
+    ep   499 | val=  7.75%
+    ep   500 | data=2.705e-04 | err_max= 91.44% 
+    ep   599 | val=  6.18%
+    ep   699 | val=  5.87%
+    ep   750 | data=1.497e-04 | err_max= 92.39% 
+    ep   799 | val=  5.70%
+    ep   899 | val=  5.61%
+    ep   999 | val=  5.40%
+    ep  1000 | data=1.207e-04 | err_max= 93.09% 
+    ep  1099 | val=  5.57%
+    ep  1199 | val=  5.22%
+    ep  1250 | data=1.240e-04 | err_max= 93.05% 
+    ep  1299 | val=  5.14%
+    ep  1399 | val= 13.07%
+    ep  1499 | data=1.284e-04 | err_max= 93.10% 
+    ep  1499 | val=  6.46%
+
+  RESULTADO e13_H100_n01: NRMSE_test=6.91% (I=7.49 E=6.34) R2df=0.455 err_param=17.83% [109.4 min]
+  -> results\escalado\e13_H100_n01.json
