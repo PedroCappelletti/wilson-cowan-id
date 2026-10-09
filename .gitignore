@@ -16,6 +16,8 @@ env/
 data/raw/*
 data/processed/*
 results/figures/*
+# Las figuras del dataset ampliado sí, para que el equipo las vea sin correr nada.
+!results/figures/ampliado/
 results/models/*
 !**/.gitkeep
 
@@ -62,3 +64,9 @@ docs/*.aux
 docs/*.log
 docs/*.out
 docs/*.toc
+
+# Estado de la cola mientras corre (cola.py, pausar.py) y salidas de error vacías
+logs/escalado/LUGARES
+logs/escalado/PAUSADAS
+logs/escalado/*.err
+logs/escalado/despierto*.log
