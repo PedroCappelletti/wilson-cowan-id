@@ -33,6 +33,7 @@ Relacionado: [[Próximos pasos desde el 10-09]] · [[El filtro de la variante K 
 5. **Cómo separar el backbone de la perturbación sin conocer la forma de la perturbación.**
 	- Sin ningún supuesto es imposible: cualquier cambio de β que imite parte de la perturbación lo puede compensar la red.
 	- Hay supuestos que no tocan la forma de la perturbación: previos sobre β, condiciones donde β no cambia, intervenciones que lo cambian de forma conocida, consistencia de β entre familias de estímulos, y medir la ambigüedad en vez de resolverla.
+	- Ya probado: la consistencia de β entre familias detecta la contaminación del actuador (dispersión 5 a 15 veces la del control), pero no el sesgo común de $w_{II}$ en refractariedad.
 	- A decidir: qué se prueba en simulación, y **qué condiciones experimentales podría registrar el equipo**.
 
 ---
@@ -346,10 +347,30 @@ Además, cualquier supuesto sobre la forma de la perturbación queda descartado,
 
 Con una corrección agnóstica, β se identifica solo en la medida en que la perturbación no se pueda imitar moviéndolo. Esa medida se puede estimar, y el diseño del experimento la puede mejorar.
 
-### Qué se puede hacer ya, en simulación
+### Resultado: consistencia de β entre familias (tanda e14, 13-10)
 
-- La consistencia de β entre las siete familias del dataset ampliado (punto 4): white-box cortos, 7 por planta.
+Un white-box por familia de estímulos, entrenado y validado solo con esa familia, en tres plantas y tres niveles de ruido (66 corridas). El control es Wilson-Cowan puro sobre los mismos escenarios (`wc0_amp`): ahí β por familia solo puede diferir por falta de información, así que lo que se dispersa de más en las otras plantas es lo que aporta la perturbación.
+
+Dispersión de β entre familias (desvío estándar entre familias, promediado sobre los diez parámetros, en %):
+
+| | control | refractariedad | actuador |
+|---|---|---|---|
+| sin ruido | 1,9 | 7,7 | **29,5** |
+| σ = 0,01 | 4,8 | 8,5 | **23,6** |
+| σ = 0,05 | 13,5 | 17,0 | **25,3** |
+
+- **El control funciona como referencia.** Sin perturbación, las familias coinciden: sin ruido, el white-box con todas las familias da 0,3 % de error, y por familia entre 0,6 y 4,5 %. La de escalones es la que más se aparta, porque es la de menos actividad.
+- **El actuador contamina β de forma distinta según el estímulo.** Se dispersa entre 5 y 15 veces más que el control. $w_{II}$ va de −91 a +354 % según la familia. Las peores son square y poisson, los estímulos de pulsos rápidos, donde el retardo de 1 ms más pesa. Poisson es de las mejores familias del control y de las peores del actuador, así que no es falta de información.
+- **Con σ = 0,05 el ruido tapa casi todo.** El control ya se dispersa 13,5 %, refractariedad apenas lo supera, y solo el actuador sigue claramente por encima.
+
+**Limitación: un sesgo común a todas las familias no se detecta.** En refractariedad, todas las familias sobreestiman $w_{II}$ en la misma dirección (de +35 a +78 % con σ = 0,01, de +36 a +112 % sin ruido), y el white-box con todas juntas da +70 %. Como el sesgo es común, la dispersión casi no sube y el diagnóstico no lo ve. La consistencia entre familias detecta la contaminación que depende del estímulo, no la que es igual en todos: hay que combinarla con alguno de los otros supuestos (previos sobre β, condiciones distintas, intervenciones).
+
+Figuras: `wilson-cowan-id/results/figures/ampliado/consistencia_beta_*.png`. Tabla: `results/consistencia_beta.md` (`scripts/consistencia_beta.py`).
+
+### Qué más se puede hacer en simulación
+
 - El conjunto de β compatibles para el actuador (punto 5), que es donde el problema se ve.
+- Usar la dispersión por familia para pesar las familias en el ajuste (punto 4) y ver si el β combinado mejora en el actuador.
 
 ### Para decidir
 
