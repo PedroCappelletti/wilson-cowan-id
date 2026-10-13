@@ -1,0 +1,26 @@
+=== escalado · e14_refrac1_thetagamma · whitebox · refrac1_amp · W=100 · epochs=1500 ===
+    ep     0 | data=4.249e-03 | err_max= 83.88% 
+    ep    99 | val=  8.01%
+    ep   199 | val=  1.53%
+    ep   250 | data=4.954e-05 | err_max= 75.58% 
+    ep   299 | val=  1.30%
+    ep   399 | val=  1.14%
+    ep   499 | val=  1.03%
+    ep   500 | data=2.444e-05 | err_max= 60.89% 
+    ep   599 | val=  0.97%
+    ep   699 | val=  0.94%
+    ep   750 | data=1.711e-05 | err_max= 66.81% 
+    ep   799 | val=  0.93%
+    ep   899 | val=  0.93%
+    ep   999 | val=  0.93%
+    ep  1000 | data=1.534e-05 | err_max= 76.42% 
+    ep  1099 | val=  0.94%
+    ep  1199 | val=  0.94%
+    ep  1250 | data=1.497e-05 | err_max= 83.17% 
+    ep  1299 | val=  0.95%
+    ep  1399 | val=  0.95%
+    ep  1499 | data=1.491e-05 | err_max= 86.54% 
+    ep  1499 | val=  0.95%
+
+  RESULTADO e14_refrac1_thetagamma: NRMSE_test=4.48% (I=4.56 E=4.39) R2df=-0.174 err_param=10.99% [22.5 min]
+  -> results\escalado\e14_refrac1_thetagamma.json

@@ -1,0 +1,26 @@
+=== escalado · e14_act1_prbs_n01 · whitebox · act1_amp_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=9.354e-03 | err_max= 84.86% 
+    ep    99 | val= 14.12%
+    ep   199 | val= 10.36%
+    ep   250 | data=3.691e-04 | err_max= 74.83% 
+    ep   299 | val=  8.70%
+    ep   399 | val=  8.67%
+    ep   499 | val=  8.52%
+    ep   500 | data=3.127e-04 | err_max= 51.07% 
+    ep   599 | val=  8.37%
+    ep   699 | val=  8.21%
+    ep   750 | data=3.022e-04 | err_max= 62.19% 
+    ep   799 | val=  8.05%
+    ep   899 | val=  7.90%
+    ep   999 | val=  7.76%
+    ep  1000 | data=2.965e-04 | err_max= 76.06% 
+    ep  1099 | val=  7.64%
+    ep  1199 | val=  7.54%
+    ep  1250 | data=2.935e-04 | err_max= 84.73% 
+    ep  1299 | val=  7.47%
+    ep  1399 | val=  7.37%
+    ep  1499 | data=2.919e-04 | err_max= 89.91% 
+    ep  1499 | val=  7.30%
+
+  RESULTADO e14_act1_prbs_n01: NRMSE_test=10.61% (I=10.63 E=10.59) R2df=-0.002 err_param=34.93% [22.7 min]
+  -> results\escalado\e14_act1_prbs_n01.json

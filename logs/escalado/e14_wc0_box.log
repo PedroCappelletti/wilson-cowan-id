@@ -1,0 +1,28 @@
+=== escalado · e14_wc0_box · whitebox · wc0_amp · W=100 · epochs=1500 ===
+    ep     0 | data=6.325e-03 | err_max= 84.86% 
+    ep    99 | val= 93.85%
+    ep   199 | val= 53.21%
+    ep   250 | data=6.466e-05 | err_max= 66.18% 
+    ep   299 | val=  8.77%
+    ep   399 | val=  7.01%
+    ep   499 | val=  5.57%
+    ep   500 | data=1.828e-05 | err_max= 38.42% 
+    ep   599 | val=  4.40%
+    ep   699 | val=  3.51%
+    ep   750 | data=6.004e-06 | err_max= 20.90% 
+    ep   799 | val=  2.78%
+    ep   899 | val=  2.33%
+    ep   999 | val=  1.91%
+    ep  1000 | data=2.220e-06 | err_max= 16.05% 
+    ep  1099 | val=  1.64%
+    ep  1199 | val=  1.39%
+    ep  1250 | data=1.068e-06 | err_max= 13.51% 
+    ep  1299 | val=  1.21%
+    ep  1399 | val=  1.08%
+    ep  1499 | data=4.457e-07 | err_max=  9.84% 
+    ep  1499 | val=  0.94%
+C:\Users\User\Desktop\wilson-cowan-id\scripts\esc_eval.py:243: RuntimeWarning: invalid value encountered in scalar divide
+  return float(1.0 - ss_res / ss_tot)
+
+  RESULTADO e14_wc0_box: NRMSE_test=1.13% (I=1.16 E=1.10) R2df=nan err_param=4.53% [25.6 min]
+  -> results\escalado\e14_wc0_box.json

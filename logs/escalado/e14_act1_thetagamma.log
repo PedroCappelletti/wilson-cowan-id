@@ -1,0 +1,26 @@
+=== escalado · e14_act1_thetagamma · whitebox · act1_amp · W=100 · epochs=1500 ===
+    ep     0 | data=5.588e-03 | err_max= 83.88% 
+    ep    99 | val=  8.22%
+    ep   199 | val=  2.53%
+    ep   250 | data=1.413e-04 | err_max= 73.65% 
+    ep   299 | val=  1.94%
+    ep   399 | val=  1.87%
+    ep   499 | val=  1.88%
+    ep   500 | data=8.816e-05 | err_max= 45.20% 
+    ep   599 | val=  1.91%
+    ep   699 | val=  1.93%
+    ep   750 | data=7.966e-05 | err_max= 50.27% 
+    ep   799 | val=  1.95%
+    ep   899 | val=  1.96%
+    ep   999 | val=  1.96%
+    ep  1000 | data=7.793e-05 | err_max= 55.01% 
+    ep  1099 | val=  1.96%
+    ep  1199 | val=  1.96%
+    ep  1250 | data=7.761e-05 | err_max= 57.39% 
+    ep  1299 | val=  1.96%
+    ep  1399 | val=  1.95%
+    ep  1499 | data=7.756e-05 | err_max= 58.41% 
+    ep  1499 | val=  1.95%
+
+  RESULTADO e14_act1_thetagamma: NRMSE_test=10.20% (I=9.28 E=11.11) R2df=-0.002 err_param=14.90% [22.5 min]
+  -> results\escalado\e14_act1_thetagamma.json

@@ -1,0 +1,28 @@
+=== escalado · e14_wc0_thetagamma_n05 · whitebox · wc0_amp_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=6.162e-03 | err_max= 83.88% 
+    ep    99 | val=  5.69%
+    ep   199 | val=  3.06%
+    ep   250 | data=4.889e-04 | err_max= 58.76% 
+    ep   299 | val=  2.93%
+    ep   399 | val=  2.85%
+    ep   499 | val=  2.80%
+    ep   500 | data=4.636e-04 | err_max= 75.90% 
+    ep   599 | val=  2.77%
+    ep   699 | val=  2.76%
+    ep   750 | data=4.580e-04 | err_max= 86.34% 
+    ep   799 | val=  2.75%
+    ep   899 | val=  2.74%
+    ep   999 | val=  2.74%
+    ep  1000 | data=4.571e-04 | err_max= 91.08% 
+    ep  1099 | val=  2.74%
+    ep  1199 | val=  2.74%
+    ep  1250 | data=4.570e-04 | err_max= 93.64% 
+    ep  1299 | val=  2.74%
+    ep  1399 | val=  2.74%
+    ep  1499 | data=4.570e-04 | err_max= 95.21% 
+    ep  1499 | val=  2.74%
+C:\Users\User\Desktop\wilson-cowan-id\scripts\esc_eval.py:243: RuntimeWarning: invalid value encountered in scalar divide
+  return float(1.0 - ss_res / ss_tot)
+
+  RESULTADO e14_wc0_thetagamma_n05: NRMSE_test=8.49% (I=9.44 E=7.53) R2df=nan err_param=19.50% [22.6 min]
+  -> results\escalado\e14_wc0_thetagamma_n05.json

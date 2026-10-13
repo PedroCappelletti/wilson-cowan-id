@@ -1,0 +1,26 @@
+=== escalado · e14_act1_chirp · whitebox · act1_amp · W=100 · epochs=1500 ===
+    ep     0 | data=2.164e-02 | err_max= 83.88% 
+    ep    99 | val= 14.17%
+    ep   199 | val= 16.88%
+    ep   250 | data=1.192e-03 | err_max= 70.76% 
+    ep   299 | val= 14.14%
+    ep   399 | val= 13.27%
+    ep   499 | val= 12.71%
+    ep   500 | data=9.313e-04 | err_max= 60.86% 
+    ep   599 | val= 12.31%
+    ep   699 | val= 12.01%
+    ep   750 | data=8.818e-04 | err_max= 68.87% 
+    ep   799 | val= 11.78%
+    ep   899 | val= 11.59%
+    ep   999 | val= 11.45%
+    ep  1000 | data=8.694e-04 | err_max= 72.62% 
+    ep  1099 | val= 11.33%
+    ep  1199 | val= 11.24%
+    ep  1250 | data=8.660e-04 | err_max= 74.40% 
+    ep  1299 | val= 11.17%
+    ep  1399 | val= 11.12%
+    ep  1499 | data=8.651e-04 | err_max= 75.26% 
+    ep  1499 | val= 11.07%
+
+  RESULTADO e14_act1_chirp: NRMSE_test=11.40% (I=10.42 E=12.39) R2df=-0.002 err_param=39.94% [24.1 min]
+  -> results\escalado\e14_act1_chirp.json

@@ -1,0 +1,28 @@
+=== escalado · e14_wc0_poisson_n05 · whitebox · wc0_amp_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=1.689e-02 | err_max= 83.88% 
+    ep    99 | val=  9.07%
+    ep   199 | val=  4.03%
+    ep   250 | data=7.458e-04 | err_max= 53.34% 
+    ep   299 | val=  3.49%
+    ep   399 | val=  3.20%
+    ep   499 | val=  3.02%
+    ep   500 | data=6.486e-04 | err_max= 36.28% 
+    ep   599 | val=  2.91%
+    ep   699 | val=  2.85%
+    ep   750 | data=6.229e-04 | err_max= 38.58% 
+    ep   799 | val=  2.81%
+    ep   899 | val=  2.79%
+    ep   999 | val=  2.78%
+    ep  1000 | data=6.180e-04 | err_max= 38.11% 
+    ep  1099 | val=  2.77%
+    ep  1199 | val=  2.77%
+    ep  1250 | data=6.174e-04 | err_max= 37.54% 
+    ep  1299 | val=  2.77%
+    ep  1399 | val=  2.76%
+    ep  1499 | data=6.173e-04 | err_max= 37.29% 
+    ep  1499 | val=  2.76%
+C:\Users\User\Desktop\wilson-cowan-id\scripts\esc_eval.py:243: RuntimeWarning: invalid value encountered in scalar divide
+  return float(1.0 - ss_res / ss_tot)
+
+  RESULTADO e14_wc0_poisson_n05: NRMSE_test=7.00% (I=8.05 E=5.95) R2df=nan err_param=8.19% [22.5 min]
+  -> results\escalado\e14_wc0_poisson_n05.json

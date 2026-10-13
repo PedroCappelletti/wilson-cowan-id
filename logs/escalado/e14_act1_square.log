@@ -1,0 +1,26 @@
+=== escalado · e14_act1_square · whitebox · act1_amp · W=100 · epochs=1500 ===
+    ep     0 | data=5.562e-03 | err_max= 84.86% 
+    ep    99 | val= 44.61%
+    ep   199 | val= 38.03%
+    ep   250 | data=1.736e-03 | err_max=157.66% 
+    ep   299 | val= 28.14%
+    ep   399 | val= 37.14%
+    ep   499 | val= 32.60%
+    ep   500 | data=2.556e-04 | err_max=237.68% 
+    ep   599 | val= 30.43%
+    ep   699 | val= 29.12%
+    ep   750 | data=2.091e-04 | err_max=326.70% 
+    ep   799 | val= 27.17%
+    ep   899 | val= 11.46%
+    ep   999 | val= 11.81%
+    ep  1000 | data=6.354e-05 | err_max=320.63% 
+    ep  1099 | val= 12.14%
+    ep  1199 | val= 12.14%
+    ep  1250 | data=5.431e-05 | err_max=250.85% 
+    ep  1299 | val= 12.05%
+    ep  1399 | val= 11.93%
+    ep  1499 | data=4.948e-05 | err_max=188.54% 
+    ep  1499 | val= 11.82%
+
+  RESULTADO e14_act1_square: NRMSE_test=12.06% (I=11.43 E=12.69) R2df=-0.002 err_param=67.54% [26.5 min]
+  -> results\escalado\e14_act1_square.json

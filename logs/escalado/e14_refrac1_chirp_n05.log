@@ -1,0 +1,26 @@
+=== escalado · e14_refrac1_chirp_n05 · whitebox · refrac1_amp_n05 · W=100 · epochs=1500 ===
+    ep     0 | data=1.226e-02 | err_max= 83.88% 
+    ep    99 | val=  5.43%
+    ep   199 | val=  3.97%
+    ep   250 | data=7.486e-04 | err_max= 34.78% 
+    ep   299 | val=  3.62%
+    ep   399 | val=  3.35%
+    ep   499 | val=  3.16%
+    ep   500 | data=6.381e-04 | err_max= 13.45% 
+    ep   599 | val=  3.05%
+    ep   699 | val=  2.98%
+    ep   750 | data=6.122e-04 | err_max= 13.93% 
+    ep   799 | val=  2.94%
+    ep   899 | val=  2.92%
+    ep   999 | val=  2.91%
+    ep  1000 | data=6.074e-04 | err_max= 25.79% 
+    ep  1099 | val=  2.90%
+    ep  1199 | val=  2.90%
+    ep  1250 | data=6.067e-04 | err_max= 31.69% 
+    ep  1299 | val=  2.90%
+    ep  1399 | val=  2.89%
+    ep  1499 | data=6.069e-04 | err_max= 34.24% 
+    ep  1499 | val=  2.89%
+
+  RESULTADO e14_refrac1_chirp_n05: NRMSE_test=8.04% (I=8.74 E=7.34) R2df=-0.174 err_param=11.17% [22.6 min]
+  -> results\escalado\e14_refrac1_chirp_n05.json

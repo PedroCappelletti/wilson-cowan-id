@@ -1,0 +1,26 @@
+=== escalado · e14_refrac1_square_n01 · whitebox · refrac1_amp_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=3.946e-03 | err_max= 84.86% 
+    ep    99 | val= 36.28%
+    ep   199 | val= 24.36%
+    ep   250 | data=3.115e-04 | err_max=196.48% 
+    ep   299 | val= 20.68%
+    ep   399 | val=  8.67%
+    ep   499 | val=  5.99%
+    ep   500 | data=3.649e-05 | err_max=232.16% 
+    ep   599 | val=  5.74%
+    ep   699 | val=  5.57%
+    ep   750 | data=2.870e-05 | err_max=174.43% 
+    ep   799 | val=  5.48%
+    ep   899 | val=  5.42%
+    ep   999 | val=  5.39%
+    ep  1000 | data=2.644e-05 | err_max=128.95% 
+    ep  1099 | val=  5.38%
+    ep  1199 | val=  5.37%
+    ep  1250 | data=2.591e-05 | err_max= 97.93% 
+    ep  1299 | val=  5.36%
+    ep  1399 | val=  5.35%
+    ep  1499 | data=2.578e-05 | err_max= 77.94% 
+    ep  1499 | val=  5.35%
+
+  RESULTADO e14_refrac1_square_n01: NRMSE_test=5.10% (I=6.04 E=4.16) R2df=-0.174 err_param=15.94% [29.1 min]
+  -> results\escalado\e14_refrac1_square_n01.json

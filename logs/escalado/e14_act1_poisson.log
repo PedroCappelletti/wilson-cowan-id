@@ -1,0 +1,26 @@
+=== escalado · e14_act1_poisson · whitebox · act1_amp · W=100 · epochs=1500 ===
+    ep     0 | data=1.601e-02 | err_max= 83.88% 
+    ep    99 | val= 15.08%
+    ep   199 | val= 13.37%
+    ep   250 | data=1.374e-03 | err_max= 93.29% 
+    ep   299 | val= 13.42%
+    ep   399 | val= 13.21%
+    ep   499 | val= 12.34%
+    ep   500 | data=1.207e-03 | err_max=219.04% 
+    ep   599 | val= 13.43%
+    ep   699 | val= 13.59%
+    ep   750 | data=1.166e-03 | err_max=301.07% 
+    ep   799 | val= 13.55%
+    ep   899 | val= 13.47%
+    ep   999 | val= 13.39%
+    ep  1000 | data=1.153e-03 | err_max=349.56% 
+    ep  1099 | val= 13.31%
+    ep  1199 | val= 13.24%
+    ep  1250 | data=1.148e-03 | err_max=379.00% 
+    ep  1299 | val= 13.18%
+    ep  1399 | val= 13.16%
+    ep  1499 | data=1.147e-03 | err_max=396.81% 
+    ep  1499 | val= 13.08%
+
+  RESULTADO e14_act1_poisson: NRMSE_test=18.79% (I=17.87 E=19.71) R2df=-0.002 err_param=48.78% [22.6 min]
+  -> results\escalado\e14_act1_poisson.json

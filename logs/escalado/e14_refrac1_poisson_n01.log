@@ -1,0 +1,26 @@
+=== escalado · e14_refrac1_poisson_n01 · whitebox · refrac1_amp_n01 · W=100 · epochs=1500 ===
+    ep     0 | data=1.128e-02 | err_max= 83.88% 
+    ep    99 | val=  8.79%
+    ep   199 | val=  3.01%
+    ep   250 | data=1.659e-04 | err_max= 41.93% 
+    ep   299 | val=  2.04%
+    ep   399 | val=  1.78%
+    ep   499 | val=  1.65%
+    ep   500 | data=8.742e-05 | err_max= 76.59% 
+    ep   599 | val=  1.61%
+    ep   699 | val=  1.61%
+    ep   750 | data=6.719e-05 | err_max= 77.82% 
+    ep   799 | val=  1.63%
+    ep   899 | val=  1.66%
+    ep   999 | val=  1.68%
+    ep  1000 | data=6.323e-05 | err_max= 78.84% 
+    ep  1099 | val=  1.70%
+    ep  1199 | val=  1.71%
+    ep  1250 | data=6.263e-05 | err_max= 79.36% 
+    ep  1299 | val=  1.72%
+    ep  1399 | val=  1.73%
+    ep  1499 | data=6.257e-05 | err_max= 79.55% 
+    ep  1499 | val=  1.73%
+
+  RESULTADO e14_refrac1_poisson_n01: NRMSE_test=5.36% (I=5.83 E=4.89) R2df=-0.174 err_param=13.65% [22.5 min]
+  -> results\escalado\e14_refrac1_poisson_n01.json
