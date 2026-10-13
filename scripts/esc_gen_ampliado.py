@@ -10,7 +10,12 @@
 # de los datasets originales:
 #     python scripts/esc_gen_ruido.py act1_amp 0.01 0.05
 #
-# USO:  python scripts/esc_gen_ampliado.py
+# wc0_amp es el control sin perturbación: Wilson-Cowan puro sobre los mismos
+# escenarios, para separar lo que aporta la perturbación de lo que falta de
+# información en cada familia de estímulos.
+#
+# USO:  python scripts/esc_gen_ampliado.py          las dos plantas
+#       python scripts/esc_gen_ampliado.py wc0      solo el control
 
 from __future__ import annotations
 
@@ -21,13 +26,17 @@ _ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_ROOT))
 sys.path.insert(0, str(_ROOT / "scripts"))
 
-from src.wilson_cowan import Refractoriness, Actuator
+from src.wilson_cowan import Refractoriness, Actuator, NoPerturbation
 
 from gen_multi_dataset import build_scenarios_ampliado
 from gen_uncertain_dataset import generar_con, OUT_DIR
 
 
 def main():
+    if "wc0" in sys.argv[1:]:
+        generar_con(lambda: NoPerturbation(), OUT_DIR / "wc0_amp.npz",
+                    {"eps": 0.0}, escenarios=build_scenarios_ampliado)
+        return
     generar_con(lambda: Refractoriness(r=0.10), OUT_DIR / "refrac1_amp.npz",
                 {"eps": 1.0}, escenarios=build_scenarios_ampliado)
     generar_con(lambda: Actuator(sat=3.0, tau_act=1.0), OUT_DIR / "act1_amp.npz",

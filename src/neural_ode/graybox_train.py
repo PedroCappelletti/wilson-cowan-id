@@ -467,16 +467,31 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
 #  SECCION 5: CARGA DEL DATASET
 # =============================================================================
 
-def load_split(path) -> dict:
+def familia_de(label) -> str:
+    """box_a0.4 -> box, square_a0.6_f50 -> square, chirp -> chirp."""
+    return str(label).split("_")[0]
+
+
+def load_split(path, familia: str | None = None) -> dict:
     """Carga un .npz multi-escenario y lo parte en train/val/test.
 
     Los datasets anteriores a la ampliacion no traen is_val: ahi la validacion
-    queda vacia y el entrenamiento ve lo mismo que antes."""
+    queda vacia y el entrenamiento ve lo mismo que antes.
+
+    Con `familia`, entrenamiento y validacion se quedan solo con los escenarios
+    de esa familia de estimulos; el test no cambia."""
     d = np.load(path, allow_pickle=True)
     is_test = d["is_test"].astype(bool)
     is_val = (d["is_val"].astype(bool) if "is_val" in d.files
               else np.zeros_like(is_test))
-    tr = ~is_test & ~is_val
+    if familia is not None:
+        de_fam = np.array([familia_de(l) == familia for l in d["labels"]])
+        if not (de_fam & ~is_test).any():
+            raise ValueError(f"no hay escenarios de entrenamiento de la familia {familia}")
+        is_val = is_val & de_fam
+        tr = ~is_test & ~is_val & de_fam
+    else:
+        tr = ~is_test & ~is_val
     out = {
         "I": d["I"][tr], "E": d["E"][tr],
         "P": d["P"][tr], "Q": d["Q"][tr],

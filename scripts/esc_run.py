@@ -110,6 +110,8 @@ def main():
                     help="ancho de la media movil sobre I y E (0 = sin suavizar)")
     ap.add_argument("--freeze-phys", action="store_true",
                     help="β fijo en el de --init-params; solo se entrena g")
+    ap.add_argument("--familia", default=None,
+                    help="entrenar y validar solo con una familia de estimulos (box, square, ...)")
     ap.add_argument("--val-every", type=int, default=100,
                     help="épocas entre mediciones de validación (si el dataset la tiene)")
     ap.add_argument("--tag", required=True)
@@ -125,9 +127,16 @@ def main():
     # Hash del dataset: sin esto, un .npz regenerado deja los resultados viejos
     # sin forma de saber si salieron de los mismos bytes.
     data_sha = hashlib.sha256(data_path.read_bytes()).hexdigest()[:16]
-    data = load_split(data_path)
+    data = load_split(data_path, familia=args.familia)
     if args.smooth > 1:
         data = suavizar(data, args.smooth)
+    if args.familia:
+        # La validacion del crudo tambien se restringe a la familia: si no, la
+        # eleccion de la epoca miraria las otras seis.
+        crudo = data["raw"]
+        crudo = {k: crudo[k] for k in crudo.files} if hasattr(crudo, "files") else dict(crudo)
+        crudo["is_val"] = data["is_val"]
+        data["raw"] = crudo
     t0 = time.time()
 
     # Con validación, el modelo que se evalúa y se guarda es el de menor NRMSE
@@ -203,6 +212,7 @@ def main():
         "hidden": args.hidden, "wd_fir": args.wd_fir,
         "smooth": args.smooth,
         "init_params": args.init_params, "freeze_phys": args.freeze_phys,
+        "familia": args.familia,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,
         **{k: v for k, v in ev.items()},
