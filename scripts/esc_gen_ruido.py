@@ -7,6 +7,11 @@
 # trayectoria exacta, que es lo unico que hace valido el R2 de la correccion.
 #
 # USO:  python scripts/esc_gen_ruido.py act1 0.01 0.05
+#       python scripts/esc_gen_ruido.py act1_amp 0.01 0.05 --semilla 1
+#
+# --semilla k usa la semilla 7 + k y agrega _s<k> al nombre: otra realización
+# del ruido sobre la misma trayectoria, para medir la variación entre corridas
+# de los modelos deterministas (white-box, forma exacta, estado de filtro).
 
 from __future__ import annotations
 
@@ -19,19 +24,20 @@ DIR = Path("data/processed/uncertain")
 SEED = 7
 
 
-def agregar_ruido(nombre: str, sigma: float) -> Path:
+def agregar_ruido(nombre: str, sigma: float, semilla: int = 0) -> Path:
     d = dict(np.load(DIR / f"{nombre}.npz", allow_pickle=True))
     if float(d["noise_std"]) != 0.0:
         raise SystemExit(f"{nombre} ya tiene ruido {d['noise_std']}")
 
-    rng = np.random.default_rng(SEED)
+    rng = np.random.default_rng(SEED + semilla)
     for k in ("I", "E"):
         d[k] = d[k] + rng.normal(0.0, sigma, size=d[k].shape).astype(d[k].dtype)
     d["noise_std"] = np.asarray(sigma)
-    d["noise_seed"] = np.asarray(SEED)
+    d["noise_seed"] = np.asarray(SEED + semilla)
     d["base_dataset"] = np.asarray(nombre)
 
-    out = DIR / f"{nombre}_n{str(sigma).split('.')[-1]}.npz"
+    sufijo = f"_s{semilla}" if semilla else ""
+    out = DIR / f"{nombre}_n{str(sigma).split('.')[-1]}{sufijo}.npz"
     np.savez_compressed(out, **d)
     rel = sigma / float(np.std(d["E"]))
     print(f"  {out.name}: sigma={sigma}  ({rel:.1%} del desvio de E)")
@@ -41,9 +47,15 @@ def agregar_ruido(nombre: str, sigma: float) -> Path:
 def main():
     if len(sys.argv) < 3:
         raise SystemExit(__doc__)
-    nombre = sys.argv[1]
-    for s in sys.argv[2:]:
-        agregar_ruido(nombre, float(s))
+    args = sys.argv[1:]
+    semilla = 0
+    if "--semilla" in args:
+        i = args.index("--semilla")
+        semilla = int(args[i + 1])
+        del args[i:i + 2]
+    nombre = args[0]
+    for s in args[1:]:
+        agregar_ruido(nombre, float(s), semilla)
 
 
 if __name__ == "__main__":
