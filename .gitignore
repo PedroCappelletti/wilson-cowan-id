@@ -47,6 +47,10 @@ results/models/*
 !data/processed/uncertain/refrac1_amp.npz
 !data/processed/uncertain/refrac1_amp_n01.npz
 !data/processed/uncertain/refrac1_amp_n05.npz
+# Control sin perturbación de la tanda e14 (esc_gen_ampliado.py wc0).
+!data/processed/uncertain/wc0_amp.npz
+!data/processed/uncertain/wc0_amp_n01.npz
+!data/processed/uncertain/wc0_amp_n05.npz
 !results/escalado/models/
 !results/escalado/models/*.pt
 
