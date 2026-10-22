@@ -43,6 +43,7 @@ def generate_dataset(
     rel_tol: float = 1e-3,                           # tolerancia relativa del integrador
     abs_tol: float = 1e-6,                           # tolerancia absoluta del integrador
     perturbation=None,                               # incertidumbre dinamica (opcional)
+    n_sub: int = 4,                                  # subpasos RK4 por muestra (solo con perturbacion)
 ) -> dict[str, np.ndarray]:
     """Genera UNA trayectoria del modelo de Wilson-Cowan y la devuelve como dict.
 
@@ -79,6 +80,7 @@ def generate_dataset(
         t_eval=t_eval,
         rel_tol=rel_tol,
         abs_tol=abs_tol,
+        n_sub=n_sub,
     )
 
     # Trayectoria "limpia" que entrego el integrador.

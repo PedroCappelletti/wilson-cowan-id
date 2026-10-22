@@ -92,8 +92,20 @@ def delta_f_verdadero(params, pert, Pf, Qf, t, I, E, P_cmd, Q_cmd, extra):
     return dfI, dfE
 
 
+def retener(f, t0: float, dt: float):
+    """El estímulo f(t) mantenido constante entre muestras: vale f(t_k) en
+    [t_k, t_k + dt). Es lo que entrega un láser comandado a esa frecuencia, y lo
+    que ve el modelo, que integra con el comando fijo en cada paso. Sin esto, con
+    un muestreo grueso la planta vería los flancos del estímulo entre muestras y
+    el modelo no."""
+    def g(t):
+        return f(t0 + np.floor((t - t0) / dt + 1e-9) * dt)
+    return g
+
+
 def generar_con(pert_factory, out_path: Path, extra_meta: dict | None = None,
-                escenarios=build_scenarios):
+                escenarios=build_scenarios, t_span=T_SPAN, n_eval=N_EVAL,
+                retenido: bool = False, n_sub: int = 4):
     """Genera el dataset multi-escenario con la perturbacion que devuelva
     `pert_factory()`. Se llama a la fabrica UNA VEZ POR ESCENARIO: las
     perturbaciones con estado interno pre-generado (el ruido, por ejemplo) no
@@ -113,11 +125,14 @@ def generar_con(pert_factory, out_path: Path, extra_meta: dict | None = None,
     labels, roles = [], []
     t_ref = None
 
+    dt_m = (t_span[1] - t_span[0]) / (n_eval - 1)
     for label, Pf, Qf, rol in scenarios:
         pert = pert_factory()
+        if retenido:
+            Pf, Qf = retener(Pf, t_span[0], dt_m), retener(Qf, t_span[0], dt_m)
         ds = generate_dataset(params=PARAMS, P=Pf, Q=Qf, I0=I0, E0=E0,
-                              t_span=T_SPAN, n_eval=N_EVAL, noise_std=NOISE,
-                              seed=SEED, perturbation=pert)
+                              t_span=t_span, n_eval=n_eval, noise_std=NOISE,
+                              seed=SEED, perturbation=pert, n_sub=n_sub)
 
         t_ref = ds["t"]
         extra = ds.get("pert_extra")
@@ -148,7 +163,8 @@ def generar_con(pert_factory, out_path: Path, extra_meta: dict | None = None,
         is_val=np.asarray([r == "val" for r in roles]),
         is_extrap=np.asarray([lab in EXTRAPOLACION for lab in labels]),
         labels=np.asarray(labels),
-        dt=float(t_ref[1] - t_ref[0]), t_span=np.asarray(T_SPAN),
+        dt=float(t_ref[1] - t_ref[0]), t_span=np.asarray(t_span),
+        estimulo_retenido=np.asarray(retenido), n_sub=np.asarray(n_sub),
         noise_std=np.asarray(NOISE), seed=np.asarray(SEED),
         **{k: np.asarray(v) for k, v in (extra_meta or {}).items()},
         **{k: np.asarray(v) for k, v in pert_ref.metadata().items()},

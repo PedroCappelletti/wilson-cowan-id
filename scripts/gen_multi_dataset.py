@@ -61,13 +61,11 @@ def hz(f_hz: float) -> float:
 # transitorios (feedback linearization). Esta grilla cubre un rango moderado para
 # arrancar; si el test en lazo cerrado muestra que falta el regimen de P,Q altos,
 # se amplia (o se agregan trayectorias generadas por el propio lazo cerrado).
-def build_scenarios():
+def build_scenarios(ton: float = 10.0, toff: float = 190.0):
     """Escenarios con estimulos tipo PULSO (la libreria nueva). Sin senoides puras;
     se conserva el chirp por su cobertura espectral. P y Q decorrelacionados
     (distinta amplitud/timing/semilla). Cada familia reserva 1 escenario como test."""
     S = []
-    ton, toff = 10.0, 190.0
-
     # --- Escalon (box): baseline ---
     for amp in (0.4, 0.8, 1.2):
         S.append((f"box_a{amp}", box_pulse(amp, ton, toff),
@@ -118,7 +116,7 @@ def build_scenarios():
 EXTRAPOLACION = {"box_a1.2"}
 
 
-def build_scenarios_ampliado():
+def build_scenarios_ampliado(ton: float = 10.0, toff: float = 190.0):
     """Los 20 de build_scenarios sin tocar, mas 29 nuevos, con validacion.
 
     Devuelve (label, P, Q, rol) con rol en {"train", "val", "test"}. Los
@@ -132,8 +130,7 @@ def build_scenarios_ampliado():
     diversidad entre familias.
     """
     S = [(lab, Pf, Qf, "test" if te else "train")
-         for lab, Pf, Qf, te in build_scenarios()]
-    ton, toff = 10.0, 190.0
+         for lab, Pf, Qf, te in build_scenarios(ton, toff)]
 
     for amp, rol in ((0.6, "train"), (1.0, "train"), (0.7, "val"), (0.5, "test")):
         S.append((f"box_a{amp}", box_pulse(amp, ton, toff),

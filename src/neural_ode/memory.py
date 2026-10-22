@@ -58,7 +58,7 @@ class LagGrayBox(nn.Module):
     n_hidden = 2
 
     def __init__(self, init_value: float = 1.0, tau_init: float = 0.3,
-                 hidden: int = 32):
+                 hidden: int = 32, tau_min: float = 0.15):
         super().__init__()
         init = {k: init_value for k in ALL_P}
         self.core = GrayBoxWC(init, {k: init_value for k in WEIGHTS},
@@ -67,6 +67,9 @@ class LagGrayBox(nn.Module):
         # softplus + piso: τ̂ muy chico vuelve rigida la ecuacion y desestabiliza
         # el RK4 de paso fijo (mismo motivo que el piso de tau_act en la planta).
         self.raw_tau = nn.Parameter(_inv_softplus(tau_init))
+        # El piso tiene que crecer con el paso: con dt = 0,5 ms y τ̂ = 0,15 ms
+        # el RK4 queda en dt/τ̂ = 3,3, pasado su límite de estabilidad (2,8).
+        self.tau_min = float(tau_min)
         # misma parametrizacion que la variante S: α directo con clamp, para que
         # el gradiente no muera cerca del canal lineal. Arranca en 0.1 (no en
         # ~0): en la primera corrida arranco en 0.01 y se fue al borde inferior
@@ -74,7 +77,7 @@ class LagGrayBox(nn.Module):
         self.raw_alpha = nn.Parameter(torch.tensor(0.1))
 
     def tau(self) -> torch.Tensor:
-        return F.softplus(self.raw_tau) + 0.15
+        return F.softplus(self.raw_tau) + self.tau_min
 
     def _eff(self, u: torch.Tensor) -> torch.Tensor:
         alpha = torch.clamp(self.raw_alpha, 1e-3, 10.0)

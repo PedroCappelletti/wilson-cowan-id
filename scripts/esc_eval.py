@@ -66,7 +66,7 @@ def cargar(ckpt_path):
                       structured=ck.get("structured", False),
                       hist_len=ck.get("hist_len", 0), **extra)
     elif kind == "lag":
-        m = LagGrayBox()
+        m = LagGrayBox(tau_min=ck.get("tau_min", 0.15))
     elif kind == "latent":
         m = LatentGrayBox(n_hidden=ck.get("n_hidden", 2))
     else:

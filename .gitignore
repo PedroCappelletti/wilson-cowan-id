@@ -51,6 +51,8 @@ results/models/*
 !data/processed/uncertain/wc0_amp.npz
 !data/processed/uncertain/wc0_amp_n01.npz
 !data/processed/uncertain/wc0_amp_n05.npz
+# Datasets de 2 s a 2 kHz (esc_gen_largo.py), con su ruido escalado.
+!data/processed/uncertain/*_2s*.npz
 !results/escalado/models/
 !results/escalado/models/*.pt
 
