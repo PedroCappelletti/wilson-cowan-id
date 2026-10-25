@@ -1,0 +1,26 @@
+=== escalado · e16_K400_n01_s0 · K · act1_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=9.263e-03 | err_max= 83.88% 
+    ep    99 | val= 12.75%
+    ep   199 | val=  8.55%
+    ep   250 | data=4.399e-04 | err_max= 83.16% 
+    ep   299 | val=  7.43%
+    ep   399 | val=  7.56%
+    ep   499 | val=  6.26%
+    ep   500 | data=2.426e-04 | err_max= 90.66% 
+    ep   599 | val=  6.33%
+    ep   699 | val=  6.49%
+    ep   750 | data=1.865e-04 | err_max= 92.30% 
+    ep   799 | val=  5.73%
+    ep   899 | val=  5.53%
+    ep   999 | val=  5.70%
+    ep  1000 | data=1.615e-04 | err_max= 92.70% 
+    ep  1099 | val=  5.49%
+    ep  1199 | val=  6.16%
+    ep  1250 | data=1.364e-04 | err_max= 92.63% 
+    ep  1299 | val=  5.16%
+    ep  1399 | val=  5.02%
+    ep  1499 | data=1.174e-04 | err_max= 92.21% 
+    ep  1499 | val=  5.03%
+
+  RESULTADO e16_K400_n01_s0: NRMSE_test=7.41% (I=7.10 E=7.72) R2df=-0.260 err_param=26.39% [52.0 min]
+  -> results\escalado\e16_K400_n01_s0.json

@@ -1,0 +1,29 @@
+=== escalado · e16_lag_n05_s2 · lag · act1_2s_n05_s2 · W=10 · epochs=1500 ===
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:127: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+    ep     0 | data=8.278e-03 | err_max= 83.88% tau=0.605 sat=12.499 alpha=0.080
+    ep    99 | val= 13.09%
+    ep   199 | val=  5.87%
+    ep   250 | data=5.309e-04 | err_max= 41.08% tau=1.198 sat=1000.000 alpha=0.001
+    ep   299 | val=  5.60%
+    ep   399 | val=  5.40%
+    ep   499 | val=  5.29%
+    ep   500 | data=4.700e-04 | err_max= 64.48% tau=1.148 sat=1000.000 alpha=0.001
+    ep   599 | val=  5.24%
+    ep   699 | val=  5.22%
+    ep   750 | data=4.580e-04 | err_max= 75.71% tau=1.138 sat=1000.000 alpha=0.001
+    ep   799 | val=  5.21%
+    ep   899 | val=  5.21%
+    ep   999 | val=  5.22%
+    ep  1000 | data=4.561e-04 | err_max= 82.35% tau=1.134 sat=1000.000 alpha=0.001
+    ep  1099 | val=  5.22%
+    ep  1199 | val=  5.23%
+    ep  1250 | data=4.559e-04 | err_max= 86.52% tau=1.133 sat=1000.000 alpha=0.001
+    ep  1299 | val=  5.23%
+    ep  1399 | val=  5.24%
+    ep  1499 | data=4.557e-04 | err_max= 89.25% tau=1.133 sat=1000.000 alpha=0.001
+    ep  1499 | val=  5.24%
+
+  RESULTADO e16_lag_n05_s2: NRMSE_test=7.75% (I=8.63 E=6.86) R2df=0.968 err_param=12.59% [130.3 min]
+  -> results\escalado\e16_lag_n05_s2.json

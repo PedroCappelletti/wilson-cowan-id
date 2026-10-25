@@ -1,0 +1,181 @@
+243 simulaciones, 4 procesos
+  act    historia, 5 ms, desde cero         extendido              e16_H100_n05_s0            RMSE 0.3966  β  24.8 %  tope 0.99  <-- divergió o saturó
+  act    historia, 5 ms, desde cero         extendido              e16_H100_n01_s1            RMSE 0.3966  β  28.4 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, desde cero         extendido              e16_H100_n01_s2            RMSE 0.3992  β  23.7 %  tope 1.00
+  act    historia, 5 ms, desde cero         extendido              e16_H100_n01_s0            RMSE 0.3977  β  23.5 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, desde cero         extendido              e16_H100_n05_s1            RMSE 0.3980  β  25.5 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, desde cero         extendido              e16_H100_n05_s2            RMSE 0.4001  β  25.7 %  tope 1.00
+  act    historia, 5 ms, warm start         extendido              e16_H100_wrm_n01_s0        RMSE 0.3977  β  25.0 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         extendido              e16_H100_wrm_n01_s1        RMSE 0.3965  β  22.6 %  tope 1.00
+  act    historia, 5 ms, warm start         extendido              e16_H100_wrm_n01_s2        RMSE 0.3980  β  25.3 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         extendido              e16_H100_wrm_n05_s0        RMSE 0.3983  β  29.9 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         extendido              e16_H100_wrm_n05_s2        RMSE 0.3975  β  29.3 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         extendido              e16_H100_wrm_n05_s1        RMSE 0.3984  β  29.0 %  tope 1.00  <-- divergió o saturó
+  act    historia, 20 ms, desde cero        extendido              e16_H400_n01_s0            RMSE 0.3972  β  31.9 %  tope 0.99  <-- divergió o saturó
+  act    historia, 20 ms, desde cero        extendido              e16_H400_n05_s0            RMSE 0.3988  β  18.2 %  tope 1.00  <-- divergió o saturó
+  act    historia, 20 ms, warm start        extendido              e16_H400_wrm_n01_s0        RMSE 0.3978  β  26.6 %  tope 1.00  <-- divergió o saturó
+  act    historia, 20 ms, warm start        extendido              e16_H400_wrm_n05_s0        RMSE 0.3973  β  37.2 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 4 canales, desde cero      extendido              e16_K400_n01_s0            RMSE 0.3905  β  26.4 %  tope 0.98  <-- divergió o saturó
+  act    filtro, 4 canales, desde cero      extendido              e16_K400_n05_s0            RMSE 0.3953  β  26.6 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 4 canales, warm start      extendido              e16_K400_wrm_n01_s0        RMSE 0.3918  β  28.1 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 4 canales, warm start      extendido              e16_K400_wrm_n05_s0        RMSE 0.3967  β  36.8 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      extendido              e16_K400f8_n01_s0          RMSE 0.3991  β  27.3 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      extendido              e16_K400f8_n01_s1          RMSE 0.3703  β  26.1 %  tope 0.97  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      extendido              e16_K400f8_n01_s2          RMSE 0.3938  β  27.1 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      extendido              e16_K400f8_n05_s0          RMSE 0.3739  β  25.5 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      extendido              e16_K400f8_n05_s1          RMSE 0.3959  β  26.4 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      extendido              e16_K400f8_n05_s2          RMSE 0.3910  β  24.2 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      extendido              e16_K400f8_wrm_n01_s0      RMSE 0.3912  β  27.4 %  tope 0.99  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      extendido              e16_K400f8_wrm_n01_s1      RMSE 0.3952  β  24.8 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      extendido              e16_K400f8_wrm_n01_s2      RMSE 0.3847  β  28.0 %  tope 0.98  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      extendido              e16_K400f8_wrm_n05_s0      RMSE 0.3947  β  33.3 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      extendido              e16_K400f8_wrm_n05_s2      RMSE 0.3977  β  33.7 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      extendido              e16_K400f8_wrm_n05_s1      RMSE 0.3970  β  32.8 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 16 canales, desde cero     extendido              e16_K400f16_n01_s0         RMSE 0.3985  β  25.6 %  tope 0.99  <-- divergió o saturó
+  act    filtro, 16 canales, desde cero     extendido              e16_K400f16_n05_s0         RMSE 0.4004  β  23.0 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 16 canales, warm start     extendido              e16_K400f16_wrm_n01_s0     RMSE 0.3956  β  24.2 %  tope 1.00  <-- divergió o saturó
+  refrac oráculo                            oráculo                                           RMSE 0.0422  β   0.0 %  tope 0.67
+  act    filtro, 16 canales, warm start     extendido              e16_K400f16_wrm_n05_s0     RMSE 0.3966  β  33.7 %  tope 1.00  <-- divergió o saturó
+  refrac oráculo + forma                    oráculo + forma                                   RMSE 0.0408  β   0.0 %  tope 0.68
+  refrac white-box                          original, solo β̂      e16_e1wb_n01_s0            RMSE 0.0421  β  10.5 %  tope 0.68  <-- divergió o saturó
+  refrac white-box                          original, solo β̂      e16_e1wb_n01_s1            RMSE 0.0421  β  10.6 %  tope 0.68  <-- divergió o saturó
+  act    oráculo                            oráculo                                           RMSE 0.3975  β   0.0 %  tope 1.00
+  refrac white-box                          original, solo β̂      e16_e1wb_n01_s2            RMSE 0.0421  β  10.4 %  tope 0.68  <-- divergió o saturó
+  refrac white-box                          original, solo β̂      e16_e1wb_n05_s0            RMSE 0.0415  β   5.9 %  tope 0.67
+  refrac white-box                          original, solo β̂      e16_e1wb_n05_s2            RMSE 0.0414  β   5.3 %  tope 0.67
+  refrac white-box                          original, solo β̂      e16_e1wb_n05_s1            RMSE 0.0414  β   5.1 %  tope 0.67
+  refrac agnóstica 5 ms, desde cero         original, solo β̂      e16_B100_n01_s0            RMSE 0.0427  β  18.6 %  tope 0.67
+  refrac agnóstica 5 ms, desde cero         original, solo β̂      e16_B100_n01_s1            RMSE 0.0427  β  17.9 %  tope 0.68
+  refrac agnóstica 5 ms, desde cero         original, solo β̂      e16_B100_n01_s2            RMSE 0.0427  β  18.4 %  tope 0.68
+  refrac agnóstica 5 ms, desde cero         original, solo β̂      e16_B100_n05_s0            RMSE 0.0425  β  17.1 %  tope 0.67
+  refrac agnóstica 5 ms, desde cero         original, con modelo   e16_B100_n01_s0            RMSE 0.0445  β  18.6 %  tope 0.51
+  refrac agnóstica 5 ms, desde cero         original, con modelo   e16_B100_n01_s1            RMSE 0.0433  β  17.9 %  tope 0.56
+  refrac agnóstica 5 ms, desde cero         original, con modelo   e16_B100_n01_s2            RMSE 0.0437  β  18.4 %  tope 0.54
+  refrac agnóstica 5 ms, desde cero         original, solo β̂      e16_B100_n05_s1            RMSE 0.0424  β  14.9 %  tope 0.67
+  refrac agnóstica 5 ms, desde cero         original, solo β̂      e16_B100_n05_s2            RMSE 0.0424  β  19.1 %  tope 0.67
+  refrac agnóstica 5 ms, desde cero         original, con modelo   e16_B100_n05_s0            RMSE 0.0454  β  17.1 %  tope 0.49
+  refrac agnóstica 5 ms, desde cero         original, con modelo   e16_B100_n05_s1            RMSE 0.0452  β  14.9 %  tope 0.49
+  refrac agnóstica 5 ms, warm start         original, solo β̂      e16_B100_wrm_n01_s0        RMSE 0.0423  β   3.8 %  tope 0.67
+  refrac agnóstica 5 ms, warm start         original, solo β̂      e16_B100_wrm_n01_s1        RMSE 0.0422  β   3.2 %  tope 0.67
+  refrac agnóstica 5 ms, desde cero         original, con modelo   e16_B100_n05_s2            RMSE 0.0460  β  19.1 %  tope 0.49
+  refrac agnóstica 5 ms, warm start         original, solo β̂      e16_B100_wrm_n01_s2        RMSE 0.0423  β   3.5 %  tope 0.67
+  refrac agnóstica 5 ms, warm start         original, con modelo   e16_B100_wrm_n01_s0        RMSE 0.0414  β   3.8 %  tope 0.68
+  refrac agnóstica 5 ms, warm start         original, solo β̂      e16_B100_wrm_n05_s0        RMSE 0.0419  β   7.8 %  tope 0.67
+  refrac agnóstica 5 ms, warm start         original, con modelo   e16_B100_wrm_n01_s1        RMSE 0.0413  β   3.2 %  tope 0.68
+  refrac agnóstica 5 ms, warm start         original, solo β̂      e16_B100_wrm_n05_s1        RMSE 0.0419  β   6.6 %  tope 0.67
+  refrac agnóstica 5 ms, warm start         original, con modelo   e16_B100_wrm_n01_s2        RMSE 0.0414  β   3.5 %  tope 0.68
+  refrac agnóstica 5 ms, warm start         original, solo β̂      e16_B100_wrm_n05_s2        RMSE 0.0416  β   6.4 %  tope 0.67
+  refrac agnóstica 5 ms, warm start         original, con modelo   e16_B100_wrm_n05_s0        RMSE 0.0411  β   7.8 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, solo β̂      e16_B400_n01_s0            RMSE 0.0425  β  21.5 %  tope 0.67
+  refrac agnóstica 5 ms, warm start         original, con modelo   e16_B100_wrm_n05_s1        RMSE 0.0411  β   6.6 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, solo β̂      e16_B400_n01_s1            RMSE 0.0430  β  24.3 %  tope 0.68
+  refrac agnóstica 5 ms, warm start         original, con modelo   e16_B100_wrm_n05_s2        RMSE 0.0411  β   6.4 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, solo β̂      e16_B400_n01_s2            RMSE 0.0425  β  19.4 %  tope 0.68
+  refrac agnóstica 20 ms, desde cero        original, con modelo   e16_B400_n01_s0            RMSE 0.0467  β  21.5 %  tope 0.50
+  refrac agnóstica 20 ms, desde cero        original, solo β̂      e16_B400_n05_s0            RMSE 0.0423  β  19.7 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, con modelo   e16_B400_n01_s1            RMSE 0.0447  β  24.3 %  tope 0.51
+  refrac agnóstica 20 ms, desde cero        original, solo β̂      e16_B400_n05_s1            RMSE 0.0422  β  16.1 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, con modelo   e16_B400_n01_s2            RMSE 0.0445  β  19.4 %  tope 0.51
+  refrac agnóstica 20 ms, desde cero        original, solo β̂      e16_B400_n05_s2            RMSE 0.0422  β  18.3 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, con modelo   e16_B400_n05_s0            RMSE 0.0462  β  19.7 %  tope 0.49
+  refrac agnóstica 20 ms, warm start        original, solo β̂      e16_B400_wrm_n01_s0        RMSE 0.0423  β   4.2 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, con modelo   e16_B400_n05_s1            RMSE 0.0432  β  16.1 %  tope 0.53
+  refrac agnóstica 20 ms, warm start        original, solo β̂      e16_B400_wrm_n01_s1        RMSE 0.0423  β   3.5 %  tope 0.67
+  refrac agnóstica 20 ms, desde cero        original, con modelo   e16_B400_n05_s2            RMSE 0.0443  β  18.3 %  tope 0.51
+  refrac agnóstica 20 ms, warm start        original, solo β̂      e16_B400_wrm_n01_s2        RMSE 0.0422  β   4.2 %  tope 0.67
+  refrac agnóstica 20 ms, warm start        original, con modelo   e16_B400_wrm_n01_s0        RMSE 0.0415  β   4.2 %  tope 0.68
+  refrac agnóstica 20 ms, warm start        original, con modelo   e16_B400_wrm_n01_s1        RMSE 0.0414  β   3.5 %  tope 0.68
+  refrac agnóstica 20 ms, warm start        original, solo β̂      e16_B400_wrm_n05_s0        RMSE 0.0420  β   5.1 %  tope 0.67
+  refrac agnóstica 20 ms, warm start        original, solo β̂      e16_B400_wrm_n05_s1        RMSE 0.0419  β   6.2 %  tope 0.67
+  refrac agnóstica 20 ms, warm start        original, con modelo   e16_B400_wrm_n01_s2        RMSE 0.0415  β   4.2 %  tope 0.68
+  refrac agnóstica 20 ms, warm start        original, solo β̂      e16_B400_wrm_n05_s2        RMSE 0.0419  β   3.4 %  tope 0.67
+  refrac agnóstica 20 ms, warm start        original, con modelo   e16_B400_wrm_n05_s0        RMSE 0.0411  β   5.1 %  tope 0.67
+  refrac forma exacta, warm start           original, solo β̂      e16_e1S2_wrm_n01_s0        RMSE 0.0420  β   2.9 %  tope 0.67
+  refrac agnóstica 20 ms, warm start        original, con modelo   e16_B400_wrm_n05_s1        RMSE 0.0411  β   6.2 %  tope 0.67
+  refrac forma exacta, warm start           original, con modelo   e16_e1S2_wrm_n01_s0        RMSE 0.0409  β   2.9 %  tope 0.68
+  refrac forma exacta, warm start           original, solo β̂      e16_e1S2_wrm_n01_s1        RMSE 0.0420  β   2.9 %  tope 0.67
+  refrac forma exacta, warm start           original, con modelo   e16_e1S2_wrm_n01_s1        RMSE 0.0409  β   2.9 %  tope 0.68
+  refrac agnóstica 20 ms, warm start        original, con modelo   e16_B400_wrm_n05_s2        RMSE 0.0410  β   3.4 %  tope 0.68
+  refrac forma exacta, warm start           original, con modelo   e16_e1S2_wrm_n01_s2        RMSE 0.0409  β   2.7 %  tope 0.68
+  refrac forma exacta, warm start           original, solo β̂      e16_e1S2_wrm_n01_s2        RMSE 0.0420  β   2.7 %  tope 0.67
+  refrac forma exacta, warm start           original, solo β̂      e16_e1S2_wrm_n05_s0        RMSE 0.0413  β   9.7 %  tope 0.66
+  refrac forma exacta, warm start           original, con modelo   e16_e1S2_wrm_n05_s0        RMSE 0.0403  β   9.7 %  tope 0.67
+  refrac forma exacta, warm start           original, con modelo   e16_e1S2_wrm_n05_s1        RMSE 0.0408  β   6.1 %  tope 0.67
+  refrac forma exacta, warm start           original, solo β̂      e16_e1S2_wrm_n05_s1        RMSE 0.0418  β   6.1 %  tope 0.67
+  refrac forma exacta, warm start           original, solo β̂      e16_e1S2_wrm_n05_s2        RMSE 0.0417  β   7.0 %  tope 0.67
+  refrac forma exacta, warm start           original, con modelo   e16_e1S2_wrm_n05_s2        RMSE 0.0407  β   7.0 %  tope 0.67
+  act    white-box                          original, solo β̂      e16_e2wb_n01_s1            RMSE 0.3973  β  25.2 %  tope 1.00
+  act    white-box                          original, solo β̂      e16_e2wb_n01_s0            RMSE 0.3973  β  25.4 %  tope 1.00
+  act    white-box                          original, solo β̂      e16_e2wb_n01_s2            RMSE 0.3973  β  24.8 %  tope 1.00
+  act    white-box                          original, solo β̂      e16_e2wb_n05_s0            RMSE 0.3972  β  20.4 %  tope 1.00  <-- divergió o saturó
+  act    white-box                          original, solo β̂      e16_e2wb_n05_s1            RMSE 0.3972  β  20.0 %  tope 1.00
+  act    agnóstica, desde cero              original, solo β̂      e16_e2B_n01_s0             RMSE 0.3972  β  26.8 %  tope 1.00
+  act    white-box                          original, solo β̂      e16_e2wb_n05_s2            RMSE 0.3972  β  21.9 %  tope 1.00
+  act    agnóstica, desde cero              original, solo β̂      e16_e2B_n05_s0             RMSE 0.3972  β  24.2 %  tope 1.00
+  act    agnóstica, warm start              original, solo β̂      e16_e2B_wrm_n01_s0         RMSE 0.3973  β  20.2 %  tope 1.00
+  act    agnóstica, desde cero              original, con modelo   e16_e2B_n01_s0             RMSE 0.3763  β  26.8 %  tope 0.95
+  act    agnóstica, warm start              original, solo β̂      e16_e2B_wrm_n05_s0         RMSE 0.3973  β  25.6 %  tope 1.00  <-- divergió o saturó
+  act    agnóstica, desde cero              original, con modelo   e16_e2B_n05_s0             RMSE 0.3779  β  24.2 %  tope 0.97
+  act    historia, 5 ms, desde cero         original, solo β̂      e16_H100_n01_s0            RMSE 0.3969  β  23.5 %  tope 1.00  <-- divergió o saturó
+  act    agnóstica, warm start              original, con modelo   e16_e2B_wrm_n01_s0         RMSE 0.3918  β  20.2 %  tope 1.00
+  act    historia, 5 ms, desde cero         original, solo β̂      e16_H100_n01_s1            RMSE 0.3951  β  28.4 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, desde cero         original, solo β̂      e16_H100_n01_s2            RMSE 0.3970  β  23.7 %  tope 1.00
+  act    agnóstica, warm start              original, con modelo   e16_e2B_wrm_n05_s0         RMSE 0.3962  β  25.6 %  tope 1.00
+  act    historia, 5 ms, desde cero         original, solo β̂      e16_H100_n05_s0            RMSE 0.3971  β  24.8 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, desde cero         original, solo β̂      e16_H100_n05_s1            RMSE 0.3970  β  25.5 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, desde cero         original, solo β̂      e16_H100_n05_s2            RMSE 0.3971  β  25.7 %  tope 1.00
+  act    historia, 5 ms, warm start         original, solo β̂      e16_H100_wrm_n01_s0        RMSE 0.3970  β  25.0 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         original, solo β̂      e16_H100_wrm_n01_s2        RMSE 0.3970  β  25.3 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         original, solo β̂      e16_H100_wrm_n01_s1        RMSE 0.3970  β  22.6 %  tope 1.00
+  act    historia, 5 ms, warm start         original, solo β̂      e16_H100_wrm_n05_s0        RMSE 0.3972  β  29.9 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         original, solo β̂      e16_H100_wrm_n05_s1        RMSE 0.3971  β  29.0 %  tope 1.00  <-- divergió o saturó
+  act    historia, 20 ms, desde cero        original, solo β̂      e16_H400_n01_s0            RMSE 0.3954  β  31.9 %  tope 1.00  <-- divergió o saturó
+  act    historia, 5 ms, warm start         original, solo β̂      e16_H100_wrm_n05_s2        RMSE 0.3971  β  29.3 %  tope 1.00  <-- divergió o saturó
+  act    historia, 20 ms, desde cero        original, solo β̂      e16_H400_n05_s0            RMSE 0.3971  β  18.2 %  tope 1.00  <-- divergió o saturó
+  act    historia, 20 ms, warm start        original, solo β̂      e16_H400_wrm_n01_s0        RMSE 0.3970  β  26.6 %  tope 1.00  <-- divergió o saturó
+  act    historia, 20 ms, warm start        original, solo β̂      e16_H400_wrm_n05_s0        RMSE 0.3971  β  37.2 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 4 canales, desde cero      original, solo β̂      e16_K400_n05_s0            RMSE 0.3969  β  26.6 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 4 canales, desde cero      original, solo β̂      e16_K400_n01_s0            RMSE 0.3967  β  26.4 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 4 canales, warm start      original, solo β̂      e16_K400_wrm_n01_s0        RMSE 0.3969  β  28.1 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 4 canales, warm start      original, solo β̂      e16_K400_wrm_n05_s0        RMSE 0.3970  β  36.8 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      original, solo β̂      e16_K400f8_n01_s1          RMSE 0.3966  β  26.1 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      original, solo β̂      e16_K400f8_n01_s0          RMSE 0.3935  β  27.3 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      original, solo β̂      e16_K400f8_n01_s2          RMSE 0.3951  β  27.1 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      original, solo β̂      e16_K400f8_n05_s0          RMSE 0.3967  β  25.5 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      original, solo β̂      e16_K400f8_n05_s2          RMSE 0.3968  β  24.2 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, desde cero      original, solo β̂      e16_K400f8_n05_s1          RMSE 0.3968  β  26.4 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      original, solo β̂      e16_K400f8_wrm_n01_s0      RMSE 0.3970  β  27.4 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      original, solo β̂      e16_K400f8_wrm_n01_s2      RMSE 0.3969  β  28.0 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      original, solo β̂      e16_K400f8_wrm_n01_s1      RMSE 0.3969  β  24.8 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      original, solo β̂      e16_K400f8_wrm_n05_s0      RMSE 0.3970  β  33.3 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      original, solo β̂      e16_K400f8_wrm_n05_s1      RMSE 0.3970  β  32.8 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 8 canales, warm start      original, solo β̂      e16_K400f8_wrm_n05_s2      RMSE 0.3970  β  33.7 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 16 canales, desde cero     original, solo β̂      e16_K400f16_n01_s0         RMSE 0.3949  β  25.6 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 16 canales, desde cero     original, solo β̂      e16_K400f16_n05_s0         RMSE 0.3968  β  23.0 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 16 canales, warm start     original, solo β̂      e16_K400f16_wrm_n01_s0     RMSE 0.3968  β  24.2 %  tope 1.00  <-- divergió o saturó
+  act    filtro, 16 canales, warm start     original, solo β̂      e16_K400f16_wrm_n05_s0     RMSE 0.3968  β  33.7 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       extendido              e16_lag_n01_s0             RMSE 0.3959  β   6.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       original, solo β̂      e16_lag_n01_s0             RMSE 0.3975  β   6.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       original, solo β̂      e16_lag_n01_s1             RMSE 0.3975  β   7.1 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       extendido              e16_lag_n01_s1             RMSE 0.3959  β   7.1 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       original, solo β̂      e16_lag_n01_s2             RMSE 0.3975  β   6.4 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       original, solo β̂      e16_lag_n05_s0             RMSE 0.3976  β  12.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       extendido              e16_lag_n01_s2             RMSE 0.3959  β   6.4 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       original, solo β̂      e16_lag_n05_s1             RMSE 0.3975  β  12.6 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       extendido              e16_lag_n05_s0             RMSE 0.3958  β  12.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       extendido              e16_lag_n05_s1             RMSE 0.3959  β  12.6 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       original, solo β̂      e16_lag_n05_s2             RMSE 0.3975  β  12.6 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       original, solo β̂      e16_lag_wrm_n01_s0         RMSE 0.3975  β   9.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, desde cero       extendido              e16_lag_n05_s2             RMSE 0.3959  β  12.6 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       original, solo β̂      e16_lag_wrm_n01_s1         RMSE 0.3975  β   9.6 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       extendido              e16_lag_wrm_n01_s0         RMSE 0.3959  β   9.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       extendido              e16_lag_wrm_n01_s1         RMSE 0.3959  β   9.6 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       original, solo β̂      e16_lag_wrm_n01_s2         RMSE 0.3975  β   6.8 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       extendido              e16_lag_wrm_n01_s2         RMSE 0.3959  β   6.8 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       original, solo β̂      e16_lag_wrm_n05_s0         RMSE 0.3975  β  14.2 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       extendido              e16_lag_wrm_n05_s0         RMSE 0.3960  β  14.2 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       original, solo β̂      e16_lag_wrm_n05_s1         RMSE 0.3975  β  13.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       extendido              e16_lag_wrm_n05_s1         RMSE 0.3960  β  13.5 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       original, solo β̂      e16_lag_wrm_n05_s2         RMSE 0.3974  β  15.7 %  tope 1.00  <-- divergió o saturó
+  act    estado de filtro, warm start       extendido              e16_lag_wrm_n05_s2         RMSE 0.3960  β  15.7 %  tope 1.00  <-- divergió o saturó
+-> C:\Users\User\Desktop\wilson-cowan-id\results\control_comparado_e16_gamma50_tope.json

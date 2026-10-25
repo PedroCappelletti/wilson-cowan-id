@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 PS = ("Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | "
-      "Where-Object { $_.CommandLine -like '*esc_run.py*' } | "
+      "Where-Object { $_.CommandLine -match 'esc_run.py|control_comparado|spawn_main' } | "
       "Select-Object ProcessId, CommandLine | ConvertTo-Json")
 
 
@@ -34,7 +34,10 @@ def corridas():
         return []
     datos = json.loads(out)
     datos = datos if isinstance(datos, list) else [datos]
-    return [(d["ProcessId"], d["CommandLine"].split("--tag ")[-1]) for d in datos]
+    # Además de los entrenamientos, las simulaciones de control_comparado.py y
+    # sus procesos hijos (spawn_main).
+    return [(d["ProcessId"], d["CommandLine"].split("--tag ")[-1].split("scripts/")[-1][:60])
+            for d in datos]
 
 
 PAUSADAS = Path(__file__).resolve().parents[1] / "logs" / "escalado" / "PAUSADAS"

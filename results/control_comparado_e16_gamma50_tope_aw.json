@@ -1,0 +1,6625 @@
+[
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.257125613815322,
+      12.418146666017904
+    ],
+    "rango_Q_sin_tope": [
+      -14.83566668276948,
+      13.91394293259568
+    ],
+    "frac_tope": 0.9921007899210079,
+    "frac_tope_P": 0.922107789221078,
+    "frac_tope_Q": 0.8827117288271172,
+    "rmse": 0.13928803389203914,
+    "rmse_I": 0.08560359381297852,
+    "rmse_E": 0.17741008285134832,
+    "error_beta": 23.48219441161269,
+    "frac_saturado": 0.48905109489051096,
+    "fallas_inversion": 6097,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n01_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.065721542811403,
+      11.691919508967919
+    ],
+    "rango_Q_sin_tope": [
+      -13.740696838015824,
+      13.674995534526042
+    ],
+    "frac_tope": 0.884011598840116,
+    "frac_tope_P": 0.7066293370662934,
+    "frac_tope_Q": 0.7264273572642735,
+    "rmse": 0.06171457780462761,
+    "rmse_I": 0.04670127184600512,
+    "rmse_E": 0.07373173967276507,
+    "error_beta": 23.710788346472246,
+    "frac_saturado": 0.10378962103789621,
+    "fallas_inversion": 4336,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n01_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -10.562994657325305,
+      10.388231812279555
+    ],
+    "rango_Q_sin_tope": [
+      -12.490243670870086,
+      12.60584885884384
+    ],
+    "frac_tope": 0.9359064093590641,
+    "frac_tope_P": 0.8694130586941305,
+    "frac_tope_Q": 0.7929207079292071,
+    "rmse": 0.07429668998023493,
+    "rmse_I": 0.04783569287185492,
+    "rmse_E": 0.09355074971109452,
+    "error_beta": 28.388494870492387,
+    "frac_saturado": 0.38236176382361764,
+    "fallas_inversion": 4101,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.303420463764027,
+      11.674272065891891
+    ],
+    "rango_Q_sin_tope": [
+      -12.29901831467455,
+      11.96379195058829
+    ],
+    "frac_tope": 0.9993000699930007,
+    "frac_tope_P": 0.9365063493650635,
+    "frac_tope_Q": 0.9457054294570543,
+    "rmse": 0.2247544310906615,
+    "rmse_I": 0.1520974818976677,
+    "rmse_E": 0.2790975897247457,
+    "error_beta": 24.76015380805447,
+    "frac_saturado": 0.5531446855314468,
+    "fallas_inversion": 7402,
+    "P_max": 1.9999999990480706,
+    "ok": false
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -17.226357313294677,
+      16.870684440659325
+    ],
+    "rango_Q_sin_tope": [
+      -18.96537884593086,
+      19.506814997137244
+    ],
+    "frac_tope": 0.7738226177382261,
+    "frac_tope_P": 0.579042095790421,
+    "frac_tope_Q": 0.674032596740326,
+    "rmse": 0.05703821722603984,
+    "rmse_I": 0.0518267087667825,
+    "rmse_E": 0.0618118816009748,
+    "error_beta": 25.01322585911978,
+    "frac_saturado": 0.130986901309869,
+    "fallas_inversion": 5674,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n01_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -15.649018662869842,
+      15.456078731006592
+    ],
+    "rango_Q_sin_tope": [
+      -18.304593688380123,
+      18.366455398202756
+    ],
+    "frac_tope": 0.9554044595540446,
+    "frac_tope_P": 0.8535146485351465,
+    "frac_tope_Q": 0.8536146385361464,
+    "rmse": 0.1004343281023598,
+    "rmse_I": 0.05810517807846585,
+    "rmse_E": 0.129606700456476,
+    "error_beta": 22.58743704784484,
+    "frac_saturado": 0.19958004199580043,
+    "fallas_inversion": 4647,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n05_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.267395535724486,
+      12.657496535827939
+    ],
+    "rango_Q_sin_tope": [
+      -12.978389459713055,
+      12.834531218419935
+    ],
+    "frac_tope": 0.9403059694030597,
+    "frac_tope_P": 0.843015698430157,
+    "frac_tope_Q": 0.7774222577742226,
+    "rmse": 0.07212187625837758,
+    "rmse_I": 0.05170342538191013,
+    "rmse_E": 0.0879197695278753,
+    "error_beta": 25.72191511325184,
+    "frac_saturado": 0.14658534146585342,
+    "fallas_inversion": 4783,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n05_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.814052842093254,
+      11.768421053946804
+    ],
+    "rango_Q_sin_tope": [
+      -11.973122272882781,
+      12.205927301800534
+    ],
+    "frac_tope": 0.935006499350065,
+    "frac_tope_P": 0.9064093590640936,
+    "frac_tope_Q": 0.8149185081491851,
+    "rmse": 0.09156756432080973,
+    "rmse_I": 0.05708589345517666,
+    "rmse_E": 0.11623441159878374,
+    "error_beta": 25.482004668031422,
+    "frac_saturado": 0.45065493450654937,
+    "fallas_inversion": 4546,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n01_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -17.497023959584283,
+      16.75189432021148
+    ],
+    "rango_Q_sin_tope": [
+      -20.191936238081574,
+      19.86926691273806
+    ],
+    "frac_tope": 0.9714028597140286,
+    "frac_tope_P": 0.8973102689731027,
+    "frac_tope_Q": 0.8702129787021298,
+    "rmse": 0.08410924708366566,
+    "rmse_I": 0.05351767155435664,
+    "rmse_E": 0.10622894954466153,
+    "error_beta": 25.289661316644576,
+    "frac_saturado": 0.26687331266873315,
+    "fallas_inversion": 3821,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -18.976979327584978,
+      17.79079007746718
+    ],
+    "rango_Q_sin_tope": [
+      -20.603478630932063,
+      20.046586555069897
+    ],
+    "frac_tope": 0.9785021497850215,
+    "frac_tope_P": 0.8501149885011499,
+    "frac_tope_Q": 0.9052094790520948,
+    "rmse": 0.08555625514631587,
+    "rmse_I": 0.056747124583208214,
+    "rmse_E": 0.10686210479333096,
+    "error_beta": 29.902833987559593,
+    "frac_saturado": 0.28357164283571645,
+    "fallas_inversion": 5206,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n05_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -17.321599233999596,
+      16.49427920695514
+    ],
+    "rango_Q_sin_tope": [
+      -21.0692558230299,
+      20.49877925721201
+    ],
+    "frac_tope": 0.8496150384961504,
+    "frac_tope_P": 0.611038896110389,
+    "frac_tope_Q": 0.7337266273372662,
+    "rmse": 0.05607279846675169,
+    "rmse_I": 0.04697801189054139,
+    "rmse_E": 0.06388570931435335,
+    "error_beta": 29.285857595858126,
+    "frac_saturado": 0.11458854114588542,
+    "fallas_inversion": 4415,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n05_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -17.28605240366022,
+      16.40747808714084
+    ],
+    "rango_Q_sin_tope": [
+      -20.521425169203596,
+      19.86019600755221
+    ],
+    "frac_tope": 0.9928007199280072,
+    "frac_tope_P": 0.9399060093990601,
+    "frac_tope_Q": 0.901009899010099,
+    "rmse": 0.09260236755388752,
+    "rmse_I": 0.05419344426147775,
+    "rmse_E": 0.11922024807996613,
+    "error_beta": 29.020638572318216,
+    "frac_saturado": 0.29217078292170784,
+    "fallas_inversion": 3745,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, desde cero",
+    "tag": "e16_H400_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.880635473888656,
+      13.083503759093768
+    ],
+    "rango_Q_sin_tope": [
+      -14.490451606859509,
+      13.418451661637087
+    ],
+    "frac_tope": 0.8861113888611138,
+    "frac_tope_P": 0.7361263873612639,
+    "frac_tope_Q": 0.8171182881711829,
+    "rmse": 0.06890638045531418,
+    "rmse_I": 0.047142702588000754,
+    "rmse_E": 0.08528624817404218,
+    "error_beta": 18.195654343636264,
+    "frac_saturado": 0.34866513348665135,
+    "fallas_inversion": 4827,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, warm start",
+    "tag": "e16_H400_wrm_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -17.261434608100664,
+      16.9689116926895
+    ],
+    "rango_Q_sin_tope": [
+      -17.114477070489272,
+      16.765504793012227
+    ],
+    "frac_tope": 0.7732226777322267,
+    "frac_tope_P": 0.6044395560443956,
+    "frac_tope_Q": 0.6202379762023797,
+    "rmse": 0.05399905972097298,
+    "rmse_I": 0.04606985284295463,
+    "rmse_E": 0.060904561081473345,
+    "error_beta": 26.639222758156915,
+    "frac_saturado": 0.1161883811618838,
+    "fallas_inversion": 4186,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, desde cero",
+    "tag": "e16_H400_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -9.486061396061654,
+      9.908062126629382
+    ],
+    "rango_Q_sin_tope": [
+      -12.152712557709403,
+      10.784148905880334
+    ],
+    "frac_tope": 0.7818218178182181,
+    "frac_tope_P": 0.5825417458254175,
+    "frac_tope_Q": 0.6968303169683032,
+    "rmse": 0.0742621386309572,
+    "rmse_I": 0.05098099241726055,
+    "rmse_E": 0.0918186739189705,
+    "error_beta": 31.85809390885489,
+    "frac_saturado": 0.3458654134586541,
+    "fallas_inversion": 5532,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, warm start",
+    "tag": "e16_H400_wrm_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -19.534735069184933,
+      19.116039111178555
+    ],
+    "rango_Q_sin_tope": [
+      -21.082159857704774,
+      21.7569994864977
+    ],
+    "frac_tope": 0.9146085391460854,
+    "frac_tope_P": 0.7472252774722528,
+    "frac_tope_Q": 0.777922207779222,
+    "rmse": 0.06900797344681092,
+    "rmse_I": 0.049343663780081294,
+    "rmse_E": 0.08419859644453591,
+    "error_beta": 37.21735371897618,
+    "frac_saturado": 0.2044795520447955,
+    "fallas_inversion": 4359,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, warm start",
+    "tag": "e16_K400_wrm_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -16.274683127384534,
+      15.992547178980995
+    ],
+    "rango_Q_sin_tope": [
+      -17.008582651694045,
+      18.24253662421271
+    ],
+    "frac_tope": 0.8261173882611739,
+    "frac_tope_P": 0.658034196580342,
+    "frac_tope_Q": 0.7096290370962903,
+    "rmse": 0.05989611533155925,
+    "rmse_I": 0.047172033710069644,
+    "rmse_E": 0.07035544399176902,
+    "error_beta": 28.114822095348718,
+    "frac_saturado": 0.37366263373662634,
+    "fallas_inversion": 2923,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, desde cero",
+    "tag": "e16_K400_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.067969560028462,
+      12.55293939166722
+    ],
+    "rango_Q_sin_tope": [
+      -15.722704585241743,
+      15.659042155141078
+    ],
+    "frac_tope": 0.8102189781021898,
+    "frac_tope_P": 0.6775322467753224,
+    "frac_tope_Q": 0.6379362063793621,
+    "rmse": 0.07264256076226573,
+    "rmse_I": 0.05881379035497021,
+    "rmse_E": 0.08423076238691272,
+    "error_beta": 26.39431726719652,
+    "frac_saturado": 0.45815418458154183,
+    "fallas_inversion": 2835,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, desde cero",
+    "tag": "e16_K400_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -15.42129944894062,
+      14.800267841017106
+    ],
+    "rango_Q_sin_tope": [
+      -14.291537881232964,
+      14.942061904242376
+    ],
+    "frac_tope": 0.8502149785021498,
+    "frac_tope_P": 0.7337266273372662,
+    "frac_tope_Q": 0.7064293570642936,
+    "rmse": 0.09295448418466293,
+    "rmse_I": 0.060532315301953646,
+    "rmse_E": 0.1166915209612865,
+    "error_beta": 26.57969321966881,
+    "frac_saturado": 0.41455854414558546,
+    "fallas_inversion": 3883,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, warm start",
+    "tag": "e16_K400_wrm_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -19.31200840447952,
+      18.911537656955062
+    ],
+    "rango_Q_sin_tope": [
+      -18.387417757658113,
+      17.774133524737362
+    ],
+    "frac_tope": 0.9169083091690831,
+    "frac_tope_P": 0.7746225377462254,
+    "frac_tope_Q": 0.7987201279872013,
+    "rmse": 0.08307418801774495,
+    "rmse_I": 0.05282283958887615,
+    "rmse_E": 0.10493993066217996,
+    "error_beta": 36.83746743148991,
+    "frac_saturado": 0.388961103889611,
+    "fallas_inversion": 4203,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n01_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.081251209412649,
+      12.613829252897634
+    ],
+    "rango_Q_sin_tope": [
+      -14.794447164331423,
+      11.623106499342132
+    ],
+    "frac_tope": 0.9033096690330967,
+    "frac_tope_P": 0.8005199480051994,
+    "frac_tope_Q": 0.7976202379762024,
+    "rmse": 0.08433620098166886,
+    "rmse_I": 0.054727716251418784,
+    "rmse_E": 0.10597200887944457,
+    "error_beta": 26.14394953917889,
+    "frac_saturado": 0.4042595740425957,
+    "fallas_inversion": 4058,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.34957638012505,
+      11.82293561675254
+    ],
+    "rango_Q_sin_tope": [
+      -15.246458890335777,
+      14.922629700322407
+    ],
+    "frac_tope": 0.9423057694230577,
+    "frac_tope_P": 0.8877112288771123,
+    "frac_tope_Q": 0.8006199380061993,
+    "rmse": 0.09077566176470318,
+    "rmse_I": 0.05500092575669956,
+    "rmse_E": 0.11599715385967715,
+    "error_beta": 27.33317368087315,
+    "frac_saturado": 0.43295670432956707,
+    "fallas_inversion": 4849,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n01_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.599253330062867,
+      11.08457502375474
+    ],
+    "rango_Q_sin_tope": [
+      -14.907550468310802,
+      14.835774919023821
+    ],
+    "frac_tope": 0.911008899110089,
+    "frac_tope_P": 0.7904209579042096,
+    "frac_tope_Q": 0.7921207879212079,
+    "rmse": 0.06495575545715751,
+    "rmse_I": 0.04911187052691168,
+    "rmse_E": 0.07763069307540645,
+    "error_beta": 27.10198438061135,
+    "frac_saturado": 0.36946305369463056,
+    "fallas_inversion": 2444,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -14.535473181019121,
+      14.07715124088719
+    ],
+    "rango_Q_sin_tope": [
+      -14.613162952777222,
+      13.97624000935905
+    ],
+    "frac_tope": 0.9905009499050095,
+    "frac_tope_P": 0.9675032496750325,
+    "frac_tope_Q": 0.8756124387561244,
+    "rmse": 0.12613683696212238,
+    "rmse_I": 0.07564785263491365,
+    "rmse_E": 0.1615500098091748,
+    "error_beta": 25.497266732688463,
+    "frac_saturado": 0.42385761423857615,
+    "fallas_inversion": 5540,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n05_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -14.607586458402189,
+      14.707395713244901
+    ],
+    "rango_Q_sin_tope": [
+      -14.298578839627567,
+      14.341810639701006
+    ],
+    "frac_tope": 0.951004899510049,
+    "frac_tope_P": 0.8513148685131486,
+    "frac_tope_Q": 0.8269173082691731,
+    "rmse": 0.10735800290458311,
+    "rmse_I": 0.06104245752607705,
+    "rmse_E": 0.13901546660173475,
+    "error_beta": 26.409905247745066,
+    "frac_saturado": 0.3785621437856214,
+    "fallas_inversion": 5542,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n05_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.258707922769238,
+      12.453293472507774
+    ],
+    "rango_Q_sin_tope": [
+      -13.91684905586354,
+      13.07377095054002
+    ],
+    "frac_tope": 0.9019098090190981,
+    "frac_tope_P": 0.7827217278272173,
+    "frac_tope_Q": 0.8006199380061993,
+    "rmse": 0.07130555668864982,
+    "rmse_I": 0.05018971214221079,
+    "rmse_E": 0.0874640361773828,
+    "error_beta": 24.22845112958125,
+    "frac_saturado": 0.4016598340165983,
+    "fallas_inversion": 3278,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -16.914136128074148,
+      16.419509207635944
+    ],
+    "rango_Q_sin_tope": [
+      -18.052112227362315,
+      18.154393541599156
+    ],
+    "frac_tope": 0.9252074792520748,
+    "frac_tope_P": 0.8514148585141486,
+    "frac_tope_Q": 0.7856214378562144,
+    "rmse": 0.05674363490440376,
+    "rmse_I": 0.04775745810630958,
+    "rmse_E": 0.06448957589837774,
+    "error_beta": 27.378953156017122,
+    "frac_saturado": 0.37176282371762825,
+    "fallas_inversion": 3026,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n01_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -16.703173499816295,
+      15.91564556332317
+    ],
+    "rango_Q_sin_tope": [
+      -17.45777634971093,
+      17.516436144181025
+    ],
+    "frac_tope": 0.9519048095190481,
+    "frac_tope_P": 0.8557144285571443,
+    "frac_tope_Q": 0.7745225477452254,
+    "rmse": 0.07009232595450397,
+    "rmse_I": 0.04721686681052617,
+    "rmse_E": 0.08715753440765689,
+    "error_beta": 24.751080728712534,
+    "frac_saturado": 0.38036196380361964,
+    "fallas_inversion": 5293,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n01_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -16.33286680729155,
+      14.999747508075272
+    ],
+    "rango_Q_sin_tope": [
+      -18.33513657639093,
+      17.78153286627462
+    ],
+    "frac_tope": 0.8905109489051095,
+    "frac_tope_P": 0.7021297870212979,
+    "frac_tope_Q": 0.7637236276372362,
+    "rmse": 0.08588936758252418,
+    "rmse_I": 0.059981897960013894,
+    "rmse_E": 0.10562262468129824,
+    "error_beta": 28.019371571994963,
+    "frac_saturado": 0.38146185381461856,
+    "fallas_inversion": 3955,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -18.579898647555545,
+      17.96613233726146
+    ],
+    "rango_Q_sin_tope": [
+      -18.780369580592183,
+      16.142602656678108
+    ],
+    "frac_tope": 0.8958104189581042,
+    "frac_tope_P": 0.7311268873112688,
+    "frac_tope_Q": 0.7712228777122287,
+    "rmse": 0.05774329534719331,
+    "rmse_I": 0.04509793499306942,
+    "rmse_E": 0.06807901713793522,
+    "error_beta": 33.252560865311395,
+    "frac_saturado": 0.37476252374762525,
+    "fallas_inversion": 5581,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n05_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -18.361634188381768,
+      17.767706037823224
+    ],
+    "rango_Q_sin_tope": [
+      -18.78965937241079,
+      19.502434936559542
+    ],
+    "frac_tope": 0.9671032896710329,
+    "frac_tope_P": 0.7951204879512048,
+    "frac_tope_Q": 0.8734126587341265,
+    "rmse": 0.10371233950323433,
+    "rmse_I": 0.05787808487406449,
+    "rmse_E": 0.1347687872683392,
+    "error_beta": 32.75748478869597,
+    "frac_saturado": 0.36836316368363164,
+    "fallas_inversion": 5801,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n05_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -18.90060948364544,
+      18.325575120454722
+    ],
+    "rango_Q_sin_tope": [
+      -19.97376008468707,
+      20.488802251202042
+    ],
+    "frac_tope": 0.89001099890011,
+    "frac_tope_P": 0.7085291470852915,
+    "frac_tope_Q": 0.732026797320268,
+    "rmse": 0.07832206413300347,
+    "rmse_I": 0.049291224159433135,
+    "rmse_E": 0.09919206964759397,
+    "error_beta": 33.72132569019284,
+    "frac_saturado": 0.23367663233676633,
+    "fallas_inversion": 5173,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, desde cero",
+    "tag": "e16_K400f16_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.223236260992039,
+      11.793907883229053
+    ],
+    "rango_Q_sin_tope": [
+      -15.769778665296736,
+      14.607494290880105
+    ],
+    "frac_tope": 0.9814018598140186,
+    "frac_tope_P": 0.914008599140086,
+    "frac_tope_Q": 0.8503149685031497,
+    "rmse": 0.09014882577012949,
+    "rmse_I": 0.054692887883592396,
+    "rmse_E": 0.11516210136333532,
+    "error_beta": 25.61804743040176,
+    "frac_saturado": 0.43695630436956306,
+    "fallas_inversion": 4787,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, desde cero",
+    "tag": "e16_K400f16_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.263929199176584,
+      13.19894598496461
+    ],
+    "rango_Q_sin_tope": [
+      -13.316503126176498,
+      12.664882018186564
+    ],
+    "frac_tope": 0.9079092090790921,
+    "frac_tope_P": 0.7522247775222478,
+    "frac_tope_Q": 0.7517248275172482,
+    "rmse": 0.07416577723842319,
+    "rmse_I": 0.04896038687002374,
+    "rmse_E": 0.09275777888833059,
+    "error_beta": 23.0496738389844,
+    "frac_saturado": 0.37796220377962203,
+    "fallas_inversion": 3874,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, warm start",
+    "tag": "e16_K400f16_wrm_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -14.015488892176837,
+      13.923509311426868
+    ],
+    "rango_Q_sin_tope": [
+      -16.75362209574027,
+      13.946220021594705
+    ],
+    "frac_tope": 0.7777222277772223,
+    "frac_tope_P": 0.5583441655834417,
+    "frac_tope_Q": 0.6371362863713629,
+    "rmse": 0.05587239816543219,
+    "rmse_I": 0.04479454559442126,
+    "rmse_E": 0.06509146210143459,
+    "error_beta": 24.227258790106998,
+    "frac_saturado": 0.38566143385661433,
+    "fallas_inversion": 4621,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "oráculo",
+    "tag": null,
+    "controlador": "oráculo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9318768566801476,
+      12.422551171798364
+    ],
+    "rango_Q_sin_tope": [
+      -13.635441099411908,
+      15.303265434491975
+    ],
+    "frac_tope": 0.42845715428457154,
+    "frac_tope_P": 0.035596440355964404,
+    "frac_tope_Q": 0.42845715428457154,
+    "rmse": 0.03641065029379599,
+    "rmse_I": 0.038951536970043235,
+    "rmse_E": 0.03367860860109228,
+    "error_beta": 0.0,
+    "frac_saturado": 0.0,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "oráculo + forma",
+    "tag": null,
+    "controlador": "oráculo + forma",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9357118398641638,
+      12.42255117243738
+    ],
+    "rango_Q_sin_tope": [
+      -13.656133142949505,
+      15.3032654356866
+    ],
+    "frac_tope": 0.4323567643235676,
+    "frac_tope_P": 0.0365963403659634,
+    "frac_tope_Q": 0.4323567643235676,
+    "rmse": 0.03506237497191373,
+    "rmse_I": 0.03842944046150836,
+    "rmse_E": 0.03133557695587475,
+    "error_beta": 0.0,
+    "frac_saturado": 0.03949605039496051,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "oráculo",
+    "tag": null,
+    "controlador": "oráculo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.34726105283588,
+      12.532263901651525
+    ],
+    "rango_Q_sin_tope": [
+      -14.621944975147102,
+      15.52853967764734
+    ],
+    "frac_tope": 0.84001599840016,
+    "frac_tope_P": 0.49475052494750527,
+    "frac_tope_Q": 0.8073192680731927,
+    "rmse": 0.07301600799432198,
+    "rmse_I": 0.04876627612108622,
+    "rmse_E": 0.09101936695086249,
+    "error_beta": 0.0,
+    "frac_saturado": 0.0,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, warm start",
+    "tag": "e16_K400f16_wrm_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -17.678840074236582,
+      16.682350002232525
+    ],
+    "rango_Q_sin_tope": [
+      -20.68242982978348,
+      20.74157584191634
+    ],
+    "frac_tope": 0.828017198280172,
+    "frac_tope_P": 0.643035696430357,
+    "frac_tope_Q": 0.7144285571442855,
+    "rmse": 0.05483725215997236,
+    "rmse_I": 0.045188965563465404,
+    "rmse_E": 0.06302543804065723,
+    "error_beta": 33.708453314999744,
+    "frac_saturado": 0.1302869713028697,
+    "fallas_inversion": 5333,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "white-box",
+    "tag": "e16_e1wb_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9215041975675924,
+      8.317902081110438
+    ],
+    "rango_Q_sin_tope": [
+      -12.974590329309573,
+      9.367554244032702
+    ],
+    "frac_tope": 0.4360563943605639,
+    "frac_tope_P": 0.03569643035696431,
+    "frac_tope_Q": 0.4360563943605639,
+    "rmse": 0.03634225885876015,
+    "rmse_I": 0.03868951323129075,
+    "rmse_E": 0.03383254533492919,
+    "error_beta": 10.553386019808906,
+    "frac_saturado": 0.32396760323967605,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "white-box",
+    "tag": "e16_e1wb_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9210883679500761,
+      8.118973985763766
+    ],
+    "rango_Q_sin_tope": [
+      -13.019706632324747,
+      9.431398745027115
+    ],
+    "frac_tope": 0.43575642435756423,
+    "frac_tope_P": 0.03569643035696431,
+    "frac_tope_Q": 0.43575642435756423,
+    "rmse": 0.03635636321349292,
+    "rmse_I": 0.03867339476359611,
+    "rmse_E": 0.03388124598774224,
+    "error_beta": 10.464161719594681,
+    "frac_saturado": 0.3234676532346765,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "white-box",
+    "tag": "e16_e1wb_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9216917787173344,
+      8.387793557720084
+    ],
+    "rango_Q_sin_tope": [
+      -12.991391066184825,
+      9.384484675061323
+    ],
+    "frac_tope": 0.43585641435856415,
+    "frac_tope_P": 0.03569643035696431,
+    "frac_tope_Q": 0.43585641435856415,
+    "rmse": 0.0363386605351832,
+    "rmse_I": 0.03869503440710216,
+    "rmse_E": 0.0338184980626837,
+    "error_beta": 10.370074758927029,
+    "frac_saturado": 0.3237676232376762,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "white-box",
+    "tag": "e16_e1wb_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9232876526949501,
+      9.358679013554
+    ],
+    "rango_Q_sin_tope": [
+      -5.4820562196435665,
+      15.665206016517233
+    ],
+    "frac_tope": 0.4310568943105689,
+    "frac_tope_P": 0.03569643035696431,
+    "frac_tope_Q": 0.4310568943105689,
+    "rmse": 0.03576662406827046,
+    "rmse_I": 0.03810575143945621,
+    "rmse_E": 0.033263410855117505,
+    "error_beta": 5.912668392771765,
+    "frac_saturado": 0.0387961203879612,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "white-box",
+    "tag": "e16_e1wb_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.925837658775049,
+      11.74983261669636
+    ],
+    "rango_Q_sin_tope": [
+      -5.777940274251264,
+      15.581363351406406
+    ],
+    "frac_tope": 0.43125687431256876,
+    "frac_tope_P": 0.0357964203579642,
+    "frac_tope_Q": 0.43125687431256876,
+    "rmse": 0.035683893531878556,
+    "rmse_I": 0.03816105318663876,
+    "rmse_E": 0.03302142539133368,
+    "error_beta": 5.295770416657129,
+    "frac_saturado": 0.0387961203879612,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "white-box",
+    "tag": "e16_e1wb_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.925540651810526,
+      11.709278053777998
+    ],
+    "rango_Q_sin_tope": [
+      -6.8731465464658665,
+      15.438179392302304
+    ],
+    "frac_tope": 0.43175682431756823,
+    "frac_tope_P": 0.0357964203579642,
+    "frac_tope_Q": 0.43175682431756823,
+    "rmse": 0.035720089017451925,
+    "rmse_I": 0.03818472772993019,
+    "rmse_E": 0.03307228578463362,
+    "error_beta": 5.055255116451354,
+    "frac_saturado": 0.0387961203879612,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9368889956085551,
+      6.339376372669444
+    ],
+    "rango_Q_sin_tope": [
+      -10.818524775800844,
+      8.17626734325244
+    ],
+    "frac_tope": 0.42475752424757524,
+    "frac_tope_P": 0.035096490350964904,
+    "frac_tope_Q": 0.42475752424757524,
+    "rmse": 0.03714172728839672,
+    "rmse_I": 0.039571996332800945,
+    "rmse_E": 0.0345408876285491,
+    "error_beta": 18.56867144505183,
+    "frac_saturado": 0.31656834316568344,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9370025322818847,
+      6.520983740314624
+    ],
+    "rango_Q_sin_tope": [
+      -11.219331843176091,
+      8.652939428065244
+    ],
+    "frac_tope": 0.4273572642735726,
+    "frac_tope_P": 0.035096490350964904,
+    "frac_tope_Q": 0.4273572642735726,
+    "rmse": 0.03708734400292975,
+    "rmse_I": 0.039577060673109746,
+    "rmse_E": 0.03441799585769467,
+    "error_beta": 17.937649843238653,
+    "frac_saturado": 0.3170682931706829,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9356430918840353,
+      6.261786163308925
+    ],
+    "rango_Q_sin_tope": [
+      -11.059750239498518,
+      8.439420397142095
+    ],
+    "frac_tope": 0.42615738426157385,
+    "frac_tope_P": 0.034996500349965,
+    "frac_tope_Q": 0.42615738426157385,
+    "rmse": 0.03711297469875564,
+    "rmse_I": 0.03949216539158956,
+    "rmse_E": 0.03457043035115832,
+    "error_beta": 18.440208640836538,
+    "frac_saturado": 0.3170682931706829,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9513265362955665,
+      6.853719921933004
+    ],
+    "rango_Q_sin_tope": [
+      -3.885349402771231,
+      12.188657299891233
+    ],
+    "frac_tope": 0.410958904109589,
+    "frac_tope_P": 0.03519648035196481,
+    "frac_tope_Q": 0.410958904109589,
+    "rmse": 0.036866117862044336,
+    "rmse_I": 0.03991980795637015,
+    "rmse_E": 0.03353550693165104,
+    "error_beta": 17.057521563200723,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n01_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8916651331926602,
+      10.2739256233723
+    ],
+    "rango_Q_sin_tope": [
+      -11.585227520659831,
+      8.01587075601516
+    ],
+    "frac_tope": 0.33366663333666635,
+    "frac_tope_P": 0.035996400359964,
+    "frac_tope_Q": 0.33366663333666635,
+    "rmse": 0.04146169448963805,
+    "rmse_I": 0.04786441562076849,
+    "rmse_E": 0.0338694838635976,
+    "error_beta": 18.56867144505183,
+    "frac_saturado": 0.07649235076492351,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n01_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9203295614156719,
+      10.513929189962276
+    ],
+    "rango_Q_sin_tope": [
+      -11.773112167074538,
+      8.686788177534648
+    ],
+    "frac_tope": 0.34496550344965504,
+    "frac_tope_P": 0.035996400359964,
+    "frac_tope_Q": 0.34496550344965504,
+    "rmse": 0.0392361242402613,
+    "rmse_I": 0.04407081788699153,
+    "rmse_E": 0.0337151286749149,
+    "error_beta": 17.937649843238653,
+    "frac_saturado": 0.03469653034696531,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.958098322122886,
+      11.810251710657186
+    ],
+    "rango_Q_sin_tope": [
+      -3.7718082385142475,
+      12.26393099132943
+    ],
+    "frac_tope": 0.41885811418858115,
+    "frac_tope_P": 0.0354964503549645,
+    "frac_tope_Q": 0.41885811418858115,
+    "rmse": 0.036747625255082045,
+    "rmse_I": 0.04022117479549693,
+    "rmse_E": 0.032909467055027945,
+    "error_beta": 14.907414558387938,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n01_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9098741390534122,
+      10.186698692677032
+    ],
+    "rango_Q_sin_tope": [
+      -11.691088280818366,
+      8.340585105868469
+    ],
+    "frac_tope": 0.3330666933306669,
+    "frac_tope_P": 0.035996400359964,
+    "frac_tope_Q": 0.3330666933306669,
+    "rmse": 0.04003499670775148,
+    "rmse_I": 0.0452877654959466,
+    "rmse_E": 0.03397970304701752,
+    "error_beta": 18.440208640836538,
+    "frac_saturado": 0.0608939106089391,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9465612179654854,
+      5.98219414136573
+    ],
+    "rango_Q_sin_tope": [
+      -3.480688249824055,
+      12.074928684541147
+    ],
+    "frac_tope": 0.41545845415458454,
+    "frac_tope_P": 0.034996500349965,
+    "frac_tope_Q": 0.41545845415458454,
+    "rmse": 0.03680557628780796,
+    "rmse_I": 0.03950270359257983,
+    "rmse_E": 0.03389450251341777,
+    "error_beta": 19.062029137497856,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n05_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8475118847239127,
+      10.715826973486681
+    ],
+    "rango_Q_sin_tope": [
+      -11.891504171906963,
+      12.194790049156458
+    ],
+    "frac_tope": 0.3351664833516648,
+    "frac_tope_P": 0.036096390360963904,
+    "frac_tope_Q": 0.3351664833516648,
+    "rmse": 0.04310767922284482,
+    "rmse_I": 0.051481780073163216,
+    "rmse_E": 0.03265226387952036,
+    "error_beta": 17.057521563200723,
+    "frac_saturado": 0.050994900509949,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9331777443839246,
+      11.966562583864366
+    ],
+    "rango_Q_sin_tope": [
+      -4.848324153319998,
+      15.579203593800948
+    ],
+    "frac_tope": 0.42785721427857215,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.42785721427857215,
+    "rmse": 0.03654420633071659,
+    "rmse_I": 0.03907390818252504,
+    "rmse_E": 0.03382584414360676,
+    "error_beta": 3.809821754693986,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n05_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8483229862788644,
+      11.810251710657186
+    ],
+    "rango_Q_sin_tope": [
+      -3.0518489701477374,
+      12.26393099132943
+    ],
+    "frac_tope": 0.33686631336866313,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.33686631336866313,
+    "rmse": 0.04281141552523698,
+    "rmse_I": 0.0513997559961018,
+    "rmse_E": 0.031995307188558135,
+    "error_beta": 14.907414558387938,
+    "frac_saturado": 0.0395960403959604,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9339055625537516,
+      12.061532468794827
+    ],
+    "rango_Q_sin_tope": [
+      -5.06763474742698,
+      15.550790528281038
+    ],
+    "frac_tope": 0.42745725427457254,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.42745725427457254,
+    "rmse": 0.03652660035853348,
+    "rmse_I": 0.039102033684362825,
+    "rmse_E": 0.03375523706406151,
+    "error_beta": 3.1913937557311285,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, desde cero",
+    "tag": "e16_B100_n05_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8382826572046684,
+      9.574900701132087
+    ],
+    "rango_Q_sin_tope": [
+      -11.803278600388339,
+      12.074928684541147
+    ],
+    "frac_tope": 0.33426657334266574,
+    "frac_tope_P": 0.035896410358964105,
+    "frac_tope_Q": 0.33426657334266574,
+    "rmse": 0.04384766452001954,
+    "rmse_I": 0.05210787210651931,
+    "rmse_E": 0.03361554747807908,
+    "error_beta": 19.062029137497856,
+    "frac_saturado": 0.0775922407759224,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9335154641464525,
+      12.049969680211571
+    ],
+    "rango_Q_sin_tope": [
+      -5.308161786398553,
+      15.508744280277662
+    ],
+    "frac_tope": 0.42805719428057193,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.42805719428057193,
+    "rmse": 0.03657600549438006,
+    "rmse_I": 0.03910572501998175,
+    "rmse_E": 0.03385780008375342,
+    "error_beta": 3.488558367604301,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n01_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9230895161925541,
+      11.966562583864366
+    ],
+    "rango_Q_sin_tope": [
+      -2.9486295437316707,
+      15.58698120106115
+    ],
+    "frac_tope": 0.4313568643135686,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.4313568643135686,
+    "rmse": 0.035618691099120726,
+    "rmse_I": 0.03854102444108027,
+    "rmse_E": 0.03243411392748718,
+    "error_beta": 3.809821754693986,
+    "frac_saturado": 0.039396060393960604,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9313199938663117,
+      9.118182026218069
+    ],
+    "rango_Q_sin_tope": [
+      -4.067319155110759,
+      16.131887207825404
+    ],
+    "frac_tope": 0.42655734426557346,
+    "frac_tope_P": 0.0352964703529647,
+    "frac_tope_Q": 0.42655734426557346,
+    "rmse": 0.03622879027223845,
+    "rmse_I": 0.03857400189702193,
+    "rmse_E": 0.03372086693470716,
+    "error_beta": 7.837833442858286,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n01_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9243210268851787,
+      12.061532468794827
+    ],
+    "rango_Q_sin_tope": [
+      -3.0375256884506245,
+      15.558565057559504
+    ],
+    "frac_tope": 0.4313568643135686,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.4313568643135686,
+    "rmse": 0.035556684926659414,
+    "rmse_I": 0.038525826896706125,
+    "rmse_E": 0.03231588383245138,
+    "error_beta": 3.1913937557311285,
+    "frac_saturado": 0.039396060393960604,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9336739747095992,
+      11.621890270949516
+    ],
+    "rango_Q_sin_tope": [
+      -4.045443405824805,
+      15.960122849804133
+    ],
+    "frac_tope": 0.42655734426557346,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.42655734426557346,
+    "rmse": 0.03620271399091645,
+    "rmse_I": 0.0386765547146258,
+    "rmse_E": 0.03354693899631905,
+    "error_beta": 6.591869606858208,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n01_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9230580334815788,
+      12.049969680211571
+    ],
+    "rango_Q_sin_tope": [
+      -3.212759541092972,
+      15.508744280277662
+    ],
+    "frac_tope": 0.4320567943205679,
+    "frac_tope_P": 0.036396360363963605,
+    "frac_tope_Q": 0.4320567943205679,
+    "rmse": 0.03565874051341762,
+    "rmse_I": 0.038635315996564806,
+    "rmse_E": 0.03240993532625585,
+    "error_beta": 3.488558367604301,
+    "frac_saturado": 0.0392960703929607,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9318005290665263,
+      11.706847322937596
+    ],
+    "rango_Q_sin_tope": [
+      -4.645703493922614,
+      15.886368654410719
+    ],
+    "frac_tope": 0.42975702429757023,
+    "frac_tope_P": 0.0354964503549645,
+    "frac_tope_Q": 0.42975702429757023,
+    "rmse": 0.03596332623831254,
+    "rmse_I": 0.03839029864444545,
+    "rmse_E": 0.033360255368280495,
+    "error_beta": 6.366492822056725,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n05_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9203353560636915,
+      11.43654385668794
+    ],
+    "rango_Q_sin_tope": [
+      -2.6544537930289067,
+      16.131887207825404
+    ],
+    "frac_tope": 0.42785721427857215,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.42785721427857215,
+    "rmse": 0.035471363341071156,
+    "rmse_I": 0.03820330467577551,
+    "rmse_E": 0.032510655890006936,
+    "error_beta": 7.837833442858286,
+    "frac_saturado": 0.039396060393960604,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9415566899360639,
+      6.236639758787716
+    ],
+    "rango_Q_sin_tope": [
+      -10.395060901404193,
+      8.176572595898387
+    ],
+    "frac_tope": 0.42585741425857415,
+    "frac_tope_P": 0.034996500349965,
+    "frac_tope_Q": 0.42585741425857415,
+    "rmse": 0.03692288107601233,
+    "rmse_I": 0.039374037042408314,
+    "rmse_E": 0.0342969896767888,
+    "error_beta": 21.46796789197695,
+    "frac_saturado": 0.31896810318968105,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n05_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9231701985473819,
+      11.621890270949516
+    ],
+    "rango_Q_sin_tope": [
+      -2.5062322864681903,
+      15.960122849804133
+    ],
+    "frac_tope": 0.42805719428057193,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.42805719428057193,
+    "rmse": 0.035419302352891445,
+    "rmse_I": 0.03827631951669043,
+    "rmse_E": 0.03231063791674974,
+    "error_beta": 6.591869606858208,
+    "frac_saturado": 0.03949605039496051,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9349429966399929,
+      5.458273234790522
+    ],
+    "rango_Q_sin_tope": [
+      -10.557525787123407,
+      7.942503130665555
+    ],
+    "frac_tope": 0.42525747425257476,
+    "frac_tope_P": 0.0347965203479652,
+    "frac_tope_Q": 0.42525747425257476,
+    "rmse": 0.03744713570927458,
+    "rmse_I": 0.039607043870432596,
+    "rmse_E": 0.03515477238588358,
+    "error_beta": 24.32130936355818,
+    "frac_saturado": 0.3177682231776822,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 5 ms, warm start",
+    "tag": "e16_B100_wrm_n05_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9230352794187953,
+      11.706847322937596
+    ],
+    "rango_Q_sin_tope": [
+      -3.828828291697419,
+      15.878828764583965
+    ],
+    "frac_tope": 0.42975702429757023,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.42975702429757023,
+    "rmse": 0.035409499141684675,
+    "rmse_I": 0.03820059639448213,
+    "rmse_E": 0.032378691975368835,
+    "error_beta": 6.366492822056725,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n01_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8417117557955445,
+      10.08458723725958
+    ],
+    "rango_Q_sin_tope": [
+      -11.375643375808929,
+      8.12995945821362
+    ],
+    "frac_tope": 0.3447655234476552,
+    "frac_tope_P": 0.035996400359964,
+    "frac_tope_Q": 0.3447655234476552,
+    "rmse": 0.04482554479926095,
+    "rmse_I": 0.05331760362528242,
+    "rmse_E": 0.034291282810043316,
+    "error_beta": 21.46796789197695,
+    "frac_saturado": 0.10928907109289071,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9405783252889539,
+      6.299362775084404
+    ],
+    "rango_Q_sin_tope": [
+      -11.110276469845315,
+      9.224095603664194
+    ],
+    "frac_tope": 0.4276572342765723,
+    "frac_tope_P": 0.034996500349965,
+    "frac_tope_Q": 0.4276572342765723,
+    "rmse": 0.03689691173611645,
+    "rmse_I": 0.039385754263135904,
+    "rmse_E": 0.03422757006346503,
+    "error_beta": 19.35535407492093,
+    "frac_saturado": 0.3174682531746825,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9515432795977696,
+      6.586277740233485
+    ],
+    "rango_Q_sin_tope": [
+      -10.371629349730098,
+      8.794061588364178
+    ],
+    "frac_tope": 0.42195780421957807,
+    "frac_tope_P": 0.035096490350964904,
+    "frac_tope_Q": 0.42195780421957807,
+    "rmse": 0.036707727946989836,
+    "rmse_I": 0.03959074609590271,
+    "rmse_E": 0.03357807924271728,
+    "error_beta": 19.650617703085857,
+    "frac_saturado": 0.3143685631436856,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n01_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8893116119423656,
+      9.12775886941468
+    ],
+    "rango_Q_sin_tope": [
+      -11.303807254604552,
+      8.284062115659072
+    ],
+    "frac_tope": 0.32766723327667235,
+    "frac_tope_P": 0.0357964203579642,
+    "frac_tope_Q": 0.32766723327667235,
+    "rmse": 0.04165471854054108,
+    "rmse_I": 0.04728050307319547,
+    "rmse_E": 0.03513951027730675,
+    "error_beta": 24.32130936355818,
+    "frac_saturado": 0.049795020497950204,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9541097148657764,
+      6.7951721639160025
+    ],
+    "rango_Q_sin_tope": [
+      -5.418288296520359,
+      12.713321057415614
+    ],
+    "frac_tope": 0.42285771422857715,
+    "frac_tope_P": 0.03519648035196481,
+    "frac_tope_Q": 0.42285771422857715,
+    "rmse": 0.03661448696745822,
+    "rmse_I": 0.039708547286501306,
+    "rmse_E": 0.033233606246930614,
+    "error_beta": 16.092030193124497,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n01_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8902807755876934,
+      10.166353612036568
+    ],
+    "rango_Q_sin_tope": [
+      -11.85508647625603,
+      8.917060923678916
+    ],
+    "frac_tope": 0.33026697330266974,
+    "frac_tope_P": 0.035996400359964,
+    "frac_tope_Q": 0.33026697330266974,
+    "rmse": 0.04131541199203706,
+    "rmse_I": 0.0473666446174261,
+    "rmse_E": 0.03421004989516938,
+    "error_beta": 19.35535407492093,
+    "frac_saturado": 0.06379362063793621,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9494975443371365,
+      6.862993388574475
+    ],
+    "rango_Q_sin_tope": [
+      -10.884554476737982,
+      9.834515095867019
+    ],
+    "frac_tope": 0.4256574342565743,
+    "frac_tope_P": 0.03519648035196481,
+    "frac_tope_Q": 0.4256574342565743,
+    "rmse": 0.03660461210884324,
+    "rmse_I": 0.0394957908745959,
+    "rmse_E": 0.03346457467932223,
+    "error_beta": 18.324577879338037,
+    "frac_saturado": 0.31596840315968405,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n05_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8376100184787343,
+      10.4359721538764
+    ],
+    "rango_Q_sin_tope": [
+      -11.33470122247622,
+      11.687906766347643
+    ],
+    "frac_tope": 0.34066593340665935,
+    "frac_tope_P": 0.036096390360963904,
+    "frac_tope_Q": 0.34066593340665935,
+    "rmse": 0.04417793337753015,
+    "rmse_I": 0.052841481919940717,
+    "rmse_E": 0.03333402741229393,
+    "error_beta": 19.650617703085857,
+    "frac_saturado": 0.0993900609939006,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9310537182270466,
+      11.853691688005664
+    ],
+    "rango_Q_sin_tope": [
+      -5.0815366743453545,
+      15.426888296101767
+    ],
+    "frac_tope": 0.42905709429057093,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.42905709429057093,
+    "rmse": 0.03655982213451938,
+    "rmse_I": 0.03894374629577889,
+    "rmse_E": 0.03400920189397856,
+    "error_beta": 4.150700320800146,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n05_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.8977937768839528,
+      10.630863526577047
+    ],
+    "rango_Q_sin_tope": [
+      -4.552410149266125,
+      12.719840716482683
+    ],
+    "frac_tope": 0.33326667333266674,
+    "frac_tope_P": 0.036096390360963904,
+    "frac_tope_Q": 0.33326667333266674,
+    "rmse": 0.03945001088098531,
+    "rmse_I": 0.04499155347354201,
+    "rmse_E": 0.03299040516661062,
+    "error_beta": 16.092030193124497,
+    "frac_saturado": 0.0390960903909609,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, desde cero",
+    "tag": "e16_B400_n05_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.878166165720593,
+      10.726143262706897
+    ],
+    "rango_Q_sin_tope": [
+      -11.64942067868287,
+      12.228517710853383
+    ],
+    "frac_tope": 0.32936706329367066,
+    "frac_tope_P": 0.036096390360963904,
+    "frac_tope_Q": 0.32936706329367066,
+    "rmse": 0.04127597032982597,
+    "rmse_I": 0.04806477212667034,
+    "rmse_E": 0.033123845394950766,
+    "error_beta": 18.324577879338037,
+    "frac_saturado": 0.07039296070392961,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9334400069179118,
+      11.882126945240518
+    ],
+    "rango_Q_sin_tope": [
+      -5.247569636879593,
+      15.348802277206735
+    ],
+    "frac_tope": 0.42745725427457254,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.42745725427457254,
+    "rmse": 0.036562563530014656,
+    "rmse_I": 0.03906418200351717,
+    "rmse_E": 0.033876714542127616,
+    "error_beta": 3.5318805064473837,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9304336670380904,
+      11.883044565895284
+    ],
+    "rango_Q_sin_tope": [
+      -5.194873801322981,
+      15.430579435104443
+    ],
+    "frac_tope": 0.43005699430056993,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.43005699430056993,
+    "rmse": 0.0365310871665211,
+    "rmse_I": 0.03888579432733187,
+    "rmse_E": 0.034013756903176234,
+    "error_beta": 4.2079123854637155,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n01_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9207734322157197,
+      11.839990435387845
+    ],
+    "rango_Q_sin_tope": [
+      -3.212077395359452,
+      15.426888296101767
+    ],
+    "frac_tope": 0.43125687431256876,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.43125687431256876,
+    "rmse": 0.035734744880935865,
+    "rmse_I": 0.03858746005552299,
+    "rmse_E": 0.032633600933310455,
+    "error_beta": 4.150700320800146,
+    "frac_saturado": 0.039196080391960805,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9377630811228779,
+      11.882810358048948
+    ],
+    "rango_Q_sin_tope": [
+      -4.485075177956547,
+      15.731877264239476
+    ],
+    "frac_tope": 0.4256574342565743,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.4256574342565743,
+    "rmse": 0.03628110173881771,
+    "rmse_I": 0.03894819296053928,
+    "rmse_E": 0.033401720792101144,
+    "error_beta": 5.096430650779179,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n01_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9226922575008683,
+      11.875296783354122
+    ],
+    "rango_Q_sin_tope": [
+      -3.1534588108946804,
+      15.348802277206735
+    ],
+    "frac_tope": 0.4310568943105689,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.4310568943105689,
+    "rmse": 0.03569694837895182,
+    "rmse_I": 0.03861788960115752,
+    "rmse_E": 0.032514655924550565,
+    "error_beta": 3.5318805064473837,
+    "frac_saturado": 0.0392960703929607,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9434641437758726,
+      11.893382565153034
+    ],
+    "rango_Q_sin_tope": [
+      -4.493772604033222,
+      15.474685048992425
+    ],
+    "frac_tope": 0.42315768423157685,
+    "frac_tope_P": 0.0354964503549645,
+    "frac_tope_Q": 0.42315768423157685,
+    "rmse": 0.0362252317751292,
+    "rmse_I": 0.039118895274665534,
+    "rmse_E": 0.03307940245550713,
+    "error_beta": 6.1653515199820195,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n01_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.92048242575578,
+      11.862406489770535
+    ],
+    "rango_Q_sin_tope": [
+      -3.3189833760436898,
+      15.430579435104443
+    ],
+    "frac_tope": 0.43155684431556846,
+    "frac_tope_P": 0.036396360363963605,
+    "frac_tope_Q": 0.43155684431556846,
+    "rmse": 0.035737222934193985,
+    "rmse_I": 0.03859433158159771,
+    "rmse_E": 0.03263090216139067,
+    "error_beta": 4.2079123854637155,
+    "frac_saturado": 0.0390960903909609,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9369109597401792,
+      12.150834441346507
+    ],
+    "rango_Q_sin_tope": [
+      -4.523138654898041,
+      15.745697920580428
+    ],
+    "frac_tope": 0.4276572342765723,
+    "frac_tope_P": 0.0354964503549645,
+    "frac_tope_Q": 0.4276572342765723,
+    "rmse": 0.036162933177716926,
+    "rmse_I": 0.03882079238025492,
+    "rmse_E": 0.0332935662103233,
+    "error_beta": 3.4150178517614087,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n05_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9259907516598955,
+      11.882810358048948
+    ],
+    "rango_Q_sin_tope": [
+      -2.736780619505852,
+      15.731877264239476
+    ],
+    "frac_tope": 0.42815718428157185,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.42815718428157185,
+    "rmse": 0.035350035801356115,
+    "rmse_I": 0.038331735401046306,
+    "rmse_E": 0.0320924932571231,
+    "error_beta": 5.096430650779179,
+    "frac_saturado": 0.03949605039496051,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9279680698022923,
+      9.536240595203125
+    ],
+    "rango_Q_sin_tope": [
+      -5.29119739965579,
+      15.514512019505785
+    ],
+    "frac_tope": 0.43325667433256676,
+    "frac_tope_P": 0.035596440355964404,
+    "frac_tope_Q": 0.43325667433256676,
+    "rmse": 0.03624763170027704,
+    "rmse_I": 0.038616673066519024,
+    "rmse_E": 0.0337125224364989,
+    "error_beta": 2.8951692935966316,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n05_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9306063811908161,
+      11.893382565153034
+    ],
+    "rango_Q_sin_tope": [
+      -2.6598692136245385,
+      15.474685048992425
+    ],
+    "frac_tope": 0.4273572642735726,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.4273572642735726,
+    "rmse": 0.03536239679100457,
+    "rmse_I": 0.03852354707476007,
+    "rmse_E": 0.0318894110072238,
+    "error_beta": 6.1653515199820195,
+    "frac_saturado": 0.03949605039496051,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n01_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9356044950198511,
+      12.280313113317481
+    ],
+    "rango_Q_sin_tope": [
+      -5.3026760527919725,
+      15.515756980871032
+    ],
+    "frac_tope": 0.43325667433256676,
+    "frac_tope_P": 0.0364963503649635,
+    "frac_tope_Q": 0.43325667433256676,
+    "rmse": 0.03514747335629611,
+    "rmse_I": 0.03851413920819796,
+    "rmse_E": 0.031422139451581566,
+    "error_beta": 2.8951692935966316,
+    "frac_saturado": 0.0387961203879612,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9288077844317078,
+      11.193724290362915
+    ],
+    "rango_Q_sin_tope": [
+      -5.497591911073307,
+      15.440731720818878
+    ],
+    "frac_tope": 0.43345665433456654,
+    "frac_tope_P": 0.035596440355964404,
+    "frac_tope_Q": 0.43345665433456654,
+    "rmse": 0.036232769804349474,
+    "rmse_I": 0.03864150192964674,
+    "rmse_E": 0.03365206596943292,
+    "error_beta": 2.867964733214606,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "agnóstica 20 ms, warm start",
+    "tag": "e16_B400_wrm_n05_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9275353892059512,
+      12.150834441346507
+    ],
+    "rango_Q_sin_tope": [
+      -2.832604275452895,
+      15.745697920580428
+    ],
+    "frac_tope": 0.42895710428957107,
+    "frac_tope_P": 0.036396360363963605,
+    "frac_tope_Q": 0.42895710428957107,
+    "rmse": 0.03521638204700577,
+    "rmse_I": 0.03832580931315655,
+    "rmse_E": 0.031804393870232824,
+    "error_beta": 3.4150178517614087,
+    "frac_saturado": 0.0392960703929607,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n01_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9363669860945756,
+      12.347332668216874
+    ],
+    "rango_Q_sin_tope": [
+      -5.508985193848943,
+      15.441959003343161
+    ],
+    "frac_tope": 0.4333566643335666,
+    "frac_tope_P": 0.0365963403659634,
+    "frac_tope_Q": 0.4333566643335666,
+    "rmse": 0.03514056287132448,
+    "rmse_I": 0.03853972985524196,
+    "rmse_E": 0.03137526956875411,
+    "error_beta": 2.867964733214606,
+    "frac_saturado": 0.0387961203879612,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9288112287001185,
+      9.795256850805421
+    ],
+    "rango_Q_sin_tope": [
+      -5.466879540951181,
+      15.438535448845945
+    ],
+    "frac_tope": 0.43315668433156684,
+    "frac_tope_P": 0.035596440355964404,
+    "frac_tope_Q": 0.43315668433156684,
+    "rmse": 0.03624823067841936,
+    "rmse_I": 0.03864670691348926,
+    "rmse_E": 0.03367937795409332,
+    "error_beta": 2.7301350094023205,
+    "frac_saturado": 0.038896110388961104,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n01_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9364759431343954,
+      12.320088565752117
+    ],
+    "rango_Q_sin_tope": [
+      -5.478474868592494,
+      15.439762207693008
+    ],
+    "frac_tope": 0.4330566943305669,
+    "frac_tope_P": 0.0365963403659634,
+    "frac_tope_Q": 0.4330566943305669,
+    "rmse": 0.03513484577772804,
+    "rmse_I": 0.03854254262488666,
+    "rmse_E": 0.03135900482569978,
+    "error_beta": 2.7301350094023205,
+    "frac_saturado": 0.0387961203879612,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.928157810531876,
+      12.176878020149791
+    ],
+    "rango_Q_sin_tope": [
+      -3.8126048835567077,
+      16.910422637435364
+    ],
+    "frac_tope": 0.42895710428957107,
+    "frac_tope_P": 0.035596440355964404,
+    "frac_tope_Q": 0.42895710428957107,
+    "rmse": 0.035620971147780685,
+    "rmse_I": 0.037901315906934845,
+    "rmse_E": 0.03318429483271833,
+    "error_beta": 9.68810926590647,
+    "frac_saturado": 0.039196080391960805,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n05_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9350825280243852,
+      12.17747992146602
+    ],
+    "rango_Q_sin_tope": [
+      -3.823011182968766,
+      16.912034829192347
+    ],
+    "frac_tope": 0.4286571342865713,
+    "frac_tope_P": 0.0364963503649635,
+    "frac_tope_Q": 0.4286571342865713,
+    "rmse": 0.03458630830767537,
+    "rmse_I": 0.03780518942679798,
+    "rmse_E": 0.031035352376138248,
+    "error_beta": 9.68810926590647,
+    "frac_saturado": 0.0390960903909609,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9240030714923935,
+      7.103018606223666
+    ],
+    "rango_Q_sin_tope": [
+      -4.325318201878782,
+      15.758852927384517
+    ],
+    "frac_tope": 0.43015698430156984,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.43015698430156984,
+    "rmse": 0.036108226113524745,
+    "rmse_I": 0.03822820250675926,
+    "rmse_E": 0.03385576050294935,
+    "error_beta": 6.125196097862153,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n05_s1",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9313766962421307,
+      11.266460794548225
+    ],
+    "rango_Q_sin_tope": [
+      -4.342047189843539,
+      15.760157647362531
+    ],
+    "frac_tope": 0.42995700429957007,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.42995700429957007,
+    "rmse": 0.03508144632211765,
+    "rmse_I": 0.038135471263785435,
+    "rmse_E": 0.03173486385022377,
+    "error_beta": 6.125196097862153,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9243830562650703,
+      7.105158851062022
+    ],
+    "rango_Q_sin_tope": [
+      -4.222051763206155,
+      15.918071346703597
+    ],
+    "frac_tope": 0.42975702429757023,
+    "frac_tope_P": 0.035396460353964605,
+    "frac_tope_Q": 0.42975702429757023,
+    "rmse": 0.036083845529964145,
+    "rmse_I": 0.03820576099490061,
+    "rmse_E": 0.03382909462668426,
+    "error_beta": 6.985910137494405,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "white-box",
+    "tag": "e16_e2wb_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.2803693983,
+      8.474544788115892
+    ],
+    "rango_Q_sin_tope": [
+      -5.49730235983608,
+      16.902753300477737
+    ],
+    "frac_tope": 0.7219278072192781,
+    "frac_tope_P": 0.47195280471952805,
+    "frac_tope_Q": 0.6898310168983102,
+    "rmse": 0.06426373852958392,
+    "rmse_I": 0.04717763468679715,
+    "rmse_E": 0.07767835583324721,
+    "error_beta": 25.4479066105116,
+    "frac_saturado": 0.09349065093490651,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "refrac",
+    "modelo": "forma exacta, warm start",
+    "tag": "e16_e1S2_wrm_n05_s2",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      0.9320633584448654,
+      11.298541746164947
+    ],
+    "rango_Q_sin_tope": [
+      -4.232673446070048,
+      15.919416018080634
+    ],
+    "frac_tope": 0.4293570642935706,
+    "frac_tope_P": 0.0362963703629637,
+    "frac_tope_Q": 0.4293570642935706,
+    "rmse": 0.035030791487519516,
+    "rmse_I": 0.03811065489812118,
+    "rmse_E": 0.031652656882487,
+    "error_beta": 6.985910137494405,
+    "frac_saturado": 0.03899610038996101,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "white-box",
+    "tag": "e16_e2wb_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.252243879699865,
+      8.433990546578944
+    ],
+    "rango_Q_sin_tope": [
+      -5.4945037181823295,
+      16.979204012317883
+    ],
+    "frac_tope": 0.7228277172282772,
+    "frac_tope_P": 0.47115288471152883,
+    "frac_tope_Q": 0.6912308769123088,
+    "rmse": 0.06432453716324146,
+    "rmse_I": 0.04715198435142696,
+    "rmse_E": 0.0777944890995066,
+    "error_beta": 25.174934963385265,
+    "frac_saturado": 0.09349065093490651,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "white-box",
+    "tag": "e16_e2wb_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.363701685684116,
+      8.621101891517679
+    ],
+    "rango_Q_sin_tope": [
+      -5.421572043843444,
+      17.131581391918647
+    ],
+    "frac_tope": 0.7261273872612739,
+    "frac_tope_P": 0.47415258474152583,
+    "frac_tope_Q": 0.6938306169383062,
+    "rmse": 0.06429387751434436,
+    "rmse_I": 0.04710427550489981,
+    "rmse_E": 0.07777269829970879,
+    "error_beta": 24.83639846245448,
+    "frac_saturado": 0.09369063093690631,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "white-box",
+    "tag": "e16_e2wb_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -7.381430254366014,
+      13.897394955102945
+    ],
+    "rango_Q_sin_tope": [
+      -5.311682856149743,
+      19.270204457917245
+    ],
+    "frac_tope": 0.7684231576842315,
+    "frac_tope_P": 0.47975202479752027,
+    "frac_tope_Q": 0.7378262173782622,
+    "rmse": 0.06478152993242395,
+    "rmse_I": 0.04635788862357695,
+    "rmse_E": 0.07902049989170605,
+    "error_beta": 20.42835837318784,
+    "frac_saturado": 0.17168283171682833,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "white-box",
+    "tag": "e16_e2wb_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.59359886798993,
+      9.80813517615036
+    ],
+    "rango_Q_sin_tope": [
+      -5.346981221107045,
+      18.789167975861215
+    ],
+    "frac_tope": 0.7754224577542246,
+    "frac_tope_P": 0.47755224477552244,
+    "frac_tope_Q": 0.7449255074492551,
+    "rmse": 0.06509927514668157,
+    "rmse_I": 0.04637505062408164,
+    "rmse_E": 0.07953103751907535,
+    "error_beta": 19.967826959632696,
+    "frac_saturado": 0.09499050094990501,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, desde cero",
+    "tag": "e16_e2B_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.456362205129574,
+      6.625722463618055
+    ],
+    "rango_Q_sin_tope": [
+      -3.8434525774225143,
+      15.601025478462894
+    ],
+    "frac_tope": 0.7429257074292571,
+    "frac_tope_P": 0.4433556644335566,
+    "frac_tope_Q": 0.7072292770722928,
+    "rmse": 0.06253636360122226,
+    "rmse_I": 0.04277921352213613,
+    "rmse_E": 0.07740498973164481,
+    "error_beta": 26.838631472062502,
+    "frac_saturado": 0.09519048095190481,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "white-box",
+    "tag": "e16_e2wb_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.705105389336005,
+      10.479091044244377
+    ],
+    "rango_Q_sin_tope": [
+      -5.2351440067169275,
+      18.987330639554948
+    ],
+    "frac_tope": 0.7727227277272273,
+    "frac_tope_P": 0.47765223477652236,
+    "frac_tope_Q": 0.7417258274172582,
+    "rmse": 0.06515182396055681,
+    "rmse_I": 0.046203299810674926,
+    "rmse_E": 0.07971684525481208,
+    "error_beta": 21.90280238787333,
+    "frac_saturado": 0.09529047095290472,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, desde cero",
+    "tag": "e16_e2B_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.304344572614609,
+      7.36732747172525
+    ],
+    "rango_Q_sin_tope": [
+      -3.3764966937324328,
+      17.227691544965655
+    ],
+    "frac_tope": 0.7591240875912408,
+    "frac_tope_P": 0.4597540245975402,
+    "frac_tope_Q": 0.7192280771922808,
+    "rmse": 0.06422808270194266,
+    "rmse_I": 0.04392770914961307,
+    "rmse_E": 0.07950377087913613,
+    "error_beta": 24.204643670292132,
+    "frac_saturado": 0.09779022097790221,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, warm start",
+    "tag": "e16_e2B_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.979374622387015,
+      8.207633834413778
+    ],
+    "rango_Q_sin_tope": [
+      -6.152543244126806,
+      17.69296026079208
+    ],
+    "frac_tope": 0.798020197980202,
+    "frac_tope_P": 0.47775222477752227,
+    "frac_tope_Q": 0.7683231676832317,
+    "rmse": 0.06574583395704642,
+    "rmse_I": 0.04730213536880928,
+    "rmse_E": 0.0800470946066494,
+    "error_beta": 20.163006463221144,
+    "frac_saturado": 0.09529047095290472,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, desde cero",
+    "tag": "e16_e2B_n01_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.450228618909488,
+      11.811484140809743
+    ],
+    "rango_Q_sin_tope": [
+      -14.543947809441883,
+      15.601025478462894
+    ],
+    "frac_tope": 0.7563243675632437,
+    "frac_tope_P": 0.45115488451154884,
+    "frac_tope_Q": 0.6733326667333267,
+    "rmse": 0.08953867960359599,
+    "rmse_I": 0.05908568074291914,
+    "rmse_E": 0.11199657415053671,
+    "error_beta": 26.838631472062502,
+    "frac_saturado": 0.0791920807919208,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, warm start",
+    "tag": "e16_e2B_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.563040906839393,
+      14.389821500680704
+    ],
+    "rango_Q_sin_tope": [
+      -5.880609595848917,
+      18.944321034680623
+    ],
+    "frac_tope": 0.803919608039196,
+    "frac_tope_P": 0.49445055494450557,
+    "frac_tope_Q": 0.7707229277072293,
+    "rmse": 0.06597585009746018,
+    "rmse_I": 0.04725758574103077,
+    "rmse_E": 0.08045089298506387,
+    "error_beta": 25.589884427331743,
+    "frac_saturado": 0.1822817718228177,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, desde cero",
+    "tag": "e16_e2B_n05_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.299616604600452,
+      12.419985128836348
+    ],
+    "rango_Q_sin_tope": [
+      -16.99233923884583,
+      17.227691544965655
+    ],
+    "frac_tope": 0.7311268873112688,
+    "frac_tope_P": 0.45685431456854314,
+    "frac_tope_Q": 0.581041895810419,
+    "rmse": 0.09061465723828409,
+    "rmse_I": 0.06140230031356018,
+    "rmse_E": 0.11248017482661907,
+    "error_beta": 24.204643670292132,
+    "frac_saturado": 0.0524947505249475,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.76595364990892,
+      6.606443979230656
+    ],
+    "rango_Q_sin_tope": [
+      -13.54424921705891,
+      11.09888283400326
+    ],
+    "frac_tope": 0.7328267173282672,
+    "frac_tope_P": 0.45555444455554445,
+    "frac_tope_Q": 0.6945305469453055,
+    "rmse": 0.06588680661007577,
+    "rmse_I": 0.04588059842007608,
+    "rmse_E": 0.08109940356847739,
+    "error_beta": 23.48219441161269,
+    "frac_saturado": 0.3615638436156384,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, warm start",
+    "tag": "e16_e2B_wrm_n01_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.974916759933498,
+      13.147980097066638
+    ],
+    "rango_Q_sin_tope": [
+      -3.897589094323793,
+      17.69296026079208
+    ],
+    "frac_tope": 0.7478252174782521,
+    "frac_tope_P": 0.4550544945505449,
+    "frac_tope_Q": 0.7183281671832816,
+    "rmse": 0.06553571990177715,
+    "rmse_I": 0.04710124842037999,
+    "rmse_E": 0.07982063369411463,
+    "error_beta": 20.163006463221144,
+    "frac_saturado": 0.05369463053694631,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -9.8950419626291,
+      5.507363918916053
+    ],
+    "rango_Q_sin_tope": [
+      -11.504684577639352,
+      7.809753770103753
+    ],
+    "frac_tope": 0.712928707129287,
+    "frac_tope_P": 0.4403559644035596,
+    "frac_tope_Q": 0.6758324167583242,
+    "rmse": 0.06737667875505514,
+    "rmse_I": 0.0465381920566767,
+    "rmse_E": 0.08314704059808546,
+    "error_beta": 28.388494870492387,
+    "frac_saturado": 0.35576442355764426,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.474668798383679,
+      6.440282948305436
+    ],
+    "rango_Q_sin_tope": [
+      -3.9063646323463583,
+      13.673145217486626
+    ],
+    "frac_tope": 0.7139286071392861,
+    "frac_tope_P": 0.45385461453854614,
+    "frac_tope_Q": 0.6678332166783322,
+    "rmse": 0.06506101430028645,
+    "rmse_I": 0.04522325131310577,
+    "rmse_E": 0.08012944966886913,
+    "error_beta": 23.710788346472246,
+    "frac_saturado": 0.09519048095190481,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.10248819895732,
+      6.315792716355207
+    ],
+    "rango_Q_sin_tope": [
+      -11.436986616085244,
+      8.1271031760411
+    ],
+    "frac_tope": 0.7265273472652735,
+    "frac_tope_P": 0.46395360463953605,
+    "frac_tope_Q": 0.6798320167983202,
+    "rmse": 0.0678086096380216,
+    "rmse_I": 0.04693777581134912,
+    "rmse_E": 0.08362332380362981,
+    "error_beta": 24.76015380805447,
+    "frac_saturado": 0.35866413358664134,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "agnóstica, warm start",
+    "tag": "e16_e2B_wrm_n05_s0",
+    "controlador": "original, con modelo",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -14.402231773013828,
+      14.36986538435848
+    ],
+    "rango_Q_sin_tope": [
+      -2.351696572862299,
+      18.944023960666126
+    ],
+    "frac_tope": 0.7556244375562444,
+    "frac_tope_P": 0.4794520547945205,
+    "frac_tope_Q": 0.7219278072192781,
+    "rmse": 0.06533072369330778,
+    "rmse_I": 0.046847966666387734,
+    "rmse_E": 0.07963337827699939,
+    "error_beta": 25.589884427331743,
+    "frac_saturado": 0.09759024097590241,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -11.170159167002982,
+      6.226082163317001
+    ],
+    "rango_Q_sin_tope": [
+      -10.934160952941172,
+      7.182184892615526
+    ],
+    "frac_tope": 0.7211278872112789,
+    "frac_tope_P": 0.46705329467053297,
+    "frac_tope_Q": 0.6774322567743226,
+    "rmse": 0.0686633932971707,
+    "rmse_I": 0.04799940845362618,
+    "rmse_E": 0.08441196565810946,
+    "error_beta": 25.482004668031422,
+    "frac_saturado": 0.3598640135986401,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, desde cero",
+    "tag": "e16_H100_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.299312424781231,
+      7.399266621988472
+    ],
+    "rango_Q_sin_tope": [
+      -3.3591009438831536,
+      12.83305675947971
+    ],
+    "frac_tope": 0.7062293770622937,
+    "frac_tope_P": 0.46065393460653936,
+    "frac_tope_Q": 0.6501349865013498,
+    "rmse": 0.06443543642880771,
+    "rmse_I": 0.04551085607066782,
+    "rmse_E": 0.07894689933909245,
+    "error_beta": 25.72191511325184,
+    "frac_saturado": 0.09869013098690131,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.421462657891564,
+      16.356369574731325
+    ],
+    "rango_Q_sin_tope": [
+      -5.9855472148668305,
+      19.506814997137244
+    ],
+    "frac_tope": 0.762023797620238,
+    "frac_tope_P": 0.5130486951304869,
+    "frac_tope_Q": 0.7190280971902809,
+    "rmse": 0.06367580814420576,
+    "rmse_I": 0.046455123595155697,
+    "rmse_E": 0.07714362305073706,
+    "error_beta": 25.01322585911978,
+    "frac_saturado": 0.17178282171782822,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.442238175642768,
+      16.366979408366493
+    ],
+    "rango_Q_sin_tope": [
+      -5.753276786278983,
+      19.86828384678618
+    ],
+    "frac_tope": 0.7633236676332367,
+    "frac_tope_P": 0.5125487451254874,
+    "frac_tope_Q": 0.7211278872112789,
+    "rmse": 0.06352664405815475,
+    "rmse_I": 0.046319332109651105,
+    "rmse_E": 0.07697914317202303,
+    "error_beta": 25.289661316644576,
+    "frac_saturado": 0.1703829617038296,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -15.122562099343103,
+      9.846955562648668
+    ],
+    "rango_Q_sin_tope": [
+      -6.24827375474648,
+      18.366455398202756
+    ],
+    "frac_tope": 0.7471252874712528,
+    "frac_tope_P": 0.49755024497550243,
+    "frac_tope_Q": 0.7062293770622937,
+    "rmse": 0.06339220639541869,
+    "rmse_I": 0.04632225576134498,
+    "rmse_E": 0.07675540557211112,
+    "error_beta": 22.58743704784484,
+    "frac_saturado": 0.0943905609439056,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.549087300566734,
+      17.449231252352227
+    ],
+    "rango_Q_sin_tope": [
+      -6.864252507937092,
+      20.046586555069897
+    ],
+    "frac_tope": 0.7806219378062194,
+    "frac_tope_P": 0.5092490750924907,
+    "frac_tope_Q": 0.748025197480252,
+    "rmse": 0.06598290985975844,
+    "rmse_I": 0.04666359719859602,
+    "rmse_E": 0.08080839983324255,
+    "error_beta": 29.902833987559593,
+    "frac_saturado": 0.1967803219678032,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.923776212307387,
+      16.060636525835474
+    ],
+    "rango_Q_sin_tope": [
+      -6.091597893225439,
+      19.86019600755221
+    ],
+    "frac_tope": 0.7761223877612239,
+    "frac_tope_P": 0.5004499550044995,
+    "frac_tope_Q": 0.7431256874312568,
+    "rmse": 0.0654412532212962,
+    "rmse_I": 0.04626379914839188,
+    "rmse_E": 0.08015470126389888,
+    "error_beta": 29.020638572318216,
+    "frac_saturado": 0.18888111188881113,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, desde cero",
+    "tag": "e16_H400_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -9.124859950170137,
+      5.168434437202611
+    ],
+    "rango_Q_sin_tope": [
+      -11.321617459015723,
+      7.643853916210153
+    ],
+    "frac_tope": 0.7491250874912508,
+    "frac_tope_P": 0.43515648435156484,
+    "frac_tope_Q": 0.7118288171182882,
+    "rmse": 0.06920004082422071,
+    "rmse_I": 0.0472860739052438,
+    "rmse_E": 0.08568149458766139,
+    "error_beta": 31.85809390885489,
+    "frac_saturado": 0.34506549345065496,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 5 ms, warm start",
+    "tag": "e16_H100_wrm_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.68067950478335,
+      16.32622280836422
+    ],
+    "rango_Q_sin_tope": [
+      -5.689479104712236,
+      20.498027218101328
+    ],
+    "frac_tope": 0.7813218678132187,
+    "frac_tope_P": 0.5021497850214979,
+    "frac_tope_Q": 0.7484251574842515,
+    "rmse": 0.06550739424603355,
+    "rmse_I": 0.046061660232950476,
+    "rmse_E": 0.08037885827999032,
+    "error_beta": 29.285857595858126,
+    "frac_saturado": 0.1912808719128087,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, desde cero",
+    "tag": "e16_H400_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.246677368735797,
+      8.174162840071542
+    ],
+    "rango_Q_sin_tope": [
+      -13.428136085715526,
+      9.142668078759097
+    ],
+    "frac_tope": 0.7443255674432556,
+    "frac_tope_P": 0.47895210478952105,
+    "frac_tope_Q": 0.7035296470352965,
+    "rmse": 0.06642064620956666,
+    "rmse_I": 0.047913676868732435,
+    "rmse_E": 0.08079408428041955,
+    "error_beta": 18.195654343636264,
+    "frac_saturado": 0.3595640435956404,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, warm start",
+    "tag": "e16_H400_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.223748877140557,
+      16.7515818481163
+    ],
+    "rango_Q_sin_tope": [
+      -5.739256518865307,
+      19.33400946663497
+    ],
+    "frac_tope": 0.7615238476152385,
+    "frac_tope_P": 0.5165483451654834,
+    "frac_tope_Q": 0.7167283271672833,
+    "rmse": 0.06366991678124116,
+    "rmse_I": 0.04663412585794269,
+    "rmse_E": 0.07702580678789356,
+    "error_beta": 26.639222758156915,
+    "frac_saturado": 0.17168283171682833,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "historia, 20 ms, warm start",
+    "tag": "e16_H400_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.269272713028686,
+      18.903243994522075
+    ],
+    "rango_Q_sin_tope": [
+      -6.857164208720586,
+      21.753796602665275
+    ],
+    "frac_tope": 0.8012198780121987,
+    "frac_tope_P": 0.5500449955004499,
+    "frac_tope_Q": 0.7465253474652535,
+    "rmse": 0.06397846494709289,
+    "rmse_I": 0.04665464630400479,
+    "rmse_E": 0.07752310579576259,
+    "error_beta": 37.21735371897618,
+    "frac_saturado": 0.18708129187081293,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, desde cero",
+    "tag": "e16_K400_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.503208533473831,
+      6.8157008260382055
+    ],
+    "rango_Q_sin_tope": [
+      -14.6973877990571,
+      10.131528323213868
+    ],
+    "frac_tope": 0.7353264673532647,
+    "frac_tope_P": 0.46815318468153183,
+    "frac_tope_Q": 0.700929907009299,
+    "rmse": 0.06663310932994086,
+    "rmse_I": 0.047538833354146805,
+    "rmse_E": 0.08136339374238494,
+    "error_beta": 26.39431726719652,
+    "frac_saturado": 0.35506449355064496,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, desde cero",
+    "tag": "e16_K400_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -9.232158678240374,
+      14.556913223531486
+    ],
+    "rango_Q_sin_tope": [
+      -13.84235974816429,
+      8.921752196587786
+    ],
+    "frac_tope": 0.7414258574142586,
+    "frac_tope_P": 0.49725027497250274,
+    "frac_tope_Q": 0.6930306969303069,
+    "rmse": 0.06646689560158409,
+    "rmse_I": 0.04910003959599801,
+    "rmse_E": 0.08015536497013274,
+    "error_beta": 26.57969321966881,
+    "frac_saturado": 0.35876412358764126,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, warm start",
+    "tag": "e16_K400_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -16.127553119697552,
+      13.182209501293377
+    ],
+    "rango_Q_sin_tope": [
+      -17.258711221360592,
+      11.882656263765671
+    ],
+    "frac_tope": 0.7554244575542446,
+    "frac_tope_P": 0.5134486551344866,
+    "frac_tope_Q": 0.7118288171182882,
+    "rmse": 0.06368544024666178,
+    "rmse_I": 0.047386668332918006,
+    "rmse_E": 0.07659095418604134,
+    "error_beta": 28.114822095348718,
+    "frac_saturado": 0.3742625737426257,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 4 canales, warm start",
+    "tag": "e16_K400_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.396386743836081,
+      18.562587941613188
+    ],
+    "rango_Q_sin_tope": [
+      -18.39398420551529,
+      11.973735631625546
+    ],
+    "frac_tope": 0.7795220477952205,
+    "frac_tope_P": 0.5298470152984701,
+    "frac_tope_Q": 0.7428257174282572,
+    "rmse": 0.06555442601002583,
+    "rmse_I": 0.04817160720003011,
+    "rmse_E": 0.0792102379669062,
+    "error_beta": 36.83746743148991,
+    "frac_saturado": 0.36896310368963103,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -10.897317578625625,
+      5.9291376836879
+    ],
+    "rango_Q_sin_tope": [
+      -14.185740036786914,
+      9.628402590364832
+    ],
+    "frac_tope": 0.7257274272572742,
+    "frac_tope_P": 0.44455554444555545,
+    "frac_tope_Q": 0.698930106989301,
+    "rmse": 0.06510282430575255,
+    "rmse_I": 0.04640158596597952,
+    "rmse_E": 0.07952136998953918,
+    "error_beta": 27.33317368087315,
+    "frac_saturado": 0.36506349365063495,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.11419274940712,
+      6.631523676273494
+    ],
+    "rango_Q_sin_tope": [
+      -14.118611218264213,
+      9.191101630937615
+    ],
+    "frac_tope": 0.7418258174182581,
+    "frac_tope_P": 0.46525347465253475,
+    "frac_tope_Q": 0.7123287671232876,
+    "rmse": 0.0673209762001866,
+    "rmse_I": 0.04774771081941311,
+    "rmse_E": 0.08236737087341006,
+    "error_beta": 26.14394953917889,
+    "frac_saturado": 0.36506349365063495,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -10.689018827768287,
+      5.851429558581895
+    ],
+    "rango_Q_sin_tope": [
+      -13.727608551768693,
+      9.02516105384965
+    ],
+    "frac_tope": 0.7436256374362564,
+    "frac_tope_P": 0.44465553444655537,
+    "frac_tope_Q": 0.7186281371862814,
+    "rmse": 0.06842657121454253,
+    "rmse_I": 0.04756853303834351,
+    "rmse_E": 0.08427114548253002,
+    "error_beta": 27.10198438061135,
+    "frac_saturado": 0.3648635136486351,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.762157824877676,
+      7.649891688645058
+    ],
+    "rango_Q_sin_tope": [
+      -13.536786575643397,
+      8.856559310463178
+    ],
+    "frac_tope": 0.7369263073692631,
+    "frac_tope_P": 0.48035196480351966,
+    "frac_tope_Q": 0.7008299170082992,
+    "rmse": 0.06591231343134156,
+    "rmse_I": 0.047480244660042574,
+    "rmse_E": 0.08021528838547748,
+    "error_beta": 25.497266732688463,
+    "frac_saturado": 0.37306269373062695,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -14.6280946424829,
+      9.08944031886427
+    ],
+    "rango_Q_sin_tope": [
+      -14.079751310269332,
+      9.114839824462473
+    ],
+    "frac_tope": 0.7508249175082492,
+    "frac_tope_P": 0.4854514548545146,
+    "frac_tope_Q": 0.7195280471952805,
+    "rmse": 0.06702779606101088,
+    "rmse_I": 0.0486484217788109,
+    "rmse_E": 0.08135589682391713,
+    "error_beta": 26.409905247745066,
+    "frac_saturado": 0.37246275372462756,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -7.009022143631629,
+      16.229161379965927
+    ],
+    "rango_Q_sin_tope": [
+      -17.223988378411597,
+      12.757322993013982
+    ],
+    "frac_tope": 0.7546245375462454,
+    "frac_tope_P": 0.515948405159484,
+    "frac_tope_Q": 0.7063293670632936,
+    "rmse": 0.06315184767922807,
+    "rmse_I": 0.046828236228218585,
+    "rmse_E": 0.07604885286679218,
+    "error_beta": 27.378953156017122,
+    "frac_saturado": 0.3748625137486251,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, desde cero",
+    "tag": "e16_K400f8_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -12.704006186780148,
+      7.114599750099298
+    ],
+    "rango_Q_sin_tope": [
+      -12.646475406324988,
+      8.203821873754025
+    ],
+    "frac_tope": 0.7445255474452555,
+    "frac_tope_P": 0.47495250474952505,
+    "frac_tope_Q": 0.7103289671032896,
+    "rmse": 0.06772880869794817,
+    "rmse_I": 0.048908713868033776,
+    "rmse_E": 0.08235484662763522,
+    "error_beta": 24.22845112958125,
+    "frac_saturado": 0.3681631836816318,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -8.165204619416084,
+      15.572599455490442
+    ],
+    "rango_Q_sin_tope": [
+      -16.256356231972788,
+      11.180851879049715
+    ],
+    "frac_tope": 0.7463253674632536,
+    "frac_tope_P": 0.5070492950704929,
+    "frac_tope_Q": 0.7005299470052995,
+    "rmse": 0.06415990190796474,
+    "rmse_I": 0.04730140555691885,
+    "rmse_E": 0.0774310212900437,
+    "error_beta": 24.751080728712534,
+    "frac_saturado": 0.3735626437356264,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -16.256584354428185,
+      12.746788853726045
+    ],
+    "rango_Q_sin_tope": [
+      -17.765782904860686,
+      12.825323626475294
+    ],
+    "frac_tope": 0.7579242075792421,
+    "frac_tope_P": 0.5145485451454854,
+    "frac_tope_Q": 0.7119288071192881,
+    "rmse": 0.06366857219399154,
+    "rmse_I": 0.04729917048006828,
+    "rmse_E": 0.07661698664356661,
+    "error_beta": 28.019371571994963,
+    "frac_saturado": 0.37346265373462656,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.884655258557546,
+      17.680024959501033
+    ],
+    "rango_Q_sin_tope": [
+      -18.780369580592183,
+      13.447840475915406
+    ],
+    "frac_tope": 0.7838216178382161,
+    "frac_tope_P": 0.5213478652134786,
+    "frac_tope_Q": 0.7464253574642535,
+    "rmse": 0.06534774885052733,
+    "rmse_I": 0.04659205532393868,
+    "rmse_E": 0.07981125823061698,
+    "error_beta": 33.252560865311395,
+    "frac_saturado": 0.37736226377362264,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.85445807346975,
+      17.6262727323826
+    ],
+    "rango_Q_sin_tope": [
+      -18.04061591972487,
+      12.388303898068715
+    ],
+    "frac_tope": 0.7798220177982201,
+    "frac_tope_P": 0.5187481251874813,
+    "frac_tope_Q": 0.7425257474252575,
+    "rmse": 0.06560942310024362,
+    "rmse_I": 0.0467702683665121,
+    "rmse_E": 0.08013572733817294,
+    "error_beta": 32.75748478869597,
+    "frac_saturado": 0.37606239376062395,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 8 canales, warm start",
+    "tag": "e16_K400f8_wrm_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.000155238055032,
+      18.17961813522104
+    ],
+    "rango_Q_sin_tope": [
+      -8.011307995015802,
+      20.488802251202042
+    ],
+    "frac_tope": 0.7806219378062194,
+    "frac_tope_P": 0.5236476352364764,
+    "frac_tope_Q": 0.7433256674332567,
+    "rmse": 0.06558013827293423,
+    "rmse_I": 0.047301227709296935,
+    "rmse_E": 0.079775327821248,
+    "error_beta": 33.72132569019284,
+    "frac_saturado": 0.19618038196180382,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, desde cero",
+    "tag": "e16_K400f16_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -10.989191040908477,
+      5.977919007239008
+    ],
+    "rango_Q_sin_tope": [
+      -14.684731465538345,
+      11.61091400237425
+    ],
+    "frac_tope": 0.7368263173682632,
+    "frac_tope_P": 0.44415558444155584,
+    "frac_tope_Q": 0.708929107089291,
+    "rmse": 0.06683702858488698,
+    "rmse_I": 0.04674198849461834,
+    "rmse_E": 0.08215572586060552,
+    "error_beta": 25.61804743040176,
+    "frac_saturado": 0.3591640835916408,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, desde cero",
+    "tag": "e16_K400f16_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -13.065938009525341,
+      7.380162596476614
+    ],
+    "rango_Q_sin_tope": [
+      -13.1182169560832,
+      8.781166489942029
+    ],
+    "frac_tope": 0.7284271572842715,
+    "frac_tope_P": 0.47305269473052697,
+    "frac_tope_Q": 0.6876312368763123,
+    "rmse": 0.06634100185121163,
+    "rmse_I": 0.04743225631020703,
+    "rmse_E": 0.08094713160185328,
+    "error_beta": 23.0496738389844,
+    "frac_saturado": 0.36446355364463556,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, warm start",
+    "tag": "e16_K400f16_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -14.015488892176837,
+      7.89164224604046
+    ],
+    "rango_Q_sin_tope": [
+      -16.348178658834936,
+      11.606067851304736
+    ],
+    "frac_tope": 0.7347265273472653,
+    "frac_tope_P": 0.49035096490350966,
+    "frac_tope_Q": 0.6908309169083092,
+    "rmse": 0.06290446266686553,
+    "rmse_I": 0.046591716954438346,
+    "rmse_E": 0.07578360481035236,
+    "error_beta": 24.227258790106998,
+    "frac_saturado": 0.37276272372762725,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "filtro, 16 canales, warm start",
+    "tag": "e16_K400f16_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -6.622063421129452,
+      16.55795744811911
+    ],
+    "rango_Q_sin_tope": [
+      -8.693506877970284,
+      20.741290354663715
+    ],
+    "frac_tope": 0.7835216478352165,
+    "frac_tope_P": 0.5144485551444855,
+    "frac_tope_Q": 0.7455254474552545,
+    "rmse": 0.065193920239537,
+    "rmse_I": 0.046524142030593234,
+    "rmse_E": 0.07959898668146105,
+    "error_beta": 33.708453314999744,
+    "frac_saturado": 0.19048095190480951,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.084895295879852,
+      14.190985599018209
+    ],
+    "rango_Q_sin_tope": [
+      -7.228702766453205,
+      16.25300410156238
+    ],
+    "frac_tope": 0.8013198680131987,
+    "frac_tope_P": 0.49505049495050496,
+    "frac_tope_Q": 0.7653234676532347,
+    "rmse": 0.06778944074821033,
+    "rmse_I": 0.047780874772778266,
+    "rmse_E": 0.0831132032823806,
+    "error_beta": 6.525238042786009,
+    "frac_saturado": 0.20037996200379962,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -29.05694837314235,
+      68.524667021076
+    ],
+    "rango_Q_sin_tope": [
+      -37.815168035172796,
+      78.55490779653209
+    ],
+    "frac_tope": 0.5966403359664033,
+    "frac_tope_P": 0.3845615438456154,
+    "frac_tope_Q": 0.5955404459554045,
+    "rmse": 0.04151776570335186,
+    "rmse_I": 0.041753377675751886,
+    "rmse_E": 0.04128080898750488,
+    "error_beta": 6.525238042786009,
+    "frac_saturado": 0.09909009099090091,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.081983539096656,
+      14.266213016358561
+    ],
+    "rango_Q_sin_tope": [
+      -8.744579218035918,
+      16.18196026002867
+    ],
+    "frac_tope": 0.7982201779822018,
+    "frac_tope_P": 0.49545045495450457,
+    "frac_tope_Q": 0.7621237876212379,
+    "rmse": 0.06772899874126831,
+    "rmse_I": 0.047837869249222086,
+    "rmse_E": 0.08298176189189875,
+    "error_beta": 7.0537745384942925,
+    "frac_saturado": 0.19968003199680032,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n01_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -28.945667856706695,
+      68.67609922604392
+    ],
+    "rango_Q_sin_tope": [
+      -45.04763797897524,
+      77.96286958258794
+    ],
+    "frac_tope": 0.5958404159584042,
+    "frac_tope_P": 0.384961503849615,
+    "frac_tope_Q": 0.5947405259474052,
+    "rmse": 0.041549636726021626,
+    "rmse_I": 0.04181798133451883,
+    "rmse_E": 0.04127954773534425,
+    "error_beta": 7.0537745384942925,
+    "frac_saturado": 0.09919008099190081,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.082825748659078,
+      14.227202795528623
+    ],
+    "rango_Q_sin_tope": [
+      -7.270171061982464,
+      16.235693015109156
+    ],
+    "frac_tope": 0.7988201179882012,
+    "frac_tope_P": 0.4948505149485051,
+    "frac_tope_Q": 0.7627237276272373,
+    "rmse": 0.06768188382779837,
+    "rmse_I": 0.04776699930561119,
+    "rmse_E": 0.0829456965387411,
+    "error_beta": 6.401917579628173,
+    "frac_saturado": 0.19968003199680032,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -4.8402290984051906,
+      13.278894667295571
+    ],
+    "rango_Q_sin_tope": [
+      -5.063479990576695,
+      17.01484031474044
+    ],
+    "frac_tope": 0.8349165083491651,
+    "frac_tope_P": 0.48785121487851213,
+    "frac_tope_Q": 0.8006199380061993,
+    "rmse": 0.06829123202193935,
+    "rmse_I": 0.04692472762954934,
+    "rmse_E": 0.08441240832390294,
+    "error_beta": 12.481086211545128,
+    "frac_saturado": 0.20877912208779123,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n01_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -28.852767379209098,
+      68.2837305831996
+    ],
+    "rango_Q_sin_tope": [
+      -37.775268682082775,
+      77.98780622152479
+    ],
+    "frac_tope": 0.5961403859614038,
+    "frac_tope_P": 0.384961503849615,
+    "frac_tope_Q": 0.595040495950405,
+    "rmse": 0.0415458980325812,
+    "rmse_I": 0.041763668092804795,
+    "rmse_E": 0.041326980461936814,
+    "error_beta": 6.401917579628173,
+    "frac_saturado": 0.09909009099090091,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -33.59816723153637,
+      76.10455230613505
+    ],
+    "rango_Q_sin_tope": [
+      -32.885082458516514,
+      97.76576712141924
+    ],
+    "frac_tope": 0.6453354664533547,
+    "frac_tope_P": 0.3802619738026197,
+    "frac_tope_Q": 0.6444355564443556,
+    "rmse": 0.04042958854628358,
+    "rmse_I": 0.04062829646758249,
+    "rmse_E": 0.04022989915704231,
+    "error_beta": 12.481086211545128,
+    "frac_saturado": 0.0993900609939006,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -4.755720280325692,
+      13.597227495477892
+    ],
+    "rango_Q_sin_tope": [
+      -5.220256441612946,
+      16.85882984453355
+    ],
+    "frac_tope": 0.8246175382461753,
+    "frac_tope_P": 0.4884511548845116,
+    "frac_tope_Q": 0.7894210578942106,
+    "rmse": 0.06753267546977083,
+    "rmse_I": 0.046917360254145175,
+    "rmse_E": 0.08318705319335175,
+    "error_beta": 12.614265744175231,
+    "frac_saturado": 0.20487951204879512,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -4.8382795002347105,
+      13.435484884067176
+    ],
+    "rango_Q_sin_tope": [
+      -5.181330207761134,
+      16.780618037724793
+    ],
+    "frac_tope": 0.8281171882811719,
+    "frac_tope_P": 0.4881511848815118,
+    "frac_tope_Q": 0.793020697930207,
+    "rmse": 0.06785196078271956,
+    "rmse_I": 0.04695144416000937,
+    "rmse_E": 0.08368595494710537,
+    "error_beta": 12.594288381792252,
+    "frac_saturado": 0.20657934206579343,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n05_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -32.91335516126322,
+      77.49847563568345
+    ],
+    "rango_Q_sin_tope": [
+      -33.59393235915784,
+      96.25869545470852
+    ],
+    "frac_tope": 0.6419358064193581,
+    "frac_tope_P": 0.38236176382361764,
+    "frac_tope_Q": 0.641035896410359,
+    "rmse": 0.04041408553610551,
+    "rmse_I": 0.040773223703353796,
+    "rmse_E": 0.04005172715720976,
+    "error_beta": 12.614265744175231,
+    "frac_saturado": 0.09979002099790021,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, desde cero",
+    "tag": "e16_lag_n05_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -32.98065761545278,
+      75.73732922265071
+    ],
+    "rango_Q_sin_tope": [
+      -32.973054608670424,
+      94.74857647302822
+    ],
+    "frac_tope": 0.6361363863613638,
+    "frac_tope_P": 0.3812618738126187,
+    "frac_tope_Q": 0.6351364863513649,
+    "rmse": 0.04051981397599165,
+    "rmse_I": 0.04078645313975666,
+    "rmse_E": 0.04025140854152027,
+    "error_beta": 12.594288381792252,
+    "frac_saturado": 0.0994900509949005,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n01_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.013066597605693,
+      14.645890034965934
+    ],
+    "rango_Q_sin_tope": [
+      -6.6523096064975125,
+      16.655414839836475
+    ],
+    "frac_tope": 0.7886211378862114,
+    "frac_tope_P": 0.4968503149685031,
+    "frac_tope_Q": 0.7529247075292471,
+    "rmse": 0.06723490945829169,
+    "rmse_I": 0.04772903871727529,
+    "rmse_E": 0.08223749122422327,
+    "error_beta": 9.535507020496187,
+    "frac_saturado": 0.1967803219678032,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n01_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.027241505870095,
+      14.633158492413322
+    ],
+    "rango_Q_sin_tope": [
+      -7.080527325975458,
+      16.57634409445614
+    ],
+    "frac_tope": 0.787921207879212,
+    "frac_tope_P": 0.49695030496950304,
+    "frac_tope_Q": 0.7522247775222478,
+    "rmse": 0.06727859526465234,
+    "rmse_I": 0.0477896728021275,
+    "rmse_E": 0.0822737256664325,
+    "error_beta": 9.647551945277623,
+    "frac_saturado": 0.196980301969803,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n01_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -28.509745780995864,
+      70.26479576216398
+    ],
+    "rango_Q_sin_tope": [
+      -34.82372049320404,
+      79.94568432727571
+    ],
+    "frac_tope": 0.5968403159684031,
+    "frac_tope_P": 0.385961403859614,
+    "frac_tope_Q": 0.5957404259574043,
+    "rmse": 0.041402876389636176,
+    "rmse_I": 0.041812579450282564,
+    "rmse_E": 0.040989078379304815,
+    "error_beta": 9.535507020496187,
+    "frac_saturado": 0.09969003099690031,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n01_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -28.475804350517024,
+      69.97220294583758
+    ],
+    "rango_Q_sin_tope": [
+      -36.76748454265315,
+      79.30723886670944
+    ],
+    "frac_tope": 0.5962403759624038,
+    "frac_tope_P": 0.38586141385861417,
+    "frac_tope_Q": 0.5951404859514049,
+    "rmse": 0.04145156106606134,
+    "rmse_I": 0.04185173927789922,
+    "rmse_E": 0.04104748164067526,
+    "error_beta": 9.647551945277623,
+    "frac_saturado": 0.09959004099590041,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n01_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -5.062280398444361,
+      14.307451023027786
+    ],
+    "rango_Q_sin_tope": [
+      -7.222735790818363,
+      16.296799913877052
+    ],
+    "frac_tope": 0.793020697930207,
+    "frac_tope_P": 0.49525047495250474,
+    "frac_tope_Q": 0.7567243275672433,
+    "rmse": 0.06761676223656396,
+    "rmse_I": 0.04778350076888273,
+    "rmse_E": 0.08282988666527455,
+    "error_beta": 6.776622214487622,
+    "frac_saturado": 0.19938006199380062,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n05_s0",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -4.827991865066014,
+      15.138217022768394
+    ],
+    "rango_Q_sin_tope": [
+      -5.371803039015058,
+      19.575361585301593
+    ],
+    "frac_tope": 0.7996200379962004,
+    "frac_tope_P": 0.4968503149685031,
+    "frac_tope_Q": 0.7668233176682332,
+    "rmse": 0.06611792600293755,
+    "rmse_I": 0.046728919629488844,
+    "rmse_E": 0.0809911621605754,
+    "error_beta": 14.203177640835444,
+    "frac_saturado": 0.1934806519348065,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n01_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -28.722067422561672,
+      68.60876937917384
+    ],
+    "rango_Q_sin_tope": [
+      -37.506351521149725,
+      78.19944584211528
+    ],
+    "frac_tope": 0.5964403559644036,
+    "frac_tope_P": 0.38506149385061494,
+    "frac_tope_Q": 0.5953404659534046,
+    "rmse": 0.0415157405472837,
+    "rmse_I": 0.04176271615934205,
+    "rmse_E": 0.04126728686711766,
+    "error_beta": 6.776622214487622,
+    "frac_saturado": 0.09919008099190081,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n05_s0",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -29.78171703043278,
+      77.82054482007369
+    ],
+    "rango_Q_sin_tope": [
+      -30.854561182952065,
+      100.81126721200302
+    ],
+    "frac_tope": 0.6334366563343665,
+    "frac_tope_P": 0.3882611738826117,
+    "frac_tope_Q": 0.6324367563243676,
+    "rmse": 0.04044633850543944,
+    "rmse_I": 0.04102526219326106,
+    "rmse_E": 0.039859007250148244,
+    "error_beta": 14.203177640835444,
+    "frac_saturado": 0.1004899510048995,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n05_s1",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -4.832193033560808,
+      14.875308670977002
+    ],
+    "rango_Q_sin_tope": [
+      -5.4157947967318485,
+      19.018081493526918
+    ],
+    "frac_tope": 0.8005199480051994,
+    "frac_tope_P": 0.49525047495250474,
+    "frac_tope_Q": 0.7678232176782321,
+    "rmse": 0.06645563946722018,
+    "rmse_I": 0.04684183163926102,
+    "rmse_E": 0.08147727807599754,
+    "error_beta": 13.479271233081818,
+    "frac_saturado": 0.19488051194880512,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n05_s2",
+    "controlador": "original, solo β̂",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -4.826811633533622,
+      14.955307888719503
+    ],
+    "rango_Q_sin_tope": [
+      -5.339148412765098,
+      19.277913900661794
+    ],
+    "frac_tope": 0.7993200679932007,
+    "frac_tope_P": 0.49455054494550543,
+    "frac_tope_Q": 0.766023397660234,
+    "rmse": 0.06604678127202276,
+    "rmse_I": 0.04662654509630713,
+    "rmse_E": 0.08093404676136536,
+    "error_beta": 15.736353610243118,
+    "frac_saturado": 0.19268073192680732,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n05_s1",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -29.66273704054755,
+      76.12635363152867
+    ],
+    "rango_Q_sin_tope": [
+      -30.896988330616512,
+      97.53076477529436
+    ],
+    "frac_tope": 0.6256374362563744,
+    "frac_tope_P": 0.38686131386861317,
+    "frac_tope_Q": 0.6246375362463754,
+    "rmse": 0.04056564037678548,
+    "rmse_I": 0.04103195102264673,
+    "rmse_E": 0.04009390668957686,
+    "error_beta": 13.479271233081818,
+    "frac_saturado": 0.10008999100089991,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  },
+  {
+    "planta": "act",
+    "modelo": "estado de filtro, warm start",
+    "tag": "e16_lag_wrm_n05_s2",
+    "controlador": "extendido",
+    "referencia": "gamma50",
+    "modo": "tope_aw",
+    "tope": {
+      "P": [
+        0.0,
+        1.9999999990480706
+      ],
+      "Q": [
+        0.0,
+        1.4999999935744763
+      ]
+    },
+    "rango_P_sin_tope": [
+      -29.640557552116828,
+      76.58480607446079
+    ],
+    "rango_Q_sin_tope": [
+      -30.517346863418005,
+      98.86584869713226
+    ],
+    "frac_tope": 0.6334366563343665,
+    "frac_tope_P": 0.38816118388161186,
+    "frac_tope_Q": 0.6324367563243676,
+    "rmse": 0.04044140668948182,
+    "rmse_I": 0.0409385922569156,
+    "rmse_E": 0.03993803217573619,
+    "error_beta": 15.736353610243118,
+    "frac_saturado": 0.10028997100289971,
+    "fallas_inversion": 0,
+    "P_max": 1.9999999990480706,
+    "ok": true
+  }
+]

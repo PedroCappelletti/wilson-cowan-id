@@ -1,0 +1,26 @@
+=== escalado · e16_B400_n01_s2 · B · refrac1_2s_n01_s2 · W=40 · epochs=1500 ===
+    ep     0 | data=8.524e-03 | err_max= 83.88% g_rms=0.0000 redund=nan
+    ep    99 | val= 13.69%
+    ep   199 | val=  4.36%
+    ep   250 | data=1.552e-04 | err_max= 82.11% g_rms=0.0204 redund=nan
+    ep   299 | val=  3.62%
+    ep   399 | val=  3.37%
+    ep   499 | val=  3.12%
+    ep   500 | data=9.720e-05 | err_max= 68.47% g_rms=0.0179 redund=nan
+    ep   599 | val=  2.92%
+    ep   699 | val=  2.77%
+    ep   750 | data=6.219e-05 | err_max= 55.64% g_rms=0.0158 redund=nan
+    ep   799 | val=  2.61%
+    ep   899 | val=  2.52%
+    ep   999 | val=  2.43%
+    ep  1000 | data=4.565e-05 | err_max= 44.70% g_rms=0.0151 redund=nan
+    ep  1099 | val=  2.34%
+    ep  1199 | val=  2.37%
+    ep  1250 | data=4.523e-05 | err_max= 41.53% g_rms=0.0146 redund=nan
+    ep  1299 | val=  2.31%
+    ep  1399 | val=  2.25%
+    ep  1499 | data=3.665e-05 | err_max= 42.23% g_rms=0.0142 redund=nan
+    ep  1499 | val=  2.22%
+
+  RESULTADO e16_B400_n01_s2: NRMSE_test=4.14% (I=4.86 E=3.42) R2df=-0.012 err_param=19.36% [52.5 min]
+  -> results\escalado\e16_B400_n01_s2.json

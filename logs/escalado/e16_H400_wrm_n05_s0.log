@@ -1,0 +1,26 @@
+=== escalado · e16_H400_wrm_n05_s0 · H · act1_2s_n05 · W=10 · epochs=1500 ===
+    ep     0 | data=1.084e-03 | err_max= 46.59% 
+    ep    99 | val=  6.16%
+    ep   199 | val=  6.21%
+    ep   250 | data=5.862e-04 | err_max= 45.41% 
+    ep   299 | val=  6.29%
+    ep   399 | val=  5.83%
+    ep   499 | val=  5.81%
+    ep   500 | data=5.357e-04 | err_max= 71.18% 
+    ep   599 | val=  5.70%
+    ep   699 | val=  5.60%
+    ep   750 | data=4.940e-04 | err_max= 82.83% 
+    ep   799 | val=  5.75%
+    ep   899 | val=  7.64%
+    ep   999 | val=  5.61%
+    ep  1000 | data=4.790e-04 | err_max= 88.65% 
+    ep  1099 | val=  6.59%
+    ep  1199 | val=  5.69%
+    ep  1250 | data=4.751e-04 | err_max= 91.86% 
+    ep  1299 | val=  6.28%
+    ep  1399 | val=  5.55%
+    ep  1499 | data=6.366e-04 | err_max= 93.84% 
+    ep  1499 | val=  6.40%
+
+  RESULTADO e16_H400_wrm_n05_s0: NRMSE_test=8.36% (I=9.07 E=7.65) R2df=0.282 err_param=37.22% [41.1 min]
+  -> results\escalado\e16_H400_wrm_n05_s0.json

@@ -1,0 +1,26 @@
+=== escalado · e16_B100_wrm_n01_s0 · B · refrac1_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=5.094e-05 | err_max= 55.85% g_rms=0.0000 redund=nan
+    ep    99 | val=  1.90%
+    ep   199 | val=  1.80%
+    ep   250 | data=1.905e-05 | err_max= 33.32% g_rms=0.0113 redund=nan
+    ep   299 | val=  1.78%
+    ep   399 | val=  1.77%
+    ep   499 | val=  1.76%
+    ep   500 | data=1.845e-05 | err_max= 19.03% g_rms=0.0113 redund=nan
+    ep   599 | val=  1.76%
+    ep   699 | val=  1.75%
+    ep   750 | data=1.801e-05 | err_max= 15.57% g_rms=0.0112 redund=nan
+    ep   799 | val=  1.76%
+    ep   899 | val=  1.74%
+    ep   999 | val=  1.75%
+    ep  1000 | data=1.772e-05 | err_max= 14.77% g_rms=0.0111 redund=nan
+    ep  1099 | val=  1.72%
+    ep  1199 | val=  1.72%
+    ep  1250 | data=2.630e-05 | err_max= 12.54% g_rms=0.0112 redund=nan
+    ep  1299 | val=  1.71%
+    ep  1399 | val=  1.71%
+    ep  1499 | data=1.730e-05 | err_max= 10.03% g_rms=0.0108 redund=nan
+    ep  1499 | val=  1.70%
+
+  RESULTADO e16_B100_wrm_n01_s0: NRMSE_test=3.95% (I=4.75 E=3.16) R2df=0.792 err_param=3.81% [28.1 min]
+  -> results\escalado\e16_B100_wrm_n01_s0.json

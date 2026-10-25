@@ -1,0 +1,26 @@
+=== escalado · e16_e2wb_n05_s0 · whitebox · act1_2s_n05 · W=10 · epochs=1500 ===
+    ep     0 | data=9.490e-03 | err_max= 83.88% 
+    ep    99 | val= 15.88%
+    ep   199 | val=  7.72%
+    ep   250 | data=1.144e-03 | err_max= 74.96% 
+    ep   299 | val=  7.50%
+    ep   399 | val=  7.27%
+    ep   499 | val=  7.14%
+    ep   500 | data=1.093e-03 | err_max= 49.87% 
+    ep   599 | val=  7.07%
+    ep   699 | val=  7.02%
+    ep   750 | data=1.085e-03 | err_max= 42.94% 
+    ep   799 | val=  7.00%
+    ep   899 | val=  6.99%
+    ep   999 | val=  6.98%
+    ep  1000 | data=1.084e-03 | err_max= 45.02% 
+    ep  1099 | val=  6.98%
+    ep  1199 | val=  6.98%
+    ep  1250 | data=1.084e-03 | err_max= 45.83% 
+    ep  1299 | val=  6.98%
+    ep  1399 | val=  6.98%
+    ep  1499 | data=1.084e-03 | err_max= 46.10% 
+    ep  1499 | val=  6.98%
+
+  RESULTADO e16_e2wb_n05_s0: NRMSE_test=9.49% (I=9.97 E=9.00) R2df=-0.000 err_param=20.43% [10.7 min]
+  -> results\escalado\e16_e2wb_n05_s0.json
