@@ -41,6 +41,44 @@ def _inv_sig(y, a, theta):
     return (-1.0 / a) * math.log(-1.0 + 1.0 / y) + theta
 
 
+class _CampoNumpy:
+    """El campo de un GrayBoxWC con historia o filtro, evaluado en numpy. Da lo
+    mismo que el modelo de torch y, con lotes de 3 filas, es mucho más rápido:
+    en el controlador se evalúa unas 1,2 millones de veces por simulación de 2 s."""
+
+    def __init__(self, m):
+        p = m.params_dict()
+        self.w = np.array([p[k] for k in ("wEE", "wEI", "wIE", "wII")])
+        self.te, self.ti, self.ae, self.ai = p["te"], p["ti"], p["ae"], p["ai"]
+        self.the, self.thi = p["thetae"], p["thetai"]
+        self.ke = 1.0 / (1.0 + math.exp(self.ae * self.the))
+        self.ki = 1.0 / (1.0 + math.exp(self.ai * self.thi))
+        g = m.g
+        self.fir = None
+        if m.correction_inputs == "xconv":
+            self.fir = g.fir.weight.detach().numpy().astype(float).T   # (2K, n_fir)
+            g = g.mlp
+        capas = [c for c in g if hasattr(c, "weight")]
+        self.W = [c.weight.detach().numpy().astype(float).T for c in capas]
+        self.b = [c.bias.detach().numpy().astype(float) for c in capas]
+
+    def __call__(self, x, Ph, Qh):
+        I, E = x[:, 0], x[:, 1]
+        P, Q = Ph[:, 0], Qh[:, 0]
+        wEE, wEI, wIE, wII = self.w
+        ui = wIE * E - wII * I + Q - self.thi
+        ue = wEE * E - wEI * I + P - self.the
+        dI = (-I + 1.0 / (1.0 + np.exp(-self.ai * ui)) - self.ki) / self.ti
+        dE = (-E + 1.0 / (1.0 + np.exp(-self.ae * ue)) - self.ke) / self.te
+        u = np.concatenate([Ph, Qh], axis=1)
+        h = np.concatenate([x, u @ self.fir if self.fir is not None else u], axis=1)
+        for k, (W, b) in enumerate(zip(self.W, self.b)):
+            h = h @ W + b
+            if k < len(self.W) - 1:
+                h = np.tanh(h)
+        return np.stack([dI, dE], axis=1) + h
+
+
 class IMCExtendido(IMCController):
     """modelo: GrayBoxWC con historia o filtro, o LagGrayBox. dt_modelo: el paso
     de muestreo con que se entrenó (ms), que fija el espaciado de la historia."""
@@ -60,6 +98,7 @@ class IMCExtendido(IMCController):
             self.bufP = np.zeros(n)          # comandos ya mandados, uno por actualización
             self.bufQ = np.zeros(n)
             self.idx = np.arange(1, self.K) * self.paso   # retardos 1..K-1
+            self._campo = _CampoNumpy(modelo)
         if tipo == "lag":
             ex = modelo.extras_dict()
             self.tau_hat, self.alpha_hat = ex["tau"], ex["alpha"]
@@ -94,20 +133,19 @@ class IMCExtendido(IMCController):
     def _newton(self, P0, Q0, I, E, dI_obj, dE_obj):
         # Newton con jacobiano por diferencias finitas: en cada iteración se
         # evalúan el punto y sus dos desplazamientos en un solo lote. Con
-        # derivadas automáticas, una simulación de 50 ms tardaba más de 10 min.
-        x = torch.tensor([[I, E]] * 3, dtype=torch.float32)
-        pasP = torch.tensor(self.bufP[self.idx], dtype=torch.float32).repeat(3, 1)
-        pasQ = torch.tensor(self.bufQ[self.idx], dtype=torch.float32).repeat(3, 1)
+        # derivadas automáticas, una simulación de 50 ms tardaba más de 10 min;
+        # así, con el campo en numpy, unos segundos.
+        x = np.array([[I, E]] * 3)
+        pasP = np.tile(self.bufP[self.idx], (3, 1))
+        pasQ = np.tile(self.bufQ[self.idx], (3, 1))
         obj = np.array([dI_obj, dE_obj])
         (Plo, Phi), (Qlo, Qhi) = self._cotas(I, E)
         h = 1e-3
 
         def residuos(P, Q):
-            Pc = torch.tensor([[P], [P + h], [P]], dtype=torch.float32)
-            Qc = torch.tensor([[Q], [Q], [Q + h]], dtype=torch.float32)
-            with torch.no_grad():
-                f = self.modelo(x, torch.cat([Pc, pasP], 1), torch.cat([Qc, pasQ], 1))[:, :2]
-            return f.numpy().astype(float) - obj
+            Pc = np.array([[P], [P + h], [P]])
+            Qc = np.array([[Q], [Q], [Q + h]])
+            return self._campo(x, np.hstack([Pc, pasP]), np.hstack([Qc, pasQ])) - obj
 
         R = residuos(P0, Q0)
         r0 = float(np.abs(R[0]).max())
@@ -166,7 +204,8 @@ class IMCExtendido(IMCController):
 
 
 def simulate_closed_loop_ext(plant_rhs, controller, refs, t_span=(0.0, 50.0),
-                             dt=0.005, dt_ctrl=0.05, x0=(0.0, 0.0)):
+                             dt=0.005, dt_ctrl=0.05, x0=(0.0, 0.0),
+                             tope=None, antiwindup: bool = False):
     """Lazo cerrado con un controlador DIGITAL: el comando se calcula cada
     dt_ctrl con el estado medido en ese instante y se mantiene constante hasta
     la actualización siguiente. La planta se integra con RK4 a paso dt.
@@ -174,7 +213,16 @@ def simulate_closed_loop_ext(plant_rhs, controller, refs, t_span=(0.0, 50.0),
     Sirve igual para IMCController y para IMCExtendido, y todas las
     comparaciones usan el mismo dt_ctrl. Los estados del controlador se
     integran en continuo: el integrador del PI con el error de cada instante, y
-    la copia del actuador (estado de filtro) con el comando retenido."""
+    la copia del actuador (estado de filtro) con el comando retenido.
+
+    tope = {"P": (lo, hi), "Q": (lo, hi)} acota el comando después de calcularlo
+    y antes de aplicarlo: la luz tiene un máximo y no puede ser negativa. El
+    controlador no se entera, salvo que antiwindup sea True: entonces el
+    integrador del lazo cuyo comando está contra el tope deja de acumular
+    mientras el error lo empujaría más allá (integración condicional). La
+    historia y la copia del actuador reciben siempre el comando aplicado.
+    La salida suma el rango del comando antes de acotar y la fracción de las
+    actualizaciones con cada comando contra el tope."""
     usa_extra = hasattr(plant_rhs, "extra0")
     nc = int(getattr(controller, "n_estados", 0))
     ext = hasattr(controller, "compute_ext")
@@ -186,6 +234,13 @@ def simulate_closed_loop_ext(plant_rhs, controller, refs, t_span=(0.0, 50.0),
         extra = state[4 + nc:]
         rI, rE = refs(t)
         dz = [rI - I, rE - E]
+        if antiwindup:
+            # Z1 alimenta a Q (lazo de I) y Z2 a P (lazo de E); los dos suben el
+            # comando cuando crecen. Se congela si el error empuja contra el tope.
+            if topeQ * dz[0] > 0:
+                dz[0] = 0.0
+            if topeP * dz[1] > 0:
+                dz[1] = 0.0
         if lag:
             th = controller.tau_hat
             dz += [(P - state[2]) / th, (Q - state[3]) / th]
@@ -203,6 +258,9 @@ def simulate_closed_loop_ext(plant_rhs, controller, refs, t_span=(0.0, 50.0),
     T, I_a, E_a, P_a, Q_a, rI_a, rE_a = [], [], [], [], [], [], []
     t = t0
     P = Q = 0.0
+    topeP = topeQ = 0          # -1 contra el piso, +1 contra el techo
+    rango = [np.inf, -np.inf, np.inf, -np.inf]
+    n_upd = n_tP = n_tQ = n_t = 0
     for i in range(n + 1):
         rI, rE = refs(t)
         if i % cada == 0:
@@ -212,6 +270,14 @@ def simulate_closed_loop_ext(plant_rhs, controller, refs, t_span=(0.0, 50.0),
                 P, Q, _ = controller.compute_ext(zs, I, E, rI, rE)
             else:
                 P, Q, _, _ = controller.compute(zs[0], zs[1], I, E, rI, rE)
+            n_upd += 1
+            rango = [min(rango[0], P), max(rango[1], P), min(rango[2], Q), max(rango[3], Q)]
+            if tope is not None:
+                (pl, ph), (ql, qh) = tope["P"], tope["Q"]
+                topeP = -1 if P < pl else (1 if P > ph else 0)
+                topeQ = -1 if Q < ql else (1 if Q > qh else 0)
+                P, Q = min(max(P, pl), ph), min(max(Q, ql), qh)
+                n_tP += topeP != 0; n_tQ += topeQ != 0; n_t += (topeP != 0 or topeQ != 0)
             if hasattr(controller, "registrar"):
                 controller.registrar(P, Q)
         T.append(t); I_a.append(state[2 + nc]); E_a.append(state[3 + nc])
@@ -225,4 +291,46 @@ def simulate_closed_loop_ext(plant_rhs, controller, refs, t_span=(0.0, 50.0),
     out = {k: np.asarray(v) for k, v in {
         "t": T, "I": I_a, "E": E_a, "P": P_a, "Q": Q_a, "rI": rI_a, "rE": rE_a}.items()}
     out["y"] = out["E"] - out["I"]
+    out["rango_P"], out["rango_Q"] = (rango[0], rango[1]), (rango[2], rango[3])
+    out["frac_tope_P"] = n_tP / max(n_upd, 1)
+    out["frac_tope_Q"] = n_tQ / max(n_upd, 1)
+    out["frac_tope"] = n_t / max(n_upd, 1)
     return out
+
+
+# -----------------------------------------------------------------------------
+#  Referencia theta-gamma con ventana, como en Martínez et al. (2022), fig. 7
+# -----------------------------------------------------------------------------
+def theta_gamma_ventana_refs(t_fin: float = 2000.0, f_gamma: float = 120.0,
+                             banda_theta=(4.0, 12.0), ancho_fase: float = math.pi / 4,
+                             semilla: int = 0, dt: float = 0.5):
+    """Referencias gamma de 120 Hz encendidas solo cerca de los valles de una
+    onda theta (ecs. 13 y 14 del paper multiplicadas por T_w).
+
+    La theta es ruido blanco filtrado entre 4 y 12 Hz, con semilla fija, para
+    que no sea una senoidal perfecta (como la theta registrada de la fig. 7a).
+    T_w vale 1 cuando la fase de la theta está a menos de `ancho_fase` del valle
+    (por defecto un cuarto de ciclo centrado en él) y 0 fuera. Fuera de la
+    ventana la referencia es el reposo, E = I = 0.
+
+    Devuelve refs(t) -> (rI, rE), y (t, theta, ventana) para graficar."""
+    from scipy.signal import butter, filtfilt, hilbert
+    n = int(round(t_fin / dt)) + 1
+    t = np.arange(n) * dt
+    rng = np.random.default_rng(semilla)
+    fs = 1000.0 / dt
+    b, a = butter(4, [banda_theta[0] / (fs / 2), banda_theta[1] / (fs / 2)], btype="band")
+    theta = filtfilt(b, a, rng.standard_normal(n))
+    theta /= np.abs(theta).max()
+    fase = np.angle(hilbert(theta))           # el valle de una coseno es fase ±π
+    ventana = (np.pi - np.abs(fase)) < ancho_fase
+    f = f_gamma / 1000.0
+
+    def refs(tt):
+        k = min(int(tt / dt), n - 1)
+        if not ventana[k]:
+            return 0.0, 0.0
+        rI = 0.2 * math.sin(2 * math.pi * f * tt - 0.94) + 0.25
+        rE = 0.3 * math.sin(2 * math.pi * f * tt) + 0.45
+        return rI, rE
+    return refs, (t, theta, ventana)

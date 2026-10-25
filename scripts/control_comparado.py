@@ -16,8 +16,19 @@
 # de 120 Hz, 50 ms, mismos topes de actuación. RMSE de seguimiento sin el
 # primer quinto.
 #
-#   python scripts/control_comparado.py e13 [procesos]
-#   python scripts/control_comparado.py e16 [procesos]
+# Dos referencias (tercer argumento):
+#   gamma50    gamma de 120 Hz siempre encendida, 50 ms (por defecto)
+#   theta2s    la misma gamma encendida solo cerca de los valles de una theta
+#              de 4 a 12 Hz, 2 s, como en la fig. 7 del paper
+#
+# Tres modos del comando (cuarto argumento):
+#   libre      sin tope (por defecto)
+#   tope       P y Q acotados al rango de los estímulos de entrenamiento de la
+#              tanda, por canal: la luz tiene un máximo y no puede ser negativa
+#   tope_aw    lo mismo, con anti-windup en el integrador del PI
+#
+#   python scripts/control_comparado.py e13 [procesos] [referencia] [modo]
+#   python scripts/control_comparado.py e16 [procesos] [referencia] [modo]
 
 from __future__ import annotations
 
@@ -84,7 +95,12 @@ def una(args):
     from esc_eval import cargar
     from exp_f6_closed_loop import fixed_de, rmse
 
-    planta_n, fila, tag, ctrl_n, tipo = args
+    planta_n, fila, tag, ctrl_n, tipo, ref, modo, tanda = args
+    from src.neural_ode.closed_loop_ext import theta_gamma_ventana_refs
+    if ref == "theta2s":
+        refs, t_span = theta_gamma_ventana_refs()[0], (0.0, 2000.0)
+    else:
+        refs, t_span = theta_gamma_refs(120.0, True), T_SPAN
     p = WilsonCowanParams()
     true = {k: getattr(p, k) for k in ALL_P}
     pert = Refractoriness(r=0.10) if planta_n == "refrac" else Actuator(sat=3.0, tau_act=1.0)
@@ -112,13 +128,18 @@ def una(args):
             datos = json.loads((RES / f"{tag}.json").read_text())["data"]
             dt_m = float(np.load(DATOS / f"{datos}.npz")["dt"])
             ctrl = IMCExtendido(fx, wh, m, tipo, dt_m, DT_CTRL, **kw)
-    sol = simulate_closed_loop_ext(planta, ctrl, theta_gamma_refs(120.0, True),
-                                   t_span=T_SPAN, dt=DT, dt_ctrl=DT_CTRL)
+    tp = topes(tanda) if modo in ("tope", "tope_aw") else None
+    sol = simulate_closed_loop_ext(planta, ctrl, refs, t_span=t_span, dt=DT, dt_ctrl=DT_CTRL,
+                                   tope=tp, antiwindup=(modo == "tope_aw"))
     eI, eE = rmse(sol)
     eb = (float(np.mean([100 * abs(ph[k] - true[k]) / abs(true[k]) for k in ALL_P]))
           if tag else 0.0)
     sat = max(ctrl.n_sat_i, ctrl.n_sat_e) / max(ctrl.n_pasos, 1)
     return {"planta": planta_n, "modelo": fila, "tag": tag, "controlador": ctrl_n,
+            "referencia": ref, "modo": modo, "tope": tp,
+            "rango_P_sin_tope": list(sol["rango_P"]), "rango_Q_sin_tope": list(sol["rango_Q"]),
+            "frac_tope": sol["frac_tope"], "frac_tope_P": sol["frac_tope_P"],
+            "frac_tope_Q": sol["frac_tope_Q"],
             "rmse": float(math.sqrt((eI ** 2 + eE ** 2) / 2)), "rmse_I": eI, "rmse_E": eE,
             "error_beta": eb, "frac_saturado": float(sat),
             "fallas_inversion": int(getattr(ctrl, "n_fallas", 0)),
@@ -126,7 +147,16 @@ def una(args):
             "ok": bool(np.isfinite(eI) and np.isfinite(eE) and sat < 0.5)}
 
 
-def tareas(tanda):
+def topes(tanda):
+    """Rango por canal de los estímulos de entrenamiento de la tanda: el modelo
+    está validado hasta ahí. En los dos datasets, P en [0, 2,0] y Q en [0, 1,5];
+    los máximos los pone chirp_3, que oscila alrededor de un offset."""
+    d = np.load(DATOS / ("act1_amp.npz" if tanda == "e13" else "act1_2s.npz"))
+    tr = ~d["is_test"].astype(bool) & ~d["is_val"].astype(bool)
+    return {"P": (0.0, float(d["P"][tr].max())), "Q": (0.0, float(d["Q"][tr].max()))}
+
+
+def tareas(tanda, ref="gamma50", modo="libre"):
     out = [("refrac", "oráculo", None, "oráculo", None),
            ("refrac", "oráculo + forma", None, "oráculo + forma", None),
            ("act", "oráculo", None, "oráculo", None)]
@@ -142,6 +172,7 @@ def tareas(tanda):
                         out.append((planta, fila, tag, "original, con modelo", tipo))
                     if tipo in ("historia", "lag"):
                         out.append((planta, fila, tag, "extendido", tipo))
+    out = [(*a, ref, modo, tanda) for a in out]
     # las del extendido con historia son las lentas: primero, para repartirlas
     return sorted(out, key=lambda a: a[3] != "extendido" or a[4] != "historia")
 
@@ -149,7 +180,9 @@ def tareas(tanda):
 def main():
     tanda = sys.argv[1]
     procesos = int(sys.argv[2]) if len(sys.argv) > 2 else 1
-    ts = tareas(tanda)
+    ref = sys.argv[3] if len(sys.argv) > 3 else "gamma50"
+    modo = sys.argv[4] if len(sys.argv) > 4 else "libre"
+    ts = tareas(tanda, ref, modo)
     print(f"{len(ts)} simulaciones, {procesos} procesos", flush=True)
     filas = []
     with Pool(procesos) as pool:
@@ -158,9 +191,10 @@ def main():
                 continue
             filas.append(r)
             print(f"  {r['planta']:6} {r['modelo']:34} {r['controlador']:22} {r['tag'] or '':26} "
-                  f"RMSE {r['rmse']:.4f}  β {r['error_beta']:5.1f} %"
+                  f"RMSE {r['rmse']:.4f}  β {r['error_beta']:5.1f} %  tope {r['frac_tope']:.2f}"
                   + ("" if r["ok"] else "  <-- divergió o saturó"), flush=True)
-    out = RAIZ / "results" / f"control_comparado_{tanda}.json"
+    sufijo = f"_{ref}_{modo}"
+    out = RAIZ / "results" / f"control_comparado_{tanda}{sufijo}.json"
     out.write_text(json.dumps(filas, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"-> {out}")
 
