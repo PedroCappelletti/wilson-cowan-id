@@ -1,0 +1,13 @@
+=== escalado · e15_B400_wrm_n05_s1 · B · refrac1_amp_n05_s1 · W=400 · epochs=1500 ===
+    ep     0 | data=5.942e-04 | err_max= 29.38% g_rms=0.0000 redund=nan
+    ep    99 | val=  5.51%
+    ep   199 | val=  5.41%
+    ep   250 | data=4.771e-04 | err_max= 30.77% g_rms=0.0112 redund=nan
+    ep   299 | val=  5.40%
+    ep   399 | val=  5.39%
+    ep   499 | val=  5.39%
+    ep   500 | data=4.754e-04 | err_max= 29.15% g_rms=0.0118 redund=nan
+    ep   599 | val=  5.39%
+    ep   699 | val=  5.38%
+    ep   750 | data=4.897e-04 | err_max= 26.86% g_rms=0.0114 redund=nan
+    ep   799 | val=  5.38%

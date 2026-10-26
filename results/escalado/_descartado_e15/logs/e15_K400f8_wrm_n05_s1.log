@@ -1,0 +1,16 @@
+=== escalado · e15_K400f8_wrm_n05_s1 · K · act1_amp_n05_s1 · W=100 · epochs=1500 ===
+    ep     0 | data=1.288e-03 | err_max= 97.32% 
+    ep    99 | val=  7.23%
+    ep   199 | val=  8.08%
+    ep   250 | data=6.839e-04 | err_max= 98.09% 
+    ep   299 | val=  8.23%
+    ep   399 | val=  7.80%
+    ep   499 | val=  7.87%
+    ep   500 | data=6.749e-04 | err_max= 98.72% 
+    ep   599 | val=  7.84%
+    ep   699 | val=  8.05%
+    ep   750 | data=5.591e-04 | err_max= 99.12% 
+    ep   799 | val=  7.79%
+    ep   899 | val=  7.73%
+    ep   999 | val=  7.78%
+    ep  1000 | data=5.389e-04 | err_max= 99.36% 

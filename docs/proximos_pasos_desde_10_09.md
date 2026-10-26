@@ -655,3 +655,16 @@ eje 1.2) se corrieron el 11-09 y están arriba.
   capacidad.
 - Volver a la regularización de `g`. El barrido la agotó.
 - Latent ODE genérica. Dio $R^2 = -0{,}51$ y es la más cara de todas.
+
+## Pendiente del control (anotado el 26-10)
+
+- **Barrido de la constante del lazo cerrado del PI.** Las ganancias del paper
+  salen del diseño IMC con λ = 0,2 ms (k_p = τ/λ, k_i = 1/λ), pensado para
+  actuación sin límite. Con el comando acotado a [0, 2] y [0, 1,5], probar
+  λ = 0,2, 0,5, 1 y 2 ms con tope y anti-windup, sobre el oráculo y el estado
+  de filtro con el controlador extendido, en las dos referencias. Unas 30
+  simulaciones. La pregunta es si un PI más suave recupera en la theta-gamma de
+  2 s la ventaja que el estado de filtro tiene sin tope (−28 %) y pierde con tope
+  (−4 %). Ojo: no todo el comando negativo viene del PI, una parte viene de la
+  cancelación de w_EE·E, así que puede no alcanzar. Resultados actuales en
+  docs/controladores_resultados.md.
