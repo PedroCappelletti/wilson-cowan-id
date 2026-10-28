@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Pruebas del controlador de Martínez et al. (2022), tal cual, para el tutor.
+# Pruebas del controlador de Martínez et al. (2022), tal cual, sobre el
+# simulador y los modelos gray-box.
 #
 # Controlador: IMCController (src/neural_ode/closed_loop.py), sin tope ni
 # anti-windup, como en el paper. Lo único que cambia entre filas es con qué
@@ -22,7 +23,7 @@
 # Error: RMSE entre E, I y sus referencias, promedio de las dos poblaciones,
 # sin el primer quinto de la simulación.
 #
-#   python scripts/control_tutor.py [procesos]
+#   python scripts/control_paper_modelos.py [procesos]
 
 from __future__ import annotations
 
@@ -39,8 +40,8 @@ sys.path.insert(0, str(RAIZ / "scripts"))
 import numpy as np
 
 RES = RAIZ / "results" / "escalado"
-OUT = RAIZ / "results" / "control_tutor.json"
-TRAZAS = RAIZ / "results" / "control_tutor_trazas.npz"
+OUT = RAIZ / "results" / "control_paper_modelos.json"
+TRAZAS = RAIZ / "results" / "control_paper_modelos_trazas.npz"
 W = ("wEE", "wEI", "wIE", "wII")
 DT = 0.005
 REFS = ("theta2s", "gamma50")

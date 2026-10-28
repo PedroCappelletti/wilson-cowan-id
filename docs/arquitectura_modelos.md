@@ -3,12 +3,11 @@ type: note
 status: inbox
 project: "[[Investigación Neurociencia]]"
 fecha: 2026-10-28
-tags: [wilson-cowan, gray-box, arquitectura, control, tutor]
+tags: [wilson-cowan, gray-box, arquitectura, control]
+pdf: "[[arquitectura-modelos-graybox.pdf]]"
 ---
 
 # Arquitectura de los modelos gray-box de Wilson-Cowan
-
-Ralf Högner, Pedro Cappelletti · 28 de octubre de 2026
 
 Repositorio: `PedroCappelletti/wilson-cowan-id`. Las rutas de archivos y funciones son relativas a la raíz del repositorio.
 
@@ -201,9 +200,6 @@ Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug`
 | actuador, historia 5 ms con warm start | 9,43 | 7,15 | 6,99 | 0,94 | 1,21 | 1,98 | 0,91 | 0,79 | 3,56 | 4,84 |
 | actuador, estado de filtro | 7,25 | 5,42 | 6,26 | 1,24 | 1,00 | 2,00 | 1,05 | 0,95 | 3,07 | 4,17 |
 
-Los JSON de cada corrida tienen los valores de todas las semillas y niveles de ruido, en el campo `params` de
-`results/escalado/e16_<variante>[_wrm]_n0x_s<k>.json`.
-
 ## 9. Archivos y funciones
 
 | archivo | qué contiene |
@@ -217,7 +213,3 @@ Los JSON de cada corrida tienen los valores de todas las semillas y niveles de r
 | `src/wilson_cowan/model.py`, `uncertainty.py` | la planta, los estímulos y las perturbaciones |
 | `scripts/esc_run.py` | entrena una configuración y guarda el JSON y el checkpoint |
 | `scripts/esc_eval.py` | `cargar` (reconstruye un modelo desde su checkpoint), métricas |
-
-### Referencia
-
-Martínez, S., Sánchez-Peña, R. S., Belluscio, M., Piriz, J. y García-Violini, D. (2022). Towards an experimental control of neural activity: the Wilson-Cowan model. *IFAC PapersOnLine* 55(40): 223-228.

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Tabla y figuras de control_tutor.py.
+# Tabla y figuras de control_paper_modelos.py.
 #
 # Tabla: RMSE de seguimiento (media ± desvío sobre las tres semillas) por
 # referencia, planta, modelo y nivel de ruido. Figuras: trazas de E y su
 # referencia en la theta-gamma, una ráfaga para la planta con actuador y tres
 # para la de refractariedad (σ = 0,01, semilla 0).
 #
-#   python scripts/resumen_control_tutor.py
+#   python scripts/resumen_control_paper_modelos.py
 
 from __future__ import annotations
 
@@ -91,19 +91,19 @@ def figura(trazas, nombre, casos, ventana):
 
 
 def main():
-    filas = json.loads((RAIZ / "results" / "control_tutor.json").read_text(encoding="utf-8"))
-    (RAIZ / "results" / "control_tutor.md").write_text(tabla(filas) + "\n", encoding="utf-8")
-    tr = dict(np.load(RAIZ / "results" / "control_tutor_trazas.npz"))
-    figura(tr, "tutor_actuador", [
+    filas = json.loads((RAIZ / "results" / "control_paper_modelos.json").read_text(encoding="utf-8"))
+    (RAIZ / "results" / "control_paper_modelos.md").write_text(tabla(filas) + "\n", encoding="utf-8")
+    tr = dict(np.load(RAIZ / "results" / "control_paper_modelos_trazas.npz"))
+    figura(tr, "paper_modelos_actuador", [
         ("ideal|ideal|θ verdaderos", "Ideal: planta sin perturbación, θ verdaderos"),
         ("act|θ verdaderos|θ verdaderos", "Planta con actuador, θ verdaderos"),
         ("act|con red|solo θ̂", "Planta con actuador, historia de 5 ms (con red), θ̂"),
         ("act|forma exacta|solo θ̂", "Planta con actuador, estado de filtro, θ̂")], (720, 760))
-    figura(tr, "tutor_refractariedad", [
+    figura(tr, "paper_modelos_refractariedad", [
         ("refrac|θ verdaderos|θ verdaderos", "Planta con refractariedad, θ verdaderos"),
         ("refrac|con red|θ̂ + g", "Planta con refractariedad, agnóstica (con red), θ̂ + g"),
         ("refrac|forma exacta|θ̂ + forma", "Planta con refractariedad, forma exacta, θ̂ + forma")], (600, 900))
-    print("escrito: results/control_tutor.md y figuras tutor_*")
+    print("escrito: results/control_paper_modelos.md y figuras paper_modelos_*")
 
 
 if __name__ == "__main__":

@@ -3,13 +3,11 @@ type: note
 status: inbox
 project: "[[Investigación Neurociencia]]"
 fecha: 2026-10-28
-tags: [wilson-cowan, control, imc, resultados, tutor]
-pdf: "[[controlador-paper-pruebas.pdf]]"
+tags: [wilson-cowan, control, imc, resultados]
+pdf: "[[controlador-paper-simulador-y-modelos.pdf]]"
 ---
 
 # Controlador de Martínez et al. (2022): pruebas sobre el simulador y los modelos gray-box
-
-Ralf Högner, Pedro Cappelletti · 28 de octubre de 2026
 
 El controlador se usa tal cual está en el paper: IMC con linealización por realimentación, sin cota sobre el comando y sin anti-windup. Entre filas cambia una sola cosa, los parámetros con los que se construye y, cuando el despeje cerrado lo admite, la corrección que cancela. La arquitectura de los modelos está en [[Arquitectura de los modelos gray-box]].
 
@@ -29,14 +27,21 @@ $$Q = \theta_i - \frac{1}{a_i}\ln\!\left(\frac{1}{U_I + k_i} - 1\right) - (w_{IE
 
 y lo mismo para $P$ con los parámetros de E. Las ganancias son las del código original, $k_p = \tau/\lambda$ y $k_i = 1/\lambda$ con $\lambda = 0{,}2$ ms: $k_{p,I} = 10$, $k_{i,I} = 5$, $k_{p,E} = 5$, $k_{i,E} = 5$. Quedan fijas en todas las pruebas. $U_x$ se recorta al dominio de la sigmoidea inversa, calculado siempre con los parámetros verdaderos para que todos los controladores tengan el mismo rango de actuación.
 
-Con un modelo identificado, los $a_x$, $\theta_x$, $w$ y $k_x$ de estas ecuaciones son los $\hat\theta$ del modelo. Hay dos usos adicionales, solo en refractariedad, porque son los únicos en que el despeje sigue siendo explícito:
+**Qué toma el controlador de cada modelo.** Todo modelo identificado tiene dos partes: los diez parámetros físicos $\hat\theta$ del backbone de Wilson-Cowan y una corrección para lo que el backbone no explica. La corrección depende del modelo:
 
-- **$\hat\theta$ + g.** La corrección agnóstica $g(I, E)$ no depende del comando. Se resta del objetivo: la sigmoidea pasa a pedir $U_x + k_x - \tau_x\, g_x(I, E)$.
-- **$\hat\theta$ + forma.** El modelo de forma exacta tiene el factor $(1 - r_x x)$ sobre la sigmoidea y una saturación $\alpha \tanh(u/\alpha)$ en la entrada. El objetivo se divide por $(1 - \hat r_x x)$ y al final se invierte la saturación.
+- en el white-box no hay corrección;
+- en la agnóstica y en la historia es una red neuronal ($g(I, E)$ en la agnóstica; una red que además ve los últimos 5 ms del comando en la historia);
+- en la forma exacta y en el estado de filtro son términos físicos agregados al backbone.
 
-En el actuador, las correcciones con red dependen del comando y el despeje deja de ser cerrado. Esos modelos se usan solo con sus $\hat\theta$.
+La columna «uso» de las tablas indica qué partes entran al controlador:
 
-**Simulación.** RK4 con paso de 0,005 ms; el controlador se recalcula en cada paso (`scripts/control_tutor.py`, `simulate_closed_loop_ext` con `dt_ctrl = dt`). Estado inicial $E = I = 0$ e integradores en cero. La medición no tiene ruido; el ruido está en los datos con que se identificó cada modelo.
+- **solo $\hat\theta$.** Los $a_x$, $\theta_x$, $w$ y $k_x$ de las ecuaciones de arriba son los del modelo, en lugar de los verdaderos. La corrección se descarta aunque el modelo la tenga: en la agnóstica y en la historia, la red no interviene en el control.
+- **$\hat\theta$ y cancela $g$.** Además de los $\hat\theta$, el controlador usa la red agnóstica. Como $g(I, E)$ no depende del comando, se resta del objetivo y la sigmoidea pasa a pedir $U_x + k_x - \tau_x\, g_x(I, E)$.
+- **$\hat\theta$ e invierte la forma.** El modelo de forma exacta tiene el factor $(1 - r_x x)$ sobre la sigmoidea y una saturación $\alpha \tanh(u/\alpha)$ en la entrada. El objetivo se divide por $(1 - \hat r_x x)$ y al final se invierte la saturación.
+
+Las dos últimas solo existen en refractariedad. En el actuador, la red de la historia depende del comando y el estado de filtro agrega dos estados; en los dos casos el despeje del paper deja de ser cerrado, así que esos modelos se usan solo con sus $\hat\theta$.
+
+**Simulación.** RK4 con paso de 0,005 ms; el controlador se recalcula en cada paso. Estado inicial $E = I = 0$ e integradores en cero. La medición no tiene ruido; el ruido está en los datos con que se identificó cada modelo.
 
 ## 2. Referencias y error
 
@@ -56,7 +61,7 @@ Las tablas dan ese RMSE combinado, en las mismas unidades de actividad que E e I
 | ideal | Wilson-Cowan sin perturbación | verdaderos |
 | θ verdaderos | perturbada | verdaderos; no sabe de la perturbación |
 | white-box | perturbada | $\hat\theta$ del white-box |
-| con red | perturbada | $\hat\theta$ de la mejor corrección con red por validación |
+| con red | perturbada | $\hat\theta$ del mejor modelo con red por validación; la red se usa o no según la columna «uso» |
 | forma exacta | perturbada | $\hat\theta$ del backbone expandido |
 
 Las perturbaciones son las del resto del trabajo: refractariedad con $r = 0{,}1$, y un actuador con filtro de primer orden ($\tau = 1$ ms) seguido de saturación $3\tanh(u/3)$. Los modelos son los de la tanda `e16` (datos de 2 s a 2 kHz), con $\sigma$ = 0,01 y 0,05 y tres semillas cada uno. Por la regla de validación, la mejor corrección con red es:
@@ -75,36 +80,36 @@ Ideal: RMSE de 0,0382 en la theta-gamma (E 0,0426, I 0,0331) y de 0,0324 en la g
 **Planta con refractariedad**
 
 | modelo | uso | σ | error de $\hat\theta$ | RMSE theta-gamma | RMSE gamma |
-|----------------|--------------|------|----------|--------------------|--------------------|
+|----------------|--------------------|------|----------|--------------------|--------------------|
 | ideal | | | 0 % | 0,0382 | 0,0324 |
 | θ verdaderos | | | 0 % | 0,0386 | 0,0339 |
 | white-box | solo $\hat\theta$ | 0,01 | 10,5 % | 0,0388 ± 0,0000 | 0,0339 ± 0,0000 |
 | | | 0,05 | 5,4 % | 0,0386 ± 0,0000 | 0,0332 ± 0,0001 |
-| agnóstica | solo $\hat\theta$ | 0,01 | 3,5 % | 0,0387 ± 0,0000 | 0,0342 ± 0,0000 |
+| agnóstica (red) | solo $\hat\theta$ | 0,01 | 3,5 % | 0,0387 ± 0,0000 | 0,0342 ± 0,0000 |
 | | | 0,05 | 4,9 % | 0,0386 ± 0,0000 | 0,0339 ± 0,0001 |
-| agnóstica | $\hat\theta$ + g | 0,01 | 3,5 % | 0,0395 ± 0,0000 | 0,0340 ± 0,0001 |
+| agnóstica (red) | $\hat\theta$ y cancela $g$ | 0,01 | 3,5 % | 0,0395 ± 0,0000 | 0,0340 ± 0,0001 |
 | | | 0,05 | 4,9 % | 0,0393 ± 0,0001 | 0,0336 ± 0,0004 |
-| forma exacta | $\hat\theta$ + forma | 0,01 | 2,8 % | 0,0384 ± 0,0000 | **0,0326 ± 0,0000** |
+| forma exacta | $\hat\theta$ e invierte la forma | 0,01 | 2,8 % | 0,0384 ± 0,0000 | **0,0326 ± 0,0000** |
 | | | 0,05 | 7,6 % | 0,0384 ± 0,0001 | **0,0325 ± 0,0002** |
 
 **Planta con actuador**
 
 | modelo | uso | σ | error de $\hat\theta$ | RMSE theta-gamma | RMSE gamma |
-|----------------|--------------|------|----------|--------------------|--------------------|
+|----------------|--------------------|------|----------|--------------------|--------------------|
 | ideal | | | 0 % | 0,0382 | 0,0324 |
 | θ verdaderos | | | 0 % | **0,0599** | **0,0692** |
 | white-box | solo $\hat\theta$ | 0,01 | 25,2 % | 0,0643 ± 0,0001 | 0,0901 ± 0,0001 |
 | | | 0,05 | 20,8 % | 0,0651 ± 0,0035 | 0,0878 ± 0,0012 |
-| historia 5 ms | solo $\hat\theta$ | 0,01 | 24,3 % | 0,0680 ± 0,0045 | 0,0828 ± 0,0068 |
+| historia 5 ms (red) | solo $\hat\theta$ | 0,01 | 24,3 % | 0,0680 ± 0,0045 | 0,0828 ± 0,0068 |
 | | | 0,05 | 29,4 % | 0,0713 ± 0,0003 | 0,0771 ± 0,0088 |
 | estado de filtro | solo $\hat\theta$ | 0,01 | 6,7 % | 0,0711 ± 0,0002 | 0,0788 ± 0,0038 |
 | | | 0,05 | 12,6 % | 0,0711 ± 0,0007 | 0,0762 ± 0,0005 |
 
-![[tutor-control-actuador.png]]
+![[control-paper-trazas-actuador.png]]
 
 *Figura 1.* Actividad excitatoria en lazo cerrado (azul) y referencia $r_E$ (gris, discontinua) durante una ráfaga gamma de la theta-gamma de 2 s. Controlador de Martínez et al. (2022) sin cota ni anti-windup. Fila 1: planta sin perturbación con parámetros verdaderos. Filas 2 a 4: planta con actuador (filtro de 1 ms y saturación $3\tanh(u/3)$) con parámetros verdaderos, con los $\hat\theta$ del modelo de historia de 5 ms y con los $\hat\theta$ del estado de filtro. Modelos con $\sigma$ = 0,01, semilla 0.
 
-![[tutor-control-refractariedad.png]]
+![[control-paper-trazas-refractariedad.png]]
 
 *Figura 2.* Igual que la figura 1, para la planta con refractariedad ($r = 0{,}1$) y tres ráfagas. Filas: parámetros verdaderos; $\hat\theta$ de la agnóstica cancelando $g$; $\hat\theta$ de la forma exacta con la inversión del factor $(1 - r x)$ y de la saturación.
 
@@ -122,9 +127,3 @@ La dispersión entre semillas de la historia (hasta 0,0088) es del mismo orden q
 **Comando.** Sin cota, el controlador pide en todos los casos comandos muy fuera del rango de los estímulos de entrenamiento (de 0 a 2). Con la planta ideal, $P$ va de −13 a +12 en la theta-gamma; en el actuador llega a −17 y +18 según el modelo. En la planta ideal y en refractariedad, $P$ solo es negativo en la theta-gamma, al apagar cada ráfaga.
 
 **Limitaciones de esta prueba.** El controlador del paper solo aprovecha de un modelo con red lo que entra en su despeje cerrado: los $\hat\theta$ y, en refractariedad, una $g$ que depende solo del estado. Las variantes que invierten la red o el estado de filtro, y las versiones con cota y anti-windup, están en [[Controladores - resultados]]. La medición es sin ruido.
-
-Datos: `results/control_tutor.json` (una fila por simulación, con RMSE de E e I por separado y rango de $P$ y $Q$), `results/control_tutor.md` y trazas en `results/control_tutor_trazas.npz`. Tablas y figuras: `scripts/resumen_control_tutor.py`.
-
-### Referencia
-
-Martínez, S., Sánchez-Peña, R. S., Belluscio, M., Piriz, J. y García-Violini, D. (2022). Towards an experimental control of neural activity: the Wilson-Cowan model. *IFAC PapersOnLine* 55(40): 223-228.
