@@ -9,8 +9,6 @@ pdf: "[[arquitectura-modelos-graybox.pdf]]"
 
 # Arquitectura de los modelos gray-box de Wilson-Cowan
 
-Repositorio: `PedroCappelletti/wilson-cowan-id`. Las rutas de archivos y funciones son relativas a la raíz del repositorio.
-
 ## 1. Planta, datos y notación
 
 Los modelos se ajustan sobre trayectorias simuladas. El estado observado es $x = (I, E)^\top$, las actividades de las poblaciones inhibitoria y excitatoria. La entrada es $u = (P, Q)^\top$, el comando de luz sobre la población excitatoria ($P$) y sobre la inhibitoria ($Q$). La salida del modelo es la trayectoria completa de $x$; el ajuste no se hace contra el LFP.
