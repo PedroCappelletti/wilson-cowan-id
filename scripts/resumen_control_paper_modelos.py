@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 
 RAIZ = Path(__file__).resolve().parents[1]
 OUT = RAIZ / "results" / "figures" / "control"
-ORDEN = [("θ verdaderos", "θ verdaderos"), ("white-box", "solo θ̂"), ("con red", "solo θ̂"),
-         ("con red", "θ̂ + g"), ("forma exacta", "θ̂ + forma"), ("forma exacta", "solo θ̂")]
+ORDEN = [("β verdaderos", "β verdaderos"), ("white-box", "solo β̂"), ("con red", "solo β̂"),
+         ("con red", "β̂ + g"), ("forma exacta", "β̂ + forma"), ("forma exacta", "solo β̂")]
 
 
 def coma(x, d=4):
@@ -35,21 +35,21 @@ def tabla(filas):
         g[(r["referencia"], r["planta"], r["modelo"], r["uso"], r["ruido"])].append(r)
     md = []
     for ref, nr in (("theta2s", "theta-gamma de 2 s"), ("gamma50", "gamma de 50 ms")):
-        ideal = g[(ref, "ideal", "ideal", "θ verdaderos", "")][0]
+        ideal = g[(ref, "ideal", "ideal", "β verdaderos", "")][0]
         md += [f"### Referencia {nr}", "",
-               f"Ideal (Wilson-Cowan sin perturbación, θ verdaderos): RMSE {coma(ideal['rmse'])} "
+               f"Ideal (Wilson-Cowan sin perturbación, β verdaderos): RMSE {coma(ideal['rmse'])} "
                f"(I {coma(ideal['rmse_I'])}, E {coma(ideal['rmse_E'])}).", ""]
         for planta, npl in (("refrac", "refractariedad"), ("act", "actuador")):
             md += [f"**Planta con {npl}**", "",
-                   "| modelo | uso en el controlador | σ = 0,01: error de θ̂ | σ = 0,01: RMSE "
-                   "| σ = 0,05: error de θ̂ | σ = 0,05: RMSE |",
+                   "| modelo | uso en el controlador | σ = 0,01: error de β̂ | σ = 0,01: RMSE "
+                   "| σ = 0,05: error de β̂ | σ = 0,05: RMSE |",
                    "|---|---|---|---|---|---|"]
             for modelo, uso in ORDEN:
-                if modelo == "θ verdaderos":
+                if modelo == "β verdaderos":
                     rs = g.get((ref, planta, modelo, uso, ""), [])
                     if rs:
                         v = coma(rs[0]["rmse"])
-                        md.append(f"| θ verdaderos | sin modelo de la perturbación | 0 % | {v} | 0 % | {v} |")
+                        md.append(f"| β verdaderos | sin modelo de la perturbación | 0 % | {v} | 0 % | {v} |")
                     continue
                 celdas = []
                 for suf in ("_n01", "_n05"):
@@ -78,7 +78,7 @@ def figura(trazas, nombre, casos, ventana):
         ax.plot(t[m], trazas[f"theta2s|{clave}|rE"][m], color="#9a9a94", lw=1.2, ls="--")
         ax.plot(t[m], trazas[f"theta2s|{clave}|E"][m], color="#104281", lw=1.1)
         ax.set_ylabel("E")
-        ax.set_title(rot.replace("θ̂", r"$\hat{\theta}$"), loc="left", fontsize=9.5)
+        ax.set_title(rot.replace("β̂", r"$\hat{\beta}$"), loc="left", fontsize=9.5)
         ax.set_ylim(-0.1, 0.9)
     axs[-1].set_xlabel("tiempo [ms]")
     h = [plt.Line2D([], [], color="#104281"), plt.Line2D([], [], color="#9a9a94", ls="--")]
@@ -95,14 +95,14 @@ def main():
     (RAIZ / "results" / "control_paper_modelos.md").write_text(tabla(filas) + "\n", encoding="utf-8")
     tr = dict(np.load(RAIZ / "results" / "control_paper_modelos_trazas.npz"))
     figura(tr, "paper_modelos_actuador", [
-        ("ideal|ideal|θ verdaderos", "Ideal: planta sin perturbación, θ verdaderos"),
-        ("act|θ verdaderos|θ verdaderos", "Planta con actuador, θ verdaderos"),
-        ("act|con red|solo θ̂", "Planta con actuador, historia de 5 ms (con red), θ̂"),
-        ("act|forma exacta|solo θ̂", "Planta con actuador, estado de filtro, θ̂")], (720, 760))
+        ("ideal|ideal|β verdaderos", "Ideal: planta sin perturbación, β verdaderos"),
+        ("act|β verdaderos|β verdaderos", "Planta con actuador, β verdaderos"),
+        ("act|con red|solo β̂", "Planta con actuador, historia de 5 ms (con red), β̂"),
+        ("act|forma exacta|solo β̂", "Planta con actuador, estado de filtro, β̂")], (720, 760))
     figura(tr, "paper_modelos_refractariedad", [
-        ("refrac|θ verdaderos|θ verdaderos", "Planta con refractariedad, θ verdaderos"),
-        ("refrac|con red|θ̂ + g", "Planta con refractariedad, agnóstica (con red), θ̂ + g"),
-        ("refrac|forma exacta|θ̂ + forma", "Planta con refractariedad, forma exacta, θ̂ + forma")], (600, 900))
+        ("refrac|β verdaderos|β verdaderos", "Planta con refractariedad, β verdaderos"),
+        ("refrac|con red|β̂ + g", "Planta con refractariedad, agnóstica (con red), β̂ + g"),
+        ("refrac|forma exacta|β̂ + forma", "Planta con refractariedad, forma exacta, β̂ + forma")], (600, 900))
     print("escrito: results/control_paper_modelos.md y figuras paper_modelos_*")
 
 

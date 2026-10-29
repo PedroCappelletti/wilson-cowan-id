@@ -17,7 +17,7 @@ Cada escenario dura 2 s, muestreado con $\Delta t = 0{,}5$ ms (4001 muestras), c
 - **Refractariedad:** la sigmoidea se multiplica por $(1 - r\,x)$, con $r = 0{,}10$.
 - **Actuador:** a las poblaciones no llega $P$ sino $P_{ef} = 3\tanh(P_{lag}/3)$, con $\dot P_{lag} = (P - P_{lag})/\tau$ y $\tau = 1$ ms, y lo mismo para $Q$.
 
-El comando se mantiene constante entre muestras, tanto en la planta como en el modelo. La planta se integra con RK4 a 0,05 ms, con 10 subpasos por muestra (`scripts/gen_uncertain_dataset.py`, `generar_con`). A $I$ y $E$ se les suma ruido blanco gaussiano independiente, con σ por muestra de 0,0032 y 0,016 (`scripts/esc_gen_ruido.py`).
+El comando se mantiene constante entre muestras, tanto en la planta como en el modelo. La planta se integra con RK4 a 0,05 ms, con 10 subpasos por muestra (`scripts/gen_uncertain_dataset.py`, `generar_con`). A $I$ y $E$ se les suma ruido blanco gaussiano independiente, con σ por muestra de 0,0032 y 0,016. En el resto del documento esos niveles se nombran σ = 0,01 y σ = 0,05, su equivalente a 20 kHz: el σ se escala por $\sqrt{2/20}$ para que la densidad espectral del ruido sea la misma que con muestreo de 20 kHz (`scripts/esc_gen_ruido.py`, opción `--ref-fs`).
 
 Los estímulos de entrenamiento cubren $P \in [0;\ 2{,}0]$ y $Q \in [0;\ 1{,}5]$. Fuera de ese rango, el modelo extrapola.
 
@@ -145,21 +145,21 @@ $$
 
 Código: `LagGrayBox.filtered_inputs`. Sin esto, arrancar cada ventana con $\hat P = P$ metía un transitorio falso que sesgaba $\hat\tau$ a la mitad.
 
-En la planta con actuador, el modelo identificó $\hat\tau$ entre 0,97 y 1,16 ms (verdadero 1,0 ms), pero **no la saturación**: $\alpha$ quedó en $10^{-3}$, o sea sin saturación, y β absorbió el efecto ($w_{EE} = 7{,}2$ contra 6,4 y $\theta_e = 3{,}07$ contra 2,8). Para un controlador, esto quiere decir que el modelo no anticipa que comandos por encima de 3 pierden efecto.
+En la planta con actuador, el modelo con warm start, que es el que se usa en el control, identificó $\hat\tau$ entre 0,96 y 1,04 ms (verdadero 1,0 ms), pero **no la saturación**: $\alpha$ quedó en $10^{-3}$, o sea sin saturación, y β absorbió el efecto (con σ = 0,01 y semilla 0, $w_{EE} = 7{,}46$ contra 6,4 y $\theta_e = 3{,}13$ contra 2,8). Para un controlador, esto quiere decir que el modelo no anticipa la pérdida de efecto de los comandos grandes: en la planta, un comando de 3 llega como 2,28 y uno de 6, como 2,89.
 
-Para el control, $u$ llega a $x$ solo a través de $\hat u$: el grado relativo de $P$ a $E$ es 2. El controlador necesita integrar $\hat P$ y $\hat Q$ con el comando que aplica, que es lo que hace `IMCExtendido` (`src/neural_ode/closed_loop_ext.py`).
+Para el control, $u$ llega a $x$ solo a través de $\hat u$: el grado relativo de $P$ a $E$ es 2, y el despeje cerrado del paper deja de valer. Con ese controlador, de este modelo se usa solo β.
 
 ### 5.3 Latent ODE
 
-`LatentGrayBox` (`src/neural_ode/memory.py`) agrega un estado $z \in \mathbb{R}^2$ sin forma física: $\dot z = h_\psi(I, E, z, P, Q)$ y $\dot x = f_{WC}(x, u) + g_\phi(I, E, z)$, con $z = 0$ al inicio de cada ventana. Se probó en el escalado sin ruido y dio $R^2 = -0{,}51$ contra el término faltante. No está en las tandas actuales.
+`LatentGrayBox` (`src/neural_ode/memory.py`) agrega un estado $z \in \mathbb{R}^2$ sin forma física: $\dot z = h_\psi(I, E, z, P, Q)$ y $\dot x = f_{WC}(x, u) + g_\phi(I, E, z)$, con $z = 0$ al inicio de cada ventana. Se probó en el escalado sin ruido, con la planta con actuador y los datos de 200 ms, y dio $R^2 = -0{,}51$ contra el término faltante. No está en las tandas actuales.
 
 ## 6. Cómo se obtienen los parámetros
 
 `scripts/esc_run.py` entrena una configuración. Con datos de 2 s:
-1. **Ventanas.** Las trayectorias de entrenamiento (28 escenarios) se parten en ventanas de $W = 10$ muestras (5 ms). Cada una arranca del estado observado (`make_windows`).
+1. **Ventanas.** Las trayectorias de entrenamiento (28 escenarios) se parten en ventanas de $W = 10$ muestras (5 ms), o de 40 (20 ms) en las corridas `B400`. Cada una arranca del estado observado (`make_windows`).
 2. **Pérdida.** El error cuadrático medio entre la trayectoria predicha por (3) y la observada, sobre todas las ventanas.
 3. **Optimización.** Adam durante 1500 épocas, con tasas de 0,05 para los pesos, 0,02 para los demás parámetros físicos y 0,003 para la red, y el gradiente recortado en 10. Después, L-BFGS solo sobre los parámetros físicos.
-4. **Selección.** Cada 100 épocas, el modelo se integra libre sobre 7 escenarios de validación, y se guarda el estado con menor NRMSE (`MejorVal`). No se usa el test para elegir nada.
+4. **Selección.** Cada 100 épocas y una vez más después del L-BFGS, el modelo se integra libre sobre 7 escenarios de validación, y se guarda el estado con menor NRMSE (`MejorVal`). No se usa el test para elegir nada.
 5. **Arranque.** Ignorante, con los diez parámetros en 1,0, o desde el β de un white-box ajustado sobre los mismos datos (`--init-params`).
 
 Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug` y `AugTrainConfig` en `src/neural_ode/memory.py` para el estado de filtro y la latent ODE, que siguen el mismo esquema sin el paso de L-BFGS.
@@ -180,23 +180,20 @@ Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug`
 
 ## 8. Consecuencias para el diseño del controlador
 
-**Evaluación del modelo dentro del controlador.** Todos los modelos son módulos de PyTorch con firma `modelo(x, P, Q) → ẋ`, así que $\partial \dot x / \partial u_k$ se obtiene por diferenciación automática. Para las variantes con historia, `_CampoNumpy` (`src/neural_ode/closed_loop_ext.py`) evalúa el mismo campo en numpy, con diferencias del orden de $10^{-8}$ y unos 200 μs por evaluación. Un checkpoint se carga con `cargar(ruta)`, en `scripts/esc_eval.py`, que reconstruye la variante a partir de los flags guardados.
+**Evaluación del modelo dentro del controlador.** Todos los modelos son módulos de PyTorch con firma `modelo(x, P, Q) → ẋ` (en el estado de filtro, `x` incluye $\hat P$ y $\hat Q$), así que $\partial \dot x / \partial u_k$ se obtiene por diferenciación automática. Un checkpoint se carga con `cargar(ruta)`, en `scripts/esc_eval.py`, que reconstruye la variante a partir de los flags guardados y devuelve el modelo y el checkpoint.
 
-**Invertibilidad.** El controlador del paper fija un $\dot x$ objetivo y despeja el comando que lo produce. En el backbone, $u_k$ entra sumado al argumento de una sigmoidea monótona, y el despeje es cerrado (ec. 6 del paper). En la agnóstica también, porque $g(I, E)$ no depende del comando y solo desplaza el objetivo. Con historia y filtro entrenable, $u_k$ entra además a la red, junto con los comandos anteriores. Despejarlo requiere resolver en cada paso una ecuación no lineal en $(P_k, Q_k)$, sin fórmula cerrada. Esa ecuación puede tener varias soluciones o ninguna: el entrenamiento no obliga a la red a ser monótona en $u_k$, y fuera del rango de los estímulos de entrenamiento ($P \in [0, 2]$, $Q \in [0; 1{,}5]$) la red no tiene datos que la restrinjan. Un controlador que use estos modelos sin invertirlos (MPC, o la estructura IMC clásica con el modelo completo en paralelo) evita ese problema.
-
-**Estado de filtro.** La inversión es analítica: se invierte la saturación y se compensa el polo. Con la ley $P = \hat P + (\hat\tau/\tau_f)(P^*_{lag} - \hat P)$ y $\tau_f = 0{,}2$ ms, el error de seguimiento baja a la mitad respecto del controlador con β verdaderos, pero el comando llega a +73. Con $P$ acotado a $[0, 2]$ y anti-windup, la mejora se mantiene en la referencia gamma de 50 ms y desaparece en la theta-gamma de 2 s.
-
+**Invertibilidad.** El controlador del paper fija un $\dot x$ objetivo y despeja el comando que lo produce. En el backbone, $u_k$ entra sumado al argumento de una sigmoidea monótona, y el despeje es cerrado (ec. 6 del paper). En la agnóstica también, porque $g(I, E)$ no depende del comando y solo desplaza el objetivo. Con historia y filtro entrenable, $u_k$ entra además a la red, junto con los comandos anteriores. Despejarlo requiere resolver en cada paso una ecuación no lineal en $(P_k, Q_k)$, sin fórmula cerrada. Esa ecuación puede tener varias soluciones o ninguna: el entrenamiento no obliga a la red a ser monótona en $u_k$, y fuera del rango de los estímulos de entrenamiento ($P \in [0; 2]$, $Q \in [0; 1{,}5]$) la red no tiene datos que la restrinjan. Un controlador que use estos modelos sin invertirlos (MPC, o la estructura IMC clásica con el modelo completo en paralelo) evita ese problema.
 **Valores identificados** con σ = 0,01, semilla 0, para quien quiera usar los parámetros directamente:
 
 | | $w_{EE}$ | $w_{EI}$ | $w_{IE}$ | $w_{II}$ | $\tau_e$ | $\tau_i$ | $a_e$ | $a_i$ | $\theta_e$ | $\theta_i$ |
 |------------------------|----|----|----|----|----|----|----|----|----|----|
 | verdaderos | 6,40 | 4,80 | 6,00 | 1,20 | 1,00 | 2,00 | 1,20 | 1,00 | 2,80 | 4,00 |
 | refractariedad, white-box | 5,82 | 4,90 | 6,19 | 1,89 | 1,12 | 2,06 | 1,28 | 1,05 | 2,64 | 3,98 |
-| refractariedad, agnóstica con warm start | 6,20 | 4,70 | 6,16 | 1,32 | 1,08 | 2,04 | 1,25 | 0,98 | 2,69 | 4,01 |
+| refractariedad, agnóstica con warm start | 6,20 | 4,69 | 6,16 | 1,32 | 1,08 | 2,04 | 1,24 | 0,98 | 2,69 | 4,01 |
 | refractariedad, forma exacta | 6,33 | 4,77 | 6,06 | 1,45 | 1,01 | 2,02 | 1,21 | 0,98 | 2,78 | 4,02 |
-| actuador, white-box | 8,21 | 7,30 | 6,97 | 2,05 | 1,41 | 2,36 | 1,14 | 0,91 | 3,03 | 4,24 |
+| actuador, white-box | 8,21 | 7,30 | 6,96 | 2,05 | 1,41 | 2,36 | 1,14 | 0,91 | 3,03 | 4,24 |
 | actuador, historia 5 ms con warm start | 9,43 | 7,15 | 6,99 | 0,94 | 1,21 | 1,98 | 0,91 | 0,79 | 3,56 | 4,84 |
-| actuador, estado de filtro | 7,25 | 5,42 | 6,26 | 1,24 | 1,00 | 2,00 | 1,05 | 0,95 | 3,07 | 4,17 |
+| actuador, estado de filtro con warm start | 7,46 | 5,51 | 6,46 | 1,36 | 0,98 | 2,00 | 1,01 | 0,93 | 3,13 | 4,25 |
 
 ## 9. Archivos y funciones
 
@@ -207,7 +204,7 @@ Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug`
 | `src/neural_ode/integrate.py` | `rk4_step`, `rollout` |
 | `src/neural_ode/graybox_train.py` | `TrainConfig`, `VARIANTS`, `build_model`, `make_windows`, `apilar_historia`, `fit`, `MejorVal`, `load_split` |
 | `src/neural_ode/closed_loop.py` | `IMCController` (el controlador del paper), plantas para lazo cerrado |
-| `src/neural_ode/closed_loop_ext.py` | `IMCExtendido`, `_CampoNumpy`, `simulate_closed_loop_ext`, referencia theta-gamma |
+| `src/neural_ode/closed_loop_ext.py` | `simulate_closed_loop_ext` (simulación del lazo cerrado), `theta_gamma_ventana_refs` (referencia theta-gamma) |
 | `src/wilson_cowan/model.py`, `uncertainty.py` | la planta, los estímulos y las perturbaciones |
 | `scripts/esc_run.py` | entrena una configuración y guarda el JSON y el checkpoint |
 | `scripts/esc_eval.py` | `cargar` (reconstruye un modelo desde su checkpoint), métricas |

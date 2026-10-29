@@ -7,16 +7,16 @@
 # parámetros (y con qué corrección, cuando el despeje cerrado la admite) se
 # construye:
 #
-#   ideal         planta = Wilson-Cowan sin perturbación, θ verdaderos
-#   θ verdaderos  planta perturbada, θ verdaderos (no sabe de la perturbación)
-#   white-box     θ̂ del white-box
+#   ideal         planta = Wilson-Cowan sin perturbación, β verdaderos
+#   β verdaderos  planta perturbada, β verdaderos (no sabe de la perturbación)
+#   white-box     β̂ del white-box
 #   con red       la mejor corrección con red por validación:
-#                   refractariedad: agnóstica g(I, E) con warm start, con su θ̂
+#                   refractariedad: agnóstica g(I, E) con warm start, con su β̂
 #                     sola y cancelando g (el despeje cerrado lo admite)
-#                   actuador: historia de 5 ms con warm start, solo θ̂ (su red
+#                   actuador: historia de 5 ms con warm start, solo β̂ (su red
 #                     depende del comando y el despeje cerrado no la admite)
 #   forma exacta  backbone expandido: refractariedad con (1 − r x) y saturación;
-#                 en el actuador, el estado de filtro, solo con su θ̂
+#                 en el actuador, el estado de filtro con warm start, solo con su β̂
 #
 # Modelos de la tanda e16 (datos de 2 s), σ = 0,01 y 0,05, semillas 0, 1 y 2.
 # Referencias: theta-gamma de 2 s (fig. 7 del paper) y gamma de 50 ms.
@@ -50,26 +50,26 @@ SEMILLAS = (0, 1, 2)
 # La mejor corrección con red por NRMSE de validación (results/resumen_2s.md).
 CON_RED = {("refrac", "_n01"): "B100_wrm", ("refrac", "_n05"): "B400_wrm",
            ("act", "_n01"): "H100_wrm", ("act", "_n05"): "H100_wrm"}
-EXACTA = {"refrac": "e1S2_wrm", "act": "lag"}
+EXACTA = {"refrac": "e1S2_wrm", "act": "lag_wrm"}
 WB = {"refrac": "e1wb", "act": "e2wb"}
 
 
 def tareas():
     out = []
     for ref in REFS:
-        out.append((ref, "ideal", "ideal", None, "θ verdaderos", "", -1))
+        out.append((ref, "ideal", "ideal", None, "β verdaderos", "", -1))
         for planta in ("refrac", "act"):
-            out.append((ref, planta, "θ verdaderos", None, "θ verdaderos", "", -1))
+            out.append((ref, planta, "β verdaderos", None, "β verdaderos", "", -1))
             for suf in NIVELES:
                 for k in SEMILLAS:
-                    out.append((ref, planta, "white-box", f"e16_{WB[planta]}{suf}_s{k}", "solo θ̂", suf, k))
+                    out.append((ref, planta, "white-box", f"e16_{WB[planta]}{suf}_s{k}", "solo β̂", suf, k))
                     red = f"e16_{CON_RED[(planta, suf)]}{suf}_s{k}"
-                    out.append((ref, planta, "con red", red, "solo θ̂", suf, k))
+                    out.append((ref, planta, "con red", red, "solo β̂", suf, k))
                     if planta == "refrac":
-                        out.append((ref, planta, "con red", red, "θ̂ + g", suf, k))
+                        out.append((ref, planta, "con red", red, "β̂ + g", suf, k))
                     ex = f"e16_{EXACTA[planta]}{suf}_s{k}"
                     out.append((ref, planta, "forma exacta", ex,
-                                "θ̂ + forma" if planta == "refrac" else "solo θ̂", suf, k))
+                                "β̂ + forma" if planta == "refrac" else "solo β̂", suf, k))
     return out
 
 
@@ -97,9 +97,9 @@ def una(t):
         m, _ = cargar(RES / "models" / f"{tag}.pt")
         ph = m.params_dict()
         ctrl_kw = {}
-        if uso == "θ̂ + g":
+        if uso == "β̂ + g":
             ctrl_kw["g_hat"] = make_graybox_correction(m)
-        elif uso == "θ̂ + forma":
+        elif uso == "β̂ + forma":
             ctrl_kw["structured"] = m.structured_dict()
     ctrl = IMCController(fixed_de(ph), {kk: ph[kk] for kk in W}, sat_ref=SAT, **ctrl_kw)
     if ref == "theta2s":
