@@ -8,6 +8,8 @@ tags: [wilson-cowan, control, imc, resultados]
 
 # Controladores: resultados
 
+> **Prueba previa, no vigente.** En este documento el modelo identificado se usa dentro del controlador: el del paper con los $\hat\beta$ del modelo, y un controlador extendido que despeja el comando con el modelo entero. Fue una prueba y no es la línea actual del proyecto. Lo vigente es el controlador del paper tal cual, con los parámetros del `.m`, y el modelo identificado como planta, al lado del simulador: `controlador_planta_modelo.pdf`.
+
 Controlador del paper (Martínez et al., 2022) contra el extendido, sobre todos los modelos, con dos referencias y tres modos del comando: 1848 simulaciones. Cómo está armado, en [[Controladores - explicación a fondo]].
 
 Valores: RMSE de seguimiento, mediana sobre ruidos y semillas, modelos de 2 s con warm start salvo que se indique. Tope: P en [0, 2,0], Q en [0, 1,5].

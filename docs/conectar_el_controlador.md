@@ -8,6 +8,8 @@ tags: [gray-box, wilson-cowan, control, imc, decision]
 
 # Conectar el controlador a los modelos gray-box: opciones
 
+> **Prueba previa, no vigente.** Este documento trata cómo usar cada modelo identificado dentro del controlador. Fue una prueba y no es la línea actual del proyecto. Lo vigente es el controlador del paper tal cual, con los parámetros del `.m`, y el modelo identificado como planta, al lado del simulador: `controlador_planta_modelo.pdf`.
+
 Qué hace falta para usar cada modelo del escalado dentro del controlador IMC, y qué opciones hay para los que hoy no se pueden conectar. Para decidir. Código del lazo cerrado: `src/neural_ode/closed_loop.py` (`IMCController`, `simulate_closed_loop`).
 
 Relacionado: [[Especificaciones técnicas - pipeline gray-box]] · [[Avances desde el póster de la Jornada]] · [[Para la próxima reunión]].

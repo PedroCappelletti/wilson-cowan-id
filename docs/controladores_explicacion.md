@@ -8,6 +8,8 @@ tags: [wilson-cowan, control, imc, gray-box, explicacion]
 
 # Controladores: explicación a fondo
 
+> **Prueba previa, no vigente.** En este documento el modelo identificado se usa dentro del controlador: el del paper con los $\hat\beta$ del modelo, y un controlador extendido que despeja el comando con el modelo entero. Fue una prueba y no es la línea actual del proyecto. Lo vigente es el controlador del paper tal cual, con los parámetros del `.m`, y el modelo identificado como planta, al lado del simulador: `controlador_planta_modelo.pdf`.
+
 Qué hace el controlador del paper, por qué no puede usar los modelos con memoria tal como está, cómo se extendió, y cómo se armaron las comparaciones. Los números están en [[Controladores - resultados]].
 
 Relacionado: [[Conectar el controlador - opciones]] · [[Especificaciones técnicas - pipeline gray-box]] · [[La parte biológica - neuronas, optogenética y Wilson-Cowan]]. Paper: Martínez, Sánchez-Peña, Belluscio, Piriz y García-Violini (2022), *Towards an experimental control of neural activity: the Wilson-Cowan model*, IFAC PapersOnLine 55-40: 223-228.

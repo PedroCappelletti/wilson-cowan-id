@@ -9,6 +9,8 @@ pdf: "[[controlador-paper-simulador-y-modelos.pdf]]"
 
 # Controlador de Martínez et al. (2022): pruebas sobre el simulador y los modelos gray-box
 
+> **Prueba previa, no vigente.** En este documento el modelo identificado se usa dentro del controlador: sus $\hat\beta$ reemplazan a los parámetros del controlador, y el simulador hace de planta. Fue una prueba y no es la línea actual del proyecto. Lo vigente es el controlador del paper tal cual, con los parámetros del `.m`, y el modelo identificado como planta, al lado del simulador: `controlador_planta_modelo.pdf`.
+
 El controlador se usa tal cual está en el paper: IMC con linealización por realimentación, sin cota sobre el comando y sin anti-windup. Entre filas cambia una sola cosa, los parámetros con los que se construye y, cuando el despeje cerrado lo admite, la corrección que cancela. La arquitectura de los modelos está en [[Arquitectura de los modelos gray-box]].
 
 ## 1. Controlador
