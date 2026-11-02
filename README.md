@@ -3,6 +3,9 @@
 Investigación sobre el modelo neuronal de **Wilson-Cowan** y su aprendizaje
 mediante **Physics-Informed Neural Networks (PINNs)**.
 
+Antes de trabajar sobre el repo, leer [`AGENTS.md`](AGENTS.md): las decisiones
+del proyecto y las correcciones que ya se hicieron.
+
 ## Objetivo
 
 Generar datos a partir del modelo de Wilson-Cowan, entrenar una PINN que
