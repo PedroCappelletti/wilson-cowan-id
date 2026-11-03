@@ -1,0 +1,28 @@
+=== escalado · e17_wb_W10_n05_s0 · whitebox · wc0_2s_n05 · W=10 · epochs=1500 ===
+    ep     0 | data=9.472e-03 | err_max= 83.88% 
+    ep    99 | val= 11.29%
+    ep   199 | val=  5.45%
+    ep   250 | data=5.144e-04 | err_max= 43.79% 
+    ep   299 | val=  5.03%
+    ep   399 | val=  4.80%
+    ep   499 | val=  4.69%
+    ep   500 | data=4.599e-04 | err_max= 47.59% 
+    ep   599 | val=  4.65%
+    ep   699 | val=  4.65%
+    ep   750 | data=4.508e-04 | err_max= 59.49% 
+    ep   799 | val=  4.66%
+    ep   899 | val=  4.67%
+    ep   999 | val=  4.69%
+    ep  1000 | data=4.496e-04 | err_max= 67.22% 
+    ep  1099 | val=  4.70%
+    ep  1199 | val=  4.71%
+    ep  1250 | data=4.495e-04 | err_max= 71.54% 
+    ep  1299 | val=  4.71%
+    ep  1399 | val=  4.72%
+    ep  1499 | data=4.495e-04 | err_max= 73.65% 
+    ep  1499 | val=  4.72%
+C:\Users\User\Desktop\wilson-cowan-id\scripts\esc_eval.py:243: RuntimeWarning: divide by zero encountered in scalar divide
+  return float(1.0 - ss_res / ss_tot)
+
+  RESULTADO e17_wb_W10_n05_s0: NRMSE_test=7.33% (I=8.37 E=6.30) R2df=-inf err_param=10.58% [11.7 min]
+  -> results\escalado\e17_wb_W10_n05_s0.json

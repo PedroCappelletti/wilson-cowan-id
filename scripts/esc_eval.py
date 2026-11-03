@@ -90,7 +90,7 @@ def _wc_plano(params: dict) -> GrayBoxWC:
 #  SECCION 2: ROLLOUT OPEN-LOOP  (con o sin estados ocultos)
 # =============================================================================
 # Variantes cuya g recibe la historia del comando en vez del valor actual.
-CON_MEMORIA = ("xhist", "xconv")
+CON_MEMORIA = ("xhist", "xhistp", "xconv")
 
 
 def largo_historia(m) -> int:

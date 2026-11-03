@@ -26,8 +26,10 @@ CONTAR = ("(Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | "
 def corridas_vivas() -> int:
     r = subprocess.run(["powershell", "-NoProfile", "-Command", CONTAR],
                        capture_output=True, text=True)
+    # Sin corridas, PowerShell imprime «0». La salida vacía es una consulta que
+    # falló, y el 2/11 eso cortó el pedido con la cola de sesgo todavía viva.
     try:
-        return int(r.stdout.strip() or 0)
+        return int(r.stdout.strip() or 1)
     except ValueError:
         return 1   # ante la duda, seguir despierto
 

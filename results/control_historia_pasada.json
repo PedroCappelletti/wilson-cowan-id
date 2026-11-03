@@ -1,0 +1,242 @@
+[
+  {
+    "referencia": "theta2s",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n01_s0",
+    "ruido": "_n01",
+    "semilla": 0,
+    "rmse": 0.06051739675181096,
+    "rmse_I": 0.044610812427194994,
+    "rmse_E": 0.07303825048437171,
+    "finito": true,
+    "P_rango": [
+      -13.697810275544155,
+      13.057457402901582
+    ],
+    "Q_rango": [
+      -16.175934759545783,
+      16.28568125291927
+    ]
+  },
+  {
+    "referencia": "theta2s",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n01_s1",
+    "ruido": "_n01",
+    "semilla": 1,
+    "rmse": 0.059083827725768305,
+    "rmse_I": 0.04545539012535376,
+    "rmse_E": 0.07011137501153737,
+    "finito": true,
+    "P_rango": [
+      -13.575090144140464,
+      13.009497554147355
+    ],
+    "Q_rango": [
+      -15.708417791314613,
+      16.050651109768836
+    ]
+  },
+  {
+    "referencia": "theta2s",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n01_s2",
+    "ruido": "_n01",
+    "semilla": 2,
+    "rmse": 0.06325894171249369,
+    "rmse_I": 0.04249260614583266,
+    "rmse_E": 0.07872589050690053,
+    "finito": true,
+    "P_rango": [
+      -13.440534213896758,
+      13.083235185403463
+    ],
+    "Q_rango": [
+      -16.222543320127848,
+      16.069582472875457
+    ]
+  },
+  {
+    "referencia": "theta2s",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n05_s0",
+    "ruido": "_n05",
+    "semilla": 0,
+    "rmse": 0.06632710831976987,
+    "rmse_I": 0.052466744632625094,
+    "rmse_E": 0.07775481530927765,
+    "finito": true,
+    "P_rango": [
+      -13.653652464899302,
+      13.453795771716694
+    ],
+    "Q_rango": [
+      -16.470313378087777,
+      15.75810637743098
+    ]
+  },
+  {
+    "referencia": "theta2s",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n05_s1",
+    "ruido": "_n05",
+    "semilla": 1,
+    "rmse": 0.07284868448274859,
+    "rmse_I": 0.04764177710069984,
+    "rmse_E": 0.09134616979611868,
+    "finito": true,
+    "P_rango": [
+      -13.51857502879227,
+      13.468228276941572
+    ],
+    "Q_rango": [
+      -16.523092024258087,
+      16.633740229079095
+    ]
+  },
+  {
+    "referencia": "theta2s",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n05_s2",
+    "ruido": "_n05",
+    "semilla": 2,
+    "rmse": 0.07260718467392835,
+    "rmse_I": 0.04680682008656483,
+    "rmse_E": 0.09139326083432969,
+    "finito": true,
+    "P_rango": [
+      -13.304375402748084,
+      13.352318216962994
+    ],
+    "Q_rango": [
+      -16.08051300252575,
+      16.47581472211713
+    ]
+  },
+  {
+    "referencia": "gamma50",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n01_s0",
+    "ruido": "_n01",
+    "semilla": 0,
+    "rmse": 0.05491937629368636,
+    "rmse_I": 0.06689441236473556,
+    "rmse_E": 0.03946407707462259,
+    "finito": true,
+    "P_rango": [
+      -13.419625342381998,
+      12.422551171798364
+    ],
+    "Q_rango": [
+      -15.126815705870074,
+      6.229528395435529
+    ]
+  },
+  {
+    "referencia": "gamma50",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n01_s1",
+    "ruido": "_n01",
+    "semilla": 1,
+    "rmse": 0.05295370699121463,
+    "rmse_I": 0.06539532397358061,
+    "rmse_E": 0.03649166713940675,
+    "finito": true,
+    "P_rango": [
+      -13.56899890225693,
+      12.547173641279755
+    ],
+    "Q_rango": [
+      -14.774041160566837,
+      6.229528395435529
+    ]
+  },
+  {
+    "referencia": "gamma50",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n01_s2",
+    "ruido": "_n01",
+    "semilla": 2,
+    "rmse": 0.0665595574864003,
+    "rmse_I": 0.0660859500857374,
+    "rmse_E": 0.06702981863944046,
+    "finito": true,
+    "P_rango": [
+      -13.597330434305832,
+      13.02370790573855
+    ],
+    "Q_rango": [
+      -15.082572165034016,
+      6.229528395435529
+    ]
+  },
+  {
+    "referencia": "gamma50",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n05_s0",
+    "ruido": "_n05",
+    "semilla": 0,
+    "rmse": 0.08997153872630179,
+    "rmse_I": 0.09398520926055845,
+    "rmse_E": 0.08577025126351143,
+    "finito": true,
+    "P_rango": [
+      -13.555021859844588,
+      13.54698942669605
+    ],
+    "Q_rango": [
+      -14.736514697350866,
+      6.229528395435529
+    ]
+  },
+  {
+    "referencia": "gamma50",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n05_s1",
+    "ruido": "_n05",
+    "semilla": 1,
+    "rmse": 0.0734919022910846,
+    "rmse_I": 0.07315316675274136,
+    "rmse_E": 0.07382908369179633,
+    "finito": true,
+    "P_rango": [
+      -13.934612442592169,
+      12.978406919701554
+    ],
+    "Q_rango": [
+      -15.35070147634535,
+      6.229528395435529
+    ]
+  },
+  {
+    "referencia": "gamma50",
+    "perturbacion": "act",
+    "planta": "historia pasada",
+    "tag": "e16_Hp100_wrm_n05_s2",
+    "ruido": "_n05",
+    "semilla": 2,
+    "rmse": 0.05072573920601065,
+    "rmse_I": 0.05800470673261344,
+    "rmse_E": 0.04220965805187152,
+    "finito": true,
+    "P_rango": [
+      -13.55848477666292,
+      12.422551171798364
+    ],
+    "Q_rango": [
+      -14.762723142920894,
+      6.229528395435529
+    ]
+  }
+]

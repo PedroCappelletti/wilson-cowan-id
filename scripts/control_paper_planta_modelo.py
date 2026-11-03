@@ -80,6 +80,8 @@ class CampoModelo:
             h = np.array([I, E])
         elif self.entradas == "xconv":
             h = np.concatenate(([I, E], np.concatenate((P, Q)) @ self.fir))
+        elif self.entradas == "xhistp":
+            h = np.concatenate(([I, E], P[1:], Q[1:]))
         else:
             h = np.concatenate(([I, E], P, Q))
         for k, (Wk, b) in enumerate(self.capas):
@@ -140,7 +142,7 @@ def planta_de(m, n_pasos):
     if hasattr(m, "extras_dict") and "tau" in m.extras_dict():
         return PlantaFiltro(m)
     campo = CampoModelo(m)
-    if campo.entradas in ("xhist", "xconv"):
+    if campo.entradas in ("xhist", "xhistp", "xconv"):
         return PlantaHistoria(campo, m.hist_len, n_pasos)
     return lambda I, E, P, Q: campo(I, E, P, Q)
 
@@ -151,7 +153,7 @@ def verificar(m, n=200, semilla=0):
     rng = np.random.default_rng(semilla)
     x = rng.uniform(-0.2, 0.9, (n, 2))
     lag = hasattr(m, "extras_dict") and "tau" in m.extras_dict()
-    K = getattr(m, "hist_len", 0) if getattr(m, "correction_inputs", "") in ("xhist", "xconv") else 0
+    K = getattr(m, "hist_len", 0) if getattr(m, "correction_inputs", "") in ("xhist", "xhistp", "xconv") else 0
     u = rng.uniform(-15, 15, (n, 2, max(K, 1)))
     with torch.no_grad():
         if lag:

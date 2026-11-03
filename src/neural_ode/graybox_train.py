@@ -56,24 +56,33 @@ def apilar_historia(u, K):
     return out
 
 
-def make_windows(I, E, P, Q, W, hist=0):
+def make_windows(I, E, P, Q, W, hist=0, x0_suave=0):
     """Parte las trayectorias en ventanas cortas (multiple shooting).
 
     Por que ventanas y no la trayectoria entera: integrar 4000 pasos de un tiron
     hace que el gradiente explote o se desvanezca. Reiniciando desde el estado
     observado cada W pasos el problema queda mucho mejor condicionado.
 
+    x0_suave > 1 toma el estado inicial de cada ventana como la media centrada
+    de esa cantidad de muestras. El blanco queda crudo: con ruido de medición,
+    el que sesga los parámetros es el del estado inicial (cola_sesgo_ventanas.py).
+
     Devuelve x0 (Nw,2), Pw (W,Nw,1), Qw (W,Nw,1), target (W+1,Nw,2).
     """
     n, T = I.shape
     nwin = (T - 1) // W
+    h = (x0_suave - 1) // 2 if x0_suave > 1 else 0
     Ph = apilar_historia(P, hist) if hist else None
     Qh = apilar_historia(Q, hist) if hist else None
     x0, Pw, Qw, tgt = [], [], [], []
     for s in range(n):
         for w in range(nwin):
             a = w * W
-            x0.append([I[s, a], E[s, a]])
+            if h:
+                lo, hi = max(0, a - h), a + h + 1
+                x0.append([I[s, lo:hi].mean(), E[s, lo:hi].mean()])
+            else:
+                x0.append([I[s, a], E[s, a]])
             Pw.append(P[s, a:a + W] if Ph is None else Ph[s, a:a + W])
             Qw.append(Q[s, a:a + W] if Qh is None else Qh[s, a:a + W])
             tgt.append(np.stack([I[s, a:a + W + 1], E[s, a:a + W + 1]], axis=1))
@@ -238,6 +247,9 @@ class TrainConfig:
     n_fir: int = 4                # canales del FIR (variante K)
     wd_fir: float = 0.0           # decaimiento de pesos, solo sobre el FIR
     freeze_phys: bool = False     # β fijo en su valor inicial; solo se entrena g
+    x0_suave: int = 0             # muestras de la media sobre x0 de cada ventana
+    x0_libre: float = 0.0         # peso de la continuidad con x0 entrenable (0 = x0 fijo)
+    lr_x0: float = 5e-3
     val_every: int = 100          # cada cuantas epocas se mide la validacion
     seed: int = 0
     sens_every: int = 25          # cada cuantas epocas se recalculan ∂f/∂θ
@@ -262,6 +274,9 @@ VARIANTS = {
     # H = la red ve el estado Y la historia del comando. Con la historia adentro
     # Delta f SI es funcion de la entrada, que es lo que g(I,E) no podia ser.
     "H":        dict(use_correction=True,  correction_inputs="xhist"),
+    # Hp = historia pasada: como H, pero la red no ve el comando actual. Con
+    # --hist K+1 la red recibe los K retardos.
+    "Hp":       dict(use_correction=True,  correction_inputs="xhistp"),
     # K = la misma historia que H pero filtrada por un FIR aprendido antes de
     # entrar a la MLP. Mismo campo receptivo con un orden de magnitud menos de
     # parametros, y el kernel queda legible.
@@ -297,7 +312,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
     seg = MejorVal(model, val_fn) if val_fn is not None else None
 
     x0, Pw, Qw, tgt = make_windows(data["I"], data["E"], data["P"], data["Q"],
-                                   cfg.window, hist=cfg.hist)
+                                   cfg.window, hist=cfg.hist, x0_suave=cfg.x0_suave)
     Xs, Ps, Qs = sample_points(data["I"], data["E"], data["P"], data["Q"], seed=cfg.seed)
     dt = data["dt"]
 
@@ -336,6 +351,23 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
         raise RuntimeError(
             f"parametros entrenables fuera del optimizador: {huerfanos}")
 
+    # x0 entrenable (Giampiccolo et al. 2024, ecs. 6-7): el estado inicial de
+    # cada ventana arranca en el medido y se ajusta. El término de datos en t = 0
+    # lo ata a la medición, y la continuidad pide que el final de cada ventana
+    # caiga en el inicio de la siguiente de la misma trayectoria. Así el ruido de
+    # la medición deja de entrar como condición inicial exacta.
+    sigue = None
+    if cfg.x0_libre > 0.0:
+        x0 = torch.nn.Parameter(x0.clone())
+        groups.append({"params": [x0], "lr": cfg.lr_x0})
+        nwin = (data["I"].shape[1] - 1) // cfg.window
+        sigue = torch.tensor([i for i in range(len(x0) - 1) if (i + 1) % nwin])
+
+    def continuidad(pred):
+        if sigue is None:
+            return torch.zeros((), dtype=torch.float32)
+        return cfg.x0_libre * ((pred[-1, sigue] - x0[sigue + 1]) ** 2).mean()
+
     opt = torch.optim.Adam(groups)
 
     A = Sf = None
@@ -345,7 +377,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
         """Devuelve (penalizacion_total, diagnosticos)."""
         if not model.use_correction:
             return torch.zeros((), dtype=torch.float32), {}
-        if model.correction_inputs in ("xhist", "xconv"):
+        if model.correction_inputs in ("xhist", "xhistp", "xconv"):
             # Los puntos sueltos no tienen historia, asi que no se puede evaluar
             # g fuera de la trayectoria. Las variantes con historia no usan
             # penalizaciones (lam_norm y lam_orth en cero).
@@ -374,7 +406,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
         pred = rollout(model, x0, Pw, Qw, dt)
         data_loss = ((pred - tgt) ** 2).mean()
         pen, diag = penalties()
-        (data_loss + pen).backward()
+        (data_loss + pen + continuidad(pred)).backward()
         torch.nn.utils.clip_grad_norm_(
             [p for g in groups for p in g["params"]], 10.0)
         opt.step()
@@ -402,7 +434,8 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
 
         def closure():
             opt2.zero_grad()
-            loss = ((rollout(model, x0, Pw, Qw, dt) - tgt) ** 2).mean()
+            pred = rollout(model, x0, Pw, Qw, dt)
+            loss = ((pred - tgt) ** 2).mean() + continuidad(pred)
             loss.backward()
             return loss
         for _ in range(cfg.lbfgs_steps):
@@ -436,7 +469,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
         # variante H el diagnostico se calcula sobre las propias ventanas, que
         # si la tienen. Se submuestrea para que cueste lo mismo que antes.
         Xd, Pd, Qd = Xs, Ps, Qs
-        if model.correction_inputs in ("xhist", "xconv"):
+        if model.correction_inputs in ("xhist", "xhistp", "xconv"):
             with torch.no_grad():
                 Xd = tgt[:-1].reshape(-1, 2)
                 Pd = Pw.reshape(-1, Pw.shape[-1])

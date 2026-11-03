@@ -146,17 +146,24 @@ class GrayBoxWC(nn.Module):
         #
         # Ver docs/incertidumbre_dinamica_graybox.md, seccion 6.
         self.use_correction = use_correction
-        if correction_inputs not in ("xpq", "x", "xhist", "xconv"):
+        if correction_inputs not in ("xpq", "x", "xhist", "xhistp", "xconv"):
             raise ValueError(
-                "correction_inputs debe ser 'xpq', 'x', 'xhist' o 'xconv'")
+                "correction_inputs debe ser 'xpq', 'x', 'xhist', 'xhistp' o 'xconv'")
         if correction_inputs in ("xhist", "xconv") and hist_len < 1:
             raise ValueError(
                 f"correction_inputs='{correction_inputs}' necesita hist_len >= 1")
+        # "xhistp": la misma historia apilada que "xhist" (actual + hist_len-1
+        # retardos), pero la red ve solo los retardos. El comando actual entra
+        # únicamente al backbone, así que el modelo sigue afín en u_k y el
+        # despeje cerrado del controlador vale igual que con "x".
+        if correction_inputs == "xhistp" and hist_len < 2:
+            raise ValueError("correction_inputs='xhistp' necesita hist_len >= 2")
         self.correction_inputs = correction_inputs
         self.hist_len = hist_len
         self.n_fir = n_fir
         if use_correction:
-            n_in = {"xpq": 4, "x": 2, "xconv": 2 + n_fir}.get(
+            n_in = {"xpq": 4, "x": 2, "xconv": 2 + n_fir,
+                    "xhistp": 2 + 2 * (hist_len - 1)}.get(
                 correction_inputs, 2 + 2 * hist_len)
             mlp = nn.Sequential(
                 nn.Linear(n_in, hidden), nn.Tanh(),
@@ -267,6 +274,8 @@ class GrayBoxWC(nn.Module):
         elif self.correction_inputs == "xhist":
             # P,Q ya vienen como (...,K): valor actual mas K-1 retardos.
             inp = torch.cat([I, E, P, Q], dim=-1)
+        elif self.correction_inputs == "xhistp":
+            inp = torch.cat([I, E, P[..., 1:], Q[..., 1:]], dim=-1)
         elif self.correction_inputs == "xconv":
             inp = torch.cat([I, E, P, Q], dim=-1)
         else:

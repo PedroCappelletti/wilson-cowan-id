@@ -1,0 +1,92 @@
+90 simulaciones, 4 procesos
+  theta2s  ideal   ideal         θ verdaderos       s-1  RMSE 0.0382
+  theta2s  refrac  θ verdaderos  θ verdaderos       s-1  RMSE 0.0386
+  theta2s  refrac  white-box     solo θ̂      _n01  s 0  RMSE 0.0388
+  theta2s  refrac  con red       solo θ̂      _n01  s 0  RMSE 0.0387
+  theta2s  refrac  white-box     solo θ̂      _n01  s 1  RMSE 0.0388
+  theta2s  refrac  con red       solo θ̂      _n01  s 1  RMSE 0.0387
+  theta2s  refrac  forma exacta  θ̂ + forma   _n01  s 0  RMSE 0.0385
+  theta2s  refrac  forma exacta  θ̂ + forma   _n01  s 1  RMSE 0.0384
+  theta2s  refrac  white-box     solo θ̂      _n01  s 2  RMSE 0.0388
+  theta2s  refrac  con red       solo θ̂      _n01  s 2  RMSE 0.0387
+  theta2s  refrac  con red       θ̂ + g       _n01  s 0  RMSE 0.0395
+  theta2s  refrac  forma exacta  θ̂ + forma   _n01  s 2  RMSE 0.0384
+  theta2s  refrac  con red       θ̂ + g       _n01  s 1  RMSE 0.0394
+  theta2s  refrac  white-box     solo θ̂      _n05  s 0  RMSE 0.0386
+  theta2s  refrac  con red       solo θ̂      _n05  s 0  RMSE 0.0386
+  theta2s  refrac  con red       θ̂ + g       _n01  s 2  RMSE 0.0395
+  theta2s  refrac  forma exacta  θ̂ + forma   _n05  s 0  RMSE 0.0384
+  theta2s  refrac  white-box     solo θ̂      _n05  s 1  RMSE 0.0386
+  theta2s  refrac  con red       solo θ̂      _n05  s 1  RMSE 0.0386
+  theta2s  refrac  forma exacta  θ̂ + forma   _n05  s 1  RMSE 0.0385
+  theta2s  refrac  white-box     solo θ̂      _n05  s 2  RMSE 0.0386
+  theta2s  refrac  con red       θ̂ + g       _n05  s 0  RMSE 0.0393
+  theta2s  refrac  con red       solo θ̂      _n05  s 2  RMSE 0.0386
+  theta2s  refrac  forma exacta  θ̂ + forma   _n05  s 2  RMSE 0.0385
+  theta2s  refrac  con red       θ̂ + g       _n05  s 1  RMSE 0.0395
+  theta2s  act     θ verdaderos  θ verdaderos       s-1  RMSE 0.0599
+  theta2s  act     white-box     solo θ̂      _n01  s 0  RMSE 0.0644
+  theta2s  act     con red       solo θ̂      _n01  s 0  RMSE 0.0709
+  theta2s  refrac  con red       θ̂ + g       _n05  s 2  RMSE 0.0392
+  theta2s  act     forma exacta  solo θ̂      _n01  s 0  RMSE 0.0713
+  theta2s  act     white-box     solo θ̂      _n01  s 1  RMSE 0.0644
+  theta2s  act     con red       solo θ̂      _n01  s 1  RMSE 0.0617
+  theta2s  act     forma exacta  solo θ̂      _n01  s 1  RMSE 0.0708
+  theta2s  act     white-box     solo θ̂      _n01  s 2  RMSE 0.0642
+  theta2s  act     con red       solo θ̂      _n01  s 2  RMSE 0.0713
+  theta2s  act     forma exacta  solo θ̂      _n01  s 2  RMSE 0.0711
+  theta2s  act     white-box     solo θ̂      _n05  s 0  RMSE 0.0696
+  theta2s  act     con red       solo θ̂      _n05  s 0  RMSE 0.0716
+  theta2s  act     forma exacta  solo θ̂      _n05  s 0  RMSE 0.0703
+  theta2s  act     white-box     solo θ̂      _n05  s 1  RMSE 0.0649
+  theta2s  act     con red       solo θ̂      _n05  s 1  RMSE 0.0709
+  theta2s  act     forma exacta  solo θ̂      _n05  s 1  RMSE 0.0711
+  gamma50  ideal   ideal         θ verdaderos       s-1  RMSE 0.0324
+  gamma50  refrac  θ verdaderos  θ verdaderos       s-1  RMSE 0.0339
+  gamma50  refrac  white-box     solo θ̂      _n01  s 0  RMSE 0.0339
+  theta2s  act     white-box     solo θ̂      _n05  s 2  RMSE 0.0609
+  gamma50  refrac  con red       solo θ̂      _n01  s 0  RMSE 0.0342
+  gamma50  refrac  forma exacta  θ̂ + forma   _n01  s 0  RMSE 0.0326
+  theta2s  act     con red       solo θ̂      _n05  s 2  RMSE 0.0715
+  gamma50  refrac  white-box     solo θ̂      _n01  s 1  RMSE 0.0339
+  gamma50  refrac  con red       solo θ̂      _n01  s 1  RMSE 0.0342
+  gamma50  refrac  con red       θ̂ + g       _n01  s 0  RMSE 0.0341
+  gamma50  refrac  forma exacta  θ̂ + forma   _n01  s 1  RMSE 0.0326
+  gamma50  refrac  white-box     solo θ̂      _n01  s 2  RMSE 0.0339
+  gamma50  refrac  con red       solo θ̂      _n01  s 2  RMSE 0.0342
+  gamma50  refrac  con red       θ̂ + g       _n01  s 1  RMSE 0.0339
+  gamma50  refrac  forma exacta  θ̂ + forma   _n01  s 2  RMSE 0.0326
+  gamma50  refrac  white-box     solo θ̂      _n05  s 0  RMSE 0.0333
+  gamma50  refrac  con red       solo θ̂      _n05  s 0  RMSE 0.0340
+  gamma50  refrac  con red       θ̂ + g       _n01  s 2  RMSE 0.0341
+  gamma50  refrac  forma exacta  θ̂ + forma   _n05  s 0  RMSE 0.0323
+  gamma50  refrac  white-box     solo θ̂      _n05  s 1  RMSE 0.0331
+  gamma50  refrac  con red       solo θ̂      _n05  s 1  RMSE 0.0339
+  gamma50  refrac  con red       θ̂ + g       _n05  s 0  RMSE 0.0335
+  gamma50  refrac  forma exacta  θ̂ + forma   _n05  s 1  RMSE 0.0327
+  gamma50  refrac  white-box     solo θ̂      _n05  s 2  RMSE 0.0331
+  gamma50  refrac  con red       solo θ̂      _n05  s 2  RMSE 0.0338
+  gamma50  refrac  con red       θ̂ + g       _n05  s 1  RMSE 0.0340
+  gamma50  refrac  forma exacta  θ̂ + forma   _n05  s 2  RMSE 0.0327
+  gamma50  act     θ verdaderos  θ verdaderos       s-1  RMSE 0.0692
+  gamma50  act     white-box     solo θ̂      _n01  s 0  RMSE 0.0903
+  gamma50  act     con red       solo θ̂      _n01  s 0  RMSE 0.0875
+  gamma50  refrac  con red       θ̂ + g       _n05  s 2  RMSE 0.0331
+  gamma50  act     forma exacta  solo θ̂      _n01  s 0  RMSE 0.0826
+  gamma50  act     white-box     solo θ̂      _n01  s 1  RMSE 0.0900
+  gamma50  act     con red       solo θ̂      _n01  s 1  RMSE 0.0733
+  gamma50  act     forma exacta  solo θ̂      _n01  s 1  RMSE 0.0803
+  gamma50  act     white-box     solo θ̂      _n01  s 2  RMSE 0.0901
+  gamma50  act     con red       solo θ̂      _n01  s 2  RMSE 0.0877
+  gamma50  act     forma exacta  solo θ̂      _n01  s 2  RMSE 0.0736
+  gamma50  act     white-box     solo θ̂      _n05  s 0  RMSE 0.0866
+  gamma50  act     con red       solo θ̂      _n05  s 0  RMSE 0.0647
+  gamma50  act     forma exacta  solo θ̂      _n05  s 0  RMSE 0.0755
+  gamma50  act     white-box     solo θ̂      _n05  s 1  RMSE 0.0893
+  gamma50  act     con red       solo θ̂      _n05  s 1  RMSE 0.0843
+  gamma50  act     forma exacta  solo θ̂      _n05  s 1  RMSE 0.0767
+  gamma50  act     white-box     solo θ̂      _n05  s 2  RMSE 0.0873
+  gamma50  act     con red       solo θ̂      _n05  s 2  RMSE 0.0824
+  gamma50  act     forma exacta  solo θ̂      _n05  s 2  RMSE 0.0764
+  theta2s  act     forma exacta  solo θ̂      _n05  s 2  RMSE 0.0720
+-> C:\Users\User\Desktop\wilson-cowan-id\results\control_tutor.json

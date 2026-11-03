@@ -51,7 +51,14 @@ def main():
               retenido=True, n_sub=10)
     plantas = [("wc0_2s", NoPerturbation, {"eps": 0.0}),
                ("refrac1_2s", lambda: Refractoriness(r=0.10), {"eps": 1.0}),
-               ("act1_2s", lambda: Actuator(sat=3.0, tau_act=1.0), {"eps": 1.0})]
+               ("act1_2s", lambda: Actuator(sat=3.0, tau_act=1.0), {"eps": 1.0}),
+               # Línea realista: misma saturación, cinética de ChR2. 2,3 y 4,3 ms
+               # son los equivalentes del ancho de banda de ChR2 (69 Hz) y de
+               # H134R (37 Hz), Tchumatchenko et al. 2013; la asimétrica toma
+               # activación y desactivación de Lin et al. 2009 y Mattis et al. 2012.
+               ("act_t23_2s", lambda: Actuator(sat=3.0, tau_act=2.3), {"eps": 1.0}),
+               ("act_t43_2s", lambda: Actuator(sat=3.0, tau_act=4.3), {"eps": 1.0}),
+               ("act_asim_2s", lambda: Actuator(sat=3.0, tau_act=1.5, tau_off=12.0), {"eps": 1.0})]
     pedidas = sys.argv[1:]
     for nombre, fab, meta in plantas:
         if pedidas and nombre not in pedidas:

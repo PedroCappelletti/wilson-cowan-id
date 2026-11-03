@@ -190,14 +190,24 @@ class Actuator(Perturbation):
     name = "actuator"
     n_extra = 2
 
-    def __init__(self, sat: float = 3.0, tau_act: float = 1.0):
+    def __init__(self, sat: float = 3.0, tau_act: float = 1.0, tau_off: float | None = None):
         self.sat = float(sat)          # nivel de saturacion (mas chico = satura antes)
         self.tau_act = float(tau_act)  # constante del filtro del canal [ms]
+        # Con tau_off, tau_act es la activación y tau_off la desactivación, que
+        # en ChR2 es unas diez veces más lenta (Lin et al. 2009; Mattis et al.
+        # 2012). Activa mientras |comando| > |filtro|: supone la misma cinética
+        # para los dos signos, hasta saber qué opsina da el negativo.
+        self.tau_off = None if tau_off is None else float(tau_off)
+
+    def _tau(self, u, x):
+        if self.tau_off is None:
+            return self.tau_act
+        return self.tau_act if abs(u) > abs(x) else self.tau_off
 
     def d_extra(self, t, I, E, extra, P, Q, p):
         # El filtro persigue al comando: dPl/dt = (P_comandado - Pl)/tau
-        return np.array([(P - extra[0]) / self.tau_act,
-                         (Q - extra[1]) / self.tau_act])
+        return np.array([(P - extra[0]) / self._tau(P, extra[0]),
+                         (Q - extra[1]) / self._tau(Q, extra[1])])
 
     def inputs(self, t, I, E, extra, P, Q, p):
         A = self.sat
@@ -206,7 +216,8 @@ class Actuator(Perturbation):
         return A * np.tanh(extra[0] / A), A * np.tanh(extra[1] / A)
 
     def metadata(self):
-        return {**super().metadata(), "pert_sat": self.sat, "pert_tau_act": self.tau_act}
+        m = {**super().metadata(), "pert_sat": self.sat, "pert_tau_act": self.tau_act}
+        return m if self.tau_off is None else {**m, "pert_tau_off": self.tau_off}
 
 
 class Adaptation(Perturbation):

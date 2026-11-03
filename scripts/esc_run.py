@@ -83,7 +83,7 @@ def main():
                     help="nombre del .npz en data/processed/uncertain (sin extension)")
     ap.add_argument("--variant", required=True,
                     choices=["whitebox", "A", "B", "C", "D", "S", "Sg", "H",
-                             "K", "lag", "latent"])
+                             "Hp", "K", "lag", "latent"])
     ap.add_argument("--window", type=int, default=100)
     ap.add_argument("--epochs", type=int, default=1500)
     # Expuesto para el smoke de punta a punta: con el modelo recien inicializado
@@ -108,6 +108,10 @@ def main():
                     help="decaimiento de pesos sobre el FIR (variante K)")
     ap.add_argument("--smooth", type=int, default=0,
                     help="ancho de la media movil sobre I y E (0 = sin suavizar)")
+    ap.add_argument("--x0-suave", type=int, default=0,
+                    help="muestras de la media centrada sobre el estado inicial de cada ventana")
+    ap.add_argument("--x0-libre", type=float, default=0.0,
+                    help="peso de la continuidad entre ventanas con x0 entrenable (0 = x0 fijo)")
     ap.add_argument("--freeze-phys", action="store_true",
                     help="β fijo en el de --init-params; solo se entrena g")
     ap.add_argument("--familia", default=None,
@@ -122,6 +126,8 @@ def main():
     if args.freeze_phys and args.variant in ("lag", "latent"):
         ap.error("--freeze-phys no está implementado para el estado aumentado: "
                  "fit_aug siempre entrena β")
+    if (args.x0_suave > 1 or args.x0_libre > 0) and args.variant in ("lag", "latent"):
+        ap.error("--x0-suave y --x0-libre no están implementados para el estado aumentado")
 
     data_path = Path("data/processed/uncertain") / f"{args.data}.npz"
     # Hash del dataset: sin esto, un .npz regenerado deja los resultados viejos
@@ -170,6 +176,7 @@ def main():
                           hist=args.hist, n_fir=args.n_fir,
                           hidden=args.hidden, lbfgs_steps=args.lbfgs_steps,
                           wd_fir=args.wd_fir, freeze_phys=args.freeze_phys,
+                          x0_suave=args.x0_suave, x0_libre=args.x0_libre,
                           val_every=args.val_every)
         warm = None
         if args.init_params or args.r_init is not None:
@@ -212,7 +219,7 @@ def main():
         "variant": args.variant,
         "window": args.window, "epochs": args.epochs, "hist": args.hist, "n_fir": args.n_fir,
         "hidden": args.hidden, "wd_fir": args.wd_fir,
-        "smooth": args.smooth,
+        "smooth": args.smooth, "x0_suave": args.x0_suave, "x0_libre": args.x0_libre,
         "init_params": args.init_params, "freeze_phys": args.freeze_phys,
         "familia": args.familia,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
