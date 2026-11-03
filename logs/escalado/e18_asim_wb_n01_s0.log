@@ -1,0 +1,26 @@
+=== escalado · e18_asim_wb_n01_s0 · whitebox · act_asim_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=1.182e-02 | err_max= 83.88% 
+    ep    99 | val= 40.32%
+    ep   199 | val= 16.19%
+    ep   250 | data=2.750e-03 | err_max=161.96% 
+    ep   299 | val= 17.30%
+    ep   399 | val= 26.06%
+    ep   499 | val= 26.76%
+    ep   500 | data=2.460e-03 | err_max=174.58% 
+    ep   599 | val= 27.66%
+    ep   699 | val= 28.75%
+    ep   750 | data=2.394e-03 | err_max=162.74% 
+    ep   799 | val= 29.89%
+    ep   899 | val= 30.74%
+    ep   999 | val= 31.19%
+    ep  1000 | data=2.367e-03 | err_max=181.13% 
+    ep  1099 | val= 31.52%
+    ep  1199 | val= 31.41%
+    ep  1250 | data=2.356e-03 | err_max=194.11% 
+    ep  1299 | val= 31.11%
+    ep  1399 | val= 30.80%
+    ep  1499 | data=2.350e-03 | err_max=203.12% 
+    ep  1499 | val= 30.49%
+
+  RESULTADO e18_asim_wb_n01_s0: NRMSE_test=17.88% (I=16.63 E=19.13) R2df=-0.117 err_param=35.39% [10.8 min]
+  -> results\escalado\e18_asim_wb_n01_s0.json

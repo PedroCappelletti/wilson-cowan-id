@@ -1,0 +1,26 @@
+=== escalado · e18_asim_H400_wrm_n01_s0 · H · act_asim_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=3.157e-03 | err_max=134.01% 
+    ep    99 | val= 17.30%
+    ep   199 | val= 22.25%
+    ep   250 | data=1.132e-03 | err_max=119.72% 
+    ep   299 | val= 17.86%
+    ep   399 | val= 14.17%
+    ep   499 | val= 13.14%
+    ep   500 | data=6.681e-04 | err_max= 91.56% 
+    ep   599 | val= 13.14%
+    ep   699 | val= 12.91%
+    ep   750 | data=5.301e-04 | err_max= 94.18% 
+    ep   799 | val= 16.99%
+    ep   899 | val= 14.76%
+    ep   999 | val= 12.46%
+    ep  1000 | data=3.880e-04 | err_max= 95.65% 
+    ep  1099 | val= 12.15%
+    ep  1199 | val= 15.94%
+    ep  1250 | data=2.949e-04 | err_max= 96.37% 
+    ep  1299 | val= 10.37%
+    ep  1399 | val= 11.13%
+    ep  1499 | data=2.569e-04 | err_max= 96.75% 
+    ep  1499 | val=  8.52%
+
+  RESULTADO e18_asim_H400_wrm_n01_s0: NRMSE_test=10.21% (I=10.63 E=9.78) R2df=0.552 err_param=33.05% [36.1 min]
+  -> results\escalado\e18_asim_H400_wrm_n01_s0.json

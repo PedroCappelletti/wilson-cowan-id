@@ -1,0 +1,9 @@
+=== escalado · e18_t43_lag_wrm_n01_s0 · lag · act_t43_2s_n01 · W=10 · epochs=1500 ===
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:127: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+    ep     0 | data=5.867e-04 | err_max=201.78% tau=0.605 sat=12.500 alpha=0.080
+    ep    99 | val= 11.41%
+    ep   199 | val=  7.45%
+    ep   250 | data=8.866e-05 | err_max=162.25% tau=3.023 sat=1000.000 alpha=0.001
+    ep   299 | val=  4.83%

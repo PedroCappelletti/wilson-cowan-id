@@ -1,0 +1,26 @@
+=== escalado · e18_asim_e2B_wrm_n05_s0 · B · act_asim_2s_n05 · W=10 · epochs=1500 ===
+    ep     0 | data=3.239e-03 | err_max=171.51% g_rms=0.0000 redund=nan
+    ep    99 | val= 14.44%
+    ep   199 | val= 13.86%
+    ep   250 | data=2.894e-03 | err_max=201.96% g_rms=0.0209 redund=nan
+    ep   299 | val= 15.16%
+    ep   399 | val= 16.55%
+    ep   499 | val= 18.20%
+    ep   500 | data=2.803e-03 | err_max=198.56% g_rms=0.0209 redund=nan
+    ep   599 | val= 21.88%
+    ep   699 | val= 22.62%
+    ep   750 | data=2.685e-03 | err_max=231.74% g_rms=0.0194 redund=nan
+    ep   799 | val= 21.69%
+    ep   899 | val= 24.90%
+    ep   999 | val= 24.04%
+    ep  1000 | data=2.639e-03 | err_max=258.37% g_rms=0.0189 redund=nan
+    ep  1099 | val= 25.21%
+    ep  1199 | val= 24.58%
+    ep  1250 | data=2.699e-03 | err_max=278.73% g_rms=0.0196 redund=nan
+    ep  1299 | val= 24.92%
+    ep  1399 | val= 25.31%
+    ep  1499 | data=2.543e-03 | err_max=301.83% g_rms=0.0246 redund=nan
+    ep  1499 | val= 25.35%
+
+  RESULTADO e18_asim_e2B_wrm_n05_s0: NRMSE_test=13.68% (I=13.62 E=13.74) R2df=-0.025 err_param=58.87% [30.2 min]
+  -> results\escalado\e18_asim_e2B_wrm_n05_s0.json

@@ -96,6 +96,9 @@ def main():
     ap.add_argument("--n-hidden", type=int, default=2)
     ap.add_argument("--init-params", default=None,
                     help="json de una corrida previa: warm-start de los 10 θ")
+    ap.add_argument("--init-model", default=None,
+                    help="checkpoint .pt de una corrida previa con la misma arquitectura: "
+                         "arranca de β y de la red ya entrenados")
     ap.add_argument("--r-init", type=float, default=None,
                     help="valor inicial de r_i, r_e (variante S)")
     ap.add_argument("--hist", type=int, default=0,
@@ -126,6 +129,8 @@ def main():
     if args.freeze_phys and args.variant in ("lag", "latent"):
         ap.error("--freeze-phys no está implementado para el estado aumentado: "
                  "fit_aug siempre entrena β")
+    if args.init_model and (args.init_params or args.variant in ("lag", "latent")):
+        ap.error("--init-model va solo, y no está implementado para el estado aumentado")
     if (args.x0_suave > 1 or args.x0_libre > 0) and args.variant in ("lag", "latent"):
         ap.error("--x0-suave y --x0-libre no están implementados para el estado aumentado")
 
@@ -179,7 +184,7 @@ def main():
                           x0_suave=args.x0_suave, x0_libre=args.x0_libre,
                           val_every=args.val_every)
         warm = None
-        if args.init_params or args.r_init is not None:
+        if args.init_params or args.r_init is not None or args.init_model:
             # warm-start: mismo modelo que build_model pero con los crudos
             # sobreescritos ANTES de entrenar (θ de una corrida previa, r > 0).
             from src.neural_ode.graybox_train import build_model
@@ -187,6 +192,11 @@ def main():
             warm = build_model(cfg)
             if args.init_params:
                 cargar_params(warm, args.init_params)
+            if args.init_model:
+                # Para la segunda etapa con x0 entrenable: si la red arrancara de
+                # cero, los x0 taparían el término que todavía no aprendió.
+                ck0 = torch.load(args.init_model, map_location="cpu", weights_only=False)
+                warm.load_state_dict(ck0["state"])
             if args.r_init is not None and warm.structured:
                 with torch.no_grad():
                     warm.raw_r_i.fill_(args.r_init)
@@ -220,7 +230,8 @@ def main():
         "window": args.window, "epochs": args.epochs, "hist": args.hist, "n_fir": args.n_fir,
         "hidden": args.hidden, "wd_fir": args.wd_fir,
         "smooth": args.smooth, "x0_suave": args.x0_suave, "x0_libre": args.x0_libre,
-        "init_params": args.init_params, "freeze_phys": args.freeze_phys,
+        "init_params": args.init_params, "init_model": args.init_model,
+        "freeze_phys": args.freeze_phys,
         "familia": args.familia,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,

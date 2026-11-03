@@ -1,0 +1,26 @@
+=== escalado · e18_asim_Hp100_wrm_n01_s0 · Hp · act_asim_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=3.157e-03 | err_max=134.01% 
+    ep    99 | val= 17.80%
+    ep   199 | val= 22.67%
+    ep   250 | data=1.064e-03 | err_max=137.24% 
+    ep   299 | val= 12.23%
+    ep   399 | val= 14.18%
+    ep   499 | val= 11.89%
+    ep   500 | data=7.176e-04 | err_max=149.93% 
+    ep   599 | val= 11.51%
+    ep   699 | val= 10.99%
+    ep   750 | data=6.130e-04 | err_max=159.20% 
+    ep   799 | val= 10.46%
+    ep   899 | val= 10.06%
+    ep   999 | val=  9.37%
+    ep  1000 | data=5.423e-04 | err_max=163.86% 
+    ep  1099 | val= 11.55%
+    ep  1199 | val=  9.41%
+    ep  1250 | data=4.988e-04 | err_max=163.89% 
+    ep  1299 | val=  8.97%
+    ep  1399 | val=  9.30%
+    ep  1499 | data=4.706e-04 | err_max=160.49% 
+    ep  1499 | val=  8.83%
+
+  RESULTADO e18_asim_Hp100_wrm_n01_s0: NRMSE_test=9.94% (I=10.55 E=9.34) R2df=-0.033 err_param=61.27% [31.7 min]
+  -> results\escalado\e18_asim_Hp100_wrm_n01_s0.json

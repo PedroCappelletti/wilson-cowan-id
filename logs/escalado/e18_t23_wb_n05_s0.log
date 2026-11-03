@@ -1,0 +1,26 @@
+=== escalado · e18_t23_wb_n05_s0 · whitebox · act_t23_2s_n05 · W=10 · epochs=1500 ===
+    ep     0 | data=9.660e-03 | err_max= 84.86% 
+    ep    99 | val= 19.77%
+    ep   199 | val= 15.15%
+    ep   250 | data=1.492e-03 | err_max=113.81% 
+    ep   299 | val= 10.06%
+    ep   399 | val=  9.93%
+    ep   499 | val=  9.77%
+    ep   500 | data=1.414e-03 | err_max= 91.69% 
+    ep   599 | val=  9.67%
+    ep   699 | val=  9.60%
+    ep   750 | data=1.400e-03 | err_max= 78.47% 
+    ep   799 | val=  9.55%
+    ep   899 | val=  9.52%
+    ep   999 | val=  9.50%
+    ep  1000 | data=1.396e-03 | err_max= 82.93% 
+    ep  1099 | val=  9.48%
+    ep  1199 | val=  9.47%
+    ep  1250 | data=1.395e-03 | err_max= 85.54% 
+    ep  1299 | val=  9.46%
+    ep  1399 | val=  9.45%
+    ep  1499 | data=1.394e-03 | err_max= 87.00% 
+    ep  1499 | val=  9.45%
+
+  RESULTADO e18_t23_wb_n05_s0: NRMSE_test=11.29% (I=11.52 E=11.06) R2df=-0.001 err_param=41.03% [10.8 min]
+  -> results\escalado\e18_t23_wb_n05_s0.json

@@ -1,0 +1,26 @@
+=== escalado · e18_t43_wb_n01_s0 · whitebox · act_t43_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=9.183e-03 | err_max= 84.86% 
+    ep    99 | val= 35.52%
+    ep   199 | val= 30.82%
+    ep   250 | data=2.493e-03 | err_max=165.88% 
+    ep   299 | val= 22.46%
+    ep   399 | val= 21.02%
+    ep   499 | val= 17.28%
+    ep   500 | data=9.774e-04 | err_max=182.66% 
+    ep   599 | val= 17.74%
+    ep   699 | val= 17.92%
+    ep   750 | data=9.269e-04 | err_max=164.72% 
+    ep   799 | val= 17.92%
+    ep   899 | val= 17.91%
+    ep   999 | val= 17.86%
+    ep  1000 | data=9.072e-04 | err_max=179.81% 
+    ep  1099 | val= 17.74%
+    ep  1199 | val= 17.61%
+    ep  1250 | data=8.983e-04 | err_max=191.66% 
+    ep  1299 | val= 17.47%
+    ep  1399 | val= 17.35%
+    ep  1499 | data=8.938e-04 | err_max=200.74% 
+    ep  1499 | val= 17.23%
+
+  RESULTADO e18_t43_wb_n01_s0: NRMSE_test=14.85% (I=15.22 E=14.47) R2df=-0.004 err_param=94.06% [10.8 min]
+  -> results\escalado\e18_t43_wb_n01_s0.json

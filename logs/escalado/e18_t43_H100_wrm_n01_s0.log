@@ -1,0 +1,26 @@
+=== escalado · e18_t43_H100_wrm_n01_s0 · H · act_t43_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=8.938e-04 | err_max=201.77% 
+    ep    99 | val=  9.05%
+    ep   199 | val=  9.58%
+    ep   250 | data=2.590e-04 | err_max=235.08% 
+    ep   299 | val=  8.00%
+    ep   399 | val=  8.23%
+    ep   499 | val=  8.49%
+    ep   500 | data=1.988e-04 | err_max=176.78% 
+    ep   599 | val= 10.48%
+    ep   699 | val=  8.13%
+    ep   750 | data=2.072e-04 | err_max=170.08% 
+    ep   799 | val=  7.84%
+    ep   899 | val=  7.42%
+    ep   999 | val=  7.97%
+    ep  1000 | data=1.449e-04 | err_max=166.79% 
+    ep  1099 | val=  7.51%
+    ep  1199 | val=  7.67%
+    ep  1250 | data=1.371e-04 | err_max=165.40% 
+    ep  1299 | val=  7.36%
+    ep  1399 | val=  8.78%
+    ep  1499 | data=1.334e-04 | err_max=165.60% 
+    ep  1499 | val=  9.16%
+
+  RESULTADO e18_t43_H100_wrm_n01_s0: NRMSE_test=9.73% (I=10.38 E=9.07) R2df=0.090 err_param=71.59% [31.0 min]
+  -> results\escalado\e18_t43_H100_wrm_n01_s0.json

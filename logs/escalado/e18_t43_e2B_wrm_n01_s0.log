@@ -1,0 +1,26 @@
+=== escalado · e18_t43_e2B_wrm_n01_s0 · B · act_t43_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=8.938e-04 | err_max=201.77% g_rms=0.0000 redund=nan
+    ep    99 | val= 13.55%
+    ep   199 | val= 12.33%
+    ep   250 | data=8.464e-04 | err_max=204.13% g_rms=0.0076 redund=nan
+    ep   299 | val= 12.22%
+    ep   399 | val= 12.34%
+    ep   499 | val= 12.79%
+    ep   500 | data=8.436e-04 | err_max=203.30% g_rms=0.0081 redund=nan
+    ep   599 | val= 11.91%
+    ep   699 | val= 12.02%
+    ep   750 | data=8.433e-04 | err_max=201.64% g_rms=0.0086 redund=nan
+    ep   799 | val= 11.69%
+    ep   899 | val= 12.24%
+    ep   999 | val= 12.26%
+    ep  1000 | data=8.350e-04 | err_max=195.95% g_rms=0.0095 redund=nan
+    ep  1099 | val= 11.84%
+    ep  1199 | val= 17.06%
+    ep  1250 | data=8.328e-04 | err_max=190.10% g_rms=0.0102 redund=nan
+    ep  1299 | val= 12.52%
+    ep  1399 | val= 12.65%
+    ep  1499 | data=8.981e-04 | err_max=187.47% g_rms=0.0100 redund=nan
+    ep  1499 | val= 43.05%
+
+  RESULTADO e18_t43_e2B_wrm_n01_s0: NRMSE_test=12.84% (I=13.09 E=12.59) R2df=-0.041 err_param=82.23% [27.7 min]
+  -> results\escalado\e18_t43_e2B_wrm_n01_s0.json
