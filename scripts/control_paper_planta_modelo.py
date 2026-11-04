@@ -121,12 +121,13 @@ class PlantaHistoria:
 
 class PlantaFiltro:
     """LagGrayBox: estado [P̂, Q̂] con dP̂/dt = (P − P̂)/τ̂, y el backbone ve
-    tanh(α P̂)/α."""
+    tanh(α P̂)/α, o P̂ recortado en ±1/α si el modelo es el de la planta con recorte."""
 
     def __init__(self, m):
         self.campo = CampoModelo(m.core)
         ex = m.extras_dict()
         self.tau, self.alpha = ex["tau"], ex["alpha"]
+        self.recorte = ex.get("recorte", False)
 
     def extra0(self):
         return np.zeros(2)
@@ -134,7 +135,10 @@ class PlantaFiltro:
     def __call__(self, I, E, P, Q, extra, t):
         Ph, Qh = extra
         a = self.alpha
-        dI, dE = self.campo(I, E, math.tanh(a * Ph) / a, math.tanh(a * Qh) / a)
+        if self.recorte:
+            dI, dE = self.campo(I, E, min(1 / a, max(-1 / a, Ph)), min(1 / a, max(-1 / a, Qh)))
+        else:
+            dI, dE = self.campo(I, E, math.tanh(a * Ph) / a, math.tanh(a * Qh) / a)
         return dI, dE, ((P - Ph) / self.tau, (Q - Qh) / self.tau)
 
 

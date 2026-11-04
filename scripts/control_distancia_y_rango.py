@@ -16,7 +16,10 @@
 #               la comparación mezcla arquitectura con extrapolación.
 #
 # Plantas: los e16 de control_planta_modelo.json, más la historia pasada (Hp),
-# el filtro entrenable (K400f8) y los e19 con x0 entrenable cuando existen.
+# el filtro entrenable (K400f8) y los e19 con x0 entrenable cuando existen. El
+# actuador con recorte en ±3 (actc) va con sus modelos e21. Se entrenó solo con
+# comandos positivos, así que los negativos que pide el controlador miden
+# extrapolación.
 #
 #   python scripts/control_distancia_y_rango.py [procesos]
 #   python scripts/control_distancia_y_rango.py --probar    (simulador, refs en rango)
@@ -49,6 +52,12 @@ SUBMUESTREO = 10       # se guarda cada 0,05 ms
 
 def modelos(planta, suf, k):
     """(etiqueta, tag) de los modelos de una planta, ruido y semilla."""
+    if planta == "actc":
+        # actuador con recorte en ±3 (e21), sin segunda etapa x0
+        return [(n, f"e21_{c}{suf}_s{k}") for n, c in
+                (("white-box", "e2wb"), ("con red", "H100_wrm"), ("forma exacta", "lag_wrm"),
+                 ("historia pasada", "Hp100_wrm"), ("filtro entrenable", "K400f8_wrm"),
+                 ("agnóstica", "e2B_wrm"))]
     out = [("white-box", f"e16_{WB[planta]}{suf}_s{k}"),
            ("con red", f"e16_{CON_RED[(planta, suf)]}{suf}_s{k}"),
            ("forma exacta", f"e16_{EXACTA[planta]}{suf}_s{k}")]
@@ -67,9 +76,9 @@ def modelos(planta, suf, k):
 def tareas():
     out = []
     for ref in REFS:
-        for planta in ("ideal", "refrac", "act"):
+        for planta in ("ideal", "refrac", "act", "actc"):
             out.append((ref, planta, "simulador", None, "", -1))
-        for planta in ("refrac", "act"):
+        for planta in ("refrac", "act", "actc"):
             for suf in NIVELES:
                 for k in SEMILLAS:
                     for nombre, tag in modelos(planta, suf, k):
@@ -144,7 +153,8 @@ def una(t):
     n_pasos = int(round((t_span[1] - t_span[0]) / DT))
     if tag is None:
         planta = make_perturbed_plant(p, {"ideal": NoPerturbation(), "refrac": Refractoriness(r=0.10),
-                                          "act": Actuator(sat=3.0, tau_act=1.0)}[pert])
+                                          "act": Actuator(sat=3.0, tau_act=1.0),
+                                          "actc": Actuator(sat=3.0, tau_act=1.0, recorte=True)}[pert])
     else:
         planta = planta_de(cargar(RES / "models" / f"{tag}.pt")[0], n_pasos)
     ctrl = IMCController(fixed_de(true), {kk: true[kk] for kk in W}, sat_ref=fixed_de(true))
