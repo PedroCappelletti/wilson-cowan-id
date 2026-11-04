@@ -20,7 +20,7 @@ ES_CONTINUOUS = 0x80000000
 ES_SYSTEM_REQUIRED = 0x00000001
 
 CONTAR = ("(Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | "
-          "Where-Object { $_.CommandLine -match 'esc_run|cola_' }).Count")
+          "Where-Object { $_.CommandLine -match 'esc_run|cola_|control_' }).Count")
 
 
 def corridas_vivas() -> int:
