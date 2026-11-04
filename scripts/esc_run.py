@@ -161,9 +161,13 @@ def main():
           f"· W={args.window} · epochs={args.epochs} ===", flush=True)
 
     if args.variant in ("lag", "latent"):
-        # piso de τ̂ en 0,6·dt para que el RK4 no se vuelva inestable
-        model = (LagGrayBox(tau_min=max(0.15, 0.6 * data["dt"])) if args.variant == "lag"
-                 else LatentGrayBox(n_hidden=args.n_hidden))
+        # piso de τ̂ en 0,6·dt para que el RK4 no se vuelva inestable.
+        # La forma de la saturación sale del dataset: recorte duro si la planta lo tiene.
+        crudo = data["raw"]
+        claves = crudo.files if hasattr(crudo, "files") else crudo.keys()
+        recorte = "pert_forma" in claves and str(crudo["pert_forma"]) == "recorte"
+        model = (LagGrayBox(tau_min=max(0.15, 0.6 * data["dt"]), recorte=recorte)
+                 if args.variant == "lag" else LatentGrayBox(n_hidden=args.n_hidden))
         # El estado aumentado tambien arranca del beta del white-box. fit_aug
         # no congela beta, asi que --freeze-phys no aplica aca.
         if args.init_params:
@@ -173,6 +177,7 @@ def main():
         res = fit_aug(data, model, cfg, val_fn=val_fn)
         ck = {"kind": args.variant, "state": model.state_dict(),
               "tau_min": getattr(model, "tau_min", 0.15),
+              "recorte": getattr(model, "recorte", False),
               "n_hidden": getattr(model, "n_hidden", 0)}
     else:
         cfg = TrainConfig(variant=args.variant, window=args.window,

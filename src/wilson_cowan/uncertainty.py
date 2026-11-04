@@ -190,8 +190,12 @@ class Actuator(Perturbation):
     name = "actuator"
     n_extra = 2
 
-    def __init__(self, sat: float = 3.0, tau_act: float = 1.0, tau_off: float | None = None):
+    def __init__(self, sat: float = 3.0, tau_act: float = 1.0, tau_off: float | None = None,
+                 recorte: bool = False):
         self.sat = float(sat)          # nivel de saturacion (mas chico = satura antes)
+        # Recorte duro en ±sat en vez de sat·tanh(·/sat). La tanh ya comprime por
+        # debajo de sat (2 sale como 1,75); el recorte es lineal hasta el límite.
+        self.recorte = bool(recorte)
         self.tau_act = float(tau_act)  # constante del filtro del canal [ms]
         # Con tau_off, tau_act es la activación y tau_off la desactivación, que
         # en ChR2 es unas diez veces más lenta (Lin et al. 2009; Mattis et al.
@@ -211,12 +215,16 @@ class Actuator(Perturbation):
 
     def inputs(self, t, I, E, extra, P, Q, p):
         A = self.sat
+        if self.recorte:
+            return min(A, max(-A, extra[0])), min(A, max(-A, extra[1]))
         # tanh: saturacion suave. Para |x| << A es casi lineal (no distorsiona);
         # para |x| >> A se aplana en +-A.
         return A * np.tanh(extra[0] / A), A * np.tanh(extra[1] / A)
 
     def metadata(self):
         m = {**super().metadata(), "pert_sat": self.sat, "pert_tau_act": self.tau_act}
+        if self.recorte:
+            m["pert_forma"] = "recorte"
         return m if self.tau_off is None else {**m, "pert_tau_off": self.tau_off}
 
 

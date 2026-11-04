@@ -1,0 +1,26 @@
+=== escalado · e19_Hp100_x0_n01_s2 · Hp · act1_2s_n01_s2 · W=10 · epochs=1500 ===
+    ep     0 | data=7.640e-05 | err_max= 72.53% 
+    ep    99 | val=  3.88%
+    ep   199 | val=  3.37%
+    ep   250 | data=4.442e-05 | err_max= 66.49% 
+    ep   299 | val=  3.37%
+    ep   399 | val=  3.40%
+    ep   499 | val=  3.74%
+    ep   500 | data=5.809e-05 | err_max= 66.60% 
+    ep   599 | val=  3.33%
+    ep   699 | val=  3.30%
+    ep   750 | data=3.922e-05 | err_max= 67.21% 
+    ep   799 | val=  3.32%
+    ep   899 | val=  3.32%
+    ep   999 | val=  3.29%
+    ep  1000 | data=3.779e-05 | err_max= 66.22% 
+    ep  1099 | val=  3.18%
+    ep  1199 | val=  3.24%
+    ep  1250 | data=3.797e-05 | err_max= 66.12% 
+    ep  1299 | val=  3.21%
+    ep  1399 | val=  3.21%
+    ep  1499 | data=3.681e-05 | err_max= 65.24% 
+    ep  1499 | val=  3.26%
+
+  RESULTADO e19_Hp100_x0_n01_s2: NRMSE_test=5.76% (I=6.31 E=5.22) R2df=-0.374 err_param=27.85% [40.9 min]
+  -> results\escalado\e19_Hp100_x0_n01_s2.json

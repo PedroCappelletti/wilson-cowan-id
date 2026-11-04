@@ -58,8 +58,12 @@ class LagGrayBox(nn.Module):
     n_hidden = 2
 
     def __init__(self, init_value: float = 1.0, tau_init: float = 0.3,
-                 hidden: int = 32, tau_min: float = 0.15):
+                 hidden: int = 32, tau_min: float = 0.15, recorte: bool = False):
         super().__init__()
+        # Forma exacta para la planta con recorte duro: clamp(u, ±1/α) en lugar
+        # de tanh(α·u)/α. Si los datos no pasan de 1/α, α no recibe gradiente y
+        # queda en su valor inicial.
+        self.recorte = bool(recorte)
         init = {k: init_value for k in ALL_P}
         self.core = GrayBoxWC(init, {k: init_value for k in WEIGHTS},
                               learnable_weights=True, learnable_params=True,
@@ -81,6 +85,8 @@ class LagGrayBox(nn.Module):
 
     def _eff(self, u: torch.Tensor) -> torch.Tensor:
         alpha = torch.clamp(self.raw_alpha, 1e-3, 10.0)
+        if self.recorte:
+            return torch.maximum(torch.minimum(u, 1.0 / alpha), -1.0 / alpha)
         return torch.tanh(alpha * u) / alpha
 
     def h0(self, x0: torch.Tensor, P0: torch.Tensor, Q0: torch.Tensor) -> torch.Tensor:
@@ -125,7 +131,8 @@ class LagGrayBox(nn.Module):
 
     def extras_dict(self) -> dict:
         alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
-        return {"tau": float(self.tau()), "sat": 1.0 / alpha, "alpha": alpha}
+        return {"tau": float(self.tau()), "sat": 1.0 / alpha, "alpha": alpha,
+                "recorte": self.recorte}
 
 
 class LatentGrayBox(nn.Module):

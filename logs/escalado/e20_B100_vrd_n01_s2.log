@@ -1,0 +1,26 @@
+=== escalado · e20_B100_vrd_n01_s2 · B · refrac1_2s_n01_s2 · W=10 · epochs=1500 ===
+    ep     0 | data=4.359e-04 | err_max=  0.00% g_rms=0.0000 redund=nan
+    ep    99 | val=  2.41%
+    ep   199 | val=  2.37%
+    ep   250 | data=4.921e-05 | err_max=  0.00% g_rms=0.0103 redund=nan
+    ep   299 | val=  2.22%
+    ep   399 | val=  2.04%
+    ep   499 | val=  2.01%
+    ep   500 | data=2.405e-05 | err_max=  0.00% g_rms=0.0102 redund=nan
+    ep   599 | val=  1.98%
+    ep   699 | val=  1.97%
+    ep   750 | data=2.300e-05 | err_max=  0.00% g_rms=0.0100 redund=nan
+    ep   799 | val=  1.96%
+    ep   899 | val=  2.46%
+    ep   999 | val=  1.94%
+    ep  1000 | data=2.178e-05 | err_max=  0.00% g_rms=0.0102 redund=nan
+    ep  1099 | val=  1.92%
+    ep  1199 | val=  1.93%
+    ep  1250 | data=2.109e-05 | err_max=  0.00% g_rms=0.0102 redund=nan
+    ep  1299 | val=  1.91%
+    ep  1399 | val=  2.14%
+    ep  1499 | data=2.064e-05 | err_max=  0.00% g_rms=0.0102 redund=nan
+    ep  1499 | val=  1.89%
+
+  RESULTADO e20_B100_vrd_n01_s2: NRMSE_test=4.29% (I=5.02 E=3.56) R2df=0.949 err_param=0.00% [34.7 min]
+  -> results\escalado\e20_B100_vrd_n01_s2.json

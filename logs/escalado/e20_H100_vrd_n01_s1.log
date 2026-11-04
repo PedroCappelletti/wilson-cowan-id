@@ -1,0 +1,26 @@
+=== escalado · e20_H100_vrd_n01_s1 · H · act1_2s_n01_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=1.952e-03 | err_max=  0.00% 
+    ep    99 | val=  5.70%
+    ep   199 | val=  5.53%
+    ep   250 | data=2.351e-04 | err_max=  0.00% 
+    ep   299 | val=  5.61%
+    ep   399 | val=  6.76%
+    ep   499 | val=  5.26%
+    ep   500 | data=1.682e-04 | err_max=  0.00% 
+    ep   599 | val=  5.08%
+    ep   699 | val=  4.63%
+    ep   750 | data=1.532e-04 | err_max=  0.00% 
+    ep   799 | val=  4.58%
+    ep   899 | val=  4.53%
+    ep   999 | val=  4.65%
+    ep  1000 | data=1.087e-04 | err_max=  0.00% 
+    ep  1099 | val=  4.77%
+    ep  1199 | val=  4.52%
+    ep  1250 | data=1.066e-04 | err_max=  0.00% 
+    ep  1299 | val=  5.11%
+    ep  1399 | val=  4.38%
+    ep  1499 | data=1.736e-04 | err_max=  0.00% 
+    ep  1499 | val=  5.83%
+
+  RESULTADO e20_H100_vrd_n01_s1: NRMSE_test=7.19% (I=7.51 E=6.86) R2df=0.837 err_param=0.00% [27.6 min]
+  -> results\escalado\e20_H100_vrd_n01_s1.json

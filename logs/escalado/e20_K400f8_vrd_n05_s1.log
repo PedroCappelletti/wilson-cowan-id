@@ -1,0 +1,26 @@
+=== escalado · e20_K400f8_vrd_n05_s1 · K · act1_2s_n05_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=2.441e-03 | err_max=  0.00% 
+    ep    99 | val=  6.56%
+    ep   199 | val=  6.65%
+    ep   250 | data=7.150e-04 | err_max=  0.00% 
+    ep   299 | val=  6.97%
+    ep   399 | val=  6.45%
+    ep   499 | val=  6.99%
+    ep   500 | data=6.919e-04 | err_max=  0.00% 
+    ep   599 | val=  6.40%
+    ep   699 | val=  6.42%
+    ep   750 | data=7.501e-04 | err_max=  0.00% 
+    ep   799 | val=  8.63%
+    ep   899 | val=  6.44%
+    ep   999 | val=  6.74%
+    ep  1000 | data=6.848e-04 | err_max=  0.00% 
+    ep  1099 | val=  6.71%
+    ep  1199 | val=  6.45%
+    ep  1250 | data=6.004e-04 | err_max=  0.00% 
+    ep  1299 | val=  6.10%
+    ep  1399 | val=  6.29%
+    ep  1499 | data=5.708e-04 | err_max=  0.00% 
+    ep  1499 | val=  5.97%
+
+  RESULTADO e20_K400f8_vrd_n05_s1: NRMSE_test=8.99% (I=9.38 E=8.60) R2df=0.732 err_param=0.00% [40.1 min]
+  -> results\escalado\e20_K400f8_vrd_n05_s1.json

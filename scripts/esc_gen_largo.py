@@ -18,7 +18,7 @@
 # un láser comandado a 2 kHz y como lo integra el modelo. La planta integra con
 # 10 subpasos por muestra (0,05 ms), la misma resolución de antes.
 #
-# Archivos: refrac1_2s, act1_2s, wc0_2s. Ruido con esc_gen_ruido.py --ref-fs.
+# Archivos: refrac1_2s, act1_2s, actc1_2s, wc0_2s. Ruido con esc_gen_ruido.py --ref-fs.
 #
 # USO:  python scripts/esc_gen_largo.py
 
@@ -52,6 +52,8 @@ def main():
     plantas = [("wc0_2s", NoPerturbation, {"eps": 0.0}),
                ("refrac1_2s", lambda: Refractoriness(r=0.10), {"eps": 1.0}),
                ("act1_2s", lambda: Actuator(sat=3.0, tau_act=1.0), {"eps": 1.0}),
+               # El mismo actuador con recorte duro en ±3 en lugar de la tanh.
+               ("actc1_2s", lambda: Actuator(sat=3.0, tau_act=1.0, recorte=True), {"eps": 1.0}),
                # Línea realista: misma saturación, cinética de ChR2. 2,3 y 4,3 ms
                # son los equivalentes del ancho de banda de ChR2 (69 Hz) y de
                # H134R (37 Hz), Tchumatchenko et al. 2013; la asimétrica toma

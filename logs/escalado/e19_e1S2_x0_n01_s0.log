@@ -1,0 +1,26 @@
+=== escalado · e19_e1S2_x0_n01_s0 · S · refrac1_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=1.746e-05 | err_max= 17.62% 
+    ep    99 | val=  1.72%
+    ep   199 | val=  1.72%
+    ep   250 | data=9.901e-06 | err_max= 20.97% 
+    ep   299 | val=  1.72%
+    ep   399 | val=  1.72%
+    ep   499 | val=  1.72%
+    ep   500 | data=9.899e-06 | err_max= 21.70% 
+    ep   599 | val=  1.72%
+    ep   699 | val=  1.72%
+    ep   750 | data=9.898e-06 | err_max= 22.27% 
+    ep   799 | val=  1.72%
+    ep   899 | val=  1.72%
+    ep   999 | val=  1.72%
+    ep  1000 | data=9.897e-06 | err_max= 22.64% 
+    ep  1099 | val=  1.72%
+    ep  1199 | val=  1.73%
+    ep  1250 | data=9.902e-06 | err_max= 22.74% 
+    ep  1299 | val=  1.72%
+    ep  1399 | val=  1.73%
+    ep  1499 | data=1.023e-05 | err_max= 22.89% 
+    ep  1499 | val=  1.72%
+
+  RESULTADO e19_e1S2_x0_n01_s0: NRMSE_test=2.92% (I=3.73 E=2.11) R2df=0.968 err_param=3.00% [17.3 min]
+  -> results\escalado\e19_e1S2_x0_n01_s0.json

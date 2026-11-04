@@ -1,0 +1,26 @@
+=== escalado · e19_B100_x0_n05_s1 · B · refrac1_2s_n05_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=4.026e-04 | err_max= 16.92% g_rms=0.0115 redund=nan
+    ep    99 | val=  4.71%
+    ep   199 | val=  4.62%
+    ep   250 | data=2.428e-04 | err_max= 14.15% g_rms=0.0118 redund=nan
+    ep   299 | val=  4.60%
+    ep   399 | val=  4.59%
+    ep   499 | val=  4.59%
+    ep   500 | data=2.419e-04 | err_max= 11.90% g_rms=0.0125 redund=nan
+    ep   599 | val=  4.59%
+    ep   699 | val=  4.59%
+    ep   750 | data=2.416e-04 | err_max= 12.20% g_rms=0.0123 redund=nan
+    ep   799 | val=  4.59%
+    ep   899 | val=  4.59%
+    ep   999 | val=  4.59%
+    ep  1000 | data=2.413e-04 | err_max= 12.22% g_rms=0.0122 redund=nan
+    ep  1099 | val=  4.58%
+    ep  1199 | val=  4.58%
+    ep  1250 | data=2.413e-04 | err_max= 11.88% g_rms=0.0118 redund=nan
+    ep  1299 | val=  4.58%
+    ep  1399 | val=  4.58%
+    ep  1499 | data=2.416e-04 | err_max= 13.30% g_rms=0.0117 redund=nan
+    ep  1499 | val=  4.58%
+
+  RESULTADO e19_B100_x0_n05_s1: NRMSE_test=6.87% (I=8.06 E=5.68) R2df=0.685 err_param=5.37% [21.5 min]
+  -> results\escalado\e19_B100_x0_n05_s1.json

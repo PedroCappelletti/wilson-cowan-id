@@ -1,0 +1,26 @@
+=== escalado · e19_e2wb_x0_n01_s1 · whitebox · act1_2s_n01_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=5.181e-04 | err_max= 64.60% 
+    ep    99 | val=  6.94%
+    ep   199 | val=  7.11%
+    ep   250 | data=1.655e-04 | err_max= 80.12% 
+    ep   299 | val=  7.24%
+    ep   399 | val=  7.31%
+    ep   499 | val=  7.30%
+    ep   500 | data=1.599e-04 | err_max=101.07% 
+    ep   599 | val=  7.30%
+    ep   699 | val=  7.29%
+    ep   750 | data=1.557e-04 | err_max=117.44% 
+    ep   799 | val=  7.22%
+    ep   899 | val=  7.25%
+    ep   999 | val=  7.25%
+    ep  1000 | data=1.529e-04 | err_max=127.86% 
+    ep  1099 | val=  7.17%
+    ep  1199 | val=  7.22%
+    ep  1250 | data=1.511e-04 | err_max=135.73% 
+    ep  1299 | val=  7.17%
+    ep  1399 | val=  7.17%
+    ep  1499 | data=1.495e-04 | err_max=141.36% 
+    ep  1499 | val=  7.18%
+
+  RESULTADO e19_e2wb_x0_n01_s1: NRMSE_test=9.49% (I=9.28 E=9.71) R2df=-0.000 err_param=25.04% [12.0 min]
+  -> results\escalado\e19_e2wb_x0_n01_s1.json

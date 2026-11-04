@@ -1,0 +1,26 @@
+=== escalado · e19_H100_W40_n01_s0 · H · act1_2s_n01 · W=40 · epochs=1500 ===
+    ep     0 | data=1.173e-02 | err_max= 84.86% 
+    ep    99 | val= 12.41%
+    ep   199 | val= 12.61%
+    ep   250 | data=1.060e-03 | err_max= 85.38% 
+    ep   299 | val=  8.49%
+    ep   399 | val=  7.57%
+    ep   499 | val=  6.69%
+    ep   500 | data=6.133e-04 | err_max= 94.51% 
+    ep   599 | val=  6.31%
+    ep   699 | val=  5.93%
+    ep   750 | data=4.435e-04 | err_max= 95.89% 
+    ep   799 | val=  5.31%
+    ep   899 | val=  4.59%
+    ep   999 | val=  4.31%
+    ep  1000 | data=2.837e-04 | err_max= 95.84% 
+    ep  1099 | val=  4.40%
+    ep  1199 | val=  5.00%
+    ep  1250 | data=2.452e-04 | err_max= 95.21% 
+    ep  1299 | val=  4.22%
+    ep  1399 | val=  4.32%
+    ep  1499 | data=2.067e-04 | err_max= 94.12% 
+    ep  1499 | val=  4.00%
+
+  RESULTADO e19_H100_W40_n01_s0: NRMSE_test=5.65% (I=6.32 E=4.99) R2df=0.321 err_param=23.45% [49.1 min]
+  -> results\escalado\e19_H100_W40_n01_s0.json
