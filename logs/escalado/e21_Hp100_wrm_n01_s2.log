@@ -1,0 +1,26 @@
+=== escalado · e21_Hp100_wrm_n01_s2 · Hp · actc1_2s_n01_s2 · W=10 · epochs=1500 ===
+    ep     0 | data=6.248e-04 | err_max= 56.39% 
+    ep    99 | val=  6.05%
+    ep   199 | val=  5.53%
+    ep   250 | data=1.929e-04 | err_max= 52.38% 
+    ep   299 | val=  4.80%
+    ep   399 | val=  4.28%
+    ep   499 | val=  4.00%
+    ep   500 | data=1.443e-04 | err_max= 54.17% 
+    ep   599 | val=  3.92%
+    ep   699 | val=  3.78%
+    ep   750 | data=1.066e-04 | err_max= 65.39% 
+    ep   799 | val=  6.16%
+    ep   899 | val=  3.50%
+    ep   999 | val=  3.51%
+    ep  1000 | data=9.481e-05 | err_max= 72.92% 
+    ep  1099 | val=  3.41%
+    ep  1199 | val=  3.40%
+    ep  1250 | data=8.322e-05 | err_max= 80.77% 
+    ep  1299 | val=  4.18%
+    ep  1399 | val=  3.22%
+    ep  1499 | data=8.054e-05 | err_max= 81.87% 
+    ep  1499 | val=  3.87%
+
+  RESULTADO e21_Hp100_wrm_n01_s2: NRMSE_test=6.16% (I=6.46 E=5.86) R2df=-0.667 err_param=27.31% [35.9 min]
+  -> results\escalado\e21_Hp100_wrm_n01_s2.json

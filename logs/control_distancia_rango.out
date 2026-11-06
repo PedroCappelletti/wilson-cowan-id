@@ -1,0 +1,531 @@
+520 simulaciones, 3 procesos
+  theta2s     ideal  simulador                    s-1  RMSE 0.0382  en rango 18%
+  theta2s     refrac simulador                    s-1  RMSE 0.0386  en rango 18%
+  theta2s     act    simulador                    s-1  RMSE 0.0599  en rango 21%
+  theta2s     refrac white-box              _n01  s 0  RMSE 0.0401  en rango 15%
+  theta2s     actc   simulador                    s-1  RMSE 0.0570  en rango 20%
+  theta2s     refrac forma exacta           _n01  s 0  RMSE 0.0388  en rango 18%
+  theta2s     refrac con red                _n01  s 0  RMSE 0.0388  en rango 14%
+  theta2s     refrac white-box x0           _n01  s 0  RMSE 0.0400  en rango 13%
+  theta2s     refrac forma exacta x0        _n01  s 0  RMSE 0.0388  en rango 18%
+  theta2s     refrac white-box              _n01  s 1  RMSE 0.0401  en rango 13%
+  theta2s     refrac agnóstica x0           _n01  s 0  RMSE 0.0388  en rango 14%
+  theta2s     refrac forma exacta           _n01  s 1  RMSE 0.0388  en rango 18%
+  theta2s     refrac white-box x0           _n01  s 1  RMSE 0.0400  en rango 13%
+  theta2s     refrac con red                _n01  s 1  RMSE 0.0387  en rango 14%
+  theta2s     refrac forma exacta x0        _n01  s 1  RMSE 0.0388  en rango 18%
+  theta2s     refrac white-box              _n01  s 2  RMSE 0.0400  en rango 13%
+  theta2s     refrac agnóstica x0           _n01  s 1  RMSE 0.0387  en rango 14%
+  theta2s     refrac forma exacta           _n01  s 2  RMSE 0.0388  en rango 18%
+  theta2s     refrac white-box x0           _n01  s 2  RMSE 0.0399  en rango 13%
+  theta2s     refrac con red                _n01  s 2  RMSE 0.0388  en rango 14%
+  theta2s     refrac forma exacta x0        _n01  s 2  RMSE 0.0388  en rango 18%
+  theta2s     refrac white-box              _n05  s 0  RMSE 0.0389  en rango 17%
+  theta2s     refrac agnóstica x0           _n01  s 2  RMSE 0.0387  en rango 14%
+  theta2s     refrac forma exacta           _n05  s 0  RMSE 0.0374  en rango 21%
+  theta2s     refrac white-box x0           _n05  s 0  RMSE 0.0394  en rango 13%
+  theta2s     refrac con red                _n05  s 0  RMSE 0.0385  en rango 14%
+  theta2s     refrac forma exacta x0        _n05  s 0  RMSE 0.0389  en rango 18%
+  theta2s     refrac white-box              _n05  s 1  RMSE 0.0389  en rango 18%
+  theta2s     refrac agnóstica x0           _n05  s 0  RMSE 0.0392  en rango 14%
+  theta2s     refrac forma exacta           _n05  s 1  RMSE 0.0388  en rango 17%
+  theta2s     refrac white-box x0           _n05  s 1  RMSE 0.0394  en rango 14%
+  theta2s     refrac con red                _n05  s 1  RMSE 0.0385  en rango 14%
+  theta2s     refrac forma exacta x0        _n05  s 1  RMSE 0.0390  en rango 18%
+  theta2s     refrac white-box              _n05  s 2  RMSE 0.0387  en rango 17%
+  theta2s     refrac agnóstica x0           _n05  s 1  RMSE 0.0392  en rango 14%
+  theta2s     refrac forma exacta           _n05  s 2  RMSE 0.0387  en rango 20%
+  theta2s     refrac white-box x0           _n05  s 2  RMSE 0.0394  en rango 13%
+  theta2s     refrac con red                _n05  s 2  RMSE 0.0384  en rango 65%
+  theta2s     refrac forma exacta x0        _n05  s 2  RMSE 0.0390  en rango 18%
+  theta2s     act    white-box              _n01  s 0  RMSE 0.0451  en rango 13%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     refrac agnóstica x0           _n05  s 2  RMSE 0.0391  en rango 14%
+  theta2s     act    forma exacta           _n01  s 0  RMSE 0.0559  en rango 22%
+  theta2s     act    con red                _n01  s 0  RMSE 0.1383  en rango 7%
+  theta2s     act    historia pasada        _n01  s 0  RMSE 0.0605  en rango 7%
+  theta2s     act    white-box x0           _n01  s 0  RMSE 0.0450  en rango 13%
+  theta2s     act    filtro entrenable      _n01  s 0  RMSE 0.0998  en rango 4%
+  theta2s     act    historia 5 ms x0       _n01  s 0  RMSE 0.1374  en rango 8%
+  theta2s     act    historia pasada x0     _n01  s 0  RMSE 0.0530  en rango 12%
+  theta2s     act    white-box              _n01  s 1  RMSE 0.0450  en rango 13%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     act    forma exacta           _n01  s 1  RMSE 0.0557  en rango 21%
+  theta2s     act    con red                _n01  s 1  RMSE 0.1190  en rango 5%
+  theta2s     act    filtro entrenable x0   _n01  s 0  RMSE 0.0883  en rango 5%
+  theta2s     act    white-box x0           _n01  s 1  RMSE 0.0450  en rango 13%
+  theta2s     act    historia pasada        _n01  s 1  RMSE 0.0591  en rango 5%
+  theta2s     act    filtro entrenable      _n01  s 1  RMSE 0.1625  en rango 4%
+  theta2s     act    historia 5 ms x0       _n01  s 1  RMSE 0.1136  en rango 8%
+  theta2s     act    historia pasada x0     _n01  s 1  RMSE 0.0554  en rango 7%
+  theta2s     act    white-box              _n01  s 2  RMSE 0.0448  en rango 13%
+  theta2s     act    forma exacta           _n01  s 2  RMSE 0.0551  en rango 22%
+  theta2s     act    con red                _n01  s 2  RMSE 0.1096  en rango 6%
+  theta2s     act    filtro entrenable x0   _n01  s 1  RMSE 0.1445  en rango 4%
+  theta2s     act    white-box x0           _n01  s 2  RMSE 0.0448  en rango 13%
+  theta2s     act    historia pasada        _n01  s 2  RMSE 0.0633  en rango 4%
+  theta2s     act    historia 5 ms x0       _n01  s 2  RMSE 0.1127  en rango 8%
+  theta2s     act    filtro entrenable      _n01  s 2  RMSE 0.1534  en rango 5%
+  theta2s     act    historia pasada x0     _n01  s 2  RMSE 0.0563  en rango 6%
+  theta2s     act    white-box              _n05  s 0  RMSE 0.0430  en rango 17%
+  theta2s     act    forma exacta           _n05  s 0  RMSE 0.0546  en rango 20%
+  theta2s     act    con red                _n05  s 0  RMSE 0.1505  en rango 6%
+  theta2s     act    filtro entrenable x0   _n01  s 2  RMSE 0.1113  en rango 6%
+  theta2s     act    white-box x0           _n05  s 0  RMSE 0.0435  en rango 16%
+  theta2s     act    historia pasada        _n05  s 0  RMSE 0.0663  en rango 2%
+  theta2s     act    filtro entrenable      _n05  s 0  RMSE 0.1380  en rango 4%
+  theta2s     act    historia 5 ms x0       _n05  s 0  RMSE 0.1535  en rango 7%
+  theta2s     act    historia pasada x0     _n05  s 0  RMSE 0.0569  en rango 6%
+  theta2s     act    white-box              _n05  s 1  RMSE 0.0432  en rango 17%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     act    forma exacta           _n05  s 1  RMSE 0.0544  en rango 20%
+  theta2s     act    con red                _n05  s 1  RMSE 0.1125  en rango 6%
+  theta2s     act    filtro entrenable x0   _n05  s 0  RMSE 0.1347  en rango 5%
+  theta2s     act    white-box x0           _n05  s 1  RMSE 0.0436  en rango 16%
+  theta2s     act    historia pasada        _n05  s 1  RMSE 0.0728  en rango 2%
+  theta2s     act    filtro entrenable      _n05  s 1  RMSE 0.1553  en rango 4%
+  theta2s     act    historia 5 ms x0       _n05  s 1  RMSE 0.1188  en rango 7%
+  theta2s     act    historia pasada x0     _n05  s 1  RMSE 0.0593  en rango 5%
+  theta2s     act    white-box              _n05  s 2  RMSE 0.0428  en rango 17%
+  theta2s     act    forma exacta           _n05  s 2  RMSE 0.0544  en rango 20%
+  theta2s     act    con red                _n05  s 2  RMSE 0.1379  en rango 5%
+  theta2s     act    filtro entrenable x0   _n05  s 1  RMSE 0.1390  en rango 6%
+  theta2s     act    white-box x0           _n05  s 2  RMSE 0.0434  en rango 16%
+  theta2s     act    historia pasada        _n05  s 2  RMSE 0.0726  en rango 5%
+  theta2s     act    filtro entrenable      _n05  s 2  RMSE 0.1336  en rango 3%
+  theta2s     act    historia 5 ms x0       _n05  s 2  RMSE 0.1314  en rango 5%
+  theta2s     act    historia pasada x0     _n05  s 2  RMSE 0.0580  en rango 7%
+  theta2s     actc   white-box              _n01  s 0  RMSE 0.0449  en rango 14%
+  theta2s     actc   forma exacta           _n01  s 0  RMSE 0.0557  en rango 20%
+  theta2s     actc   con red                _n01  s 0  RMSE 0.1478  en rango 7%
+  theta2s     act    filtro entrenable x0   _n05  s 2  RMSE 0.1327  en rango 8%
+  theta2s     actc   historia pasada        _n01  s 0  RMSE 0.0647  en rango 3%
+  theta2s     actc   agnóstica              _n01  s 0  RMSE 0.0438  en rango 12%
+  theta2s     actc   white-box              _n01  s 1  RMSE 0.0449  en rango 14%
+  theta2s     actc   forma exacta           _n01  s 1  RMSE 0.0557  en rango 20%
+  theta2s     actc   filtro entrenable      _n01  s 0  RMSE 0.1932  en rango 4%
+  theta2s     actc   con red                _n01  s 1  RMSE 0.1164  en rango 7%
+  theta2s     actc   historia pasada        _n01  s 1  RMSE 0.0640  en rango 4%
+  theta2s     actc   agnóstica              _n01  s 1  RMSE 0.0442  en rango 13%
+  theta2s     actc   white-box              _n01  s 2  RMSE 0.0447  en rango 14%
+  theta2s     actc   filtro entrenable      _n01  s 1  RMSE 0.1695  en rango 4%
+  theta2s     actc   forma exacta           _n01  s 2  RMSE 0.0559  en rango 20%
+  theta2s     actc   con red                _n01  s 2  RMSE 0.1369  en rango 7%
+  theta2s     actc   historia pasada        _n01  s 2  RMSE 0.0706  en rango 2%
+  theta2s     actc   agnóstica              _n01  s 2  RMSE 0.0436  en rango 13%
+  theta2s     actc   white-box              _n05  s 0  RMSE 0.0432  en rango 23%
+  theta2s     actc   filtro entrenable      _n01  s 2  RMSE 0.1734  en rango 5%
+  theta2s     actc   forma exacta           _n05  s 0  RMSE 0.0549  en rango 19%
+  theta2s     actc   con red                _n05  s 0  RMSE 0.1525  en rango 4%
+  theta2s     actc   historia pasada        _n05  s 0  RMSE 0.0615  en rango 18%
+  theta2s     actc   agnóstica              _n05  s 0  RMSE 0.0419  en rango 13%
+  theta2s     actc   white-box              _n05  s 1  RMSE 0.0431  en rango 30%
+  theta2s     actc   filtro entrenable      _n05  s 0  RMSE 0.1456  en rango 5%
+  theta2s     actc   forma exacta           _n05  s 1  RMSE 0.0561  en rango 18%
+  theta2s     actc   con red                _n05  s 1  RMSE 0.1007  en rango 6%
+  theta2s     actc   historia pasada        _n05  s 1  RMSE 0.0710  en rango 4%
+  theta2s     actc   agnóstica              _n05  s 1  RMSE 0.0417  en rango 14%
+  theta2s     actc   white-box              _n05  s 2  RMSE 0.0425  en rango 32%
+  theta2s     actc   filtro entrenable      _n05  s 1  RMSE 0.1647  en rango 4%
+  theta2s     actc   forma exacta           _n05  s 2  RMSE 0.0566  en rango 18%
+  theta2s     actc   con red                _n05  s 2  RMSE 0.1342  en rango 5%
+  theta2s     actc   historia pasada        _n05  s 2  RMSE 0.0819  en rango 2%
+  gamma50     ideal  simulador                    s-1  RMSE 0.0324  en rango 59%
+  gamma50     refrac simulador                    s-1  RMSE 0.0339  en rango 59%
+  gamma50     act    simulador                    s-1  RMSE 0.0692  en rango 4%
+  gamma50     actc   simulador                    s-1  RMSE 0.0676  en rango 4%
+  gamma50     refrac white-box              _n01  s 0  RMSE 0.0348  en rango 59%
+  gamma50     refrac con red                _n01  s 0  RMSE 0.0334  en rango 60%
+  gamma50     refrac forma exacta           _n01  s 0  RMSE 0.0340  en rango 59%
+  gamma50     refrac white-box x0           _n01  s 0  RMSE 0.0355  en rango 59%
+  gamma50     refrac agnóstica x0           _n01  s 0  RMSE 0.0336  en rango 60%
+  gamma50     refrac forma exacta x0        _n01  s 0  RMSE 0.0343  en rango 59%
+  gamma50     refrac white-box              _n01  s 1  RMSE 0.0349  en rango 59%
+  gamma50     refrac con red                _n01  s 1  RMSE 0.0335  en rango 60%
+  gamma50     refrac forma exacta           _n01  s 1  RMSE 0.0341  en rango 59%
+  gamma50     refrac white-box x0           _n01  s 1  RMSE 0.0355  en rango 59%
+  gamma50     refrac agnóstica x0           _n01  s 1  RMSE 0.0335  en rango 60%
+  gamma50     refrac forma exacta x0        _n01  s 1  RMSE 0.0343  en rango 59%
+  gamma50     refrac white-box              _n01  s 2  RMSE 0.0348  en rango 59%
+  gamma50     refrac con red                _n01  s 2  RMSE 0.0335  en rango 60%
+  theta2s     actc   agnóstica              _n05  s 2  RMSE 0.0411  en rango 14%
+  gamma50     refrac forma exacta           _n01  s 2  RMSE 0.0341  en rango 59%
+  gamma50     refrac white-box x0           _n01  s 2  RMSE 0.0355  en rango 59%
+  gamma50     refrac forma exacta x0        _n01  s 2  RMSE 0.0343  en rango 59%
+  gamma50     refrac agnóstica x0           _n01  s 2  RMSE 0.0335  en rango 60%
+  gamma50     refrac white-box              _n05  s 0  RMSE 0.0314  en rango 63%
+  gamma50     refrac forma exacta           _n05  s 0  RMSE 0.0303  en rango 64%
+  gamma50     refrac con red                _n05  s 0  RMSE 0.0325  en rango 61%
+  gamma50     refrac white-box x0           _n05  s 0  RMSE 0.0350  en rango 59%
+  gamma50     refrac forma exacta x0        _n05  s 0  RMSE 0.0342  en rango 59%
+  gamma50     refrac agnóstica x0           _n05  s 0  RMSE 0.0333  en rango 60%
+  gamma50     refrac white-box              _n05  s 1  RMSE 0.0318  en rango 63%
+  gamma50     refrac forma exacta           _n05  s 1  RMSE 0.0320  en rango 62%
+  gamma50     refrac con red                _n05  s 1  RMSE 0.0328  en rango 61%
+  gamma50     refrac white-box x0           _n05  s 1  RMSE 0.0350  en rango 59%
+  gamma50     refrac forma exacta x0        _n05  s 1  RMSE 0.0346  en rango 59%
+  gamma50     refrac agnóstica x0           _n05  s 1  RMSE 0.0334  en rango 60%
+  gamma50     refrac white-box              _n05  s 2  RMSE 0.0314  en rango 63%
+  gamma50     refrac forma exacta           _n05  s 2  RMSE 0.0317  en rango 62%
+  gamma50     refrac con red                _n05  s 2  RMSE 0.0327  en rango 61%
+  gamma50     refrac white-box x0           _n05  s 2  RMSE 0.0350  en rango 59%
+  gamma50     refrac forma exacta x0        _n05  s 2  RMSE 0.0345  en rango 59%
+  gamma50     refrac agnóstica x0           _n05  s 2  RMSE 0.0334  en rango 60%
+  gamma50     act    white-box              _n01  s 0  RMSE 0.0391  en rango 52%
+  gamma50     act    forma exacta           _n01  s 0  RMSE 0.0606  en rango 5%
+  gamma50     act    con red                _n01  s 0  RMSE 0.0533  en rango 43%
+  gamma50     act    historia pasada        _n01  s 0  RMSE 0.0549  en rango 29%
+  gamma50     act    white-box x0           _n01  s 0  RMSE 0.0393  en rango 53%
+  gamma50     act    filtro entrenable      _n01  s 0  RMSE 0.0502  en rango 42%
+  gamma50     act    historia 5 ms x0       _n01  s 0  RMSE 0.0528  en rango 42%
+  gamma50     act    historia pasada x0     _n01  s 0  RMSE 0.0479  en rango 48%
+  gamma50     act    white-box              _n01  s 1  RMSE 0.0388  en rango 53%
+  gamma50     act    filtro entrenable x0   _n01  s 0  RMSE 0.0560  en rango 34%
+  gamma50     act    forma exacta           _n01  s 1  RMSE 0.0607  en rango 5%
+  gamma50     act    con red                _n01  s 1  RMSE 0.0520  en rango 41%
+  theta2s     actc   filtro entrenable      _n05  s 2  RMSE 0.1620  en rango 5%
+  gamma50     act    historia pasada        _n01  s 1  RMSE 0.0530  en rango 31%
+  gamma50     act    white-box x0           _n01  s 1  RMSE 0.0391  en rango 53%
+  gamma50     act    filtro entrenable      _n01  s 1  RMSE 0.0511  en rango 41%
+  gamma50     act    historia 5 ms x0       _n01  s 1  RMSE 0.0509  en rango 49%
+  gamma50     act    historia pasada x0     _n01  s 1  RMSE 0.0493  en rango 37%
+  gamma50     act    white-box              _n01  s 2  RMSE 0.0384  en rango 53%
+  gamma50     act    forma exacta           _n01  s 2  RMSE 0.0584  en rango 5%
+  gamma50     act    filtro entrenable x0   _n01  s 1  RMSE 0.0441  en rango 56%
+  gamma50     act    con red                _n01  s 2  RMSE 0.0555  en rango 51%
+  gamma50     act    white-box x0           _n01  s 2  RMSE 0.0388  en rango 53%
+  gamma50     act    historia pasada        _n01  s 2  RMSE 0.0666  en rango 7%
+  gamma50     act    filtro entrenable      _n01  s 2  RMSE 0.0490  en rango 32%
+  gamma50     act    historia 5 ms x0       _n01  s 2  RMSE 0.0528  en rango 56%
+  gamma50     act    white-box              _n05  s 0  RMSE 0.0326  en rango 58%
+  gamma50     act    historia pasada x0     _n01  s 2  RMSE 0.0625  en rango 10%
+  gamma50     act    forma exacta           _n05  s 0  RMSE 0.0602  en rango 6%
+  gamma50     act    filtro entrenable x0   _n01  s 2  RMSE 0.0353  en rango 48%
+  gamma50     act    con red                _n05  s 0  RMSE 0.0481  en rango 46%
+  gamma50     act    white-box x0           _n05  s 0  RMSE 0.0350  en rango 55%
+  gamma50     act    historia pasada        _n05  s 0  RMSE 0.0900  en rango 4%
+  gamma50     act    historia 5 ms x0       _n05  s 0  RMSE 0.0548  en rango 39%
+  gamma50     act    filtro entrenable      _n05  s 0  RMSE 0.0556  en rango 28%
+  gamma50     act    historia pasada x0     _n05  s 0  RMSE 0.0640  en rango 6%
+  gamma50     act    white-box              _n05  s 1  RMSE 0.0328  en rango 58%
+  gamma50     act    forma exacta           _n05  s 1  RMSE 0.0600  en rango 6%
+  gamma50     act    con red                _n05  s 1  RMSE 0.0471  en rango 44%
+  gamma50     act    filtro entrenable x0   _n05  s 0  RMSE 0.0473  en rango 36%
+  gamma50     act    white-box x0           _n05  s 1  RMSE 0.0354  en rango 55%
+  gamma50     act    historia pasada        _n05  s 1  RMSE 0.0735  en rango 3%
+  gamma50     act    filtro entrenable      _n05  s 1  RMSE 0.0584  en rango 34%
+  gamma50     act    historia 5 ms x0       _n05  s 1  RMSE 0.0469  en rango 38%
+  gamma50     act    historia pasada x0     _n05  s 1  RMSE 0.0622  en rango 15%
+  gamma50     act    white-box              _n05  s 2  RMSE 0.0319  en rango 59%
+  gamma50     act    forma exacta           _n05  s 2  RMSE 0.0618  en rango 7%
+  gamma50     act    con red                _n05  s 2  RMSE 0.0511  en rango 38%
+  gamma50     act    filtro entrenable x0   _n05  s 1  RMSE 0.0473  en rango 46%
+  gamma50     act    white-box x0           _n05  s 2  RMSE 0.0346  en rango 56%
+  gamma50     act    historia pasada        _n05  s 2  RMSE 0.0507  en rango 34%
+  gamma50     act    historia 5 ms x0       _n05  s 2  RMSE 0.0446  en rango 22%
+  gamma50     act    filtro entrenable      _n05  s 2  RMSE 0.0554  en rango 23%
+  gamma50     act    historia pasada x0     _n05  s 2  RMSE 0.0495  en rango 32%
+  gamma50     actc   white-box              _n01  s 0  RMSE 0.0378  en rango 53%
+  gamma50     actc   forma exacta           _n01  s 0  RMSE 0.0642  en rango 3%
+  gamma50     actc   con red                _n01  s 0  RMSE 0.0583  en rango 48%
+  gamma50     act    filtro entrenable x0   _n05  s 2  RMSE 0.0471  en rango 29%
+  gamma50     actc   historia pasada        _n01  s 0  RMSE 0.0686  en rango 22%
+  gamma50     actc   agnóstica              _n01  s 0  RMSE 0.0337  en rango 56%
+  gamma50     actc   white-box              _n01  s 1  RMSE 0.0378  en rango 53%
+  gamma50     actc   forma exacta           _n01  s 1  RMSE 0.0626  en rango 4%
+  gamma50     actc   filtro entrenable      _n01  s 0  RMSE 0.0559  en rango 39%
+  gamma50     actc   con red                _n01  s 1  RMSE 0.0564  en rango 49%
+  gamma50     actc   historia pasada        _n01  s 1  RMSE 0.0458  en rango 36%
+  gamma50     actc   agnóstica              _n01  s 1  RMSE 0.0340  en rango 58%
+  gamma50     actc   white-box              _n01  s 2  RMSE 0.0374  en rango 54%
+  gamma50     actc   filtro entrenable      _n01  s 1  RMSE 0.0335  en rango 63%
+  gamma50     actc   forma exacta           _n01  s 2  RMSE 0.0623  en rango 4%
+  gamma50     actc   con red                _n01  s 2  RMSE 0.0576  en rango 43%
+  gamma50     actc   historia pasada        _n01  s 2  RMSE 0.0657  en rango 21%
+  gamma50     actc   agnóstica              _n01  s 2  RMSE 0.0321  en rango 57%
+  gamma50     actc   white-box              _n05  s 0  RMSE 0.0330  en rango 57%
+  gamma50     actc   filtro entrenable      _n01  s 2  RMSE 0.0545  en rango 34%
+  gamma50     actc   forma exacta           _n05  s 0  RMSE 0.0632  en rango 4%
+  gamma50     actc   con red                _n05  s 0  RMSE 0.0610  en rango 27%
+  gamma50     actc   historia pasada        _n05  s 0  RMSE 0.0549  en rango 29%
+  gamma50     actc   agnóstica              _n05  s 0  RMSE 0.0304  en rango 60%
+  gamma50     actc   white-box              _n05  s 1  RMSE 0.0323  en rango 58%
+  gamma50     actc   filtro entrenable      _n05  s 0  RMSE 0.0482  en rango 41%
+  gamma50     actc   forma exacta           _n05  s 1  RMSE 0.0639  en rango 3%
+  gamma50     actc   con red                _n05  s 1  RMSE 0.0418  en rango 53%
+  gamma50     actc   historia pasada        _n05  s 1  RMSE 0.0420  en rango 30%
+  gamma50     actc   white-box              _n05  s 2  RMSE 0.0308  en rango 60%
+  gamma50     actc   agnóstica              _n05  s 1  RMSE 0.0294  en rango 63%
+  gamma50     actc   forma exacta           _n05  s 2  RMSE 0.0605  en rango 6%
+  gamma50     actc   filtro entrenable      _n05  s 1  RMSE 0.0560  en rango 23%
+  gamma50     actc   con red                _n05  s 2  RMSE 0.0494  en rango 40%
+  gamma50     actc   historia pasada        _n05  s 2  RMSE 0.0704  en rango 17%
+  gamma50     actc   agnóstica              _n05  s 2  RMSE 0.0296  en rango 62%
+  gamma50     actc   filtro entrenable      _n05  s 2  RMSE 0.0428  en rango 33%
+  theta_rango ideal  simulador                    s-1  RMSE 0.0113  en rango 100%
+  theta_rango refrac simulador                    s-1  RMSE 0.0122  en rango 92%
+  theta_rango act    simulador                    s-1  RMSE 0.0112  en rango 88%
+  theta_rango refrac white-box              _n01  s 0  RMSE 0.0117  en rango 93%
+  theta_rango actc   simulador                    s-1  RMSE 0.0113  en rango 100%
+  theta_rango refrac forma exacta           _n01  s 0  RMSE 0.0121  en rango 93%
+  theta_rango refrac con red                _n01  s 0  RMSE 0.0122  en rango 92%
+  theta_rango refrac white-box x0           _n01  s 0  RMSE 0.0119  en rango 86%
+  theta_rango refrac forma exacta x0        _n01  s 0  RMSE 0.0121  en rango 93%
+  theta_rango refrac white-box              _n01  s 1  RMSE 0.0117  en rango 92%
+  theta_rango refrac agnóstica x0           _n01  s 0  RMSE 0.0122  en rango 92%
+  theta_rango refrac forma exacta           _n01  s 1  RMSE 0.0121  en rango 93%
+  theta_rango refrac white-box x0           _n01  s 1  RMSE 0.0119  en rango 86%
+  theta_rango refrac con red                _n01  s 1  RMSE 0.0122  en rango 92%
+  theta_rango refrac forma exacta x0        _n01  s 1  RMSE 0.0121  en rango 93%
+  theta_rango refrac white-box              _n01  s 2  RMSE 0.0117  en rango 93%
+  theta_rango refrac agnóstica x0           _n01  s 1  RMSE 0.0122  en rango 92%
+  theta_rango refrac forma exacta           _n01  s 2  RMSE 0.0121  en rango 93%
+  theta_rango refrac white-box x0           _n01  s 2  RMSE 0.0119  en rango 86%
+  theta_rango refrac con red                _n01  s 2  RMSE 0.0122  en rango 92%
+  theta_rango refrac forma exacta x0        _n01  s 2  RMSE 0.0121  en rango 93%
+  theta_rango refrac white-box              _n05  s 0  RMSE 0.0118  en rango 98%
+  theta_rango refrac agnóstica x0           _n01  s 2  RMSE 0.0122  en rango 92%
+  theta_rango refrac forma exacta           _n05  s 0  RMSE 0.0121  en rango 94%
+  theta_rango refrac white-box x0           _n05  s 0  RMSE 0.0118  en rango 85%
+  theta_rango refrac con red                _n05  s 0  RMSE 0.0123  en rango 93%
+  theta_rango refrac forma exacta x0        _n05  s 0  RMSE 0.0121  en rango 93%
+  theta_rango refrac white-box              _n05  s 1  RMSE 0.0118  en rango 98%
+  theta_rango refrac agnóstica x0           _n05  s 0  RMSE 0.0121  en rango 93%
+  theta_rango refrac forma exacta           _n05  s 1  RMSE 0.0121  en rango 94%
+  theta_rango refrac white-box x0           _n05  s 1  RMSE 0.0118  en rango 85%
+  theta_rango refrac con red                _n05  s 1  RMSE 0.0124  en rango 93%
+  theta_rango refrac forma exacta x0        _n05  s 1  RMSE 0.0121  en rango 93%
+  theta_rango refrac white-box              _n05  s 2  RMSE 0.0118  en rango 98%
+  theta_rango refrac agnóstica x0           _n05  s 1  RMSE 0.0122  en rango 93%
+  theta_rango refrac forma exacta           _n05  s 2  RMSE 0.0121  en rango 95%
+  theta_rango refrac white-box x0           _n05  s 2  RMSE 0.0118  en rango 85%
+  theta_rango refrac con red                _n05  s 2  RMSE 0.0122  en rango 93%
+  theta_rango refrac forma exacta x0        _n05  s 2  RMSE 0.0122  en rango 93%
+  theta_rango act    white-box              _n01  s 0  RMSE 0.0116  en rango 82%
+  theta_rango refrac agnóstica x0           _n05  s 2  RMSE 0.0121  en rango 93%
+  theta_rango act    forma exacta           _n01  s 0  RMSE 0.0113  en rango 100%
+  theta_rango act    con red                _n01  s 0  RMSE 0.0292  en rango 30%
+  theta_rango act    historia pasada        _n01  s 0  RMSE 0.0314  en rango 20%
+  theta_rango act    white-box x0           _n01  s 0  RMSE 0.0113  en rango 83%
+  theta_rango act    filtro entrenable      _n01  s 0  RMSE 0.0459  en rango 20%
+  theta_rango act    historia 5 ms x0       _n01  s 0  RMSE 0.0246  en rango 34%
+  theta_rango act    historia pasada x0     _n01  s 0  RMSE 0.0170  en rango 45%
+  theta_rango act    white-box              _n01  s 1  RMSE 0.0116  en rango 83%
+  theta_rango act    forma exacta           _n01  s 1  RMSE 0.0113  en rango 100%
+  theta_rango act    con red                _n01  s 1  RMSE 0.0318  en rango 29%
+  theta_rango act    filtro entrenable x0   _n01  s 0  RMSE 0.0341  en rango 21%
+  theta_rango act    white-box x0           _n01  s 1  RMSE 0.0114  en rango 83%
+  theta_rango act    historia pasada        _n01  s 1  RMSE 0.0321  en rango 22%
+  theta_rango act    filtro entrenable      _n01  s 1  RMSE 0.0544  en rango 21%
+  theta_rango act    historia 5 ms x0       _n01  s 1  RMSE 0.0247  en rango 32%
+  theta_rango act    historia pasada x0     _n01  s 1  RMSE 0.0229  en rango 30%
+  theta_rango act    white-box              _n01  s 2  RMSE 0.0116  en rango 83%
+  theta_rango act    forma exacta           _n01  s 2  RMSE 0.0113  en rango 100%
+  theta_rango act    con red                _n01  s 2  RMSE 0.0340  en rango 22%
+  theta_rango act    filtro entrenable x0   _n01  s 1  RMSE 0.0452  en rango 29%
+  theta_rango act    white-box x0           _n01  s 2  RMSE 0.0114  en rango 84%
+  theta_rango act    historia pasada        _n01  s 2  RMSE 0.0331  en rango 22%
+  theta_rango act    historia 5 ms x0       _n01  s 2  RMSE 0.0257  en rango 32%
+  theta_rango act    filtro entrenable      _n01  s 2  RMSE 0.0564  en rango 20%
+  theta_rango act    historia pasada x0     _n01  s 2  RMSE 0.0210  en rango 36%
+  theta_rango act    white-box              _n05  s 0  RMSE 0.0116  en rango 86%
+  theta_rango act    forma exacta           _n05  s 0  RMSE 0.0114  en rango 94%
+  theta_rango act    con red                _n05  s 0  RMSE 0.0380  en rango 20%
+  theta_rango act    filtro entrenable x0   _n01  s 2  RMSE 0.0450  en rango 26%
+  theta_rango act    white-box x0           _n05  s 0  RMSE 0.0115  en rango 86%
+  theta_rango act    historia pasada        _n05  s 0  RMSE 0.0378  en rango 17%
+  theta_rango act    filtro entrenable      _n05  s 0  RMSE 0.0540  en rango 16%
+  theta_rango act    historia 5 ms x0       _n05  s 0  RMSE 0.0290  en rango 28%
+  theta_rango act    historia pasada x0     _n05  s 0  RMSE 0.0248  en rango 30%
+  theta_rango act    white-box              _n05  s 1  RMSE 0.0116  en rango 87%
+  theta_rango act    forma exacta           _n05  s 1  RMSE 0.0113  en rango 95%
+  theta_rango act    con red                _n05  s 1  RMSE 0.0392  en rango 21%
+  theta_rango act    filtro entrenable x0   _n05  s 0  RMSE 0.0357  en rango 39%
+  theta_rango act    white-box x0           _n05  s 1  RMSE 0.0115  en rango 87%
+  theta_rango act    historia pasada        _n05  s 1  RMSE 0.0485  en rango 14%
+  theta_rango act    filtro entrenable      _n05  s 1  RMSE 0.0451  en rango 21%
+  theta_rango act    historia 5 ms x0       _n05  s 1  RMSE 0.0247  en rango 39%
+  theta_rango act    historia pasada x0     _n05  s 1  RMSE 0.0253  en rango 31%
+  theta_rango act    white-box              _n05  s 2  RMSE 0.0116  en rango 88%
+  theta_rango act    forma exacta           _n05  s 2  RMSE 0.0113  en rango 96%
+  theta_rango act    con red                _n05  s 2  RMSE 0.0337  en rango 24%
+  theta_rango act    filtro entrenable x0   _n05  s 1  RMSE 0.0287  en rango 33%
+  theta_rango act    white-box x0           _n05  s 2  RMSE 0.0115  en rango 87%
+  theta_rango act    historia pasada        _n05  s 2  RMSE 0.0505  en rango 10%
+  theta_rango act    filtro entrenable      _n05  s 2  RMSE 0.0435  en rango 17%
+  theta_rango act    historia 5 ms x0       _n05  s 2  RMSE 0.0262  en rango 34%
+  theta_rango act    historia pasada x0     _n05  s 2  RMSE 0.0357  en rango 25%
+  theta_rango actc   white-box              _n01  s 0  RMSE 0.0114  en rango 93%
+  theta_rango actc   forma exacta           _n01  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actc   con red                _n01  s 0  RMSE 0.0307  en rango 31%
+  theta_rango act    filtro entrenable x0   _n05  s 2  RMSE 0.0239  en rango 43%
+  theta_rango actc   historia pasada        _n01  s 0  RMSE 0.0327  en rango 25%
+  theta_rango actc   agnóstica              _n01  s 0  RMSE 0.0114  en rango 91%
+  theta_rango actc   white-box              _n01  s 1  RMSE 0.0114  en rango 93%
+  theta_rango actc   filtro entrenable      _n01  s 0  RMSE 0.0622  en rango 19%
+  theta_rango actc   forma exacta           _n01  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actc   con red                _n01  s 1  RMSE 0.0317  en rango 34%
+  theta_rango actc   historia pasada        _n01  s 1  RMSE 0.0376  en rango 21%
+  theta_rango actc   agnóstica              _n01  s 1  RMSE 0.0116  en rango 89%
+  theta_rango actc   white-box              _n01  s 2  RMSE 0.0114  en rango 94%
+  theta_rango actc   filtro entrenable      _n01  s 1  RMSE 0.0486  en rango 24%
+  theta_rango actc   forma exacta           _n01  s 2  RMSE 0.0113  en rango 100%
+  theta_rango actc   con red                _n01  s 2  RMSE 0.0344  en rango 28%
+  theta_rango actc   historia pasada        _n01  s 2  RMSE 0.0506  en rango 16%
+  theta_rango actc   agnóstica              _n01  s 2  RMSE 0.0116  en rango 91%
+  theta_rango actc   white-box              _n05  s 0  RMSE 0.0115  en rango 100%
+  theta_rango actc   filtro entrenable      _n01  s 2  RMSE 0.0461  en rango 22%
+  theta_rango actc   forma exacta           _n05  s 0  RMSE 0.0113  en rango 95%
+  theta_rango actc   con red                _n05  s 0  RMSE 0.0313  en rango 41%
+  theta_rango actc   historia pasada        _n05  s 0  RMSE 0.0384  en rango 18%
+  theta_rango actc   agnóstica              _n05  s 0  RMSE 0.0117  en rango 92%
+  theta_rango actc   white-box              _n05  s 1  RMSE 0.0115  en rango 100%
+  theta_rango actc   filtro entrenable      _n05  s 0  RMSE 0.0487  en rango 21%
+  theta_rango actc   forma exacta           _n05  s 1  RMSE 0.0113  en rango 99%
+  theta_rango actc   con red                _n05  s 1  RMSE 0.0360  en rango 27%
+  theta_rango actc   historia pasada        _n05  s 1  RMSE 0.0420  en rango 17%
+  theta_rango actc   agnóstica              _n05  s 1  RMSE 0.0117  en rango 82%
+  theta_rango actc   white-box              _n05  s 2  RMSE 0.0115  en rango 100%
+  theta_rango actc   filtro entrenable      _n05  s 1  RMSE 0.0539  en rango 17%
+  theta_rango actc   forma exacta           _n05  s 2  RMSE 0.0113  en rango 99%
+  theta_rango actc   con red                _n05  s 2  RMSE 0.0377  en rango 27%
+  theta_rango actc   historia pasada        _n05  s 2  RMSE 0.0613  en rango 14%
+  theta_rango actc   agnóstica              _n05  s 2  RMSE 0.0119  en rango 99%
+  gamma_rango ideal  simulador                    s-1  RMSE 0.0193  en rango 100%
+  theta_rango actc   filtro entrenable      _n05  s 2  RMSE 0.0516  en rango 23%
+  gamma_rango act    simulador                    s-1  RMSE 0.0199  en rango 86%
+  gamma_rango refrac simulador                    s-1  RMSE 0.0211  en rango 83%
+  gamma_rango refrac white-box              _n01  s 0  RMSE 0.0201  en rango 74%
+  gamma_rango actc   simulador                    s-1  RMSE 0.0195  en rango 100%
+  gamma_rango refrac con red                _n01  s 0  RMSE 0.0213  en rango 82%
+  gamma_rango refrac forma exacta           _n01  s 0  RMSE 0.0209  en rango 83%
+  gamma_rango refrac white-box x0           _n01  s 0  RMSE 0.0203  en rango 71%
+  gamma_rango refrac forma exacta x0        _n01  s 0  RMSE 0.0209  en rango 83%
+  gamma_rango refrac white-box              _n01  s 1  RMSE 0.0201  en rango 74%
+  gamma_rango refrac agnóstica x0           _n01  s 0  RMSE 0.0214  en rango 82%
+  gamma_rango refrac forma exacta           _n01  s 1  RMSE 0.0209  en rango 83%
+  gamma_rango refrac white-box x0           _n01  s 1  RMSE 0.0202  en rango 71%
+  gamma_rango refrac con red                _n01  s 1  RMSE 0.0213  en rango 82%
+  gamma_rango refrac forma exacta x0        _n01  s 1  RMSE 0.0209  en rango 83%
+  gamma_rango refrac white-box              _n01  s 2  RMSE 0.0200  en rango 74%
+  gamma_rango refrac agnóstica x0           _n01  s 1  RMSE 0.0214  en rango 82%
+  gamma_rango refrac forma exacta           _n01  s 2  RMSE 0.0210  en rango 83%
+  gamma_rango refrac white-box x0           _n01  s 2  RMSE 0.0202  en rango 71%
+  gamma_rango refrac con red                _n01  s 2  RMSE 0.0213  en rango 82%
+  gamma_rango refrac forma exacta x0        _n01  s 2  RMSE 0.0210  en rango 83%
+  gamma_rango refrac white-box              _n05  s 0  RMSE 0.0200  en rango 84%
+  gamma_rango refrac agnóstica x0           _n01  s 2  RMSE 0.0214  en rango 82%
+  gamma_rango refrac forma exacta           _n05  s 0  RMSE 0.0207  en rango 84%
+  gamma_rango refrac white-box x0           _n05  s 0  RMSE 0.0202  en rango 69%
+  gamma_rango refrac con red                _n05  s 0  RMSE 0.0213  en rango 83%
+  gamma_rango refrac forma exacta x0        _n05  s 0  RMSE 0.0210  en rango 83%
+  gamma_rango refrac white-box              _n05  s 1  RMSE 0.0200  en rango 76%
+  gamma_rango refrac agnóstica x0           _n05  s 0  RMSE 0.0215  en rango 83%
+  gamma_rango refrac forma exacta           _n05  s 1  RMSE 0.0209  en rango 83%
+  gamma_rango refrac white-box x0           _n05  s 1  RMSE 0.0202  en rango 70%
+  gamma_rango refrac con red                _n05  s 1  RMSE 0.0214  en rango 83%
+  gamma_rango refrac forma exacta x0        _n05  s 1  RMSE 0.0210  en rango 83%
+  gamma_rango refrac white-box              _n05  s 2  RMSE 0.0200  en rango 83%
+  gamma_rango refrac agnóstica x0           _n05  s 1  RMSE 0.0215  en rango 83%
+  gamma_rango refrac forma exacta           _n05  s 2  RMSE 0.0209  en rango 84%
+  gamma_rango refrac white-box x0           _n05  s 2  RMSE 0.0202  en rango 70%
+  gamma_rango refrac con red                _n05  s 2  RMSE 0.0210  en rango 83%
+  gamma_rango refrac forma exacta x0        _n05  s 2  RMSE 0.0211  en rango 83%
+  gamma_rango act    white-box              _n01  s 0  RMSE 0.0210  en rango 81%
+  gamma_rango refrac agnóstica x0           _n05  s 2  RMSE 0.0214  en rango 83%
+  gamma_rango act    forma exacta           _n01  s 0  RMSE 0.0197  en rango 89%
+  gamma_rango act    con red                _n01  s 0  RMSE 0.0413  en rango 9%
+  gamma_rango act    historia pasada        _n01  s 0  RMSE 0.0448  en rango 12%
+  gamma_rango act    white-box x0           _n01  s 0  RMSE 0.0206  en rango 83%
+  gamma_rango act    filtro entrenable      _n01  s 0  RMSE 0.0511  en rango 15%
+  gamma_rango act    historia 5 ms x0       _n01  s 0  RMSE 0.0384  en rango 17%
+  gamma_rango act    historia pasada x0     _n01  s 0  RMSE 0.0371  en rango 18%
+  gamma_rango act    white-box              _n01  s 1  RMSE 0.0210  en rango 81%
+  gamma_rango act    forma exacta           _n01  s 1  RMSE 0.0197  en rango 88%
+  gamma_rango act    con red                _n01  s 1  RMSE 0.0528  en rango 6%
+  gamma_rango act    filtro entrenable x0   _n01  s 0  RMSE 0.0447  en rango 15%
+  gamma_rango act    white-box x0           _n01  s 1  RMSE 0.0207  en rango 83%
+  gamma_rango act    historia pasada        _n01  s 1  RMSE 0.0521  en rango 8%
+  gamma_rango act    filtro entrenable      _n01  s 1  RMSE 0.0558  en rango 15%
+  gamma_rango act    historia 5 ms x0       _n01  s 1  RMSE 0.0450  en rango 17%
+  gamma_rango act    historia pasada x0     _n01  s 1  RMSE 0.0434  en rango 8%
+  gamma_rango act    white-box              _n01  s 2  RMSE 0.0210  en rango 81%
+  gamma_rango act    forma exacta           _n01  s 2  RMSE 0.0197  en rango 100%
+  gamma_rango act    con red                _n01  s 2  RMSE 0.0444  en rango 14%
+  gamma_rango act    filtro entrenable x0   _n01  s 1  RMSE 0.0628  en rango 9%
+  gamma_rango act    white-box x0           _n01  s 2  RMSE 0.0206  en rango 83%
+  gamma_rango act    historia pasada        _n01  s 2  RMSE 0.0549  en rango 11%
+  gamma_rango act    filtro entrenable      _n01  s 2  RMSE 0.0619  en rango 8%
+  gamma_rango act    historia 5 ms x0       _n01  s 2  RMSE 0.0402  en rango 17%
+  gamma_rango act    historia pasada x0     _n01  s 2  RMSE 0.0416  en rango 18%
+  gamma_rango act    white-box              _n05  s 0  RMSE 0.0207  en rango 85%
+  gamma_rango act    forma exacta           _n05  s 0  RMSE 0.0198  en rango 76%
+  gamma_rango act    con red                _n05  s 0  RMSE 0.0608  en rango 11%
+  gamma_rango act    filtro entrenable x0   _n01  s 2  RMSE 0.0472  en rango 11%
+  gamma_rango act    white-box x0           _n05  s 0  RMSE 0.0205  en rango 85%
+  gamma_rango act    historia pasada        _n05  s 0  RMSE 0.0519  en rango 5%
+  gamma_rango act    filtro entrenable      _n05  s 0  RMSE 0.0621  en rango 6%
+  gamma_rango act    historia 5 ms x0       _n05  s 0  RMSE 0.0448  en rango 10%
+  gamma_rango act    historia pasada x0     _n05  s 0  RMSE 0.0380  en rango 14%
+  gamma_rango act    white-box              _n05  s 1  RMSE 0.0208  en rango 86%
+  gamma_rango act    forma exacta           _n05  s 1  RMSE 0.0198  en rango 81%
+  gamma_rango act    con red                _n05  s 1  RMSE 0.0479  en rango 13%
+  gamma_rango act    filtro entrenable x0   _n05  s 0  RMSE 0.0543  en rango 19%
+  gamma_rango act    white-box x0           _n05  s 1  RMSE 0.0205  en rango 85%
+  gamma_rango act    historia pasada        _n05  s 1  RMSE 0.0634  en rango 8%
+  gamma_rango act    historia 5 ms x0       _n05  s 1  RMSE 0.0414  en rango 19%
+  gamma_rango act    filtro entrenable      _n05  s 1  RMSE 0.0537  en rango 14%
+  gamma_rango act    historia pasada x0     _n05  s 1  RMSE 0.0450  en rango 10%
+  gamma_rango act    white-box              _n05  s 2  RMSE 0.0207  en rango 90%
+  gamma_rango act    forma exacta           _n05  s 2  RMSE 0.0197  en rango 84%
+  gamma_rango act    con red                _n05  s 2  RMSE 0.0505  en rango 12%
+  gamma_rango act    filtro entrenable x0   _n05  s 1  RMSE 0.0398  en rango 15%
+  gamma_rango act    white-box x0           _n05  s 2  RMSE 0.0205  en rango 86%
+  gamma_rango act    historia pasada        _n05  s 2  RMSE 0.0572  en rango 6%
+  gamma_rango act    filtro entrenable      _n05  s 2  RMSE 0.0510  en rango 12%
+  gamma_rango act    historia 5 ms x0       _n05  s 2  RMSE 0.0409  en rango 14%
+  gamma_rango act    historia pasada x0     _n05  s 2  RMSE 0.0477  en rango 8%
+  gamma_rango actc   white-box              _n01  s 0  RMSE 0.0206  en rango 92%
+  gamma_rango actc   forma exacta           _n01  s 0  RMSE 0.0195  en rango 99%
+  gamma_rango actc   con red                _n01  s 0  RMSE 0.0448  en rango 9%
+  gamma_rango act    filtro entrenable x0   _n05  s 2  RMSE 0.0419  en rango 22%
+  gamma_rango actc   historia pasada        _n01  s 0  RMSE 0.0453  en rango 9%
+  gamma_rango actc   agnóstica              _n01  s 0  RMSE 0.0206  en rango 80%
+  gamma_rango actc   white-box              _n01  s 1  RMSE 0.0206  en rango 92%
+  gamma_rango actc   filtro entrenable      _n01  s 0  RMSE 0.0726  en rango 8%
+  gamma_rango actc   forma exacta           _n01  s 1  RMSE 0.0195  en rango 99%
+  gamma_rango actc   con red                _n01  s 1  RMSE 0.0509  en rango 16%
+  gamma_rango actc   historia pasada        _n01  s 1  RMSE 0.0609  en rango 8%
+  gamma_rango actc   agnóstica              _n01  s 1  RMSE 0.0207  en rango 62%
+  gamma_rango actc   white-box              _n01  s 2  RMSE 0.0206  en rango 92%
+  gamma_rango actc   filtro entrenable      _n01  s 1  RMSE 0.0582  en rango 10%
+  gamma_rango actc   forma exacta           _n01  s 2  RMSE 0.0195  en rango 98%
+  gamma_rango actc   con red                _n01  s 2  RMSE 0.0496  en rango 13%
+  gamma_rango actc   historia pasada        _n01  s 2  RMSE 0.0648  en rango 7%
+  gamma_rango actc   agnóstica              _n01  s 2  RMSE 0.0208  en rango 82%
+  gamma_rango actc   white-box              _n05  s 0  RMSE 0.0204  en rango 92%
+  gamma_rango actc   filtro entrenable      _n01  s 2  RMSE 0.0559  en rango 11%
+  gamma_rango actc   forma exacta           _n05  s 0  RMSE 0.0196  en rango 88%
+  gamma_rango actc   con red                _n05  s 0  RMSE 0.0498  en rango 15%
+  gamma_rango actc   historia pasada        _n05  s 0  RMSE 0.0461  en rango 11%
+  gamma_rango actc   agnóstica              _n05  s 0  RMSE 0.0209  en rango 79%
+  gamma_rango actc   white-box              _n05  s 1  RMSE 0.0204  en rango 92%
+  gamma_rango actc   filtro entrenable      _n05  s 0  RMSE 0.0678  en rango 11%
+  gamma_rango actc   forma exacta           _n05  s 1  RMSE 0.0195  en rango 89%
+  gamma_rango actc   con red                _n05  s 1  RMSE 0.0510  en rango 12%
+  gamma_rango actc   historia pasada        _n05  s 1  RMSE 0.0635  en rango 8%
+  gamma_rango actc   white-box              _n05  s 2  RMSE 0.0203  en rango 92%
+  gamma_rango actc   agnóstica              _n05  s 1  RMSE 0.0214  en rango 73%
+  gamma_rango actc   filtro entrenable      _n05  s 1  RMSE 0.0628  en rango 9%
+  gamma_rango actc   forma exacta           _n05  s 2  RMSE 0.0195  en rango 89%
+  gamma_rango actc   con red                _n05  s 2  RMSE 0.0569  en rango 8%
+  gamma_rango actc   historia pasada        _n05  s 2  RMSE 0.0678  en rango 7%
+  gamma_rango actc   agnóstica              _n05  s 2  RMSE 0.0209  en rango 87%
+  gamma_rango actc   filtro entrenable      _n05  s 2  RMSE 0.0550  en rango 16%
+-> C:\Users\User\Desktop\wilson-cowan-id\results\control_distancia_rango.json

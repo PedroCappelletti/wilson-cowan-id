@@ -1,0 +1,60 @@
+
+=== actuator -> actc1_2s.npz — 49 escenarios ===
+  [train] box_a0.4           E=[-0.000, 0.031] |Df|=0.0000
+  [train] box_a0.8           E=[-0.000, 0.162] |Df|=0.0001
+  [test ] box_a1.2           E=[-0.003, 0.828] |Df|=0.0004
+  [train] square_a0.6_f50    E=[-0.002, 0.068] |Df|=0.0047
+  [train] square_a0.6_f100   E=[-0.001, 0.050] |Df|=0.0086
+  [train] square_a0.6_f130   E=[-0.000, 0.041] |Df|=0.0104
+  [train] square_a1.0_f50    E=[-0.009, 0.810] |Df|=0.0182
+  [train] square_a1.0_f100   E=[-0.001, 0.190] |Df|=0.0227
+  [test ] square_a1.0_f130   E=[-0.001, 0.122] |Df|=0.0253
+  [train] aprbs_0            E=[-0.000, 0.751] |Df|=0.0078
+  [train] aprbs_1            E=[-0.000, 0.827] |Df|=0.0176
+  [test ] aprbs_2            E=[-0.000, 0.159] |Df|=0.0036
+  [train] prbs_0             E=[-0.010, 0.824] |Df|=0.0172
+  [test ] prbs_1             E=[-0.012, 0.867] |Df|=0.0200
+  [train] thetagamma_0       E=[-0.007, 0.814] |Df|=0.0054
+  [train] thetagamma_1       E=[-0.009, 0.851] |Df|=0.0103
+  [test ] thetagamma_2       E=[-0.003, 0.227] |Df|=0.0038
+  [train] poisson_0          E=[-0.011, 0.856] |Df|=0.0271
+  [test ] poisson_1          E=[-0.013, 0.877] |Df|=0.0372
+  [test ] chirp              E=[-0.010, 0.888] |Df|=0.0420
+  [train] box_a0.6           E=[-0.000, 0.064] |Df|=0.0001
+  [train] box_a1.0           E=[-0.004, 0.732] |Df|=0.0003
+  [val  ] box_a0.7           E=[-0.000, 0.095] |Df|=0.0001
+  [test ] box_a0.5           E=[-0.000, 0.045] |Df|=0.0000
+  [train] square_a0.8_f50    E=[-0.003, 0.190] |Df|=0.0086
+  [train] square_a0.8_f100   E=[-0.001, 0.091] |Df|=0.0139
+  [val  ] square_a0.8_f80    E=[-0.002, 0.114] |Df|=0.0121
+  [test ] square_a0.8_f115   E=[-0.001, 0.071] |Df|=0.0153
+  [train] aprbs_3            E=[-0.000, 0.816] |Df|=0.0127
+  [train] aprbs_4            E=[-0.000, 0.065] |Df|=0.0021
+  [val  ] aprbs_5            E=[-0.003, 0.801] |Df|=0.0093
+  [test ] aprbs_6            E=[-0.000, 0.702] |Df|=0.0066
+  [train] prbs_2             E=[-0.008, 0.768] |Df|=0.0084
+  [train] prbs_3             E=[-0.010, 0.848] |Df|=0.0284
+  [val  ] prbs_4             E=[-0.010, 0.842] |Df|=0.0215
+  [test ] prbs_5             E=[-0.009, 0.801] |Df|=0.0106
+  [train] thetagamma_3       E=[-0.007, 0.838] |Df|=0.0062
+  [train] thetagamma_4       E=[-0.005, 0.678] |Df|=0.0060
+  [val  ] thetagamma_5       E=[-0.008, 0.830] |Df|=0.0067
+  [test ] thetagamma_6       E=[-0.009, 0.810] |Df|=0.0062
+  [train] poisson_2          E=[-0.010, 0.824] |Df|=0.0149
+  [train] poisson_3          E=[-0.011, 0.867] |Df|=0.0349
+  [val  ] poisson_4          E=[-0.012, 0.861] |Df|=0.0273
+  [test ] poisson_5          E=[-0.009, 0.842] |Df|=0.0207
+  [train] chirp_1            E=[-0.011, 0.885] |Df|=0.0216
+  [train] chirp_2            E=[-0.009, 0.848] |Df|=0.0456
+  [train] chirp_3            E=[-0.012, 0.910] |Df|=0.0418
+  [val  ] chirp_4            E=[-0.011, 0.901] |Df|=0.0448
+  [test ] chirp_5            E=[-0.009, 0.870] |Df|=0.0356
+  -> data\processed\uncertain\actc1_2s.npz
+
+Listo.
+  actc1_2s_n01.npz: sigma=0.0031622776601683794  (1.7% del desvio de E)
+  actc1_2s_n05.npz: sigma=0.0158113883008419  (8.3% del desvio de E)
+  actc1_2s_n01_s1.npz: sigma=0.0031622776601683794  (1.7% del desvio de E)
+  actc1_2s_n05_s1.npz: sigma=0.0158113883008419  (8.3% del desvio de E)
+  actc1_2s_n01_s2.npz: sigma=0.0031622776601683794  (1.7% del desvio de E)
+  actc1_2s_n05_s2.npz: sigma=0.0158113883008419  (8.3% del desvio de E)
