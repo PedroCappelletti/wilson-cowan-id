@@ -21,7 +21,13 @@
 # comandos positivos, así que los negativos que pide el controlador miden
 # extrapolación.
 #
+# «forma exacta, sat 3» es la misma forma exacta con el nivel de saturación del
+# diseño (1/α = 3) en lugar del entrenado. Con comandos de entrenamiento entre 0
+# y 2 ese nivel no se identifica (α̂ queda en 0,1 con recorte y se va a 0,001 con
+# tanh), y el controlador pide hasta ±11. En el tag va como sufijo «@sat3».
+#
 #   python scripts/control_distancia_y_rango.py [procesos]
+#   python scripts/control_distancia_y_rango.py [procesos] --nuevas   (solo lo que falta en el json)
 #   python scripts/control_distancia_y_rango.py --probar    (simulador, refs en rango)
 
 from __future__ import annotations
@@ -54,16 +60,20 @@ def modelos(planta, suf, k):
     """(etiqueta, tag) de los modelos de una planta, ruido y semilla."""
     if planta == "actc":
         # actuador con recorte en ±3 (e21), sin segunda etapa x0
-        return [(n, f"e21_{c}{suf}_s{k}") for n, c in
-                (("white-box", "e2wb"), ("con red", "H100_wrm"), ("forma exacta", "lag_wrm"),
-                 ("historia pasada", "Hp100_wrm"), ("filtro entrenable", "K400f8_wrm"),
-                 ("agnóstica", "e2B_wrm"))]
+        return [(n, f"e21_{c}{suf}_s{k}{s}") for n, c, s in
+                (("white-box", "e2wb", ""), ("con red", "H100_wrm", ""), ("forma exacta", "lag_wrm", ""),
+                 ("forma exacta, sat 3", "lag_wrm", "@sat3"),
+                 ("historia pasada", "Hp100_wrm", ""), ("filtro entrenable", "K400f8_wrm", ""),
+                 ("agnóstica", "e2B_wrm", ""))]
     out = [("white-box", f"e16_{WB[planta]}{suf}_s{k}"),
            ("con red", f"e16_{CON_RED[(planta, suf)]}{suf}_s{k}"),
            ("forma exacta", f"e16_{EXACTA[planta]}{suf}_s{k}")]
     if planta == "act":
+        # e16 tiene la agnóstica solo con la semilla 0
         out += [("historia pasada", f"e16_Hp100_wrm{suf}_s{k}"),
-                ("filtro entrenable", f"e16_K400f8_wrm{suf}_s{k}")]
+                ("filtro entrenable", f"e16_K400f8_wrm{suf}_s{k}"),
+                ("forma exacta, sat 3", f"e16_{EXACTA[planta]}{suf}_s{k}@sat3"),
+                ("agnóstica", f"e16_e2B_wrm{suf}_s{k}")]
         e19 = ("e2wb", "H100", "Hp100", "K400f8")
         nombres = ("white-box", "historia 5 ms", "historia pasada", "filtro entrenable")
     else:
@@ -82,7 +92,7 @@ def tareas():
             for suf in NIVELES:
                 for k in SEMILLAS:
                     for nombre, tag in modelos(planta, suf, k):
-                        if (RES / "models" / f"{tag}.pt").exists():
+                        if (RES / "models" / f"{tag.split('@')[0]}.pt").exists():
                             out.append((ref, planta, nombre, tag, suf, k))
                         else:
                             print(f"  falta {tag}, se saltea", flush=True)
@@ -156,7 +166,10 @@ def una(t):
                                           "act": Actuator(sat=3.0, tau_act=1.0),
                                           "actc": Actuator(sat=3.0, tau_act=1.0, recorte=True)}[pert])
     else:
-        planta = planta_de(cargar(RES / "models" / f"{tag}.pt")[0], n_pasos)
+        base, _, sat = tag.partition("@sat")
+        planta = planta_de(cargar(RES / "models" / f"{base}.pt")[0], n_pasos)
+        if sat:
+            planta.alpha = 1.0 / float(sat)
     ctrl = IMCController(fixed_de(true), {kk: true[kk] for kk in W}, sat_ref=fixed_de(true))
     with np.errstate(over="ignore", invalid="ignore"):
         sol = simulate_closed_loop_ext(planta, ctrl, refs, t_span=t_span, dt=DT, dt_ctrl=DT)
@@ -198,8 +211,20 @@ def main():
                 print(f"  {ref:12} {pl:6} RMSE {fila['rmse']:.4f}  en rango {fila['en_rango']:.0%}  "
                       f"P {fila['P_p5_p95']}  Q {fila['Q_p5_p95']}", flush=True)
         return
-    procesos = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    procesos = int(args[0]) if args else 1
     ts = tareas()
+    viejas = []
+    if "--nuevas" in sys.argv and OUT.exists():
+        # las trazas no se guardan, así que el lazo con el simulador se vuelve a
+        # correr para las distancias; es determinista y reemplaza a su fila vieja
+        viejas = json.loads(OUT.read_text(encoding="utf-8"))
+        hechas = {(f["referencia"], f["perturbacion"], f["tag"]) for f in viejas if f["tag"]}
+        ts = [t for t in ts if (t[0], t[1], t[3]) not in hechas]
+        perts = {t[1] for t in ts if t[3]}
+        ts = [t for t in ts if t[3] or t[1] in perts]
+        sims = {(t[0], t[1]) for t in ts if t[3] is None}
+        viejas = [f for f in viejas if f["tag"] or (f["referencia"], f["perturbacion"]) not in sims]
     print(f"{len(ts)} simulaciones, {procesos} procesos", flush=True)
     filas, trazas = [], []
     with Pool(procesos) as pool:
@@ -210,7 +235,7 @@ def main():
                   f"{fila['ruido']:5} s{fila['semilla']:>2}  RMSE {fila['rmse']:.4f}  "
                   f"en rango {fila['en_rango']:.0%}", flush=True)
     distancias(filas, trazas)
-    OUT.write_text(json.dumps(filas, indent=2, ensure_ascii=False), encoding="utf-8")
+    OUT.write_text(json.dumps(viejas + filas, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"-> {OUT}")
 
 
