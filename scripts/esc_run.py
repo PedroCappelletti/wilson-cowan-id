@@ -83,7 +83,7 @@ def main():
                     help="nombre del .npz en data/processed/uncertain (sin extension)")
     ap.add_argument("--variant", required=True,
                     choices=["whitebox", "A", "B", "C", "D", "S", "Sg", "H",
-                             "Hp", "K", "lag", "latent"])
+                             "Hp", "K", "BB", "BBH", "lag", "latent"])
     ap.add_argument("--window", type=int, default=100)
     ap.add_argument("--epochs", type=int, default=1500)
     # Expuesto para el smoke de punta a punta: con el modelo recien inicializado
@@ -129,10 +129,12 @@ def main():
     if args.freeze_phys and args.variant in ("lag", "latent"):
         ap.error("--freeze-phys no está implementado para el estado aumentado: "
                  "fit_aug siempre entrena β")
-    if args.init_model and (args.init_params or args.variant in ("lag", "latent")):
-        ap.error("--init-model va solo, y no está implementado para el estado aumentado")
-    if (args.x0_suave > 1 or args.x0_libre > 0) and args.variant in ("lag", "latent"):
-        ap.error("--x0-suave y --x0-libre no están implementados para el estado aumentado")
+    if args.init_model and (args.init_params or args.variant == "latent"):
+        ap.error("--init-model va solo, y no está implementado para el estado latente")
+    if args.x0_suave > 1 and args.variant in ("lag", "latent"):
+        ap.error("--x0-suave no está implementado para el estado aumentado")
+    if args.x0_libre > 0 and args.variant == "latent":
+        ap.error("--x0-libre no está implementado para el estado latente")
 
     data_path = Path("data/processed/uncertain") / f"{args.data}.npz"
     # Hash del dataset: sin esto, un .npz regenerado deja los resultados viejos
@@ -172,8 +174,14 @@ def main():
         # no congela beta, asi que --freeze-phys no aplica aca.
         if args.init_params:
             cargar_params(model.core, args.init_params)
+        if args.init_model:
+            ck0 = torch.load(args.init_model, map_location="cpu", weights_only=False)
+            if ck0.get("recorte", False) != recorte:
+                ap.error("--init-model con otra forma de saturación que el dataset")
+            model.load_state_dict(ck0["state"])
         cfg = AugTrainConfig(window=args.window, epochs=args.epochs,
-                             seed=args.seed, val_every=args.val_every)
+                             seed=args.seed, val_every=args.val_every,
+                             x0_libre=args.x0_libre)
         res = fit_aug(data, model, cfg, val_fn=val_fn)
         ck = {"kind": args.variant, "state": model.state_dict(),
               "tau_min": getattr(model, "tau_min", 0.15),
@@ -212,7 +220,8 @@ def main():
               "use_correction": model.use_correction,
               "correction_inputs": model.correction_inputs,
               "hist_len": getattr(model, "hist_len", 0),
-              "structured": model.structured}
+              "structured": model.structured,
+              "con_backbone": model.con_backbone}
 
     mins = (time.time() - t0) / 60.0
     model.eval()
@@ -223,11 +232,18 @@ def main():
     torch.save(ck, OUT_DIR / "models" / f"{args.tag}.pt")
 
     ev = evaluar(model, data["raw"], data["true"])
+    if not getattr(model, "con_backbone", True):
+        # Sin backbone no hay β ni término faltante contra el cual medir: los
+        # errores serían los del arranque en 1,0 y el R² compararía con eso.
+        for k in ("mean_param_error", "max_param_error", "param_errors",
+                  "r2_delta_test", "r2_residuo_test"):
+            ev[k] = None
 
     print(f"\n  RESULTADO {args.tag}: NRMSE_test={ev['nrmse_test']:.2f}% "
           f"(I={ev['nrmse_I']:.2f} E={ev['nrmse_E']:.2f}) "
-          f"R2df={ev['r2_delta_test']:.3f} "
-          f"err_param={ev['mean_param_error']:.2f}% [{mins:.1f} min]", flush=True)
+          + (f"R2df={ev['r2_delta_test']:.3f} err_param={ev['mean_param_error']:.2f}% "
+             if ev["mean_param_error"] is not None else "")
+          + f"[{mins:.1f} min]", flush=True)
 
     out = {
         "tag": args.tag, "data": args.data, "data_sha256": data_sha,

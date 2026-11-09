@@ -64,7 +64,8 @@ def cargar(ckpt_path):
                       use_correction=ck.get("use_correction", False),
                       correction_inputs=ck.get("correction_inputs", "x"),
                       structured=ck.get("structured", False),
-                      hist_len=ck.get("hist_len", 0), **extra)
+                      hist_len=ck.get("hist_len", 0),
+                      con_backbone=ck.get("con_backbone", True), **extra)
     elif kind == "lag":
         m = LagGrayBox(tau_min=ck.get("tau_min", 0.15), recorte=ck.get("recorte", False))
     elif kind == "latent":

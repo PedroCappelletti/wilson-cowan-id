@@ -281,6 +281,10 @@ VARIANTS = {
     # entrar a la MLP. Mismo campo receptivo con un orden de magnitud menos de
     # parametros, y el kernel queda legible.
     "K":        dict(use_correction=True,  correction_inputs="xconv"),
+    # BB = referencia black-box: ẋ = g(I, E, P, Q), sin Wilson-Cowan. BBH es la
+    # misma con la historia del comando de H. No hay β que identificar.
+    "BB":       dict(use_correction=True,  correction_inputs="xpq", con_backbone=False),
+    "BBH":      dict(use_correction=True,  correction_inputs="xhist", con_backbone=False),
 }
 
 
@@ -317,7 +321,8 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
     dt = data["dt"]
 
     phys_raw = [getattr(model, f"raw_{k}") for k in PHYS]
-    if cfg.freeze_phys:
+    sin_beta = cfg.freeze_phys or not getattr(model, "con_backbone", True)
+    if sin_beta:
         # Entrenamiento en dos etapas: β viene ya ajustado (--init-params) y
         # queda fijo. Sin requires_grad=False el control de huérfanos de abajo
         # frenaría la corrida, y con él β no recibe gradiente.
@@ -427,7 +432,7 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
     #     mas se beneficia de un metodo de segundo orden).
     # Con β congelado se saltea: L-BFGS mueve solo los parámetros físicos, que
     # es justo lo que tiene que quedar fijo.
-    if cfg.lbfgs_steps > 0 and not cfg.freeze_phys:
+    if cfg.lbfgs_steps > 0 and not sin_beta:
         params = [model.raw_w] + phys_raw + struct_raw
         opt2 = torch.optim.LBFGS(params, lr=1.0, max_iter=20,
                                  line_search_fn="strong_wolfe")

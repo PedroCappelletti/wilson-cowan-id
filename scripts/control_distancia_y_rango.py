@@ -26,6 +26,11 @@
 # y 2 ese nivel no se identifica (α̂ queda en 0,1 con recorte y se va a 0,001 con
 # tanh), y el controlador pide hasta ±11. En el tag va como sufijo «@sat3».
 #
+# actf es la misma planta con filtro y sin saturación (el recorte en ±10⁹). Sus
+# modelos son los e21: con comandos de entrenamiento en [0, 2] el recorte en ±3
+# nunca actúa, así que los datos de actc y de actf son los mismos. En la forma
+# exacta se saca el recorte («@satinf»); las redes no tienen un nivel separable.
+#
 #   python scripts/control_distancia_y_rango.py [procesos]
 #   python scripts/control_distancia_y_rango.py [procesos] --nuevas   (solo lo que falta en el json)
 #   python scripts/control_distancia_y_rango.py --probar    (simulador, refs en rango)
@@ -65,6 +70,12 @@ def modelos(planta, suf, k):
                  ("forma exacta, sat 3", "lag_wrm", "@sat3"),
                  ("historia pasada", "Hp100_wrm", ""), ("filtro entrenable", "K400f8_wrm", ""),
                  ("agnóstica", "e2B_wrm", ""))]
+    if planta == "actf":
+        return [(n, f"e21_{c}{suf}_s{k}{s}") for n, c, s in
+                (("white-box", "e2wb", ""), ("con red", "H100_wrm", ""),
+                 ("forma exacta, sin saturación", "lag_wrm", "@satinf"),
+                 ("historia pasada", "Hp100_wrm", ""), ("filtro entrenable", "K400f8_wrm", ""),
+                 ("agnóstica", "e2B_wrm", ""))]
     out = [("white-box", f"e16_{WB[planta]}{suf}_s{k}"),
            ("con red", f"e16_{CON_RED[(planta, suf)]}{suf}_s{k}"),
            ("forma exacta", f"e16_{EXACTA[planta]}{suf}_s{k}")]
@@ -86,9 +97,9 @@ def modelos(planta, suf, k):
 def tareas():
     out = []
     for ref in REFS:
-        for planta in ("ideal", "refrac", "act", "actc"):
+        for planta in ("ideal", "refrac", "act", "actc", "actf"):
             out.append((ref, planta, "simulador", None, "", -1))
-        for planta in ("refrac", "act", "actc"):
+        for planta in ("refrac", "act", "actc", "actf"):
             for suf in NIVELES:
                 for k in SEMILLAS:
                     for nombre, tag in modelos(planta, suf, k):
@@ -164,12 +175,14 @@ def una(t):
     if tag is None:
         planta = make_perturbed_plant(p, {"ideal": NoPerturbation(), "refrac": Refractoriness(r=0.10),
                                           "act": Actuator(sat=3.0, tau_act=1.0),
-                                          "actc": Actuator(sat=3.0, tau_act=1.0, recorte=True)}[pert])
+                                          "actc": Actuator(sat=3.0, tau_act=1.0, recorte=True),
+                                          "actf": Actuator(sat=1e9, tau_act=1.0, recorte=True)}[pert])
     else:
         base, _, sat = tag.partition("@sat")
         planta = planta_de(cargar(RES / "models" / f"{base}.pt")[0], n_pasos)
         if sat:
-            planta.alpha = 1.0 / float(sat)
+            # 1/α = ∞ daría división por cero en PlantaFiltro; 10⁹ no recorta nunca
+            planta.alpha = 1e-9 if sat == "inf" else 1.0 / float(sat)
     ctrl = IMCController(fixed_de(true), {kk: true[kk] for kk in W}, sat_ref=fixed_de(true))
     with np.errstate(over="ignore", invalid="ignore"):
         sol = simulate_closed_loop_ext(planta, ctrl, refs, t_span=t_span, dt=DT, dt_ctrl=DT)

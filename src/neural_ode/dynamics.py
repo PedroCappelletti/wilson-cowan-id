@@ -64,8 +64,12 @@ class GrayBoxWC(nn.Module):
         structured: bool = False,         # True -> correccion FISICA en vez de red
         hist_len: int = 0,                # K de correction_inputs="xhist"/"xconv"
         n_fir: int = 4,                   # canales del filtro FIR de "xconv"
+        con_backbone: bool = True,        # False -> black-box: el campo es solo g
     ) -> None:
         super().__init__()
+        # Sin backbone los β siguen existiendo (el checkpoint y los diagnósticos
+        # los esperan), pero no entran al campo y fit() no los entrena.
+        self.con_backbone = con_backbone
 
         # --- CORRECCION ESTRUCTURADA (alternativa a la red neuronal) ----------
         #  En vez de un MLP generico de ~1000 pesos, se agregan TRES parametros
@@ -289,6 +293,8 @@ class GrayBoxWC(nn.Module):
     #  x: (...,2)=[I,E];  P,Q: tensores broadcastables a (...,1).
     # -------------------------------------------------------------------------
     def forward(self, x: torch.Tensor, P: torch.Tensor, Q: torch.Tensor) -> torch.Tensor:
+        if not self.con_backbone:
+            return self.g_out(x, P, Q)
         out = self.backbone(x, P, Q)
         if self.use_correction:
             out = out + self.g_out(x, P, Q)

@@ -203,6 +203,8 @@ class AugTrainConfig:
     lr_phys: float = 2e-2
     lr_extra: float = 2e-2      # τ̂, α (LagGrayBox)
     lr_g: float = 3e-3          # redes g y h (LatentGrayBox)
+    x0_libre: float = 0.0       # peso de la continuidad con x0 entrenable (0 = x0 fijo)
+    lr_x0: float = 5e-3
     seed: int = 0
     log_every: int = 250
     val_every: int = 100
@@ -254,6 +256,14 @@ def fit_aug(data: dict, model: nn.Module, cfg: AugTrainConfig,
     own = [p for n, p in model.named_parameters(recurse=False)]
     if own:
         groups.append({"params": own, "lr": cfg.lr_extra})
+    # x0 entrenable, como en graybox_train.fit, solo para (I, E). El estado del
+    # filtro de LagGrayBox no se libera: sale exacto de filtrar el comando, que
+    # se conoce sin ruido, así que ya es continuo entre ventanas.
+    sigue = None
+    if cfg.x0_libre > 0.0:
+        x0 = torch.nn.Parameter(x0.clone())
+        groups.append({"params": [x0], "lr": cfg.lr_x0})
+        sigue = torch.tensor([i for i in range(len(x0) - 1) if (i + 1) % nwin])
     opt = torch.optim.Adam(groups)
 
     hist = []
@@ -262,7 +272,10 @@ def fit_aug(data: dict, model: nn.Module, cfg: AugTrainConfig,
         y0 = torch.cat([x0, hidden0()], dim=-1)
         pred = rollout(model, y0, Pw, Qw, dt)[..., :2]   # solo lo observable
         loss = ((pred - tgt) ** 2).mean()
-        loss.backward()
+        total = loss
+        if sigue is not None:
+            total = loss + cfg.x0_libre * ((pred[-1, sigue] - x0[sigue + 1]) ** 2).mean()
+        total.backward()
         torch.nn.utils.clip_grad_norm_(
             [p for g in groups for p in g["params"]], 10.0)
         opt.step()
