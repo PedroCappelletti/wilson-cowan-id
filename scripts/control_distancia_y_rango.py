@@ -63,15 +63,19 @@ SUBMUESTREO = 10       # se guarda cada 0,05 ms
 
 def modelos(planta, suf, k):
     """(etiqueta, tag) de los modelos de una planta, ruido y semilla."""
+    # e23: la forma exacta con x0 entrenable (segunda etapa sobre e21 lag_wrm)
+    x0 = f"e23_lag_x0{suf}_s{k}"
     if planta == "actc":
-        # actuador con recorte en ±3 (e21), sin segunda etapa x0
-        return [(n, f"e21_{c}{suf}_s{k}{s}") for n, c, s in
+        # actuador con recorte en ±3 (e21); de las segundas etapas x0, solo e23
+        return [("forma exacta x0", x0), ("forma exacta x0, sat 3", x0 + "@sat3")] + [
+            (n, f"e21_{c}{suf}_s{k}{s}") for n, c, s in
                 (("white-box", "e2wb", ""), ("con red", "H100_wrm", ""), ("forma exacta", "lag_wrm", ""),
                  ("forma exacta, sat 3", "lag_wrm", "@sat3"),
                  ("historia pasada", "Hp100_wrm", ""), ("filtro entrenable", "K400f8_wrm", ""),
                  ("agnóstica", "e2B_wrm", ""))]
     if planta == "actf":
-        return [(n, f"e21_{c}{suf}_s{k}{s}") for n, c, s in
+        return [("forma exacta x0, sin saturación", x0 + "@satinf")] + [
+            (n, f"e21_{c}{suf}_s{k}{s}") for n, c, s in
                 (("white-box", "e2wb", ""), ("con red", "H100_wrm", ""),
                  ("forma exacta, sin saturación", "lag_wrm", "@satinf"),
                  ("historia pasada", "Hp100_wrm", ""), ("filtro entrenable", "K400f8_wrm", ""),
