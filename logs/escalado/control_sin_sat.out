@@ -1,0 +1,175 @@
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+148 simulaciones, 3 procesos
+  theta2s     actf   white-box              _n01  s 0  RMSE 0.0449  en rango 14%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actf   simulador                    s-1  RMSE 0.0560  en rango 21%
+  theta2s     actf   forma exacta, sin saturación _n01  s 0  RMSE 0.0557  en rango 20%
+  theta2s     actf   con red                _n01  s 0  RMSE 0.1478  en rango 7%
+  theta2s     actf   historia pasada        _n01  s 0  RMSE 0.0647  en rango 3%
+  theta2s     actf   agnóstica              _n01  s 0  RMSE 0.0438  en rango 12%
+  theta2s     actf   white-box              _n01  s 1  RMSE 0.0449  en rango 14%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actf   filtro entrenable      _n01  s 0  RMSE 0.1932  en rango 4%
+  theta2s     actf   forma exacta, sin saturación _n01  s 1  RMSE 0.0557  en rango 20%
+  theta2s     actf   con red                _n01  s 1  RMSE 0.1164  en rango 7%
+  theta2s     actf   historia pasada        _n01  s 1  RMSE 0.0640  en rango 4%
+  theta2s     actf   agnóstica              _n01  s 1  RMSE 0.0442  en rango 13%
+  theta2s     actf   white-box              _n01  s 2  RMSE 0.0447  en rango 14%
+  theta2s     actf   filtro entrenable      _n01  s 1  RMSE 0.1695  en rango 4%
+  theta2s     actf   forma exacta, sin saturación _n01  s 2  RMSE 0.0559  en rango 20%
+  theta2s     actf   con red                _n01  s 2  RMSE 0.1369  en rango 7%
+  theta2s     actf   historia pasada        _n01  s 2  RMSE 0.0706  en rango 2%
+  theta2s     actf   agnóstica              _n01  s 2  RMSE 0.0436  en rango 13%
+  theta2s     actf   white-box              _n05  s 0  RMSE 0.0432  en rango 23%
+  theta2s     actf   filtro entrenable      _n01  s 2  RMSE 0.1734  en rango 5%
+  theta2s     actf   forma exacta, sin saturación _n05  s 0  RMSE 0.0549  en rango 19%
+  theta2s     actf   con red                _n05  s 0  RMSE 0.1525  en rango 4%
+  theta2s     actf   historia pasada        _n05  s 0  RMSE 0.0615  en rango 18%
+  theta2s     actf   agnóstica              _n05  s 0  RMSE 0.0419  en rango 13%
+  theta2s     actf   white-box              _n05  s 1  RMSE 0.0431  en rango 30%
+  theta2s     actf   filtro entrenable      _n05  s 0  RMSE 0.1456  en rango 5%
+  theta2s     actf   forma exacta, sin saturación _n05  s 1  RMSE 0.0561  en rango 18%
+  theta2s     actf   con red                _n05  s 1  RMSE 0.1007  en rango 6%
+  theta2s     actf   historia pasada        _n05  s 1  RMSE 0.0710  en rango 4%
+  theta2s     actf   white-box              _n05  s 2  RMSE 0.0425  en rango 32%
+  theta2s     actf   agnóstica              _n05  s 1  RMSE 0.0417  en rango 14%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actf   filtro entrenable      _n05  s 1  RMSE 0.1647  en rango 4%
+  theta2s     actf   forma exacta, sin saturación _n05  s 2  RMSE 0.0560  en rango 18%
+  theta2s     actf   con red                _n05  s 2  RMSE 0.1342  en rango 5%
+  theta2s     actf   historia pasada        _n05  s 2  RMSE 0.0819  en rango 2%
+  gamma50     actf   simulador                    s-1  RMSE 0.0633  en rango 3%
+  gamma50     actf   white-box              _n01  s 0  RMSE 0.0378  en rango 53%
+  gamma50     actf   con red                _n01  s 0  RMSE 0.0583  en rango 48%
+  gamma50     actf   forma exacta, sin saturación _n01  s 0  RMSE 0.0643  en rango 3%
+  gamma50     actf   historia pasada        _n01  s 0  RMSE 0.0686  en rango 22%
+  gamma50     actf   filtro entrenable      _n01  s 0  RMSE 0.0559  en rango 39%
+  gamma50     actf   agnóstica              _n01  s 0  RMSE 0.0337  en rango 56%
+  gamma50     actf   white-box              _n01  s 1  RMSE 0.0378  en rango 53%
+  gamma50     actf   con red                _n01  s 1  RMSE 0.0564  en rango 49%
+  gamma50     actf   forma exacta, sin saturación _n01  s 1  RMSE 0.0626  en rango 4%
+  gamma50     actf   historia pasada        _n01  s 1  RMSE 0.0458  en rango 36%
+  gamma50     actf   filtro entrenable      _n01  s 1  RMSE 0.0335  en rango 63%
+  gamma50     actf   agnóstica              _n01  s 1  RMSE 0.0340  en rango 58%
+  gamma50     actf   white-box              _n01  s 2  RMSE 0.0374  en rango 54%
+  gamma50     actf   con red                _n01  s 2  RMSE 0.0576  en rango 43%
+  gamma50     actf   forma exacta, sin saturación _n01  s 2  RMSE 0.0624  en rango 4%
+  gamma50     actf   historia pasada        _n01  s 2  RMSE 0.0657  en rango 21%
+  theta2s     actf   agnóstica              _n05  s 2  RMSE 0.0411  en rango 14%
+  gamma50     actf   agnóstica              _n01  s 2  RMSE 0.0321  en rango 57%
+  gamma50     actf   white-box              _n05  s 0  RMSE 0.0330  en rango 57%
+  gamma50     actf   filtro entrenable      _n01  s 2  RMSE 0.0545  en rango 34%
+  gamma50     actf   forma exacta, sin saturación _n05  s 0  RMSE 0.0633  en rango 4%
+  gamma50     actf   con red                _n05  s 0  RMSE 0.0610  en rango 27%
+  gamma50     actf   historia pasada        _n05  s 0  RMSE 0.0549  en rango 29%
+  gamma50     actf   agnóstica              _n05  s 0  RMSE 0.0304  en rango 60%
+  gamma50     actf   white-box              _n05  s 1  RMSE 0.0323  en rango 58%
+  gamma50     actf   filtro entrenable      _n05  s 0  RMSE 0.0482  en rango 41%
+  gamma50     actf   forma exacta, sin saturación _n05  s 1  RMSE 0.0639  en rango 3%
+  gamma50     actf   con red                _n05  s 1  RMSE 0.0418  en rango 53%
+  gamma50     actf   historia pasada        _n05  s 1  RMSE 0.0420  en rango 30%
+  gamma50     actf   agnóstica              _n05  s 1  RMSE 0.0294  en rango 63%
+  gamma50     actf   filtro entrenable      _n05  s 1  RMSE 0.0560  en rango 23%
+  gamma50     actf   white-box              _n05  s 2  RMSE 0.0308  en rango 60%
+  gamma50     actf   forma exacta, sin saturación _n05  s 2  RMSE 0.0601  en rango 6%
+  gamma50     actf   con red                _n05  s 2  RMSE 0.0494  en rango 40%
+  gamma50     actf   historia pasada        _n05  s 2  RMSE 0.0704  en rango 17%
+  theta2s     actf   filtro entrenable      _n05  s 2  RMSE 0.1620  en rango 5%
+  gamma50     actf   agnóstica              _n05  s 2  RMSE 0.0296  en rango 62%
+  gamma50     actf   filtro entrenable      _n05  s 2  RMSE 0.0428  en rango 33%
+  theta_rango actf   white-box              _n01  s 0  RMSE 0.0114  en rango 93%
+  theta_rango actf   simulador                    s-1  RMSE 0.0113  en rango 100%
+  theta_rango actf   forma exacta, sin saturación _n01  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actf   con red                _n01  s 0  RMSE 0.0307  en rango 31%
+  theta_rango actf   historia pasada        _n01  s 0  RMSE 0.0327  en rango 25%
+  theta_rango actf   agnóstica              _n01  s 0  RMSE 0.0114  en rango 91%
+  theta_rango actf   white-box              _n01  s 1  RMSE 0.0114  en rango 93%
+  theta_rango actf   filtro entrenable      _n01  s 0  RMSE 0.0622  en rango 19%
+  theta_rango actf   forma exacta, sin saturación _n01  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actf   con red                _n01  s 1  RMSE 0.0317  en rango 34%
+  theta_rango actf   historia pasada        _n01  s 1  RMSE 0.0376  en rango 21%
+  theta_rango actf   agnóstica              _n01  s 1  RMSE 0.0116  en rango 89%
+  theta_rango actf   white-box              _n01  s 2  RMSE 0.0114  en rango 94%
+  theta_rango actf   filtro entrenable      _n01  s 1  RMSE 0.0486  en rango 24%
+  theta_rango actf   forma exacta, sin saturación _n01  s 2  RMSE 0.0113  en rango 100%
+  theta_rango actf   con red                _n01  s 2  RMSE 0.0344  en rango 28%
+  theta_rango actf   historia pasada        _n01  s 2  RMSE 0.0506  en rango 16%
+  theta_rango actf   white-box              _n05  s 0  RMSE 0.0115  en rango 100%
+  theta_rango actf   agnóstica              _n01  s 2  RMSE 0.0116  en rango 91%
+  theta_rango actf   filtro entrenable      _n01  s 2  RMSE 0.0461  en rango 22%
+  theta_rango actf   forma exacta, sin saturación _n05  s 0  RMSE 0.0113  en rango 95%
+  theta_rango actf   con red                _n05  s 0  RMSE 0.0313  en rango 41%
+  theta_rango actf   historia pasada        _n05  s 0  RMSE 0.0384  en rango 18%
+  theta_rango actf   agnóstica              _n05  s 0  RMSE 0.0117  en rango 92%
+  theta_rango actf   white-box              _n05  s 1  RMSE 0.0115  en rango 100%
+  theta_rango actf   filtro entrenable      _n05  s 0  RMSE 0.0487  en rango 21%
+  theta_rango actf   forma exacta, sin saturación _n05  s 1  RMSE 0.0113  en rango 99%
+  theta_rango actf   con red                _n05  s 1  RMSE 0.0360  en rango 27%
+  theta_rango actf   historia pasada        _n05  s 1  RMSE 0.0420  en rango 17%
+  theta_rango actf   white-box              _n05  s 2  RMSE 0.0115  en rango 100%
+  theta_rango actf   agnóstica              _n05  s 1  RMSE 0.0117  en rango 82%
+  theta_rango actf   filtro entrenable      _n05  s 1  RMSE 0.0539  en rango 17%
+  theta_rango actf   forma exacta, sin saturación _n05  s 2  RMSE 0.0113  en rango 99%
+  theta_rango actf   con red                _n05  s 2  RMSE 0.0377  en rango 27%
+  theta_rango actf   historia pasada        _n05  s 2  RMSE 0.0613  en rango 14%
+  gamma_rango actf   simulador                    s-1  RMSE 0.0195  en rango 100%
+  theta_rango actf   agnóstica              _n05  s 2  RMSE 0.0119  en rango 99%
+  gamma_rango actf   white-box              _n01  s 0  RMSE 0.0206  en rango 92%
+  theta_rango actf   filtro entrenable      _n05  s 2  RMSE 0.0516  en rango 23%
+  gamma_rango actf   forma exacta, sin saturación _n01  s 0  RMSE 0.0195  en rango 99%
+  gamma_rango actf   con red                _n01  s 0  RMSE 0.0448  en rango 9%
+  gamma_rango actf   historia pasada        _n01  s 0  RMSE 0.0453  en rango 9%
+  gamma_rango actf   agnóstica              _n01  s 0  RMSE 0.0206  en rango 80%
+  gamma_rango actf   filtro entrenable      _n01  s 0  RMSE 0.0726  en rango 8%
+  gamma_rango actf   white-box              _n01  s 1  RMSE 0.0206  en rango 92%
+  gamma_rango actf   forma exacta, sin saturación _n01  s 1  RMSE 0.0195  en rango 99%
+  gamma_rango actf   con red                _n01  s 1  RMSE 0.0509  en rango 16%
+  gamma_rango actf   historia pasada        _n01  s 1  RMSE 0.0609  en rango 8%
+  gamma_rango actf   white-box              _n01  s 2  RMSE 0.0206  en rango 92%
+  gamma_rango actf   agnóstica              _n01  s 1  RMSE 0.0207  en rango 62%
+  gamma_rango actf   filtro entrenable      _n01  s 1  RMSE 0.0582  en rango 10%
+  gamma_rango actf   forma exacta, sin saturación _n01  s 2  RMSE 0.0195  en rango 98%
+  gamma_rango actf   con red                _n01  s 2  RMSE 0.0496  en rango 13%
+  gamma_rango actf   historia pasada        _n01  s 2  RMSE 0.0648  en rango 7%
+  gamma_rango actf   agnóstica              _n01  s 2  RMSE 0.0208  en rango 82%
+  gamma_rango actf   white-box              _n05  s 0  RMSE 0.0204  en rango 92%
+  gamma_rango actf   filtro entrenable      _n01  s 2  RMSE 0.0559  en rango 11%
+  gamma_rango actf   forma exacta, sin saturación _n05  s 0  RMSE 0.0196  en rango 88%
+  gamma_rango actf   con red                _n05  s 0  RMSE 0.0498  en rango 15%
+  gamma_rango actf   historia pasada        _n05  s 0  RMSE 0.0461  en rango 11%
+  gamma_rango actf   white-box              _n05  s 1  RMSE 0.0204  en rango 92%
+  gamma_rango actf   agnóstica              _n05  s 0  RMSE 0.0209  en rango 79%
+  gamma_rango actf   filtro entrenable      _n05  s 0  RMSE 0.0678  en rango 11%
+  gamma_rango actf   forma exacta, sin saturación _n05  s 1  RMSE 0.0195  en rango 89%
+  gamma_rango actf   con red                _n05  s 1  RMSE 0.0510  en rango 12%
+  gamma_rango actf   historia pasada        _n05  s 1  RMSE 0.0635  en rango 8%
+  gamma_rango actf   agnóstica              _n05  s 1  RMSE 0.0214  en rango 73%
+  gamma_rango actf   white-box              _n05  s 2  RMSE 0.0203  en rango 92%
+  gamma_rango actf   filtro entrenable      _n05  s 1  RMSE 0.0628  en rango 9%
+  gamma_rango actf   forma exacta, sin saturación _n05  s 2  RMSE 0.0195  en rango 89%
+  gamma_rango actf   con red                _n05  s 2  RMSE 0.0569  en rango 8%
+  gamma_rango actf   historia pasada        _n05  s 2  RMSE 0.0678  en rango 7%
+  gamma_rango actf   agnóstica              _n05  s 2  RMSE 0.0209  en rango 87%
+  gamma_rango actf   filtro entrenable      _n05  s 2  RMSE 0.0550  en rango 16%
+-> C:\Users\User\Desktop\wilson-cowan-id\results\control_distancia_rango.json
