@@ -22,29 +22,22 @@
 \maketitle
 \vspace{-12mm}
 
-\section{Configuración}
-
-Todas las corridas usan el controlador IMC del paper de referencia, con los parámetros nominales de Wilson-Cowan y sin modificaciones. Lo único que cambia es el bloque que ocupa el lugar de la planta. En el lazo con el simulador es Wilson-Cowan con el actuador perturbado, con filtro de primer orden de 1~ms y recorte en $\pm 3$. En el lazo con cada modelo es el modelo identificado de ese simulador, de la semilla 0 y con ruido de medición $\sigma = 0{,}01$.
-
-En cada figura hay un panel por modelo, con tres curvas. La referencia en gris grueso, el lazo con el simulador en negro y el lazo con el modelo del panel en trazo discontinuo. El título de cada panel da el RMSE entre la variable del lazo con ese modelo y la referencia, calculado sobre el último 80~\% de la corrida, igual que en el paper del controlador. La leyenda da el mismo RMSE para el lazo con el simulador.
-
-Los modelos son el white-box, la agnóstica $g(I, E)$, la historia con comando actual (5~ms), la historia sin comando actual (5~ms), el filtro de 8 canales (20~ms) y el estado de filtro en tres versiones. Con recorte en $\pm 10$ es el modelo tal como quedó entrenado. Con recorte en $\pm 3$ es el mismo modelo con el nivel del recorte fijado en su valor de diseño. La última versión agrega la segunda etapa con x0 entrenable.
-
 \section{Referencias}
 
 \subsection{Theta-gamma con ventana}
 
-La referencia es la gamma de 120~Hz del paper del controlador, encendida solo cerca de los valles de una onda theta,
+Referencia:
 \begin{align*}
 r_I(t) &= T_w(t)\,\big[\,0{,}2\,\sin(2\pi f_\gamma t - 0{,}94) + 0{,}25\,\big],\\
-r_E(t) &= T_w(t)\,\big[\,0{,}3\,\sin(2\pi f_\gamma t) + 0{,}45\,\big],
+r_E(t) &= T_w(t)\,\big[\,0{,}3\,\sin(2\pi f_\gamma t) + 0{,}45\,\big],\\
+T_w(t) &= \begin{cases} 1 & \text{si } \big|\pi - |\varphi_\theta(t)|\big| < \pi/4,\\ 0 & \text{si no,} \end{cases}
 \end{align*}
-con $f_\gamma = 120$~Hz y $t \in [0, 2000]$~ms. La ventana vale $T_w(t) = 1$ cuando la fase $\varphi_\theta(t)$ de la theta está a menos de $\pi/4$ del valle, $\big|\pi - |\varphi_\theta(t)|\big| < \pi/4$, y $T_w(t) = 0$ fuera. Fuera de la ventana la referencia es el reposo, $r_I = r_E = 0$. La theta es ruido blanco gaussiano (semilla 0) filtrado entre 4 y 12~Hz con un Butterworth de orden 4 sin desfase, normalizado a amplitud máxima 1. Su fase sale de la transformada de Hilbert.
+con $f_\gamma = 120$~Hz, $t \in [0, 2000]$~ms y $\varphi_\theta$ la fase de una theta de 4 a 12~Hz.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{theta2s_referencia.pdf}
-\caption{Arriba, la onda theta, con las ventanas $T_w = 1$ en celeste. Abajo, $r_E$ en los 2~s de la corrida. La franja gris marca la ventana que se muestra en las figuras siguientes, entre 1150 y 1500~ms.}
+\caption{Arriba, la theta, con $T_w = 1$ en celeste. Abajo, $r_E$. En gris, la ventana de las figuras siguientes.}
 \end{figure}
 
 \begin{figure}[H]
@@ -62,7 +55,7 @@ Dentro de cada ráfaga, el lazo con el simulador sigue la forma de la gamma con 
 
 \subsection{Gamma continua de 50~ms}
 
-Es la referencia del paper del controlador sin ventana,
+Referencia:
 \begin{align*}
 r_I(t) &= 0{,}2\,\sin(2\pi f_\gamma t - 0{,}94) + 0{,}25,\\
 r_E(t) &= 0{,}3\,\sin(2\pi f_\gamma t) + 0{,}45,
@@ -84,11 +77,11 @@ Con la gamma continua, el lazo con el simulador va atrasado respecto de la refer
 
 \subsection{Referencias con el comando en el rango de entrenamiento}
 
-Estas dos referencias se construyeron para que el controlador no saque el comando del rango de los datos de entrenamiento, $P \in [0, 2]$ y $Q \in [0, 1{,}5]$. Cada una es la respuesta del Wilson-Cowan ideal, sin perturbación y desde el reposo, a un estímulo senoidal,
+Referencia: $\big(r_I(t), r_E(t)\big) = \big(I(t), E(t)\big)$, la solución del Wilson-Cowan sin perturbación desde el reposo con
 \[
 P(t) = 1 + 0{,}8\,\sin(2\pi f t), \qquad Q(t) = 0{,}75 + 0{,}6\,\sin(2\pi f t - 1),
 \]
-de modo que $\big(r_I(t), r_E(t)\big)$ es la trayectoria $\big(I(t), E(t)\big)$ que produce ese estímulo. La referencia theta usa $f = 8$~Hz durante 500~ms, y la gamma $f = 40$~Hz durante 250~ms. Las dos son alcanzables por construcción.
+con $f = 8$~Hz y $t \in [0, 500]$~ms para la theta, y $f = 40$~Hz y $t \in [0, 250]$~ms para la gamma.
 
 \begin{figure}[H]
 \centering
