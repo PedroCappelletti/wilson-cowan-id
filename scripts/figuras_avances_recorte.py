@@ -123,8 +123,8 @@ def fig_saturacion():
 
 
 # --- 2. Lazo abierto, tanh contra recorte ----------------------------------------
-MODELOS_ACT = [("white-box", "e2wb"), ("agnóstica", "e2B_wrm"), ("historia 5 ms", "H100_wrm"),
-               ("filtro 8 canales", "K400f8_wrm"), ("historia pasada", "Hp100_wrm"),
+MODELOS_ACT = [("white-box", "e2wb"), ("agnóstica", "e2B_wrm"), ("historia con comando actual", "H100_wrm"),
+               ("filtro 8 canales", "K400f8_wrm"), ("historia sin comando actual", "Hp100_wrm"),
                ("estado de filtro", "lag_wrm")]
 
 
@@ -143,8 +143,8 @@ def fig_tanh_vs_recorte(clave, nombre, xlabel, xmax):
 
 # --- 3. β verdadero fijo ------------------------------------------------------------
 def fig_e20():
-    redes = [("agnóstica, refractariedad", "B100"), ("historia 5 ms", "H100"),
-             ("filtro 8 canales", "K400f8"), ("historia pasada", "Hp100"),
+    redes = [("agnóstica, refractariedad", "B100"), ("historia con comando actual", "H100"),
+             ("filtro 8 canales", "K400f8"), ("historia sin comando actual", "Hp100"),
              ("agnóstica, actuador", "e2B")]
     fig, ax = plt.subplots(figsize=(7.0, 4.6))
     series = [(t, c, [media(f"e20_{r}_vrd", s, "r2_residuo_test") for _, r in redes]) for s, t, c in SIGMA]
@@ -170,8 +170,8 @@ def fig_e20():
 
 # --- 4. x0 entrenable: error de β̂ antes y después -----------------------------------
 def fig_x0():
-    filas = [("white-box", "e21_e2wb", "e22_e2wb_x0"), ("historia 5 ms", "e21_H100_wrm", "e22_H100_x0"),
-             ("historia pasada", "e21_Hp100_wrm", "e22_Hp100_x0"),
+    filas = [("white-box", "e21_e2wb", "e22_e2wb_x0"), ("historia con comando actual", "e21_H100_wrm", "e22_H100_x0"),
+             ("historia sin comando actual", "e21_Hp100_wrm", "e22_Hp100_x0"),
              ("filtro 8 canales", "e21_K400f8_wrm", "e22_K400f8_x0"),
              ("estado de filtro", "e21_lag_wrm", "e23_lag_x0")]
     fig, axs = plt.subplots(1, 2, figsize=(10.4, 4.6), sharey=True)
@@ -203,11 +203,11 @@ def lazo():
     return lambda pert, ref, pl, suf, k: st.median(x[k] for x in g[(pert, ref, pl, suf)])
 
 
-PLANTAS_LAZO = [("white-box", "white-box"), ("agnóstica", "agnóstica"), ("historia 5 ms", "con red"),
-                ("filtro 8 canales", "filtro entrenable"), ("historia pasada", "historia pasada"),
-                ("estado de filtro, recorte ±10", "forma exacta"),
-                ("estado de filtro, recorte ±3", "forma exacta, sat 3"),
-                ("estado de filtro x0, recorte ±3", "forma exacta x0, sat 3")]
+PLANTAS_LAZO = [("white-box", "white-box"), ("agnóstica", "agnóstica"), ("historia con comando actual", "con red"),
+                ("filtro 8 canales", "filtro entrenable"), ("historia sin comando actual", "historia pasada"),
+                ("estado de filtro, recorte en ±10", "forma exacta"),
+                ("estado de filtro, recorte en ±3", "forma exacta, sat 3"),
+                ("estado de filtro x0, recorte en ±3", "forma exacta x0, sat 3")]
 
 
 def fig_distancia(L):
@@ -232,10 +232,10 @@ def fig_rmse_vs_distancia(L):
         ax.plot(x, y, "o", color=AZUL, ms=8, mec="white", mew=1.2)
     p = lambda pl, k: L("actc", "theta2s", pl, "_n01", k)
     etiquetas = [("white-box y agnóstica", "white-box", (0.055, 0.036)),
-                 ("estado de filtro, recorte ±10", "forma exacta", (0.06, 0.047)),
-                 ("historia pasada", "historia pasada", (0.065, 0.075)),
-                 ("estado de filtro, recorte ±3,\ncon y sin x0 entrenable", "forma exacta, sat 3", (0.004, 0.09)),
-                 ("historia 5 ms", "con red", (0.105, 0.145)),
+                 ("estado de filtro, recorte en ±10", "forma exacta", (0.06, 0.047)),
+                 ("historia sin comando actual", "historia pasada", (0.058, 0.08)),
+                 ("estado de filtro, recorte en ±3,\ncon y sin x0 entrenable", "forma exacta, sat 3", (0.004, 0.105)),
+                 ("historia con comando actual", "con red", (0.07, 0.145)),
                  ("filtro 8 canales", "filtro entrenable", (0.125, 0.178))]
     for txt, pl, (tx, ty) in etiquetas:
         ax.annotate(txt, (p(pl, "dist_x"), p(pl, "rmse")), xytext=(tx, ty), fontsize=14.5, color=TINTA,
@@ -248,8 +248,8 @@ def fig_rmse_vs_distancia(L):
 
 
 def fig_saturacion_lazo(L):
-    casos = [("recorte ±10 (entrenado)", "actc", "forma exacta"), ("recorte ±3 (diseño)", "actc", "forma exacta, sat 3"),
-             ("x0 entrenable, recorte ±3", "actc", "forma exacta x0, sat 3"),
+    casos = [("recorte en ±10", "actc", "forma exacta"), ("recorte en ±3", "actc", "forma exacta, sat 3"),
+             ("x0 entrenable, recorte en ±3", "actc", "forma exacta x0, sat 3"),
              ("sin recorte*", "actf", "forma exacta, sin saturación"),
              ("x0 entrenable, sin recorte*", "actf", "forma exacta x0, sin saturación")]
     fig, axs = plt.subplots(1, 2, figsize=(10.8, 4.8), sharey=True)
@@ -264,37 +264,44 @@ def fig_saturacion_lazo(L):
 
 
 def fig_trazas():
+    """Lazo con cada modelo contra el lazo con el simulador, un panel por modelo.
+    La ventana de 1250 a 1350 ms muestra a la historia con comando actual
+    siguiendo la referencia y después trabada en un punto fijo."""
+    from matplotlib.lines import Line2D
     z = np.load(RAIZ / "results" / "trazas_lazo_ejemplo.npz")
     nombres = list(z["nombres"])
     dt = 0.05                                   # ms entre muestras guardadas
     t0 = 400.0                                  # la traza arranca en el 20 % de 2 s
     t = t0 + dt * np.arange(len(z["0_E"]))
-    a, b = np.searchsorted(t, 1630), np.searchsorted(t, 1690)
+    a, b = np.searchsorted(t, 1250), np.searchsorted(t, 1350)
     sim = nombres.index("simulador")
-    modelos = [("historia 5 ms", "historia 5 ms", NARANJA),
-               ("estado de filtro, nivel 10", "estado de filtro, recorte ±10", AMARILLO),
-               ("estado de filtro x0, nivel 3", "estado de filtro x0, recorte ±3", AZUL)]
-    for var, ylab, nombre, banda in (("E", "E", "trazas_E", False), ("P", "comando P", "trazas_P", True)):
-        fig, axs = plt.subplots(3, 1, figsize=(10.4, 6.4), sharex=True, sharey=True)
-        for ax, (clave, etiqueta, color) in zip(axs, modelos):
-            k = nombres.index(clave)
-            if banda:
-                ax.axhspan(-3, 3, color="#ecebe7", zorder=0)
-            ax.plot(t[a:b], z[f"{sim}_{var}"][a:b], color=TINTA, lw=2.2)
-            ax.plot(t[a:b], z[f"{k}_{var}"][a:b], color=color, lw=1.8, ls="--")
-            ax.set_ylabel(ylab)
-            ax.set_title(etiqueta, loc="left", fontsize=15, pad=4)
-        axs[-1].set_xlabel("tiempo (ms)")
-        fig.tight_layout(rect=(0, 0, 1, 0.93), h_pad=0.4)
-        from matplotlib.lines import Line2D
-        fig.legend([Line2D([], [], color=TINTA, lw=2.2), Line2D([], [], color=TINTA2, lw=1.8, ls="--")],
-                   ["simulador", "modelo del título"], loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.0))
-        guardar(fig, nombre, y_numerico=True)
+    grupos = {"redes": [("white-box", GRIS), ("agnóstica", AQUA), ("historia 5 ms con comando actual", NARANJA),
+                        ("historia 5 ms sin comando actual", "#e87ba4")],
+              "filtro": [("filtro 8 canales", "#6250d6"), ("estado de filtro, recorte en ±10", AMARILLO),
+                         ("estado de filtro, recorte en ±3", AZUL), ("estado de filtro x0, recorte en ±3", AZUL)]}
+    for var, ylab, banda in (("E", "E", False), ("P", "comando P", True)):
+        for grupo, modelos in grupos.items():
+            fig, axs = plt.subplots(2, 2, figsize=(12.4, 5.8), sharex=True, sharey=True)
+            for ax, (clave, color) in zip(axs.flat, modelos):
+                k = nombres.index(clave)
+                if banda:
+                    ax.axhspan(-3, 3, color="#ecebe7", zorder=0)
+                ax.plot(t[a:b], z[f"{sim}_{var}"][a:b], color=TINTA, lw=2.0)
+                ax.plot(t[a:b], z[f"{k}_{var}"][a:b], color=color, lw=1.8, ls="--")
+                ax.set_title(clave, loc="left", fontsize=15, pad=3)
+            for ax in axs[:, 0]:
+                ax.set_ylabel(ylab)
+            for ax in axs[1]:
+                ax.set_xlabel("tiempo (ms)")
+            fig.tight_layout(rect=(0, 0, 1, 0.92), h_pad=0.6, w_pad=1.0)
+            fig.legend([Line2D([], [], color=TINTA, lw=2.0), Line2D([], [], color=TINTA2, lw=1.8, ls="--")],
+                       ["simulador", "modelo del título"], loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.0))
+            guardar(fig, f"trazas_{var}_{grupo}", y_numerico=True)
 
 
 # --- 6. Black-box ---------------------------------------------------------------
 def fig_blackbox():
-    plantas = [("actuador con recorte", "act", "e21_e2wb", "e21_H100_wrm", "historia 5 ms", "e21_lag_wrm",
+    plantas = [("actuador con recorte", "act", "e21_e2wb", "e21_H100_wrm", "historia con comando actual", "e21_lag_wrm",
                 "estado de filtro"),
                ("refractariedad", "ref", "e16_e1wb", "e16_B100_wrm", "agnóstica", "e16_e1S2_wrm",
                 "forma exacta")]

@@ -23,6 +23,7 @@
 \newcommand{\pie}[1]{\par\vspace{0.5mm}{\raggedright\scriptsize\color{tinta2}#1\par}}
 % figura que ocupa el ancho de la diapositiva
 \newcommand{\figura}[1]{{\centering\includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{#1}\par}}
+\newcommand{\figurat}[1]{{\centering\includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{#1}\par}}
 \newcommand{\bh}{$\hat\beta$}
 
 \title{Actuador con recorte, x0 entrenable\\y referencia black-box}
@@ -63,7 +64,7 @@
 
 \begin{frame}{NRMSE con tanh y con recorte}
   \figura{nrmse_tanh_vs_recorte.pdf}
-  \pie{NRMSE de test de los mismos modelos. Con la tanh la compresión quedaba absorbida en $w_{EE}$, $w_{EI}$ y $a_e$, con NRMSE parecido y \bh{} peor.}
+  \pie{NRMSE de test de los mismos modelos. Las dos historias cubren 5~ms del comando. Una incluye el comando actual y la otra solo los retardos. Con la tanh la compresión quedaba absorbida en $w_{EE}$, $w_{EI}$ y $a_e$, con NRMSE parecido y \bh{} peor.}
 \end{frame}
 
 \begin{frame}{Capacidad de cada red con $\beta$ verdadero fijo (e20)}
@@ -76,8 +77,8 @@
       \small
       \begin{itemize}\setlength\itemsep{2mm}
         \item Sin el comando actual, la red no reconstruye el estado del filtro.
-        \item Con $\beta$ libre la historia pasada parecía equivalente a la de 5~ms, porque \bh{} absorbía parte del término.
-        \item La historia pasada se evalúa solo en el lugar del simulador dentro del lazo, no dentro del controlador.
+        \item Con $\beta$ libre la historia sin comando actual parecía equivalente a la historia con comando actual, porque \bh{} absorbía parte del término.
+        \item La historia sin comando actual se evalúa solo en el lugar del simulador dentro del lazo, no dentro del controlador.
       \end{itemize}
     \end{column}
   \end{columns}
@@ -88,13 +89,23 @@
   \pie{Error de \bh{} antes (gris) y después (azul) de la segunda etapa con el estado inicial de cada ventana entrenable. Redes en e22, estado de filtro en e23, desde el checkpoint de e21. El modelo de partida compite en la selección por validación. El white-box no mejora su validación con x0 y queda igual.}
 \end{frame}
 
-\begin{frame}{Actividad $E$ en lazo cerrado}
-  \figura{trazas_E.pdf}
-  \pie{$E$ con el controlador IMC del paper y la referencia theta-gamma, entre 1630 y 1690~ms. En cada panel, el lazo con el simulador (continua) y el lazo con el modelo del título (discontinua). Modelos de la semilla 0 con $\sigma = 0{,}01$.}
+\begin{frame}{Actividad $E$ en lazo cerrado: correcciones con red}
+  \figurat{trazas_E_redes.pdf}
+  \pie{$E$ con el controlador IMC del paper, theta-gamma, 1250 a 1350~ms, semilla 0, $\sigma = 0{,}01$. Con la historia con comando actual, el lazo queda fijo en $E \approx 0{,}3$ desde unos 1300~ms.}
 \end{frame}
 
-\begin{frame}{Comando $P$ en lazo cerrado}
-  \figura{trazas_P.pdf}
+\begin{frame}{Actividad $E$ en lazo cerrado: filtro entrenable y estado de filtro}
+  \figurat{trazas_E_filtro.pdf}
+  \pie{$E$, mismas corridas. Con el filtro de 8 canales, el lazo queda fijo en $E \approx 0{,}4$ desde unos 1310~ms.}
+\end{frame}
+
+\begin{frame}{Comando $P$ en lazo cerrado: correcciones con red}
+  \figurat{trazas_P_redes.pdf}
+  \pie{Comando $P$ que calcula el controlador en las mismas corridas. La franja gris marca $\pm 3$, el nivel del recorte del simulador.}
+\end{frame}
+
+\begin{frame}{Comando $P$ en lazo cerrado: filtro entrenable y estado de filtro}
+  \figurat{trazas_P_filtro.pdf}
   \pie{Comando $P$ que calcula el controlador en las mismas corridas. La franja gris marca $\pm 3$, el nivel del recorte del simulador.}
 \end{frame}
 
@@ -123,7 +134,7 @@
 
 \begin{frame}{Estado de filtro en el lazo: nivel del recorte y x0}
   \figura{estado_filtro_en_lazo.pdf}
-  \pie{Distancia al lazo con el simulador. «Recorte ±10» es el nivel con el que quedó el modelo entrenado, que no se mueve de su valor inicial porque los comandos de entrenamiento no llegan a 3. «Recorte ±3» es el nivel de diseño, fijado sin reentrenar. * Simulador con filtro y sin saturación, modelo sin recorte.}
+  \pie{Distancia al lazo con el simulador. El nivel del recorte del modelo no se identifica, porque los comandos de entrenamiento no llegan a 3. «Recorte en ±10» es el valor con el que se inicializa, que no cambia al entrenar. «Recorte en ±3» es el valor de diseño, fijado sin reentrenar. * Simulador con filtro y sin saturación, modelo sin recorte.}
 \end{frame}
 
 \begin{frame}{Referencia black-box (e24)}

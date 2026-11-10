@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Trazas de lazo cerrado para las figuras de avances: theta-gamma de 2 s sobre
 # el actuador con recorte, semilla 0 y σ 0,01. control_distancia_y_rango.py no
-# guarda las trazas, así que acá se vuelven a correr las cinco plantas.
+# guarda las trazas, así que acá se vuelven a correr el simulador y los ocho modelos.
 #
 #   python scripts/trazas_lazo_ejemplo.py
 
@@ -23,9 +23,13 @@ OUT = RAIZ / "results" / "trazas_lazo_ejemplo.npz"
 CASOS = [
     ("simulador", None),
     ("white-box", "e21_e2wb_n01_s0"),
-    ("historia 5 ms", "e21_H100_wrm_n01_s0"),
-    ("estado de filtro, nivel 10", "e21_lag_wrm_n01_s0"),
-    ("estado de filtro x0, nivel 3", "e23_lag_x0_n01_s0@sat3"),
+    ("agnóstica", "e21_e2B_wrm_n01_s0"),
+    ("historia 5 ms con comando actual", "e21_H100_wrm_n01_s0"),
+    ("historia 5 ms sin comando actual", "e21_Hp100_wrm_n01_s0"),
+    ("filtro 8 canales", "e21_K400f8_wrm_n01_s0"),
+    ("estado de filtro, recorte en ±10", "e21_lag_wrm_n01_s0"),
+    ("estado de filtro, recorte en ±3", "e21_lag_wrm_n01_s0@sat3"),
+    ("estado de filtro x0, recorte en ±3", "e23_lag_x0_n01_s0@sat3"),
 ]
 
 
