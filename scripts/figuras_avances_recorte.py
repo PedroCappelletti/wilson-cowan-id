@@ -212,12 +212,12 @@ PLANTAS_LAZO = [("white-box", "white-box"), ("agnóstica", "agnóstica"), ("hist
 
 def fig_distancia(L):
     fig, axs = plt.subplots(1, 2, figsize=(10.8, 6.2), sharey=True)
-    for ax, (ref, titulo, xmax) in zip(axs, (("theta2s", "theta-gamma, 2 s", 0.19),
+    for ax, (ref, titulo, xmax) in zip(axs, (("theta2s", "theta-gamma, 2 s", 0.095),
                                               ("gamma50", "gamma, 50 ms", 0.11))):
         series = [(t, c, [L("actc", ref, pl, s, "dist_x") for _, pl in PLANTAS_LAZO]) for s, t, c in SIGMA]
         barras_h(ax, [e for e, _ in PLANTAS_LAZO], series, fmt="{:.3f}", xmax=xmax)
         ax.set_title(titulo)
-        ax.set_xlabel("distancia al lazo con el simulador")
+        ax.set_xlabel("distancia")
     leyenda_arriba(fig, axs[0])
     guardar(fig, "distancia_lazos")
 
@@ -226,22 +226,22 @@ def fig_rmse_vs_distancia(L):
     fig, ax = plt.subplots(figsize=(7.2, 5.2))
     sim = L("actc", "theta2s", "simulador", "", "rmse")
     ax.axhline(sim, color=GRIS, lw=1, ls="--")
-    ax.text(0.181, sim + 0.003, "simulador", ha="right", fontsize=14.5, color=TINTA2)
+    ax.text(0.089, sim + 0.0012, "simulador", ha="right", fontsize=14.5, color=TINTA2)
     for e, pl in PLANTAS_LAZO:
         x, y = L("actc", "theta2s", pl, "_n01", "dist_x"), L("actc", "theta2s", pl, "_n01", "rmse")
         ax.plot(x, y, "o", color=AZUL, ms=8, mec="white", mew=1.2)
     p = lambda pl, k: L("actc", "theta2s", pl, "_n01", k)
-    etiquetas = [("white-box y agnóstica", "white-box", (0.055, 0.036)),
-                 ("estado de filtro, recorte en ±10", "forma exacta", (0.06, 0.047)),
-                 ("historia sin comando actual", "historia pasada", (0.058, 0.08)),
-                 ("estado de filtro, recorte en ±3,\ncon y sin x0 entrenable", "forma exacta, sat 3", (0.004, 0.105)),
-                 ("historia con comando actual", "con red", (0.07, 0.145)),
-                 ("filtro 8 canales", "filtro entrenable", (0.125, 0.178))]
+    etiquetas = [("white-box y agnóstica", "white-box", (0.043, 0.0385)),
+                 ("estado de filtro, recorte en ±10", "forma exacta", (0.002, 0.0485)),
+                 ("historia sin comando actual", "historia pasada", (0.061, 0.0635)),
+                 ("estado de filtro, recorte en ±3,\ncon y sin x0 entrenable", "forma exacta, sat 3", (0.002, 0.072)),
+                 ("historia con comando actual", "con red", (0.052, 0.0515)),
+                 ("filtro 8 canales", "filtro entrenable", (0.042, 0.0815))]
     for txt, pl, (tx, ty) in etiquetas:
         ax.annotate(txt, (p(pl, "dist_x"), p(pl, "rmse")), xytext=(tx, ty), fontsize=14.5, color=TINTA,
                     va="center", arrowprops=dict(arrowstyle="-", color=GRIS, lw=0.8, shrinkB=5))
-    ax.set_xlim(0, 0.19)
-    ax.set_ylim(0.03, 0.19)
+    ax.set_xlim(0, 0.09)
+    ax.set_ylim(0.035, 0.087)
     ax.set_xlabel("distancia al lazo con el simulador")
     ax.set_ylabel("RMSE de seguimiento")
     guardar(fig, "rmse_vs_distancia", y_numerico=True)
@@ -258,7 +258,7 @@ def fig_saturacion_lazo(L):
         series = [(t, c, [L(p, ref, pl, s, "dist_x") for _, p, pl in casos]) for s, t, c in SIGMA]
         barras_h(ax, [c[0] for c in casos], series, fmt="{:.3f}", xmax=xmax)
         ax.set_title(titulo)
-        ax.set_xlabel("distancia al lazo con el simulador")
+        ax.set_xlabel("distancia")
     leyenda_arriba(fig, axs[0])
     guardar(fig, "estado_filtro_en_lazo")
 

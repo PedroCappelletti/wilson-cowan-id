@@ -105,15 +105,21 @@ class PlantaHistoria:
 
     def __call__(self, I, E, P, Q, extra, t):
         s = t / DT
-        i = int(math.floor(s + 1e-6))
+        # Tolerancia de 1e-3 pasos, no de 1e-6. t se acumula sumando dt y el
+        # error de redondeo pasa de 1e-6 pasos hacia los 1292 ms: con la
+        # tolerancia vieja el comando dejaba de registrarse, la red veía una
+        # historia en cero y el lazo se trababa en un punto fijo falso (theta2s
+        # con H y K, hasta el 10/11/2026). Las etapas intermedias del RK4 caen en
+        # medio paso, lejos de cualquier tolerancia chica.
+        i = int(math.floor(s + 1e-3))
         # Al principio de cada paso el comando nuevo pisa al que dejó la última
         # etapa del RK4 anterior, así que cada casilla termina con el aplicado.
-        if abs(s - round(s)) < 1e-6:
+        if abs(s - round(s)) < 1e-3:
             self.logP[i], self.logQ[i] = P, Q
         Ph, Qh = np.empty(self.K), np.empty(self.K)
         Ph[0], Qh[0] = P, Q
         for k in range(1, self.K):
-            j = int(math.floor((t - k * DT_MODELO) / DT + 1e-6))
+            j = int(math.floor((t - k * DT_MODELO) / DT + 1e-3))
             Ph[k], Qh[k] = (self.logP[j], self.logQ[j]) if j >= 0 else (0.0, 0.0)
         dI, dE = self.campo(I, E, Ph, Qh)
         return dI, dE, ()

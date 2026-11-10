@@ -91,12 +91,12 @@
 
 \begin{frame}{Actividad $E$ en lazo cerrado: correcciones con red}
   \figurat{trazas_E_redes.pdf}
-  \pie{$E$ con el controlador IMC del paper, theta-gamma, 1250 a 1350~ms, semilla 0, $\sigma = 0{,}01$. Con la historia con comando actual, el lazo queda fijo en $E \approx 0{,}3$ desde unos 1300~ms.}
+  \pie{$E$ con el controlador IMC del paper, theta-gamma, 1250 a 1350~ms, semilla 0, $\sigma = 0{,}01$. Continua, simulador. Discontinua, modelo del título.}
 \end{frame}
 
 \begin{frame}{Actividad $E$ en lazo cerrado: filtro entrenable y estado de filtro}
   \figurat{trazas_E_filtro.pdf}
-  \pie{$E$, mismas corridas. Con el filtro de 8 canales, el lazo queda fijo en $E \approx 0{,}4$ desde unos 1310~ms.}
+  \pie{$E$, mismas corridas. Con el filtro de 8 canales $E$ oscila entre los dos trenes de la referencia, donde el lazo con el simulador queda en reposo.}
 \end{frame}
 
 \begin{frame}{Comando $P$ en lazo cerrado: correcciones con red}
@@ -124,9 +124,9 @@
     \begin{column}{0.39\textwidth}
       \small
       \begin{itemize}\setlength\itemsep{2mm}
-        \item El white-box y la agnóstica siguen a la referencia mejor que el simulador, con lazos lejanos al del simulador.
+        \item El white-box y la agnóstica siguen a la referencia mejor que el simulador. Su lazo queda a 0,034 del lazo con el simulador, contra 0,010 del estado de filtro con recorte en $\pm 3$.
+        \item Las correcciones con historia siguen casi como el simulador y quedan más lejos, entre 0,049 y 0,065.
         \item El RMSE de seguimiento no ordena modelos. Se reporta junto con la distancia.
-        \item Con el comando dentro del rango de entrenamiento, el estado de filtro, el white-box y la agnóstica quedan a menos de 0,003.
       \end{itemize}
     \end{column}
   \end{columns}

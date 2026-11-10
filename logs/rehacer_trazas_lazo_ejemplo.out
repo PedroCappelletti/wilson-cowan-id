@@ -1,0 +1,16 @@
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+simulador                      RMSE 0.0570
+white-box                      RMSE 0.0449
+agnóstica                      RMSE 0.0438
+historia 5 ms con comando actual RMSE 0.0610
+historia 5 ms sin comando actual RMSE 0.0700
+filtro 8 canales               RMSE 0.0887
+estado de filtro, recorte en ±10 RMSE 0.0557
+estado de filtro, recorte en ±3 RMSE 0.0573
+estado de filtro x0, recorte en ±3 RMSE 0.0574
+-> C:\Users\User\Desktop\wilson-cowan-id\results\trazas_lazo_ejemplo.npz

@@ -82,11 +82,15 @@ Cada modelo identificado reemplaza a la planta bajo el controlador IMC del paper
 | simulador | 0,057 | − | − |
 | white-box | 0,045 / 0,043 | 0,034 / 0,035 | 0,061 / 0,062 |
 | agnóstica | 0,044 / 0,042 | 0,034 / 0,035 | 0,061 / 0,062 |
-| historia 5 ms | 0,137 / 0,134 | 0,137 / 0,136 | 0,068 / 0,066 |
+| historia con comando actual | 0,059 / 0,063 | 0,049 / 0,054 | 0,068 / 0,066 |
+| historia sin comando actual | 0,070 / 0,079 | 0,057 / 0,066 | 0,076 / 0,070 |
+| filtro 8 canales | 0,077 / 0,078 | 0,065 / 0,071 | 0,067 / 0,067 |
 | estado de filtro, nivel entrenado (10) | 0,056 / 0,056 | 0,035 / 0,038 | 0,062 / 0,087 |
 | estado de filtro, nivel fijo en 3 | 0,057 / 0,058 | 0,010 / 0,033 | 0,007 / 0,059 |
 
-**El RMSE de seguimiento no ordena modelos.** El white-box y la agnóstica siguen a la referencia mejor que la planta, y sus lazos quedan tan lejos del de la planta como el estado de filtro con el nivel entrenado.
+**El RMSE de seguimiento no ordena modelos.** El white-box y la agnóstica siguen a la referencia mejor que el simulador, y sus lazos quedan a 0,034 del lazo con el simulador, igual que el estado de filtro con el nivel entrenado. Las correcciones con historia del comando siguen casi como el simulador y quedan más lejos, entre 0,049 y 0,065.
+
+**Corrección de la simulación.** En una versión anterior las correcciones con historia aparecían trabadas en theta-gamma, con RMSE de 0,137 y 0,172. Era un error de la simulación del lazo. El tiempo se acumula sumando el paso, y desde los 1292 ms el código dejaba de registrar el comando aplicado, así que la red veía una historia en cero. Corregido el registro, ninguna se traba. Las referencias más cortas que 1292 ms no estaban afectadas.
 
 **Nivel de saturación.** Con theta-gamma el controlador pide comandos de hasta ±11. El nivel del recorte no se identifica con comandos de entrenamiento en $[0, 2]$. Con el nivel fijo en su valor de diseño y sin reentrenar, el estado de filtro reproduce el lazo de la planta con σ = 0,01. Con σ = 0,05 mejora menos, por el error de $\hat\beta$. En la línea con tanh fijar el nivel no ayuda, porque las ganancias ya absorbieron la compresión.
 
@@ -99,11 +103,11 @@ Cada modelo identificado reemplaza a la planta bajo el controlador IMC del paper
 | simulador con recorte, RMSE | 0,0570 | 0,0676 |
 | simulador sin recorte, RMSE | 0,0560 | 0,0633 |
 | estado de filtro sin recorte, distancia | 0,007 / 0,029 | 0,017 / 0,079 |
-| historia 5 ms, distancia | 0,137 / 0,136 | 0,071 / 0,064 |
+| historia con comando actual, distancia | 0,048 / 0,053 | 0,071 / 0,064 |
 
 Con la forma exacta de e23 (x0 entrenable) la distancia con σ = 0,05 baja a 0,013 en theta-gamma y a 0,019 en gamma, con el nivel de diseño y sin saturación. Con $\hat\beta$ corregido, el lazo con el modelo coincide con el lazo con el simulador en los dos niveles de ruido.
 
-La saturación cambia poco el seguimiento del simulador, como ya se había visto con el simulador solo. La forma exacta sin recorte reproduce el lazo sin saturación con σ = 0,01. Las redes quedan a la misma distancia que con recorte, así que su lazo lejano viene de extrapolar comandos fuera del rango de entrenamiento y no de la saturación.
+La saturación cambia poco el seguimiento del simulador, como ya se había visto con el simulador solo. La forma exacta sin recorte reproduce el lazo sin saturación con σ = 0,01. Las redes quedan a la misma distancia que con recorte, así que su distancia no viene de la saturación.
 
 # 6. Referencia black-box (e24)
 

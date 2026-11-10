@@ -1,0 +1,102 @@
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+84 simulaciones, 3 procesos
+  theta2s     actc   simulador                    s-1  RMSE 0.0570  en rango 20%
+  theta2s     actf   simulador                    s-1  RMSE 0.0560  en rango 21%
+  theta2s     act    simulador                    s-1  RMSE 0.0599  en rango 21%
+  theta2s     act    con red                _n01  s 0  RMSE 0.0558  en rango 13%
+  theta2s     act    historia pasada        _n01  s 0  RMSE 0.0650  en rango 10%
+  theta2s     act    filtro entrenable      _n01  s 0  RMSE 0.0733  en rango 8%
+  theta2s     act    historia 5 ms x0       _n01  s 0  RMSE 0.0536  en rango 14%
+  theta2s     act    historia pasada x0     _n01  s 0  RMSE 0.0575  en rango 17%
+  theta2s     act    con red                _n01  s 1  RMSE 0.0670  en rango 8%
+  theta2s     act    filtro entrenable x0   _n01  s 0  RMSE 0.0672  en rango 9%
+  theta2s     act    historia pasada        _n01  s 1  RMSE 0.0654  en rango 8%
+  theta2s     act    historia 5 ms x0       _n01  s 1  RMSE 0.0576  en rango 14%
+  theta2s     act    historia pasada x0     _n01  s 1  RMSE 0.0605  en rango 10%
+  theta2s     act    filtro entrenable      _n01  s 1  RMSE 0.0783  en rango 7%
+  theta2s     act    con red                _n01  s 2  RMSE 0.0577  en rango 11%
+  theta2s     act    historia pasada        _n01  s 2  RMSE 0.0719  en rango 5%
+  theta2s     act    filtro entrenable x0   _n01  s 1  RMSE 0.0804  en rango 8%
+  theta2s     act    historia 5 ms x0       _n01  s 2  RMSE 0.0553  en rango 14%
+  theta2s     act    filtro entrenable      _n01  s 2  RMSE 0.0858  en rango 8%
+  theta2s     act    historia pasada x0     _n01  s 2  RMSE 0.0631  en rango 7%
+  theta2s     act    con red                _n05  s 0  RMSE 0.0620  en rango 10%
+  theta2s     act    historia pasada        _n05  s 0  RMSE 0.0752  en rango 4%
+  theta2s     act    filtro entrenable x0   _n01  s 2  RMSE 0.0739  en rango 10%
+  theta2s     act    historia 5 ms x0       _n05  s 0  RMSE 0.0560  en rango 12%
+  theta2s     act    filtro entrenable      _n05  s 0  RMSE 0.0912  en rango 7%
+  theta2s     act    historia pasada x0     _n05  s 0  RMSE 0.0640  en rango 7%
+  theta2s     act    con red                _n05  s 1  RMSE 0.0595  en rango 9%
+  theta2s     act    historia pasada        _n05  s 1  RMSE 0.0832  en rango 4%
+  theta2s     act    filtro entrenable x0   _n05  s 0  RMSE 0.0733  en rango 9%
+  theta2s     act    historia 5 ms x0       _n05  s 1  RMSE 0.0566  en rango 12%
+  theta2s     act    historia pasada x0     _n05  s 1  RMSE 0.0671  en rango 6%
+  theta2s     act    filtro entrenable      _n05  s 1  RMSE 0.0724  en rango 8%
+  theta2s     act    con red                _n05  s 2  RMSE 0.0623  en rango 9%
+  theta2s     act    historia pasada        _n05  s 2  RMSE 0.0877  en rango 6%
+  theta2s     act    filtro entrenable x0   _n05  s 1  RMSE 0.0646  en rango 10%
+  theta2s     act    historia 5 ms x0       _n05  s 2  RMSE 0.0578  en rango 9%
+  theta2s     act    historia pasada x0     _n05  s 2  RMSE 0.0671  en rango 9%
+  theta2s     act    filtro entrenable      _n05  s 2  RMSE 0.0706  en rango 6%
+  theta2s     actc   con red                _n01  s 0  RMSE 0.0610  en rango 12%
+  theta2s     actc   historia pasada        _n01  s 0  RMSE 0.0700  en rango 6%
+  theta2s     act    filtro entrenable x0   _n05  s 2  RMSE 0.0545  en rango 13%
+  theta2s     actc   con red                _n01  s 1  RMSE 0.0584  en rango 11%
+  theta2s     actc   historia pasada        _n01  s 1  RMSE 0.0700  en rango 7%
+  theta2s     actc   filtro entrenable      _n01  s 0  RMSE 0.0887  en rango 7%
+  theta2s     actc   filtro entrenable      _n01  s 1  RMSE 0.0768  en rango 8%
+  theta2s     actc   con red                _n01  s 2  RMSE 0.0593  en rango 12%
+  theta2s     actc   historia pasada        _n01  s 2  RMSE 0.0837  en rango 3%
+  theta2s     actc   con red                _n05  s 0  RMSE 0.0619  en rango 7%
+  theta2s     actc   historia pasada        _n05  s 0  RMSE 0.0685  en rango 7%
+  theta2s     actc   filtro entrenable      _n01  s 2  RMSE 0.0765  en rango 7%
+  theta2s     actc   con red                _n05  s 1  RMSE 0.0626  en rango 11%
+  theta2s     actc   filtro entrenable      _n05  s 0  RMSE 0.0736  en rango 8%
+  theta2s     actc   historia pasada        _n05  s 1  RMSE 0.0791  en rango 7%
+  theta2s     actc   con red                _n05  s 2  RMSE 0.0668  en rango 9%
+  theta2s     actc   historia pasada        _n05  s 2  RMSE 0.0985  en rango 3%
+  theta2s     actc   filtro entrenable      _n05  s 1  RMSE 0.0781  en rango 7%
+  theta2s     actf   con red                _n01  s 0  RMSE 0.0610  en rango 12%
+  theta2s     actf   historia pasada        _n01  s 0  RMSE 0.0700  en rango 6%
+  theta2s     actc   filtro entrenable      _n05  s 2  RMSE 0.0786  en rango 9%
+  theta2s     actf   con red                _n01  s 1  RMSE 0.0584  en rango 11%
+  theta2s     actf   historia pasada        _n01  s 1  RMSE 0.0700  en rango 7%
+  theta2s     actf   filtro entrenable      _n01  s 0  RMSE 0.0887  en rango 7%
+  theta2s     actf   historia pasada        _n01  s 2  RMSE 0.0837  en rango 3%
+  theta2s     actf   con red                _n01  s 2  RMSE 0.0593  en rango 12%
+  theta2s     actf   filtro entrenable      _n01  s 1  RMSE 0.0768  en rango 8%
+  theta2s     actf   con red                _n05  s 0  RMSE 0.0619  en rango 7%
+  theta2s     actf   historia pasada        _n05  s 0  RMSE 0.0685  en rango 7%
+  theta2s     actf   filtro entrenable      _n01  s 2  RMSE 0.0765  en rango 7%
+  theta2s     actf   con red                _n05  s 1  RMSE 0.0626  en rango 11%
+  theta2s     actf   historia pasada        _n05  s 1  RMSE 0.0791  en rango 7%
+  theta2s     actf   filtro entrenable      _n05  s 0  RMSE 0.0736  en rango 8%
+  theta2s     actf   con red                _n05  s 2  RMSE 0.0668  en rango 9%
+  theta2s     actf   historia pasada        _n05  s 2  RMSE 0.0985  en rango 3%
+  gamma50     act    simulador                    s-1  RMSE 0.0692  en rango 4%
+  gamma50     actc   simulador                    s-1  RMSE 0.0676  en rango 4%
+  gamma50     actf   simulador                    s-1  RMSE 0.0633  en rango 3%
+  theta2s     actf   filtro entrenable      _n05  s 1  RMSE 0.0781  en rango 7%
+  theta_rango act    simulador                    s-1  RMSE 0.0112  en rango 88%
+  theta_rango actc   simulador                    s-1  RMSE 0.0113  en rango 100%
+  gamma_rango act    simulador                    s-1  RMSE 0.0199  en rango 86%
+  theta_rango actf   simulador                    s-1  RMSE 0.0113  en rango 100%
+  gamma_rango actc   simulador                    s-1  RMSE 0.0195  en rango 100%
+  gamma_rango actf   simulador                    s-1  RMSE 0.0195  en rango 100%
+  theta2s     actf   filtro entrenable      _n05  s 2  RMSE 0.0786  en rango 9%
+-> C:\Users\User\Desktop\wilson-cowan-id\results\control_distancia_rango.json
