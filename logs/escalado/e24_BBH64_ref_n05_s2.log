@@ -1,0 +1,47 @@
+=== escalado · e24_BBH64_ref_n05_s2 · BBH · refrac1_2s_n05_s2 · W=10 · epochs=3000 ===
+    ep     0 | data=1.328e-02 | err_max= 84.38% 
+    ep    99 | val= 13.20%
+    ep   199 | val= 10.57%
+    ep   250 | data=1.362e-03 | err_max= 84.38% 
+    ep   299 | val= 10.33%
+    ep   399 | val= 10.02%
+    ep   499 | val= 17.03%
+    ep   500 | data=2.265e-03 | err_max= 84.38% 
+    ep   599 | val=  8.78%
+    ep   699 | val=  8.39%
+    ep   750 | data=1.081e-03 | err_max= 84.38% 
+    ep   799 | val=  8.02%
+    ep   899 | val=  7.29%
+    ep   999 | val=  6.78%
+    ep  1000 | data=6.395e-04 | err_max= 84.38% 
+    ep  1099 | val=  6.58%
+    ep  1199 | val=  7.37%
+    ep  1250 | data=5.338e-04 | err_max= 84.38% 
+    ep  1299 | val=  5.95%
+    ep  1399 | val=  6.28%
+    ep  1499 | val=  5.68%
+    ep  1500 | data=4.649e-04 | err_max= 84.38% 
+    ep  1599 | val=  5.98%
+    ep  1699 | val=  6.02%
+    ep  1750 | data=4.466e-04 | err_max= 84.38% 
+    ep  1799 | val=  5.78%
+    ep  1899 | val=  5.60%
+    ep  1999 | val=  5.46%
+    ep  2000 | data=4.138e-04 | err_max= 84.38% 
+    ep  2099 | val=  5.35%
+    ep  2199 | val=  5.34%
+    ep  2250 | data=4.388e-04 | err_max= 84.38% 
+    ep  2299 | val=  5.32%
+    ep  2399 | val=  5.61%
+    ep  2499 | val=  5.60%
+    ep  2500 | data=4.302e-04 | err_max= 84.38% 
+    ep  2599 | val=  5.45%
+    ep  2699 | val=  5.60%
+    ep  2750 | data=4.042e-04 | err_max= 84.38% 
+    ep  2799 | val=  5.34%
+    ep  2899 | val=  5.25%
+    ep  2999 | data=4.158e-04 | err_max= 84.38% 
+    ep  2999 | val=  5.55%
+
+  RESULTADO e24_BBH64_ref_n05_s2: NRMSE_test=7.17% (I=8.26 E=6.08) [61.6 min]
+  -> results\escalado\e24_BBH64_ref_n05_s2.json

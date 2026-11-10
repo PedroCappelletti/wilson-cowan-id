@@ -1,0 +1,47 @@
+=== escalado · e24_BB64_ref_n05_s0 · BB · refrac1_2s_n05 · W=10 · epochs=3000 ===
+    ep     0 | data=1.329e-02 | err_max= 84.38% g_rms=0.0000 redund=nan
+    ep    99 | val= 12.56%
+    ep   199 | val= 10.12%
+    ep   250 | data=1.090e-03 | err_max= 84.38% g_rms=0.0550 redund=nan
+    ep   299 | val=  8.67%
+    ep   399 | val=  7.39%
+    ep   499 | val=  6.89%
+    ep   500 | data=6.237e-04 | err_max= 84.38% g_rms=0.0542 redund=nan
+    ep   599 | val=  6.45%
+    ep   699 | val=  6.44%
+    ep   750 | data=5.311e-04 | err_max= 84.38% g_rms=0.0546 redund=nan
+    ep   799 | val=  5.93%
+    ep   899 | val=  5.75%
+    ep   999 | val=  5.99%
+    ep  1000 | data=5.236e-04 | err_max= 84.38% g_rms=0.0547 redund=nan
+    ep  1099 | val=  5.91%
+    ep  1199 | val=  5.91%
+    ep  1250 | data=4.457e-04 | err_max= 84.38% g_rms=0.0547 redund=nan
+    ep  1299 | val=  5.92%
+    ep  1399 | val=  5.30%
+    ep  1499 | val=  6.07%
+    ep  1500 | data=4.605e-04 | err_max= 84.38% g_rms=0.0545 redund=nan
+    ep  1599 | val=  5.14%
+    ep  1699 | val=  5.10%
+    ep  1750 | data=4.124e-04 | err_max= 84.38% g_rms=0.0546 redund=nan
+    ep  1799 | val=  5.50%
+    ep  1899 | val=  6.14%
+    ep  1999 | val=  5.05%
+    ep  2000 | data=4.070e-04 | err_max= 84.38% g_rms=0.0546 redund=nan
+    ep  2099 | val=  5.02%
+    ep  2199 | val=  6.07%
+    ep  2250 | data=4.101e-04 | err_max= 84.38% g_rms=0.0549 redund=nan
+    ep  2299 | val=  5.08%
+    ep  2399 | val=  5.53%
+    ep  2499 | val=  5.59%
+    ep  2500 | data=4.421e-04 | err_max= 84.38% g_rms=0.0552 redund=nan
+    ep  2599 | val=  5.01%
+    ep  2699 | val=  5.04%
+    ep  2750 | data=4.022e-04 | err_max= 84.38% g_rms=0.0549 redund=nan
+    ep  2799 | val=  5.56%
+    ep  2899 | val=  5.07%
+    ep  2999 | data=4.217e-04 | err_max= 84.38% g_rms=0.0546 redund=nan
+    ep  2999 | val=  5.25%
+
+  RESULTADO e24_BB64_ref_n05_s0: NRMSE_test=7.09% (I=8.27 E=5.90) [55.7 min]
+  -> results\escalado\e24_BB64_ref_n05_s0.json

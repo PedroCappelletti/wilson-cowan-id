@@ -1,0 +1,107 @@
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+  falta e16_e2B_wrm_n01_s1, se saltea
+  falta e16_e2B_wrm_n01_s2, se saltea
+  falta e16_e2B_wrm_n05_s1, se saltea
+  falta e16_e2B_wrm_n05_s2, se saltea
+80 simulaciones, 3 procesos
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actc   forma exacta x0        _n01  s 0  RMSE 0.0556  en rango 20%
+  theta2s     actc   simulador                    s-1  RMSE 0.0570  en rango 20%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actf   simulador                    s-1  RMSE 0.0560  en rango 21%
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actc   forma exacta x0, sat 3 _n01  s 0  RMSE 0.0574  en rango 20%
+  theta2s     actc   forma exacta x0        _n01  s 1  RMSE 0.0556  en rango 21%
+  theta2s     actc   forma exacta x0, sat 3 _n01  s 1  RMSE 0.0573  en rango 20%
+  theta2s     actc   forma exacta x0        _n01  s 2  RMSE 0.0556  en rango 21%
+  theta2s     actc   forma exacta x0, sat 3 _n01  s 2  RMSE 0.0573  en rango 20%
+  theta2s     actc   forma exacta x0        _n05  s 0  RMSE 0.0546  en rango 21%
+  theta2s     actc   forma exacta x0, sat 3 _n05  s 0  RMSE 0.0565  en rango 21%
+  theta2s     actc   forma exacta x0        _n05  s 1  RMSE 0.0551  en rango 21%
+  theta2s     actc   forma exacta x0, sat 3 _n05  s 1  RMSE 0.0570  en rango 20%
+  theta2s     actc   forma exacta x0        _n05  s 2  RMSE 0.0549  en rango 20%
+  theta2s     actc   forma exacta x0, sat 3 _n05  s 2  RMSE 0.0568  en rango 20%
+  theta2s     actf   forma exacta x0, sin saturación _n01  s 0  RMSE 0.0556  en rango 20%
+  theta2s     actf   forma exacta x0, sin saturación _n01  s 1  RMSE 0.0556  en rango 21%
+  theta2s     actf   forma exacta x0, sin saturación _n01  s 2  RMSE 0.0555  en rango 21%
+  theta2s     actf   forma exacta x0, sin saturación _n05  s 0  RMSE 0.0546  en rango 21%
+  gamma50     actc   simulador                    s-1  RMSE 0.0676  en rango 4%
+  gamma50     actf   simulador                    s-1  RMSE 0.0633  en rango 3%
+  gamma50     actc   forma exacta x0        _n01  s 0  RMSE 0.0622  en rango 4%
+  gamma50     actc   forma exacta x0, sat 3 _n01  s 0  RMSE 0.0664  en rango 4%
+  gamma50     actc   forma exacta x0        _n01  s 1  RMSE 0.0624  en rango 4%
+  gamma50     actc   forma exacta x0, sat 3 _n01  s 1  RMSE 0.0665  en rango 4%
+  gamma50     actc   forma exacta x0        _n01  s 2  RMSE 0.0622  en rango 4%
+  gamma50     actc   forma exacta x0, sat 3 _n01  s 2  RMSE 0.0665  en rango 4%
+  gamma50     actc   forma exacta x0        _n05  s 0  RMSE 0.0607  en rango 3%
+  gamma50     actc   forma exacta x0, sat 3 _n05  s 0  RMSE 0.0631  en rango 3%
+  gamma50     actc   forma exacta x0        _n05  s 1  RMSE 0.0613  en rango 4%
+  gamma50     actc   forma exacta x0, sat 3 _n05  s 1  RMSE 0.0642  en rango 4%
+  gamma50     actc   forma exacta x0        _n05  s 2  RMSE 0.0611  en rango 4%
+  gamma50     actc   forma exacta x0, sat 3 _n05  s 2  RMSE 0.0637  en rango 4%
+  gamma50     actf   forma exacta x0, sin saturación _n01  s 0  RMSE 0.0623  en rango 4%
+  gamma50     actf   forma exacta x0, sin saturación _n01  s 1  RMSE 0.0624  en rango 4%
+  gamma50     actf   forma exacta x0, sin saturación _n01  s 2  RMSE 0.0622  en rango 4%
+  gamma50     actf   forma exacta x0, sin saturación _n05  s 0  RMSE 0.0607  en rango 3%
+  gamma50     actf   forma exacta x0, sin saturación _n05  s 1  RMSE 0.0612  en rango 4%
+  gamma50     actf   forma exacta x0, sin saturación _n05  s 2  RMSE 0.0610  en rango 4%
+  theta2s     actf   forma exacta x0, sin saturación _n05  s 1  RMSE 0.0551  en rango 21%
+  theta2s     actf   forma exacta x0, sin saturación _n05  s 2  RMSE 0.0549  en rango 20%
+  theta_rango actc   simulador                    s-1  RMSE 0.0113  en rango 100%
+  theta_rango actf   simulador                    s-1  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0, sat 3 _n01  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0        _n01  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0        _n01  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0, sat 3 _n01  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0        _n01  s 2  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0, sat 3 _n01  s 2  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0        _n05  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0, sat 3 _n05  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0        _n05  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0, sat 3 _n05  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0        _n05  s 2  RMSE 0.0113  en rango 100%
+  theta_rango actc   forma exacta x0, sat 3 _n05  s 2  RMSE 0.0113  en rango 100%
+  theta_rango actf   forma exacta x0, sin saturación _n01  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actf   forma exacta x0, sin saturación _n01  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actf   forma exacta x0, sin saturación _n01  s 2  RMSE 0.0113  en rango 100%
+  theta_rango actf   forma exacta x0, sin saturación _n05  s 0  RMSE 0.0113  en rango 100%
+  theta_rango actf   forma exacta x0, sin saturación _n05  s 1  RMSE 0.0113  en rango 100%
+  theta_rango actf   forma exacta x0, sin saturación _n05  s 2  RMSE 0.0113  en rango 100%
+  gamma_rango actc   simulador                    s-1  RMSE 0.0195  en rango 100%
+  gamma_rango actf   simulador                    s-1  RMSE 0.0195  en rango 100%
+  gamma_rango actc   forma exacta x0        _n01  s 0  RMSE 0.0195  en rango 100%
+  gamma_rango actc   forma exacta x0, sat 3 _n01  s 0  RMSE 0.0195  en rango 100%
+  gamma_rango actc   forma exacta x0        _n01  s 1  RMSE 0.0195  en rango 100%
+  gamma_rango actc   forma exacta x0, sat 3 _n01  s 1  RMSE 0.0195  en rango 100%
+  gamma_rango actc   forma exacta x0        _n01  s 2  RMSE 0.0195  en rango 99%
+  gamma_rango actc   forma exacta x0, sat 3 _n01  s 2  RMSE 0.0195  en rango 99%
+  gamma_rango actc   forma exacta x0        _n05  s 0  RMSE 0.0195  en rango 97%
+  gamma_rango actc   forma exacta x0, sat 3 _n05  s 0  RMSE 0.0195  en rango 97%
+  gamma_rango actc   forma exacta x0        _n05  s 1  RMSE 0.0196  en rango 98%
+  gamma_rango actc   forma exacta x0, sat 3 _n05  s 1  RMSE 0.0196  en rango 98%
+  gamma_rango actc   forma exacta x0        _n05  s 2  RMSE 0.0196  en rango 98%
+  gamma_rango actc   forma exacta x0, sat 3 _n05  s 2  RMSE 0.0196  en rango 98%
+  gamma_rango actf   forma exacta x0, sin saturación _n01  s 0  RMSE 0.0195  en rango 100%
+  gamma_rango actf   forma exacta x0, sin saturación _n01  s 1  RMSE 0.0195  en rango 100%
+  gamma_rango actf   forma exacta x0, sin saturación _n01  s 2  RMSE 0.0195  en rango 99%
+  gamma_rango actf   forma exacta x0, sin saturación _n05  s 0  RMSE 0.0195  en rango 97%
+  gamma_rango actf   forma exacta x0, sin saturación _n05  s 1  RMSE 0.0196  en rango 98%
+  gamma_rango actf   forma exacta x0, sin saturación _n05  s 2  RMSE 0.0196  en rango 98%
+-> C:\Users\User\Desktop\wilson-cowan-id\results\control_distancia_rango.json
