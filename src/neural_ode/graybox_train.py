@@ -314,6 +314,11 @@ def fit(data: dict, cfg: TrainConfig, model: GrayBoxWC | None = None,
     if model is None:
         model = build_model(cfg)
     seg = MejorVal(model, val_fn) if val_fn is not None else None
+    # El modelo de partida también compite. En una segunda etapa (--init-model)
+    # puede pasar que ninguna época valide mejor que el punto de partida: pasó
+    # con el white-box en e19 y e22, que se reportó con β̂ empeorado de 20 a 35 %.
+    if seg:
+        seg.evaluar("inicio")
 
     x0, Pw, Qw, tgt = make_windows(data["I"], data["E"], data["P"], data["Q"],
                                    cfg.window, hist=cfg.hist, x0_suave=cfg.x0_suave)

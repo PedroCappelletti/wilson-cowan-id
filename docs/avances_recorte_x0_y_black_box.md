@@ -57,11 +57,11 @@ Con ventanas que arrancan del estado medido, el ruido entra como condición inic
 | modelo | σ = 0,01 | σ = 0,05 |
 |---|---|---|
 | historia 5 ms | 18,6 → 18,6 | 27,4 → 23,3 |
-| historia pasada | 28,9 → 26,7 | 34,2 → 30,2 |
-| filtro 8 canales | 18,9 → 19,7 | 27,6 → 28,1 |
-| white-box | 20,1 → 35,4 | 16,6 → 16,5 |
+| historia pasada | 28,8 → 28,3 | 34,2 → 30,2 |
+| filtro 8 canales | 18,9 → 19,7 | 27,6 → 28,3 |
+| white-box | 20,1 → 20,1 | 16,6 → 16,6 |
 
-El NRMSE de las redes baja entre 0,1 y 0,35 puntos. El white-box con σ = 0,01 empeora en las tres semillas, y su NRMSE sube de 7,28 a 7,83. Los x0 libres absorben parte de lo que el modelo no puede representar.
+El NRMSE de las redes baja entre 0,1 y 0,35 puntos. En la selección por validación compite también el modelo de partida. En el white-box ninguna época de la segunda etapa valida mejor que el punto de partida, así que queda igual. Sin esa regla se había reportado un empeoramiento de 20 a 35 %, que era un artefacto de la selección. Los x0 libres bajan la pérdida de entrenamiento absorbiendo el desajuste del modelo, y la validación empeora.
 
 **Recorte, estado de filtro (e23).** Se liberan solo los x0 de E e I. El estado del filtro de cada ventana sale de filtrar el comando entero con $\hat\tau$, que se conoce sin ruido.
 
@@ -101,22 +101,24 @@ Cada modelo identificado reemplaza a la planta bajo el controlador IMC del paper
 | estado de filtro sin recorte, distancia | 0,007 / 0,029 | 0,017 / 0,079 |
 | historia 5 ms, distancia | 0,137 / 0,136 | 0,071 / 0,064 |
 
+Con la forma exacta de e23 (x0 entrenable) la distancia con σ = 0,05 baja a 0,013 en theta-gamma y a 0,019 en gamma, con el nivel de diseño y sin saturación. Con $\hat\beta$ corregido, el lazo con el modelo coincide con el lazo con el simulador en los dos niveles de ruido.
+
 La saturación cambia poco el seguimiento del simulador, como ya se había visto con el simulador solo. La forma exacta sin recorte reproduce el lazo sin saturación con σ = 0,01. Las redes quedan a la misma distancia que con recorte, así que su lazo lejano viene de extrapolar comandos fuera del rango de entrenamiento y no de la saturación.
 
-# 6. Referencia black-box (e24, en curso)
+# 6. Referencia black-box (e24)
 
 La referencia black-box es una Neural ODE sin el modelo de Wilson-Cowan, $\dot x = g(I, E, P, Q)$. La variante BBH recibe además la historia del comando de la variante de 5 ms. Las dos usan una red de 64 unidades y 3000 épocas, el doble que las correcciones, porque aprenden el campo entero. Se entrenan desde cero, porque no hay backbone desde el cual arrancar. No tienen $\hat\beta$ ni R² contra el término faltante.
 
-Al cierre de este documento hay 10 de 24 corridas. La tabla muestra la media de las semillas disponibles, que son una o dos según la fila.
+La tabla muestra el NRMSE de test, media de tres semillas. El white-box es la referencia sin corrección.
 
 | planta, σ | BB | BBH | white-box | corrección con red | forma exacta |
 |---|---|---|---|---|---|
-| recorte, 0,01 | 6,55 | 3,45 | 7,28 | 4,07 | 2,25 |
-| recorte, 0,05 | 7,39 | 6,20 | 7,90 | 6,24 | 5,86 |
-| refractariedad, 0,01 | 2,91 | 2,82 | 3,29 | 2,13 | 2,14 |
-| refractariedad, 0,05 | 5,89 | 6,01 | 5,91 | 5,66 | 5,70 |
+| recorte, 0,01 | 6,50 | 3,47 | 7,28 | 4,07 | 2,25 |
+| recorte, 0,05 | 7,34 | 6,19 | 7,90 | 6,24 | 5,86 |
+| refractariedad, 0,01 | 2,88 | 3,20 | 3,29 | 2,13 | 2,14 |
+| refractariedad, 0,05 | 5,85 | 5,99 | 5,91 | 5,66 | 5,70 |
 
-En el actuador, la black-box con historia queda a la par de la corrección con historia de 5 ms, y con σ = 0,01 la supera. Las formas estructuradas siguen siendo las más precisas en las dos plantas. Si se confirma con todas las semillas, la ventaja del gray-box frente a la black-box no está en la precisión en lazo abierto de las correcciones con red. Está en los parámetros identificables y en las formas estructuradas. La black-box todavía no puede usarse como planta en el lazo cerrado.
+En el actuador, la black-box con historia queda a la par de la corrección con historia de 5 ms, y con σ = 0,01 la supera. Las formas estructuradas siguen siendo las más precisas en las dos plantas. La ventaja del gray-box frente a la black-box no está en la precisión en lazo abierto de las correcciones con red. Está en los parámetros identificables y en las formas estructuradas. La black-box todavía no puede usarse como planta en el lazo cerrado.
 
 # 7. Paper y repositorios
 
@@ -126,8 +128,7 @@ En el actuador, la black-box con historia queda a la par de la corrección con h
 
 # 8. Pendientes
 
-- Lazo cerrado con la forma exacta de e23, programado para cuando termine la black-box. Con $\hat\beta$ al 1,4 % debería reproducir el lazo también con σ = 0,05.
-- Terminar e24 y llevar la black-box al lazo cerrado.
+- Llevar la black-box al lazo cerrado.
 - Declarar en Métodos la excepción al warm start de la black-box y que e19 corrió sobre la línea con tanh.
 - Unificar la métrica de 13 y de 14 escenarios.
 - Decidir el alcance de la planta con las dos perturbaciones juntas.

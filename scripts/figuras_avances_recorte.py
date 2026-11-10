@@ -48,6 +48,18 @@ def media(prefijo, suf, clave="mean_param_error"):
     return st.mean(vals) if vals else float("nan")
 
 
+def media_x0(prefijo, suf, clave="mean_param_error"):
+    """Segunda etapa con el modelo de partida como candidato. Si ninguna época
+    valida mejor que el checkpoint de partida, vale el de partida. Las corridas
+    e19 a e23 se hicieron antes de que MejorVal evaluara el punto de partida."""
+    vals = []
+    for f in sorted(RES.glob(f"{prefijo}{suf}_s*.json")):
+        d = json.loads(f.read_text())
+        s = json.loads((RES / f"{Path(d['init_model']).stem}.json").read_text())
+        vals.append(s[clave] if d["nrmse_val"] >= s["nrmse_val"] else d[clave])
+    return st.mean(vals)
+
+
 def coma(v, _=None):
     s = f"{v:.10g}".replace(".", ",")
     return s.replace("-", "−")
@@ -165,7 +177,7 @@ def fig_x0():
     fig, axs = plt.subplots(1, 2, figsize=(10.4, 4.6), sharey=True)
     for ax, (suf, titulo, _) in zip(axs, SIGMA):
         for i, (n, a, b) in enumerate(filas):
-            va, vb = media(a, suf), media(b, suf)
+            va, vb = media(a, suf), media_x0(b, suf)
             ax.annotate("", (vb, i), (va, i), arrowprops=dict(arrowstyle="-|>", color=TINTA2, lw=1.1,
                                                                  shrinkA=5, shrinkB=5))
             ax.plot(va, i, "o", color=GRIS, ms=8, label="sin x0 entrenable" if i == 0 else None)
@@ -193,8 +205,9 @@ def lazo():
 
 PLANTAS_LAZO = [("white-box", "white-box"), ("agnóstica", "agnóstica"), ("historia 5 ms", "con red"),
                 ("filtro 8 canales", "filtro entrenable"), ("historia pasada", "historia pasada"),
-                ("estado de filtro, nivel 10", "forma exacta"), ("estado de filtro, nivel 3", "forma exacta, sat 3"),
-                ("estado de filtro x0, nivel 3", "forma exacta x0, sat 3")]
+                ("estado de filtro, recorte ±10", "forma exacta"),
+                ("estado de filtro, recorte ±3", "forma exacta, sat 3"),
+                ("estado de filtro x0, recorte ±3", "forma exacta x0, sat 3")]
 
 
 def fig_distancia(L):
@@ -204,7 +217,7 @@ def fig_distancia(L):
         series = [(t, c, [L("actc", ref, pl, s, "dist_x") for _, pl in PLANTAS_LAZO]) for s, t, c in SIGMA]
         barras_h(ax, [e for e, _ in PLANTAS_LAZO], series, fmt="{:.3f}", xmax=xmax)
         ax.set_title(titulo)
-        ax.set_xlabel("distancia al lazo con la planta")
+        ax.set_xlabel("distancia al lazo con el simulador")
     leyenda_arriba(fig, axs[0])
     guardar(fig, "distancia_lazos")
 
@@ -213,15 +226,15 @@ def fig_rmse_vs_distancia(L):
     fig, ax = plt.subplots(figsize=(7.2, 5.2))
     sim = L("actc", "theta2s", "simulador", "", "rmse")
     ax.axhline(sim, color=GRIS, lw=1, ls="--")
-    ax.text(0.181, sim + 0.003, "planta", ha="right", fontsize=14.5, color=TINTA2)
+    ax.text(0.181, sim + 0.003, "simulador", ha="right", fontsize=14.5, color=TINTA2)
     for e, pl in PLANTAS_LAZO:
         x, y = L("actc", "theta2s", pl, "_n01", "dist_x"), L("actc", "theta2s", pl, "_n01", "rmse")
         ax.plot(x, y, "o", color=AZUL, ms=8, mec="white", mew=1.2)
     p = lambda pl, k: L("actc", "theta2s", pl, "_n01", k)
     etiquetas = [("white-box y agnóstica", "white-box", (0.055, 0.036)),
-                 ("estado de filtro, nivel 10", "forma exacta", (0.06, 0.047)),
+                 ("estado de filtro, recorte ±10", "forma exacta", (0.06, 0.047)),
                  ("historia pasada", "historia pasada", (0.065, 0.075)),
-                 ("estado de filtro, nivel 3,\ncon y sin x0 entrenable", "forma exacta, sat 3", (0.004, 0.09)),
+                 ("estado de filtro, recorte ±3,\ncon y sin x0 entrenable", "forma exacta, sat 3", (0.004, 0.09)),
                  ("historia 5 ms", "con red", (0.105, 0.145)),
                  ("filtro 8 canales", "filtro entrenable", (0.125, 0.178))]
     for txt, pl, (tx, ty) in etiquetas:
@@ -229,14 +242,14 @@ def fig_rmse_vs_distancia(L):
                     va="center", arrowprops=dict(arrowstyle="-", color=GRIS, lw=0.8, shrinkB=5))
     ax.set_xlim(0, 0.19)
     ax.set_ylim(0.03, 0.19)
-    ax.set_xlabel("distancia al lazo con la planta")
+    ax.set_xlabel("distancia al lazo con el simulador")
     ax.set_ylabel("RMSE de seguimiento")
     guardar(fig, "rmse_vs_distancia", y_numerico=True)
 
 
 def fig_saturacion_lazo(L):
-    casos = [("nivel entrenado (10)", "actc", "forma exacta"), ("nivel fijo en 3", "actc", "forma exacta, sat 3"),
-             ("x0 entrenable, nivel 3", "actc", "forma exacta x0, sat 3"),
+    casos = [("recorte ±10 (entrenado)", "actc", "forma exacta"), ("recorte ±3 (diseño)", "actc", "forma exacta, sat 3"),
+             ("x0 entrenable, recorte ±3", "actc", "forma exacta x0, sat 3"),
              ("sin recorte*", "actf", "forma exacta, sin saturación"),
              ("x0 entrenable, sin recorte*", "actf", "forma exacta x0, sin saturación")]
     fig, axs = plt.subplots(1, 2, figsize=(10.8, 4.8), sharey=True)
@@ -245,7 +258,7 @@ def fig_saturacion_lazo(L):
         series = [(t, c, [L(p, ref, pl, s, "dist_x") for _, p, pl in casos]) for s, t, c in SIGMA]
         barras_h(ax, [c[0] for c in casos], series, fmt="{:.3f}", xmax=xmax)
         ax.set_title(titulo)
-        ax.set_xlabel("distancia al lazo con la planta")
+        ax.set_xlabel("distancia al lazo con el simulador")
     leyenda_arriba(fig, axs[0])
     guardar(fig, "estado_filtro_en_lazo")
 
@@ -255,26 +268,28 @@ def fig_trazas():
     nombres = list(z["nombres"])
     dt = 0.05                                   # ms entre muestras guardadas
     t0 = 400.0                                  # la traza arranca en el 20 % de 2 s
-    n = len(z["0_E"])
-    t = t0 + dt * np.arange(n)
-    a, b = np.searchsorted(t, 1500), np.searchsorted(t, 1700)
-    estilo = {"simulador": (TINTA, 2.0, "-"), "historia 5 ms": (NARANJA, 1.4, "-"),
-              "estado de filtro, nivel 10": (AMARILLO, 1.4, "-"),
-              "estado de filtro x0, nivel 3": (AZUL, 1.4, "--")}
-    fig, axs = plt.subplots(2, 1, figsize=(10.4, 5.6), sharex=True)
-    for k, nom in enumerate(nombres):
-        if nom not in estilo:
-            continue
-        c, lw, ls = estilo[nom]
-        axs[0].plot(t[a:b], z[f"{k}_E"][a:b], color=c, lw=lw, ls=ls, label=nom)
-        axs[1].plot(t[a:b], z[f"{k}_P"][a:b], color=c, lw=lw, ls=ls)
-    axs[1].axhspan(-3, 3, color="#ecebe7", zorder=0)
-    axs[0].set_ylabel("E")
-    axs[1].set_ylabel("comando P")
-    axs[1].set_xlabel("tiempo (ms)")
-    axs[0].legend(loc="upper center", bbox_to_anchor=(0.5, 1.32), ncol=4)
-    fig.tight_layout()
-    guardar(fig, "trazas_lazo", y_numerico=True)
+    t = t0 + dt * np.arange(len(z["0_E"]))
+    a, b = np.searchsorted(t, 1630), np.searchsorted(t, 1690)
+    sim = nombres.index("simulador")
+    modelos = [("historia 5 ms", "historia 5 ms", NARANJA),
+               ("estado de filtro, nivel 10", "estado de filtro, recorte ±10", AMARILLO),
+               ("estado de filtro x0, nivel 3", "estado de filtro x0, recorte ±3", AZUL)]
+    for var, ylab, nombre, banda in (("E", "E", "trazas_E", False), ("P", "comando P", "trazas_P", True)):
+        fig, axs = plt.subplots(3, 1, figsize=(10.4, 6.4), sharex=True, sharey=True)
+        for ax, (clave, etiqueta, color) in zip(axs, modelos):
+            k = nombres.index(clave)
+            if banda:
+                ax.axhspan(-3, 3, color="#ecebe7", zorder=0)
+            ax.plot(t[a:b], z[f"{sim}_{var}"][a:b], color=TINTA, lw=2.2)
+            ax.plot(t[a:b], z[f"{k}_{var}"][a:b], color=color, lw=1.8, ls="--")
+            ax.set_ylabel(ylab)
+            ax.set_title(etiqueta, loc="left", fontsize=15, pad=4)
+        axs[-1].set_xlabel("tiempo (ms)")
+        fig.tight_layout(rect=(0, 0, 1, 0.93), h_pad=0.4)
+        from matplotlib.lines import Line2D
+        fig.legend([Line2D([], [], color=TINTA, lw=2.2), Line2D([], [], color=TINTA2, lw=1.8, ls="--")],
+                   ["simulador", "modelo del título"], loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.0))
+        guardar(fig, nombre, y_numerico=True)
 
 
 # --- 6. Black-box ---------------------------------------------------------------
