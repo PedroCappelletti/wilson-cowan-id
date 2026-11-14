@@ -28,7 +28,7 @@ COLORES = {"white-box": "#9a9a96", "agnóstica": "#1baf7a", "historia con comand
            "historia sin comando actual": "#e87ba4", "filtro 8 canales": "#6250d6",
            "estado de filtro, recorte en ±10": "#eda100", "estado de filtro, recorte en ±3": "#2a78d6",
            "estado de filtro x0, recorte en ±3": "#2a78d6", "estado de filtro": "#2a78d6",
-           "black-box": "#5c5c58", "black-box con historia": "#b5651d"}
+           "black-box": "#e34948", "black-box con historia": "#b5651d"}
 AMPLITUD = "--amplitud" in sys.argv
 if AMPLITUD:
     OUT = RAIZ / "docs" / "figuras_amplitud"

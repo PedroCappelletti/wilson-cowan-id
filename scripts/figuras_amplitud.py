@@ -124,7 +124,7 @@ def distancia(viejo, nuevo, nombre):
         barras(ax, [p[0] for p in pares], [("entrenado con [0, 2]", GRIS, v), ("entrenado con amplitud grande", AZUL, n)],
                xmax, fmt="{:.3f}")
         ax.set_title(titulo)
-        ax.set_xlabel("distancia al lazo con el simulador")
+        ax.set_xlabel("distancia")
     leyenda_arriba(fig, axs[0])
     guardar(fig, nombre)
 
