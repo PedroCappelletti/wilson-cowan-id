@@ -1,0 +1,1150 @@
+{
+  "actuador": [
+    {
+      "modelo": "white-box",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 121.9404,
+        "r2": -0.01,
+        "nrmse_viejo13": 23.8468,
+        "minutos": 28.9074,
+        "nrmse_nuevo": 10.2754
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 20.0727,
+        "r2": -0.0065,
+        "nrmse_viejo13": 7.2774,
+        "minutos": 16.8361
+      }
+    },
+    {
+      "modelo": "white-box",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 121.2091,
+        "r2": -0.01,
+        "nrmse_viejo13": 15.763,
+        "minutos": 64.3103,
+        "nrmse_nuevo": 9.784
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 16.5912,
+        "r2": -0.0065,
+        "nrmse_viejo13": 7.9032,
+        "minutos": 16.4053
+      }
+    },
+    {
+      "modelo": "agnóstica, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 44.9414,
+        "r2": 0.0038,
+        "nrmse_viejo13": 26.9338,
+        "minutos": 59.7707,
+        "nrmse_nuevo": 8.1162
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 17.6184,
+        "r2": -0.0204,
+        "nrmse_viejo13": 7.3438,
+        "minutos": 28.7863
+      }
+    },
+    {
+      "modelo": "agnóstica, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 46.8029,
+        "r2": 0.003,
+        "nrmse_viejo13": 18.2983,
+        "minutos": 61.1304,
+        "nrmse_nuevo": 7.7863
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 22.1327,
+        "r2": -0.1154,
+        "nrmse_viejo13": 7.9016,
+        "minutos": 250.3017
+      }
+    },
+    {
+      "modelo": "agnóstica, desde cero",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 47.403,
+        "r2": -0.0143,
+        "nrmse_viejo13": 19.1145,
+        "minutos": 59.8,
+        "nrmse_nuevo": 8.3116
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 28.344,
+        "r2": -0.1285,
+        "nrmse_viejo13": 7.3204,
+        "minutos": 26.6193
+      }
+    },
+    {
+      "modelo": "agnóstica, desde cero",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 49.3672,
+        "r2": -0.0202,
+        "nrmse_viejo13": 15.2358,
+        "minutos": 124.1975,
+        "nrmse_nuevo": 7.9383
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 23.2271,
+        "r2": -0.1783,
+        "nrmse_viejo13": 8.0604,
+        "minutos": 28.4832
+      }
+    },
+    {
+      "modelo": "historia con comando actual, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 117.8982,
+        "r2": -0.027,
+        "nrmse_viejo13": 4.9525,
+        "minutos": 71.6103,
+        "nrmse_nuevo": 1.6177
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 18.6012,
+        "r2": 0.166,
+        "nrmse_viejo13": 4.0715,
+        "minutos": 34.6984
+      }
+    },
+    {
+      "modelo": "historia con comando actual, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 114.4053,
+        "r2": -0.0373,
+        "nrmse_viejo13": 6.636,
+        "minutos": 70.2576,
+        "nrmse_nuevo": 2.1967
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 27.3852,
+        "r2": 0.2684,
+        "nrmse_viejo13": 6.2384,
+        "minutos": 46.1211
+      }
+    },
+    {
+      "modelo": "historia con comando actual, desde cero",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 42.1143,
+        "r2": 0.2484,
+        "nrmse_viejo13": 4.5246,
+        "minutos": 71.7788,
+        "nrmse_nuevo": 1.7394
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 22.1648,
+        "r2": -0.1781,
+        "nrmse_viejo13": 4.5173,
+        "minutos": 33.2929
+      }
+    },
+    {
+      "modelo": "historia con comando actual, desde cero",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 41.3269,
+        "r2": 0.2546,
+        "nrmse_viejo13": 6.7137,
+        "minutos": 132.5506,
+        "nrmse_nuevo": 2.3351
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 25.3496,
+        "r2": -0.1508,
+        "nrmse_viejo13": 6.3145,
+        "minutos": 32.3977
+      }
+    },
+    {
+      "modelo": "historia sin comando actual, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 204.4202,
+        "r2": -0.6211,
+        "nrmse_viejo13": 5.1066,
+        "minutos": 68.6153,
+        "nrmse_nuevo": 1.8566
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 28.8499,
+        "r2": -0.7329,
+        "nrmse_viejo13": 4.0598,
+        "minutos": 32.5597
+      }
+    },
+    {
+      "modelo": "historia sin comando actual, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 210.4787,
+        "r2": -0.6837,
+        "nrmse_viejo13": 6.7357,
+        "minutos": 68.9155,
+        "nrmse_nuevo": 2.3337
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 34.2386,
+        "r2": -0.7702,
+        "nrmse_viejo13": 6.3017,
+        "minutos": 255.8584
+      }
+    },
+    {
+      "modelo": "historia sin comando actual, desde cero",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 70.7305,
+        "r2": -0.6674,
+        "nrmse_viejo13": 4.4636,
+        "minutos": 67.9199,
+        "nrmse_nuevo": 1.892
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 36.3533,
+        "r2": -0.9496,
+        "nrmse_viejo13": 4.5883,
+        "minutos": 32.8144
+      }
+    },
+    {
+      "modelo": "historia sin comando actual, desde cero",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 69.6551,
+        "r2": -0.677,
+        "nrmse_viejo13": 6.759,
+        "minutos": 132.0974,
+        "nrmse_nuevo": 2.4711
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 31.9615,
+        "r2": -1.0383,
+        "nrmse_viejo13": 6.4347,
+        "minutos": 32.5536
+      }
+    },
+    {
+      "modelo": "filtro 8 canales, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 109.5274,
+        "r2": -0.0822,
+        "nrmse_viejo13": 4.1809,
+        "minutos": 90.0595,
+        "nrmse_nuevo": 1.3063
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 18.9065,
+        "r2": 0.1252,
+        "nrmse_viejo13": 4.2256,
+        "minutos": 44.5765
+      }
+    },
+    {
+      "modelo": "filtro 8 canales, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 109.362,
+        "r2": -0.0968,
+        "nrmse_viejo13": 6.3538,
+        "minutos": 86.6815,
+        "nrmse_nuevo": 2.0864
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 27.5968,
+        "r2": 0.1517,
+        "nrmse_viejo13": 6.7177,
+        "minutos": 49.0607
+      }
+    },
+    {
+      "modelo": "filtro 8 canales, desde cero",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 43.7287,
+        "r2": 0.1892,
+        "nrmse_viejo13": 3.9954,
+        "minutos": 89.4165,
+        "nrmse_nuevo": 1.3816
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 29.9572,
+        "r2": -0.3447,
+        "nrmse_viejo13": 5.2135,
+        "minutos": 43.8569
+      }
+    },
+    {
+      "modelo": "filtro 8 canales, desde cero",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 44.374,
+        "r2": 0.1788,
+        "nrmse_viejo13": 6.497,
+        "minutos": 149.8556,
+        "nrmse_nuevo": 2.0712
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 26.3984,
+        "r2": -0.3427,
+        "nrmse_viejo13": 6.6879,
+        "minutos": 60.8459
+      }
+    },
+    {
+      "modelo": "estado de filtro, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.1045,
+        "r2": 0.9999,
+        "nrmse_viejo13": 2.2546,
+        "minutos": 893.3645,
+        "nrmse_nuevo": 0.3715,
+        "tau": 0.9931,
+        "sat": 3.003
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 0.4551,
+        "r2": 0.9997,
+        "nrmse_viejo13": 2.2513,
+        "minutos": 328.9111,
+        "tau": 0.998,
+        "sat": 10.0
+      }
+    },
+    {
+      "modelo": "estado de filtro, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.7187,
+        "r2": 0.9986,
+        "nrmse_viejo13": 5.44,
+        "minutos": 930.2966,
+        "nrmse_nuevo": 1.5955,
+        "tau": 0.9969,
+        "sat": 2.9948
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 10.2667,
+        "r2": 0.9877,
+        "nrmse_viejo13": 5.8559,
+        "minutos": 559.2856,
+        "tau": 1.0879,
+        "sat": 10.0
+      }
+    },
+    {
+      "modelo": "estado de filtro, desde cero",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.4595,
+        "r2": 0.9999,
+        "nrmse_viejo13": 2.259,
+        "minutos": 890.7289,
+        "nrmse_nuevo": 0.3723,
+        "tau": 0.9933,
+        "sat": 3.0013
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 0.4157,
+        "r2": 0.9997,
+        "nrmse_viejo13": 2.2561,
+        "minutos": 195.6227,
+        "tau": 0.998,
+        "sat": 10.0
+      }
+    },
+    {
+      "modelo": "estado de filtro, desde cero",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.5554,
+        "r2": 0.9986,
+        "nrmse_viejo13": 5.4451,
+        "minutos": 969.4138,
+        "nrmse_nuevo": 1.5957,
+        "tau": 0.9973,
+        "sat": 2.9924
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 12.1851,
+        "r2": 0.9765,
+        "nrmse_viejo13": 5.8713,
+        "minutos": 357.7121,
+        "tau": 1.122,
+        "sat": 10.0
+      }
+    },
+    {
+      "modelo": "white-box, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 128.3428,
+        "r2": -0.01,
+        "nrmse_viejo13": 25.6546,
+        "minutos": 30.6608,
+        "nrmse_nuevo": 10.571
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 35.3667,
+        "r2": -0.0065,
+        "nrmse_viejo13": 7.8335,
+        "minutos": 19.0359
+      }
+    },
+    {
+      "modelo": "white-box, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 127.6784,
+        "r2": -0.01,
+        "nrmse_viejo13": 20.7245,
+        "minutos": 30.5853,
+        "nrmse_nuevo": 10.0406
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 16.4779,
+        "r2": -0.0065,
+        "nrmse_viejo13": 8.2344,
+        "minutos": 581.6698
+      }
+    },
+    {
+      "modelo": "historia con comando actual, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 119.4265,
+        "r2": -0.0739,
+        "nrmse_viejo13": 4.4015,
+        "minutos": 74.6944,
+        "nrmse_nuevo": 1.3051
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 18.5994,
+        "r2": 0.2268,
+        "nrmse_viejo13": 3.9121,
+        "minutos": 40.0575
+      }
+    },
+    {
+      "modelo": "historia con comando actual, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 115.8114,
+        "r2": -0.0841,
+        "nrmse_viejo13": 6.4171,
+        "minutos": 72.5453,
+        "nrmse_nuevo": 2.0193
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 23.3029,
+        "r2": 0.3219,
+        "nrmse_viejo13": 6.0248,
+        "minutos": 37.6177
+      }
+    },
+    {
+      "modelo": "historia sin comando actual, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 214.2008,
+        "r2": -0.6739,
+        "nrmse_viejo13": 4.7252,
+        "minutos": 73.0539,
+        "nrmse_nuevo": 1.6092
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 26.7444,
+        "r2": -0.5114,
+        "nrmse_viejo13": 3.9702,
+        "minutos": 601.843
+      }
+    },
+    {
+      "modelo": "historia sin comando actual, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 221.3306,
+        "r2": -0.7132,
+        "nrmse_viejo13": 6.4782,
+        "minutos": 70.6238,
+        "nrmse_nuevo": 2.1774
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 30.2236,
+        "r2": -0.4714,
+        "nrmse_viejo13": 6.1377,
+        "minutos": 37.4881
+      }
+    },
+    {
+      "modelo": "filtro 8 canales, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 110.9007,
+        "r2": -0.1412,
+        "nrmse_viejo13": 4.3366,
+        "minutos": 86.6553,
+        "nrmse_nuevo": 1.2128
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 19.7053,
+        "r2": 0.1918,
+        "nrmse_viejo13": 4.3159,
+        "minutos": 607.3609
+      }
+    },
+    {
+      "modelo": "filtro 8 canales, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 112.2034,
+        "r2": -0.1643,
+        "nrmse_viejo13": 6.2306,
+        "minutos": 84.4414,
+        "nrmse_nuevo": 1.9723
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 28.1038,
+        "r2": 0.2607,
+        "nrmse_viejo13": 6.3694,
+        "minutos": 46.5276
+      }
+    },
+    {
+      "modelo": "estado de filtro, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.1045,
+        "r2": 0.9999,
+        "nrmse_viejo13": 2.2546,
+        "minutos": 1069.5306,
+        "nrmse_nuevo": 0.3715,
+        "tau": 0.9931,
+        "sat": 3.003
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 0.1625,
+        "r2": 0.9997,
+        "nrmse_viejo13": 2.2239,
+        "minutos": 188.6388,
+        "tau": 0.9898,
+        "sat": 10.0
+      }
+    },
+    {
+      "modelo": "estado de filtro, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.0956,
+        "r2": 0.9987,
+        "nrmse_viejo13": 5.3832,
+        "minutos": 1070.9467,
+        "nrmse_nuevo": 1.5906,
+        "tau": 0.9944,
+        "sat": 3.0051
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 1.3739,
+        "r2": 0.9941,
+        "nrmse_viejo13": 5.3991,
+        "minutos": 188.9138,
+        "tau": 0.979,
+        "sat": 10.0
+      }
+    },
+    {
+      "modelo": "black-box",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 9.9861,
+        "minutos": 122.8039,
+        "nrmse_nuevo": 4.7123
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 6.5008,
+        "minutos": 56.7262
+      }
+    },
+    {
+      "modelo": "black-box",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 8.5594,
+        "minutos": 120.0242,
+        "nrmse_nuevo": 4.6914
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 7.3411,
+        "minutos": 58.3588
+      }
+    },
+    {
+      "modelo": "black-box con historia",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 3.9713,
+        "minutos": 129.6542,
+        "nrmse_nuevo": 1.0917
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 3.4716,
+        "minutos": 61.0221
+      }
+    },
+    {
+      "modelo": "black-box con historia",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 6.7461,
+        "minutos": 130.1612,
+        "nrmse_nuevo": 1.9416
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 6.1885,
+        "minutos": 62.6799
+      }
+    }
+  ],
+  "refractaria": [
+    {
+      "modelo": "white-box",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 8.8153,
+        "r2": -0.2097,
+        "nrmse_viejo13": 9.4472,
+        "minutos": 30.8333,
+        "nrmse_nuevo": 2.5122
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 10.4625,
+        "r2": -0.1679,
+        "nrmse_viejo13": 3.2927,
+        "minutos": 11.2043
+      }
+    },
+    {
+      "modelo": "white-box",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 8.8577,
+        "r2": -0.2097,
+        "nrmse_viejo13": 7.8514,
+        "minutos": 54.7554,
+        "nrmse_nuevo": 2.8905
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 5.4212,
+        "r2": -0.1679,
+        "nrmse_viejo13": 5.9076,
+        "minutos": 11.3964
+      }
+    },
+    {
+      "modelo": "agnóstica 5 ms, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 1.6845,
+        "r2": 0.8727,
+        "nrmse_viejo13": 2.199,
+        "minutos": 60.5352,
+        "nrmse_nuevo": 0.4443
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 3.4966,
+        "r2": 0.7836,
+        "nrmse_viejo13": 2.1268,
+        "minutos": 28.0867
+      }
+    },
+    {
+      "modelo": "agnóstica 5 ms, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 1.9928,
+        "r2": 0.8686,
+        "nrmse_viejo13": 5.4742,
+        "minutos": 59.2504,
+        "nrmse_nuevo": 1.6965
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 6.9321,
+        "r2": 0.7379,
+        "nrmse_viejo13": 5.6604,
+        "minutos": 28.1372
+      }
+    },
+    {
+      "modelo": "agnóstica 5 ms, desde cero",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 1.8113,
+        "r2": 0.8709,
+        "nrmse_viejo13": 2.366,
+        "minutos": 60.5312,
+        "nrmse_nuevo": 0.4635
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 18.3155,
+        "r2": 0.4231,
+        "nrmse_viejo13": 2.2844,
+        "minutos": 34.4366
+      }
+    },
+    {
+      "modelo": "agnóstica 5 ms, desde cero",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 2.1101,
+        "r2": 0.8639,
+        "nrmse_viejo13": 5.5049,
+        "minutos": 58.1633,
+        "nrmse_nuevo": 1.705
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 17.009,
+        "r2": 0.2278,
+        "nrmse_viejo13": 5.6984,
+        "minutos": 35.8853
+      }
+    },
+    {
+      "modelo": "agnóstica 20 ms, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 1.7398,
+        "r2": 0.8727,
+        "nrmse_viejo13": 2.1785,
+        "minutos": 78.6556,
+        "nrmse_nuevo": 0.4419
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 3.9635,
+        "r2": 0.7402,
+        "nrmse_viejo13": 2.1384,
+        "minutos": 47.4739
+      }
+    },
+    {
+      "modelo": "agnóstica 20 ms, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 1.8532,
+        "r2": 0.8686,
+        "nrmse_viejo13": 5.4422,
+        "minutos": 76.1486,
+        "nrmse_nuevo": 1.6923
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 4.8923,
+        "r2": 0.7467,
+        "nrmse_viejo13": 5.4801,
+        "minutos": 293.8556
+      }
+    },
+    {
+      "modelo": "agnóstica 20 ms, desde cero",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 2.3233,
+        "r2": 0.8419,
+        "nrmse_viejo13": 2.2532,
+        "minutos": 75.678,
+        "nrmse_nuevo": 0.5285
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 21.7149,
+        "r2": -0.0406,
+        "nrmse_viejo13": 2.3822,
+        "minutos": 49.3857
+      }
+    },
+    {
+      "modelo": "agnóstica 20 ms, desde cero",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 2.3658,
+        "r2": 0.834,
+        "nrmse_viejo13": 5.4696,
+        "minutos": 75.4562,
+        "nrmse_nuevo": 1.7203
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 18.0224,
+        "r2": 0.0199,
+        "nrmse_viejo13": 5.5102,
+        "minutos": 59.1505
+      }
+    },
+    {
+      "modelo": "forma exacta, warm start",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.2381,
+        "r2": 0.9994,
+        "nrmse_viejo13": 2.1197,
+        "minutos": 39.2861,
+        "nrmse_nuevo": 0.3826
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 2.8311,
+        "r2": 0.9672,
+        "nrmse_viejo13": 2.1373,
+        "minutos": 20.2908
+      }
+    },
+    {
+      "modelo": "forma exacta, warm start",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.4888,
+        "r2": 0.9981,
+        "nrmse_viejo13": 5.4447,
+        "minutos": 38.581,
+        "nrmse_nuevo": 1.6796
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 7.5997,
+        "r2": 0.9446,
+        "nrmse_viejo13": 5.7006,
+        "minutos": 19.8652
+      }
+    },
+    {
+      "modelo": "white-box, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 8.7207,
+        "r2": -0.2097,
+        "nrmse_viejo13": 10.0946,
+        "minutos": 32.1349,
+        "nrmse_nuevo": 2.5127
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 11.0995,
+        "r2": -0.1679,
+        "nrmse_viejo13": 3.0026,
+        "minutos": 14.7924
+      }
+    },
+    {
+      "modelo": "white-box, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 8.7329,
+        "r2": -0.2097,
+        "nrmse_viejo13": 8.1327,
+        "minutos": 34.1323,
+        "nrmse_nuevo": 2.904
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 9.7797,
+        "r2": -0.1679,
+        "nrmse_viejo13": 5.7417,
+        "minutos": 14.9509
+      }
+    },
+    {
+      "modelo": "agnóstica 5 ms, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 1.7298,
+        "r2": 0.873,
+        "nrmse_viejo13": 2.1924,
+        "minutos": 59.8895,
+        "nrmse_nuevo": 0.4409
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 3.3063,
+        "r2": 0.7817,
+        "nrmse_viejo13": 2.1226,
+        "minutos": 120.3286
+      }
+    },
+    {
+      "modelo": "agnóstica 5 ms, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 1.9458,
+        "r2": 0.8707,
+        "nrmse_viejo13": 5.4272,
+        "minutos": 62.2777,
+        "nrmse_nuevo": 1.6868
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 5.6117,
+        "r2": 0.6906,
+        "nrmse_viejo13": 5.4589,
+        "minutos": 24.9266
+      }
+    },
+    {
+      "modelo": "forma exacta, x0",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.2644,
+        "r2": 0.9993,
+        "nrmse_viejo13": 2.1169,
+        "minutos": 40.3548,
+        "nrmse_nuevo": 0.3813
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 2.9855,
+        "r2": 0.9678,
+        "nrmse_viejo13": 2.132,
+        "minutos": 113.9747
+      }
+    },
+    {
+      "modelo": "forma exacta, x0",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": 0.2819,
+        "r2": 0.9978,
+        "nrmse_viejo13": 5.4167,
+        "minutos": 40.0331,
+        "nrmse_nuevo": 1.674
+      },
+      "anterior": {
+        "n": 3,
+        "beta": 3.6102,
+        "r2": 0.9631,
+        "nrmse_viejo13": 5.4514,
+        "minutos": 17.9781
+      }
+    },
+    {
+      "modelo": "black-box",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 2.6838,
+        "minutos": 120.3634,
+        "nrmse_nuevo": 0.5994
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 2.8822,
+        "minutos": 55.3837
+      }
+    },
+    {
+      "modelo": "black-box",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 5.7779,
+        "minutos": 123.4817,
+        "nrmse_nuevo": 1.7453
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 5.8543,
+        "minutos": 56.3765
+      }
+    },
+    {
+      "modelo": "black-box con historia",
+      "ruido": "_n01",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 3.1258,
+        "minutos": 128.6131,
+        "nrmse_nuevo": 0.8315
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 3.2033,
+        "minutos": 60.712
+      }
+    },
+    {
+      "modelo": "black-box con historia",
+      "ruido": "_n05",
+      "amplitud": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 6.0474,
+        "minutos": 131.2554,
+        "nrmse_nuevo": 1.8672
+      },
+      "anterior": {
+        "n": 3,
+        "beta": null,
+        "r2": null,
+        "nrmse_viejo13": 5.9929,
+        "minutos": 61.607
+      }
+    }
+  ],
+  "ideal_white_box": {
+    "_n01": {
+      "n": 3,
+      "beta": 0.2678,
+      "r2": NaN,
+      "nrmse_viejo13": 1.9805,
+      "minutos": 28.3263,
+      "nrmse_nuevo": 0.354
+    },
+    "_n05": {
+      "n": 3,
+      "beta": 0.6344,
+      "r2": NaN,
+      "nrmse_viejo13": 5.1435,
+      "minutos": 63.8396,
+      "nrmse_nuevo": 1.5507
+    }
+  }
+}

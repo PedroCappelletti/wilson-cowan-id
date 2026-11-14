@@ -52,6 +52,8 @@ class CampoModelo:
         self.alpha = s.get("alpha")
         self.r_i, self.r_e = s.get("r_i", 0.0), s.get("r_e", 0.0)
         self.entradas = core.correction_inputs if core.use_correction else None
+        # black-box (variantes BB y BBH): el campo es solo la red
+        self.con_backbone = getattr(core, "con_backbone", True)
         self.fir, self.capas = None, []
         if self.entradas is not None:
             g = core.g
@@ -76,6 +78,12 @@ class CampoModelo:
         dE = (-E + (1.0 - self.r_e * E) / (1.0 + math.exp(-self.ae * ue)) - self.ke) / self.te
         if self.entradas is None:
             return dI, dE
+        h = self._red(I, E, P, Q)
+        if not self.con_backbone:
+            return h[0], h[1]
+        return dI + h[0], dE + h[1]
+
+    def _red(self, I, E, P, Q):
         if self.entradas == "x":
             h = np.array([I, E])
         elif self.entradas == "xconv":
@@ -83,12 +91,13 @@ class CampoModelo:
         elif self.entradas == "xhistp":
             h = np.concatenate(([I, E], P[1:], Q[1:]))
         else:
-            h = np.concatenate(([I, E], P, Q))
+            # "xpq" recibe P y Q escalares; "xhist", vectores con la historia
+            h = np.concatenate(([I, E], np.atleast_1d(P), np.atleast_1d(Q)))
         for k, (Wk, b) in enumerate(self.capas):
             h = h @ Wk + b
             if k < len(self.capas) - 1:
                 h = np.tanh(h)
-        return dI + h[0], dE + h[1]
+        return h
 
 
 class PlantaHistoria:

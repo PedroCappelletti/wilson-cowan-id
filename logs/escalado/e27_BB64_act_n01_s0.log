@@ -1,0 +1,51 @@
+=== escalado · e27_BB64_act_n01_s0 · BB · actc_amp_2s_n01 · W=10 · epochs=3000 ===
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3065: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3066: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+    ep     0 | data=7.012e-02 | err_max= 84.38% g_rms=0.0000 redund=nan
+    ep    99 | val= 14.12%
+    ep   199 | val= 11.10%
+    ep   250 | data=6.449e-03 | err_max= 84.38% g_rms=0.1221 redund=nan
+    ep   299 | val=  9.40%
+    ep   399 | val=  7.45%
+    ep   499 | val=  6.08%
+    ep   500 | data=3.670e-03 | err_max= 84.38% g_rms=0.1149 redund=nan
+    ep   599 | val=  6.09%
+    ep   699 | val=  5.40%
+    ep   750 | data=3.287e-03 | err_max= 84.38% g_rms=0.1226 redund=nan
+    ep   799 | val=  6.07%
+    ep   899 | val=  5.36%
+    ep   999 | val=  5.19%
+    ep  1000 | data=2.885e-03 | err_max= 84.38% g_rms=0.1207 redund=nan
+    ep  1099 | val=  6.55%
+    ep  1199 | val=  5.12%
+    ep  1250 | data=2.742e-03 | err_max= 84.38% g_rms=0.1231 redund=nan
+    ep  1299 | val=  5.48%
+    ep  1399 | val=  5.12%
+    ep  1499 | val=  5.52%
+    ep  1500 | data=2.754e-03 | err_max= 84.38% g_rms=0.1223 redund=nan
+    ep  1599 | val=  5.66%
+    ep  1699 | val=  5.06%
+    ep  1750 | data=2.743e-03 | err_max= 84.38% g_rms=0.1245 redund=nan
+    ep  1799 | val=  5.26%
+    ep  1899 | val=  5.06%
+    ep  1999 | val=  4.92%
+    ep  2000 | data=2.543e-03 | err_max= 84.38% g_rms=0.1218 redund=nan
+    ep  2099 | val=  4.84%
+    ep  2199 | val=  5.27%
+    ep  2250 | data=2.791e-03 | err_max= 84.38% g_rms=0.1205 redund=nan
+    ep  2299 | val=  4.73%
+    ep  2399 | val=  5.18%
+    ep  2499 | val=  5.28%
+    ep  2500 | data=2.490e-03 | err_max= 84.38% g_rms=0.1226 redund=nan
+    ep  2599 | val=  4.88%
+    ep  2699 | val=  5.41%
+    ep  2750 | data=2.406e-03 | err_max= 84.38% g_rms=0.1216 redund=nan
+    ep  2799 | val=  5.74%
+    ep  2899 | val=  4.56%
+    ep  2999 | data=2.347e-03 | err_max= 84.38% g_rms=0.1218 redund=nan
+    ep  2999 | val=  4.72%
+
+  RESULTADO e27_BB64_act_n01_s0: NRMSE_test=8.35% (I=7.97 E=8.74) [110.5 min]
+  -> results\escalado\e27_BB64_act_n01_s0.json

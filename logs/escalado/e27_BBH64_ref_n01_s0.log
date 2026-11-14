@@ -1,0 +1,51 @@
+=== escalado · e27_BBH64_ref_n01_s0 · BBH · refrac_amp_2s_n01 · W=10 · epochs=3000 ===
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3065: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3066: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+    ep     0 | data=7.731e-02 | err_max= 84.38% 
+    ep    99 | val= 10.83%
+    ep   199 | val=  7.50%
+    ep   250 | data=2.367e-03 | err_max= 84.38% 
+    ep   299 | val=  7.65%
+    ep   399 | val=  4.67%
+    ep   499 | val=  5.17%
+    ep   500 | data=1.027e-03 | err_max= 84.38% 
+    ep   599 | val=  3.09%
+    ep   699 | val=  2.47%
+    ep   750 | data=2.942e-04 | err_max= 84.38% 
+    ep   799 | val=  2.28%
+    ep   899 | val=  1.84%
+    ep   999 | val=  2.80%
+    ep  1000 | data=3.054e-04 | err_max= 84.38% 
+    ep  1099 | val=  1.52%
+    ep  1199 | val=  2.37%
+    ep  1250 | data=1.166e-04 | err_max= 84.38% 
+    ep  1299 | val=  1.39%
+    ep  1399 | val=  1.29%
+    ep  1499 | val=  1.39%
+    ep  1500 | data=9.963e-05 | err_max= 84.38% 
+    ep  1599 | val=  1.41%
+    ep  1699 | val=  1.11%
+    ep  1750 | data=1.290e-04 | err_max= 84.38% 
+    ep  1799 | val=  1.76%
+    ep  1899 | val=  1.16%
+    ep  1999 | val=  1.01%
+    ep  2000 | data=5.778e-05 | err_max= 84.38% 
+    ep  2099 | val=  1.29%
+    ep  2199 | val=  0.88%
+    ep  2250 | data=7.128e-05 | err_max= 84.38% 
+    ep  2299 | val=  1.06%
+    ep  2399 | val=  1.07%
+    ep  2499 | val=  1.12%
+    ep  2500 | data=5.645e-05 | err_max= 84.38% 
+    ep  2599 | val=  1.33%
+    ep  2699 | val=  0.83%
+    ep  2750 | data=8.400e-05 | err_max= 84.38% 
+    ep  2799 | val=  1.26%
+    ep  2899 | val=  1.16%
+    ep  2999 | data=3.618e-05 | err_max= 84.38% 
+    ep  2999 | val=  0.83%
+
+  RESULTADO e27_BBH64_ref_n01_s0: NRMSE_test=2.96% (I=3.31 E=2.61) [129.2 min]
+  -> results\escalado\e27_BBH64_ref_n01_s0.json

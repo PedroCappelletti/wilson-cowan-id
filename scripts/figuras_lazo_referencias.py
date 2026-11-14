@@ -27,7 +27,11 @@ TINTA, TINTA2, REF = "#1f1f1e", "#5c5c58", "#b9b8b2"
 COLORES = {"white-box": "#9a9a96", "agnóstica": "#1baf7a", "historia con comando actual": "#eb6834",
            "historia sin comando actual": "#e87ba4", "filtro 8 canales": "#6250d6",
            "estado de filtro, recorte en ±10": "#eda100", "estado de filtro, recorte en ±3": "#2a78d6",
-           "estado de filtro x0, recorte en ±3": "#2a78d6"}
+           "estado de filtro x0, recorte en ±3": "#2a78d6", "estado de filtro": "#2a78d6",
+           "black-box": "#5c5c58", "black-box con historia": "#b5651d"}
+AMPLITUD = "--amplitud" in sys.argv
+if AMPLITUD:
+    OUT = RAIZ / "docs" / "figuras_amplitud"
 # ventana que se muestra de cada referencia, en ms
 VENTANA = {"theta2s": (1150, 1500), "gamma50": (0, 50), "theta_rango": (0, 500), "gamma_rango": (0, 250)}
 
@@ -98,9 +102,11 @@ def figura_theta():
 
 
 if __name__ == "__main__":
-    z = np.load(RAIZ / "results" / "trazas_lazo_referencias.npz")
+    z = np.load(RAIZ / "results" / ("trazas_lazo_referencias_amplitud.npz" if AMPLITUD
+                                     else "trazas_lazo_referencias.npz"))
     for i, ref in enumerate(z["refs"]):
         for var in ("E", "I"):
             figura(z, i, str(ref), var)
-    figura_theta()
+    if not AMPLITUD:
+        figura_theta()
     print(f"-> {OUT}")

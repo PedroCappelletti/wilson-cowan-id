@@ -1,0 +1,26 @@
+=== escalado · e26_H100_x0_n01_s0 · H · actc_amp_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=2.584e-04 | err_max=205.32% 
+    ep    99 | val=  2.61%
+    ep   199 | val=  2.34%
+    ep   250 | data=1.995e-04 | err_max=206.35% 
+    ep   299 | val=  2.26%
+    ep   399 | val=  2.33%
+    ep   499 | val=  2.15%
+    ep   500 | data=1.768e-04 | err_max=207.23% 
+    ep   599 | val=  2.10%
+    ep   699 | val=  2.18%
+    ep   750 | data=1.717e-04 | err_max=208.51% 
+    ep   799 | val=  2.24%
+    ep   899 | val=  1.98%
+    ep   999 | val=  1.92%
+    ep  1000 | data=1.425e-04 | err_max=210.40% 
+    ep  1099 | val=  1.88%
+    ep  1199 | val=  1.93%
+    ep  1250 | data=1.512e-04 | err_max=212.00% 
+    ep  1299 | val=  1.79%
+    ep  1399 | val=  1.81%
+    ep  1499 | data=1.252e-04 | err_max=213.58% 
+    ep  1499 | val=  1.81%
+
+  RESULTADO e26_H100_x0_n01_s0: NRMSE_test=4.08% (I=4.67 E=3.49) R2df=0.057 err_param=101.21% [76.1 min]
+  -> results\escalado\e26_H100_x0_n01_s0.json

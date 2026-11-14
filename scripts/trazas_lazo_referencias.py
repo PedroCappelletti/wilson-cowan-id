@@ -32,6 +32,21 @@ CASOS = [
     ("estado de filtro, recorte en ±3", "e21_lag_wrm_n01_s0@sat3"),
     ("estado de filtro x0, recorte en ±3", "e23_lag_x0_n01_s0@sat3"),
 ]
+# --amplitud: los mismos lazos con los modelos entrenados con amplitud grande
+CASOS_AMPLITUD = [
+    ("simulador", None),
+    ("white-box", "e25_e2wb_n01_s0"),
+    ("agnóstica", "e25_e2B_wrm_n01_s0"),
+    ("historia con comando actual", "e25_H100_wrm_n01_s0"),
+    ("historia sin comando actual", "e25_Hp100_wrm_n01_s0"),
+    ("filtro 8 canales", "e25_K400f8_wrm_n01_s0"),
+    ("estado de filtro", "e25_lag_wrm_n01_s0"),
+    ("black-box", "e27_BB64_act_n01_s0"),
+    ("black-box con historia", "e27_BBH64_act_n01_s0"),
+]
+if "--amplitud" in sys.argv:
+    CASOS = CASOS_AMPLITUD
+    OUT = RAIZ / "results" / "trazas_lazo_referencias_amplitud.npz"
 SUB = 4          # se guarda cada 0,02 ms
 
 

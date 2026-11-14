@@ -1,0 +1,26 @@
+=== escalado · e25_B400_wrm_n01_s1 · B · refrac_amp_2s_n01_s1 · W=40 · epochs=1500 ===
+    ep     0 | data=5.606e-04 | err_max= 34.04% g_rms=0.0000 redund=nan
+    ep    99 | val=  0.69%
+    ep   199 | val=  0.66%
+    ep   250 | data=2.844e-05 | err_max=  7.47% g_rms=0.0265 redund=nan
+    ep   299 | val=  0.62%
+    ep   399 | val=  0.56%
+    ep   499 | val=  0.67%
+    ep   500 | data=3.156e-05 | err_max=  7.48% g_rms=0.0260 redund=nan
+    ep   599 | val=  0.50%
+    ep   699 | val=  0.49%
+    ep   750 | data=1.576e-05 | err_max=  6.77% g_rms=0.0265 redund=nan
+    ep   799 | val=  0.49%
+    ep   899 | val=  0.52%
+    ep   999 | val=  0.49%
+    ep  1000 | data=1.583e-05 | err_max=  7.20% g_rms=0.0265 redund=nan
+    ep  1099 | val=  0.48%
+    ep  1199 | val=  0.48%
+    ep  1250 | data=1.555e-05 | err_max=  6.40% g_rms=0.0266 redund=nan
+    ep  1299 | val=  0.48%
+    ep  1399 | val=  0.48%
+    ep  1499 | data=1.861e-05 | err_max=  6.47% g_rms=0.0271 redund=nan
+    ep  1499 | val=  0.55%
+
+  RESULTADO e25_B400_wrm_n01_s1: NRMSE_test=2.22% (I=2.67 E=1.77) R2df=0.873 err_param=1.77% [80.7 min]
+  -> results\escalado\e25_B400_wrm_n01_s1.json

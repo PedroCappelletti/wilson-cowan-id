@@ -1,0 +1,26 @@
+=== escalado · e25_e1S2_wrm_n05_s1 · S · refrac_amp_2s_n05_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=5.087e-04 | err_max= 35.11% 
+    ep    99 | val=  1.91%
+    ep   199 | val=  1.91%
+    ep   250 | data=2.823e-04 | err_max=  1.27% 
+    ep   299 | val=  1.91%
+    ep   399 | val=  1.91%
+    ep   499 | val=  1.91%
+    ep   500 | data=2.823e-04 | err_max=  1.27% 
+    ep   599 | val=  1.91%
+    ep   699 | val=  1.91%
+    ep   750 | data=2.823e-04 | err_max=  1.27% 
+    ep   799 | val=  1.91%
+    ep   899 | val=  1.91%
+    ep   999 | val=  1.91%
+    ep  1000 | data=2.823e-04 | err_max=  1.28% 
+    ep  1099 | val=  1.91%
+    ep  1199 | val=  1.91%
+    ep  1250 | data=2.823e-04 | err_max=  1.27% 
+    ep  1299 | val=  1.91%
+    ep  1399 | val=  1.92%
+    ep  1499 | data=2.823e-04 | err_max=  1.27% 
+    ep  1499 | val=  1.91%
+
+  RESULTADO e25_e1S2_wrm_n05_s1: NRMSE_test=3.82% (I=4.53 E=3.11) R2df=0.998 err_param=0.52% [41.3 min]
+  -> results\escalado\e25_e1S2_wrm_n05_s1.json

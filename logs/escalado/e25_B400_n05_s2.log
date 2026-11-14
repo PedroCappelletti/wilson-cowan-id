@@ -1,0 +1,26 @@
+=== escalado · e25_B400_n05_s2 · B · refrac_amp_2s_n05_s2 · W=40 · epochs=1500 ===
+    ep     0 | data=3.375e-02 | err_max= 83.88% g_rms=0.0000 redund=nan
+    ep    99 | val=  6.34%
+    ep   199 | val=  3.45%
+    ep   250 | data=6.714e-04 | err_max=199.16% g_rms=0.0294 redund=nan
+    ep   299 | val=  2.69%
+    ep   399 | val=  2.34%
+    ep   499 | val=  2.12%
+    ep   500 | data=3.335e-04 | err_max= 78.89% g_rms=0.0274 redund=nan
+    ep   599 | val=  2.03%
+    ep   699 | val=  1.99%
+    ep   750 | data=2.925e-04 | err_max= 31.24% g_rms=0.0270 redund=nan
+    ep   799 | val=  1.97%
+    ep   899 | val=  1.97%
+    ep   999 | val=  1.96%
+    ep  1000 | data=2.865e-04 | err_max= 14.72% g_rms=0.0269 redund=nan
+    ep  1099 | val=  1.96%
+    ep  1199 | val=  1.95%
+    ep  1250 | data=2.832e-04 | err_max=  9.83% g_rms=0.0268 redund=nan
+    ep  1299 | val=  1.95%
+    ep  1399 | val=  1.95%
+    ep  1499 | data=2.785e-04 | err_max=  7.89% g_rms=0.0268 redund=nan
+    ep  1499 | val=  1.94%
+
+  RESULTADO e25_B400_n05_s2: NRMSE_test=4.40% (I=5.10 E=3.69) R2df=0.844 err_param=2.49% [77.9 min]
+  -> results\escalado\e25_B400_n05_s2.json

@@ -1,0 +1,51 @@
+=== escalado · e27_BBH64_ref_n01_s1 · BBH · refrac_amp_2s_n01_s1 · W=10 · epochs=3000 ===
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3065: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3066: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+    ep     0 | data=7.732e-02 | err_max= 84.38% 
+    ep    99 | val= 11.24%
+    ep   199 | val=  7.69%
+    ep   250 | data=2.255e-03 | err_max= 84.38% 
+    ep   299 | val=  5.92%
+    ep   399 | val=  4.95%
+    ep   499 | val=  4.16%
+    ep   500 | data=8.555e-04 | err_max= 84.38% 
+    ep   599 | val=  3.32%
+    ep   699 | val=  2.57%
+    ep   750 | data=3.097e-04 | err_max= 84.38% 
+    ep   799 | val=  2.08%
+    ep   899 | val=  1.78%
+    ep   999 | val=  1.77%
+    ep  1000 | data=1.720e-04 | err_max= 84.38% 
+    ep  1099 | val=  1.56%
+    ep  1199 | val=  1.61%
+    ep  1250 | data=1.093e-04 | err_max= 84.38% 
+    ep  1299 | val=  1.29%
+    ep  1399 | val=  1.99%
+    ep  1499 | val=  1.56%
+    ep  1500 | data=1.029e-04 | err_max= 84.38% 
+    ep  1599 | val=  1.18%
+    ep  1699 | val=  1.31%
+    ep  1750 | data=6.353e-05 | err_max= 84.38% 
+    ep  1799 | val=  1.23%
+    ep  1899 | val=  1.30%
+    ep  1999 | val=  1.18%
+    ep  2000 | data=6.698e-05 | err_max= 84.38% 
+    ep  2099 | val=  1.14%
+    ep  2199 | val=  2.18%
+    ep  2250 | data=8.319e-05 | err_max= 84.38% 
+    ep  2299 | val=  2.17%
+    ep  2399 | val=  1.48%
+    ep  2499 | val=  1.50%
+    ep  2500 | data=9.257e-05 | err_max= 84.38% 
+    ep  2599 | val=  1.03%
+    ep  2699 | val=  1.49%
+    ep  2750 | data=3.637e-05 | err_max= 84.38% 
+    ep  2799 | val=  0.87%
+    ep  2899 | val=  0.84%
+    ep  2999 | data=3.280e-05 | err_max= 84.38% 
+    ep  2999 | val=  0.81%
+
+  RESULTADO e27_BBH64_ref_n01_s1: NRMSE_test=2.86% (I=3.14 E=2.58) [140.6 min]
+  -> results\escalado\e27_BBH64_ref_n01_s1.json

@@ -1,0 +1,26 @@
+=== escalado · e25_K400f8_n01_s2 · K · actc_amp_2s_n01_s2 · W=10 · epochs=1500 ===
+    ep     0 | data=5.350e-02 | err_max= 83.88% 
+    ep    99 | val=  9.97%
+    ep   199 | val=  5.85%
+    ep   250 | data=1.354e-03 | err_max= 65.41% 
+    ep   299 | val=  5.01%
+    ep   399 | val=  4.05%
+    ep   499 | val=  3.54%
+    ep   500 | data=6.194e-04 | err_max= 72.77% 
+    ep   599 | val=  3.06%
+    ep   699 | val=  2.62%
+    ep   750 | data=2.909e-04 | err_max= 75.02% 
+    ep   799 | val=  2.32%
+    ep   899 | val=  2.14%
+    ep   999 | val=  2.14%
+    ep  1000 | data=2.135e-04 | err_max= 73.46% 
+    ep  1099 | val=  2.04%
+    ep  1199 | val=  1.76%
+    ep  1250 | data=1.282e-04 | err_max= 73.46% 
+    ep  1299 | val=  1.75%
+    ep  1399 | val=  1.72%
+    ep  1499 | data=1.301e-04 | err_max= 74.51% 
+    ep  1499 | val=  2.18%
+
+  RESULTADO e25_K400f8_n01_s2: NRMSE_test=4.18% (I=4.56 E=3.80) R2df=0.151 err_param=43.67% [90.6 min]
+  -> results\escalado\e25_K400f8_n01_s2.json

@@ -1,0 +1,26 @@
+=== escalado · e25_e2B_wrm_n01_s2 · B · actc_amp_2s_n01_s2 · W=10 · epochs=1500 ===
+    ep     0 | data=7.638e-03 | err_max=527.38% g_rms=0.0000 redund=nan
+    ep    99 | val=  9.09%
+    ep   199 | val=  8.57%
+    ep   250 | data=6.209e-03 | err_max=340.49% g_rms=0.0372 redund=nan
+    ep   299 | val=  8.93%
+    ep   399 | val=  9.56%
+    ep   499 | val=  9.07%
+    ep   500 | data=5.935e-03 | err_max=384.69% g_rms=0.0425 redund=nan
+    ep   599 | val=  8.95%
+    ep   699 | val=  8.85%
+    ep   750 | data=5.779e-03 | err_max=339.98% g_rms=0.0443 redund=nan
+    ep   799 | val=  8.86%
+    ep   899 | val=  8.54%
+    ep   999 | val=  8.03%
+    ep  1000 | data=5.316e-03 | err_max=144.28% g_rms=0.0565 redund=nan
+    ep  1099 | val=  7.94%
+    ep  1199 | val=  8.08%
+    ep  1250 | data=5.278e-03 | err_max=146.23% g_rms=0.0576 redund=nan
+    ep  1299 | val=  8.39%
+    ep  1399 | val=  8.09%
+    ep  1499 | data=5.242e-03 | err_max=145.53% g_rms=0.0577 redund=nan
+    ep  1499 | val=  8.10%
+
+  RESULTADO e25_e2B_wrm_n01_s2: NRMSE_test=19.73% (I=23.49 E=15.96) R2df=0.005 err_param=43.86% [61.3 min]
+  -> results\escalado\e25_e2B_wrm_n01_s2.json

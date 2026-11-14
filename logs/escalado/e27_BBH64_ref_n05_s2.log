@@ -1,0 +1,51 @@
+=== escalado · e27_BBH64_ref_n05_s2 · BBH · refrac_amp_2s_n05_s2 · W=10 · epochs=3000 ===
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3065: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3066: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+    ep     0 | data=7.769e-02 | err_max= 84.38% 
+    ep    99 | val= 10.69%
+    ep   199 | val=  6.95%
+    ep   250 | data=2.168e-03 | err_max= 84.38% 
+    ep   299 | val=  5.56%
+    ep   399 | val=  4.41%
+    ep   499 | val=  4.84%
+    ep   500 | data=1.158e-03 | err_max= 84.38% 
+    ep   599 | val=  3.21%
+    ep   699 | val=  2.82%
+    ep   750 | data=5.103e-04 | err_max= 84.38% 
+    ep   799 | val=  2.78%
+    ep   899 | val=  2.46%
+    ep   999 | val=  2.51%
+    ep  1000 | data=4.344e-04 | err_max= 84.38% 
+    ep  1099 | val=  2.29%
+    ep  1199 | val=  2.24%
+    ep  1250 | data=4.027e-04 | err_max= 84.38% 
+    ep  1299 | val=  2.20%
+    ep  1399 | val=  2.17%
+    ep  1499 | val=  2.22%
+    ep  1500 | data=3.460e-04 | err_max= 84.38% 
+    ep  1599 | val=  2.11%
+    ep  1699 | val=  2.09%
+    ep  1750 | data=4.595e-04 | err_max= 84.38% 
+    ep  1799 | val=  2.09%
+    ep  1899 | val=  2.09%
+    ep  1999 | val=  2.06%
+    ep  2000 | data=3.101e-04 | err_max= 84.38% 
+    ep  2099 | val=  2.86%
+    ep  2199 | val=  2.34%
+    ep  2250 | data=5.229e-04 | err_max= 84.38% 
+    ep  2299 | val=  2.04%
+    ep  2399 | val=  2.04%
+    ep  2499 | val=  2.07%
+    ep  2500 | data=3.043e-04 | err_max= 84.38% 
+    ep  2599 | val=  2.36%
+    ep  2699 | val=  2.04%
+    ep  2750 | data=3.055e-04 | err_max= 84.38% 
+    ep  2799 | val=  2.18%
+    ep  2899 | val=  2.15%
+    ep  2999 | data=3.015e-04 | err_max= 84.38% 
+    ep  2999 | val=  2.09%
+
+  RESULTADO e27_BBH64_ref_n05_s2: NRMSE_test=4.78% (I=5.39 E=4.18) [147.6 min]
+  -> results\escalado\e27_BBH64_ref_n05_s2.json

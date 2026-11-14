@@ -1,0 +1,26 @@
+=== escalado · e26_e1wb_x0_n05_s1 · whitebox · refrac_amp_2s_n05_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=6.372e-04 | err_max= 41.86% 
+    ep    99 | val=  3.20%
+    ep   199 | val=  3.20%
+    ep   250 | data=6.555e-04 | err_max= 32.62% 
+    ep   299 | val=  3.20%
+    ep   399 | val=  3.20%
+    ep   499 | val=  3.20%
+    ep   500 | data=6.552e-04 | err_max= 32.16% 
+    ep   599 | val=  3.20%
+    ep   699 | val=  3.20%
+    ep   750 | data=6.552e-04 | err_max= 32.18% 
+    ep   799 | val=  3.20%
+    ep   899 | val=  3.21%
+    ep   999 | val=  3.20%
+    ep  1000 | data=6.552e-04 | err_max= 32.18% 
+    ep  1099 | val=  3.20%
+    ep  1199 | val=  3.20%
+    ep  1250 | data=6.552e-04 | err_max= 32.18% 
+    ep  1299 | val=  3.20%
+    ep  1399 | val=  3.21%
+    ep  1499 | data=6.552e-04 | err_max= 32.18% 
+    ep  1499 | val=  3.20%
+
+  RESULTADO e26_e1wb_x0_n05_s1: NRMSE_test=6.05% (I=6.34 E=5.76) R2df=-0.210 err_param=8.77% [34.4 min]
+  -> results\escalado\e26_e1wb_x0_n05_s1.json

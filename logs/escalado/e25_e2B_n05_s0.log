@@ -1,0 +1,26 @@
+=== escalado · e25_e2B_n05_s0 · B · actc_amp_2s_n05 · W=10 · epochs=1500 ===
+    ep     0 | data=5.373e-02 | err_max= 83.88% g_rms=0.0000 redund=nan
+    ep    99 | val= 12.49%
+    ep   199 | val=  9.59%
+    ep   250 | data=7.063e-03 | err_max=109.62% g_rms=0.0643 redund=nan
+    ep   299 | val=  8.95%
+    ep   399 | val=  8.50%
+    ep   499 | val=  8.18%
+    ep   500 | data=5.931e-03 | err_max=101.60% g_rms=0.0616 redund=nan
+    ep   599 | val=  8.00%
+    ep   699 | val=  8.17%
+    ep   750 | data=5.682e-03 | err_max=112.83% g_rms=0.0661 redund=nan
+    ep   799 | val=  8.11%
+    ep   899 | val=  8.11%
+    ep   999 | val=  8.28%
+    ep  1000 | data=5.635e-03 | err_max=125.04% g_rms=0.0685 redund=nan
+    ep  1099 | val=  8.12%
+    ep  1199 | val=  8.33%
+    ep  1250 | data=5.576e-03 | err_max=133.45% g_rms=0.0690 redund=nan
+    ep  1299 | val=  8.23%
+    ep  1399 | val=  8.23%
+    ep  1499 | data=5.555e-03 | err_max=141.76% g_rms=0.0694 redund=nan
+    ep  1499 | val=  8.25%
+
+  RESULTADO e25_e2B_n05_s0: NRMSE_test=12.36% (I=12.36 E=12.36) R2df=-0.008 err_param=46.82% [249.0 min]
+  -> results\escalado\e25_e2B_n05_s0.json

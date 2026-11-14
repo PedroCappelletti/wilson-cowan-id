@@ -1,0 +1,51 @@
+=== escalado · e27_BBH64_act_n05_s2 · BBH · actc_amp_2s_n05_s2 · W=10 · epochs=3000 ===
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3065: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3066: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+    ep     0 | data=7.050e-02 | err_max= 84.38% 
+    ep    99 | val= 10.62%
+    ep   199 | val=  7.29%
+    ep   250 | data=2.371e-03 | err_max= 84.38% 
+    ep   299 | val=  6.02%
+    ep   399 | val=  4.92%
+    ep   499 | val=  4.10%
+    ep   500 | data=9.907e-04 | err_max= 84.38% 
+    ep   599 | val=  3.94%
+    ep   699 | val=  3.26%
+    ep   750 | data=6.101e-04 | err_max= 84.38% 
+    ep   799 | val=  3.18%
+    ep   899 | val=  3.06%
+    ep   999 | val=  2.94%
+    ep  1000 | data=4.900e-04 | err_max= 84.38% 
+    ep  1099 | val=  2.78%
+    ep  1199 | val=  2.84%
+    ep  1250 | data=4.264e-04 | err_max= 84.38% 
+    ep  1299 | val=  2.94%
+    ep  1399 | val=  2.87%
+    ep  1499 | val=  2.66%
+    ep  1500 | data=4.100e-04 | err_max= 84.38% 
+    ep  1599 | val=  2.67%
+    ep  1699 | val=  3.05%
+    ep  1750 | data=3.735e-04 | err_max= 84.38% 
+    ep  1799 | val=  2.74%
+    ep  1899 | val=  2.76%
+    ep  1999 | val=  2.77%
+    ep  2000 | data=4.158e-04 | err_max= 84.38% 
+    ep  2099 | val=  2.60%
+    ep  2199 | val=  2.49%
+    ep  2250 | data=3.744e-04 | err_max= 84.38% 
+    ep  2299 | val=  2.89%
+    ep  2399 | val=  2.92%
+    ep  2499 | val=  2.56%
+    ep  2500 | data=3.555e-04 | err_max= 84.38% 
+    ep  2599 | val=  2.52%
+    ep  2699 | val=  2.57%
+    ep  2750 | data=3.548e-04 | err_max= 84.38% 
+    ep  2799 | val=  2.51%
+    ep  2899 | val=  2.40%
+    ep  2999 | data=3.372e-04 | err_max= 84.38% 
+    ep  2999 | val=  2.41%
+
+  RESULTADO e27_BBH64_act_n05_s2: NRMSE_test=5.47% (I=5.95 E=4.99) [147.3 min]
+  -> results\escalado\e27_BBH64_act_n05_s2.json

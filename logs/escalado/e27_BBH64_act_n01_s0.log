@@ -1,0 +1,51 @@
+=== escalado · e27_BBH64_act_n01_s0 · BBH · actc_amp_2s_n01 · W=10 · epochs=3000 ===
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3065: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+D:\wilson-cowan-amplitud\.venv\Lib\site-packages\numpy\lib\_function_base_impl.py:3066: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+    ep     0 | data=7.012e-02 | err_max= 84.38% 
+    ep    99 | val= 11.69%
+    ep   199 | val=  8.03%
+    ep   250 | data=2.335e-03 | err_max= 84.38% 
+    ep   299 | val=  6.19%
+    ep   399 | val=  4.81%
+    ep   499 | val=  4.02%
+    ep   500 | data=7.292e-04 | err_max= 84.38% 
+    ep   599 | val=  3.01%
+    ep   699 | val=  2.70%
+    ep   750 | data=3.084e-04 | err_max= 84.38% 
+    ep   799 | val=  2.70%
+    ep   899 | val=  2.18%
+    ep   999 | val=  2.13%
+    ep  1000 | data=2.028e-04 | err_max= 84.38% 
+    ep  1099 | val=  2.06%
+    ep  1199 | val=  1.86%
+    ep  1250 | data=1.652e-04 | err_max= 84.38% 
+    ep  1299 | val=  2.84%
+    ep  1399 | val=  1.68%
+    ep  1499 | val=  2.18%
+    ep  1500 | data=1.957e-04 | err_max= 84.38% 
+    ep  1599 | val=  1.68%
+    ep  1699 | val=  1.79%
+    ep  1750 | data=1.295e-04 | err_max= 84.38% 
+    ep  1799 | val=  1.68%
+    ep  1899 | val=  1.52%
+    ep  1999 | val=  1.90%
+    ep  2000 | data=1.353e-04 | err_max= 84.38% 
+    ep  2099 | val=  1.68%
+    ep  2199 | val=  1.39%
+    ep  2250 | data=8.594e-05 | err_max= 84.38% 
+    ep  2299 | val=  1.58%
+    ep  2399 | val=  1.56%
+    ep  2499 | val=  1.50%
+    ep  2500 | data=9.366e-05 | err_max= 84.38% 
+    ep  2599 | val=  1.95%
+    ep  2699 | val=  1.26%
+    ep  2750 | data=7.720e-05 | err_max= 84.38% 
+    ep  2799 | val=  1.25%
+    ep  2899 | val=  1.60%
+    ep  2999 | data=6.778e-05 | err_max= 84.38% 
+    ep  2999 | val=  1.37%
+
+  RESULTADO e27_BBH64_act_n01_s0: NRMSE_test=3.60% (I=3.92 E=3.28) [118.8 min]
+  -> results\escalado\e27_BBH64_act_n01_s0.json
