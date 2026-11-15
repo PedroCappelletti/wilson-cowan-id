@@ -11,6 +11,9 @@ import statistics as st
 from collections import defaultdict
 from pathlib import Path
 
+import sys as _sys
+_sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+from nombres_modelos import mostrar  # noqa: E402
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -55,7 +58,7 @@ def barras(ax, etiquetas, series, xmax, fmt="{:.1f}", log=False):
             if np.isfinite(x):
                 ax.text(x * (1.08 if log else 1) + (0 if log else xmax * 0.012), p,
                         coma(float(fmt.format(x))), va="center", fontsize=11.5, color=TINTA2)
-    ax.set_yticks(y, etiquetas)
+    ax.set_yticks(y, [mostrar(e) for e in etiquetas])
     if not ax.yaxis_inverted():
         ax.invert_yaxis()
     ax.grid(axis="y", visible=False)

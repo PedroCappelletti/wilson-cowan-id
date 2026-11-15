@@ -71,14 +71,15 @@ white-box & $f_{WC}(x, u_k; \bh)$ & nada \\
 agnóstica & $f_{WC} + g(I, E)$ & red del estado \\
 historia con comando actual & $f_{WC} + g(I, E, u_k, \dots, u_{k-9})$ & red con 5 ms del comando \\
 historia sin comando actual & $f_{WC} + g(I, E, u_{k-1}, \dots, u_{k-10})$ & red con 5 ms, sin el comando actual \\
-filtro 8 canales & $f_{WC} + g(I, E, W u_{k:k-39})$ & 20 ms del comando por un FIR de 8 canales \\
-estado de filtro & $f_{WC}(x, \hat P_{ef}; \bh)$ & $\hat\tau\dot{\hat P} = P - \hat P$, $\hat P_{ef}$ recortado en $\pm 1/\hat\alpha$ \\
+filtro entrenable & $f_{WC} + g(I, E, W u_{k:k-39})$ & 20 ms del comando por un FIR de 8 canales \\
+backbone expandido (refractaria) & $f_{WC}$ con $(1 - \hat r x)\,S(\cdot)$ & factor refractario con $\hat r$ entrenable \\
+backbone expandido (actuador) & $f_{WC}(x, \hat P_{ef}; \bh)$ & $\hat\tau\dot{\hat P} = P - \hat P$, $\hat P_{ef}$ recortado en $\pm 1/\hat\alpha$ \\
 black-box & $g(I, E, P, Q)$ & sin backbone \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-$u_k$ es el comando $(P, Q)$ en la muestra $k$, con 0,5~ms entre muestras. El estado de filtro es la forma exacta de la perturbación del actuador. Para la refractaria, la forma exacta es el backbone con el factor $(1 - \hat r x)$.
+$u_k$ es el comando $(P, Q)$ en la muestra $k$, con 0,5~ms entre muestras. El backbone expandido agrega al white-box la ecuación del mecanismo omitido, con sus parámetros físicos entrenables. En la refractaria agrega el factor $(1 - \hat r x)$. En el actuador agrega el filtro $\hat\tau\,\dot{\hat P} = P - \hat P$ y el recorte en $\pm 1/\hat\alpha$.
 
 \textbf{Métricas.} El NRMSE mide la reproducción en lazo abierto de estímulos que el modelo no vio. El error de $\bh$ mide cuánto se alejan los parámetros identificados de los verdaderos. El R² contra el término faltante mide cuánto de la perturbación quedó representado en la corrección. En lazo cerrado se usan el RMSE de seguimiento y la distancia al lazo con el simulador (sección 7).
 
@@ -158,7 +159,7 @@ En este trabajo el modelo identificado reemplaza a la planta, y el controlador q
   \draw[flecha] (int.south) -- ++(0,-14mm) -| node[pos=0.25, below, etiq]{estado $x$} ($(mem.south)+(-6mm,0)$);
   \draw[flecha] ($(int.south)+(0,-14mm)$) -| (bb.south);
 \end{tikzpicture}
-\caption{Estructura del bloque de planta cuando es un modelo gray-box con red. La memoria del comando cambia con el modelo. En la agnóstica la red no recibe el comando. En la historia con comando actual recibe $u_k, \dots, u_{k-9}$, en la historia sin comando actual $u_{k-1}, \dots, u_{k-10}$, y en el filtro de 8 canales la combinación de 40 muestras por un FIR. En el estado de filtro no hay red. El comando entra al backbone después de $\hat\tau\dot{\hat P} = P - \hat P$ y del recorte.}
+\caption{Estructura del bloque de planta cuando es un modelo gray-box con red. La memoria del comando cambia con el modelo. En la agnóstica la red no recibe el comando. En la historia con comando actual recibe $u_k, \dots, u_{k-9}$, en la historia sin comando actual $u_{k-1}, \dots, u_{k-10}$, y en el filtro entrenable la combinación de 40 muestras por un FIR. En el backbone expandido no hay red. El comando entra al backbone después de $\hat\tau\dot{\hat P} = P - \hat P$ y del recorte.}
 \label{fig:planta}
 \end{figure}
 
@@ -191,11 +192,11 @@ modelo & qué se invierte & tipo \\
 \midrule
 white-box & la misma ley con $\bh$ en lugar de los nominales & explícita \\
 agnóstica & el objetivo se corre en $-\tau\,\hat g(I, E)$, porque $g$ depende solo del estado & explícita \\
-forma exacta refractaria & el objetivo se divide por $(1 - \hat r x)$ & explícita \\
+backbone expandido refractario & el objetivo se divide por $(1 - \hat r x)$ & explícita \\
 historia sin comando actual & $g$ depende de comandos ya aplicados, conocidos en el paso $k$. El objetivo se corre como en la agnóstica & explícita \\
 historia con comando actual & $g$ depende de $u_k$, que es lo que se busca, y $u_k$ aparece a los dos lados & implícita, un punto fijo por paso \\
-filtro 8 canales & el FIR incluye $u_k$, mismo caso & implícita \\
-estado de filtro & hay que pedir $P = \hat P + \hat\tau\,\dot{\hat P}^{*}$ para que el filtro llegue al valor deseado, y el recorte solo se invierte dentro de $\pm 3$ & explícita con derivada, acotada \\
+filtro entrenable & el FIR incluye $u_k$, mismo caso & implícita \\
+backbone expandido (actuador) & hay que pedir $P = \hat P + \hat\tau\,\dot{\hat P}^{*}$ para que el filtro llegue al valor deseado, y el recorte solo se invierte dentro de $\pm 3$ & explícita con derivada, acotada \\
 black-box & no hay sigmoidea ni pesos que invertir & numérica \\
 \bottomrule
 \end{tabular}
@@ -229,7 +230,7 @@ La saturación con tanh comprime aun por debajo del nivel. Un comando de 2 sale 
 
 \begin{preguntas}
 \pr{¿Por qué se cambió la tanh por el recorte?}
-Porque la tanh agregaba una no linealidad dentro del rango de entrenamiento que no se buscaba estudiar. Los modelos la absorbían en $w_{EE}$, $w_{EI}$ y $a_e$, y el error de $\bh$ del estado de filtro quedaba entre 7 y 9 \% aun con poco ruido.
+Porque la tanh agregaba una no linealidad dentro del rango de entrenamiento que no se buscaba estudiar. Los modelos la absorbían en $w_{EE}$, $w_{EI}$ y $a_e$, y el error de $\bh$ del backbone expandido quedaba entre 7 y 9 \% aun con poco ruido.
 
 \pr{¿El recorte es más realista?}
 Los dos son idealizaciones de la saturación de la opsina. El recorte se eligió para separar el efecto del filtro del efecto de la saturación. La línea con tanh se conserva como comparación.
@@ -252,7 +253,7 @@ Es el rango de los estímulos del dataset, que se diseñó antes del controlador
 \caption{NRMSE de test de los mismos modelos.}
 \end{figure}
 
-El recorte cambia poco la precisión en lazo abierto y cambia mucho la identificación. Con $\sigma = 0{,}01$ el estado de filtro pasa de 8,7 a 0,5 \% de error de $\bh$, con $\hat\tau = 0{,}997$~ms. Las correcciones con red mejoran algo, pero quedan entre 17 y 34 \%, porque su estructura no tiene el estado del filtro.
+El recorte cambia poco la precisión en lazo abierto y cambia mucho la identificación. Con $\sigma = 0{,}01$ el backbone expandido pasa de 8,7 a 0,5 \% de error de $\bh$, con $\hat\tau = 0{,}997$~ms. Las correcciones con red mejoran algo, pero quedan entre 17 y 34 \%, porque su estructura no tiene el estado del filtro.
 
 \begin{preguntas}
 \pr{Si el NRMSE es parecido, ¿por qué importa el error de $\bh$?}
@@ -285,20 +286,20 @@ Porque es la única corrección con memoria del comando que deja el modelo expl�
 
 \section{x0 entrenable}
 
-En el entrenamiento cada trayectoria se corta en ventanas de 5~ms, y cada ventana arranca desde el estado medido. Con ruido, ese estado inicial tiene error, y el error entra como condición inicial exacta. La segunda etapa arranca del modelo ya entrenado y deja entrenable el estado inicial de cada ventana, con un término que pide continuidad entre ventanas consecutivas. En el estado de filtro se liberan solo los estados iniciales de $E$ e $I$. El del filtro sale de filtrar el comando, que se conoce sin ruido.
+En el entrenamiento cada trayectoria se corta en ventanas de 5~ms, y cada ventana arranca desde el estado medido. Con ruido, ese estado inicial tiene error, y el error entra como condición inicial exacta. La segunda etapa arranca del modelo ya entrenado y deja entrenable el estado inicial de cada ventana, con un término que pide continuidad entre ventanas consecutivas. En el backbone expandido se liberan solo los estados iniciales de $E$ e $I$. El del filtro sale de filtrar el comando, que se conoce sin ruido.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{x0_entrenable_beta.pdf}
-\caption{Error de $\bh$ antes (gris) y después (azul) de la segunda etapa. Correcciones con red en e22, estado de filtro en e23, desde el checkpoint de e21. El modelo de partida compite en la selección por validación.}
+\caption{Error de $\bh$ antes (gris) y después (azul) de la segunda etapa. Correcciones con red en e22, backbone expandido en e23, desde el checkpoint de e21. El modelo de partida compite en la selección por validación.}
 \end{figure}
 
 \begin{preguntas}
-\pr{¿Por qué x0 entrenable baja tanto el error en el estado de filtro y casi nada en las redes?}
-Porque el error de $\bh$ tiene dos fuentes. El ruido en las condiciones iniciales sesga los parámetros, y x0 entrenable lo corrige. En el estado de filtro con $\sigma = 0{,}05$ el error baja de 10,3 a 1,4 \%. En las redes la fuente principal es estructural, porque les falta el estado del filtro, y liberar x0 no lo resuelve.
+\pr{¿Por qué x0 entrenable baja tanto el error en el backbone expandido y casi nada en las redes?}
+Porque el error de $\bh$ tiene dos fuentes. El ruido en las condiciones iniciales sesga los parámetros, y x0 entrenable lo corrige. En el backbone expandido con $\sigma = 0{,}05$ el error baja de 10,3 a 1,4 \%. En las redes la fuente principal es estructural, porque les falta el estado del filtro, y liberar x0 no lo resuelve.
 
 \pr{¿Por qué con $\sigma = 0{,}01$ casi no cambia nada?}
-Con poco ruido el sesgo por condiciones iniciales es chico. El estado de filtro ya tenía 0,5 \% y baja a 0,2 \%.
+Con poco ruido el sesgo por condiciones iniciales es chico. El backbone expandido ya tenía 0,5 \% y baja a 0,2 \%.
 
 \pr{¿Por qué en una versión anterior el white-box empeoraba de 20 a 35 \%?}
 Era un artefacto de la selección del modelo. De cada entrenamiento se guarda la época con mejor validación, pero en la segunda etapa el modelo de partida no competía. En el white-box los x0 libres bajan la pérdida de entrenamiento absorbiendo el desajuste del modelo, y la validación empeora en todas las épocas. Se guardaba igual la mejor de esas épocas. Con el modelo de partida como candidato, el white-box queda en su valor original. El código ya está corregido.
@@ -320,7 +321,7 @@ Sí, si se usa desde el arranque. Por eso se aplica solo como segunda etapa, con
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{trazas_E_filtro.pdf}
-\caption{$E$ en las mismas condiciones para el filtro de 8 canales y las tres versiones del estado de filtro.}
+\caption{$E$ en las mismas condiciones para el filtro entrenable y las tres versiones del backbone expandido.}
 \end{figure}
 
 \begin{figure}[H]
@@ -332,10 +333,10 @@ Sí, si se usa desde el arranque. Por eso se aplica solo como segunda etapa, con
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{trazas_P_filtro.pdf}
-\caption{Comando $P$ para el filtro de 8 canales y las tres versiones del estado de filtro.}
+\caption{Comando $P$ para el filtro entrenable y las tres versiones del backbone expandido.}
 \end{figure}
 
-Las trazas muestran tres comportamientos. El white-box y la agnóstica siguen el contorno de la actividad y suavizan los picos finos. Las correcciones con historia del comando oscilan entre los dos trenes de la referencia, donde el lazo con el simulador queda en reposo, y el controlador responde a esas oscilaciones con comandos de $\pm 10$. El estado de filtro con recorte en $\pm 3$ se superpone al simulador. Con recorte en $\pm 10$ se separa en los tramos donde el controlador pide más de 3, porque el modelo deja pasar lo que el simulador recorta.
+Las trazas muestran tres comportamientos. El white-box y la agnóstica siguen el contorno de la actividad y suavizan los picos finos. Las correcciones con historia del comando oscilan entre los dos trenes de la referencia, donde el lazo con el simulador queda en reposo, y el controlador responde a esas oscilaciones con comandos de $\pm 10$. El backbone expandido con recorte en $\pm 3$ se superpone al simulador. Con recorte en $\pm 10$ se separa en los tramos donde el controlador pide más de 3, porque el modelo deja pasar lo que el simulador recorta.
 
 \subsection{Distancia entre lazos}
 
@@ -357,18 +358,18 @@ con $m$ el lazo con el modelo y $s$ el lazo con el simulador. Es el criterio de 
 \caption{RMSE de seguimiento contra distancia al lazo con el simulador, theta-gamma, $\sigma = 0{,}01$. La línea punteada es el RMSE del lazo con el simulador.}
 \end{figure}
 
-Con theta-gamma y $\sigma = 0{,}01$ el orden es claro. El estado de filtro con recorte en $\pm 3$ queda a 0,010, el white-box, la agnóstica y el estado de filtro con recorte en $\pm 10$ a 0,034 o 0,035, y las correcciones con historia entre 0,049 y 0,065. El RMSE de seguimiento no sigue ese orden. El white-box y la agnóstica siguen mejor que el simulador (0,045 contra 0,057), porque el controlador los cancela casi exactamente, y las correcciones con historia siguen casi como el simulador. Por eso el RMSE se reporta junto con la distancia.
+Con theta-gamma y $\sigma = 0{,}01$ el orden es claro. El backbone expandido con recorte en $\pm 3$ queda a 0,010, el white-box, la agnóstica y el backbone expandido con recorte en $\pm 10$ a 0,034 o 0,035, y las correcciones con historia entre 0,049 y 0,065. El RMSE de seguimiento no sigue ese orden. El white-box y la agnóstica siguen mejor que el simulador (0,045 contra 0,057), porque el controlador los cancela casi exactamente, y las correcciones con historia siguen casi como el simulador. Por eso el RMSE se reporta junto con la distancia.
 
-Con gamma de 50~ms todos los modelos quedan entre 0,061 y 0,087, salvo el estado de filtro con recorte en $\pm 3$, que con $\sigma = 0{,}01$ queda en 0,007 sin x0 entrenable y en 0,009 con x0 entrenable.
+Con gamma de 50~ms todos los modelos quedan entre 0,061 y 0,087, salvo el backbone expandido con recorte en $\pm 3$, que con $\sigma = 0{,}01$ queda en 0,007 sin x0 entrenable y en 0,009 con x0 entrenable.
 
 \subsection{Nivel del recorte}
 
-El nivel del recorte del estado de filtro no se identifica. Es un parámetro entrenable, pero el recorte solo recibe gradiente cuando el comando lo supera, y los comandos de entrenamiento no pasan de 2. El modelo se inicializa con el nivel en 10 y termina en 10. En la práctica es un valor fijado, igual que el 3 del diseño, que se le pone después sin reentrenar.
+El nivel del recorte del backbone expandido no se identifica. Es un parámetro entrenable, pero el recorte solo recibe gradiente cuando el comando lo supera, y los comandos de entrenamiento no pasan de 2. El modelo se inicializa con el nivel en 10 y termina en 10. En la práctica es un valor fijado, igual que el 3 del diseño, que se le pone después sin reentrenar.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{estado_filtro_en_lazo.pdf}
-\caption{Distancia al lazo con el simulador para el estado de filtro. * Simulador con filtro y sin saturación, modelo sin recorte. Filas con x0 entrenable de e23, las demás de e21.}
+\caption{Distancia al lazo con el simulador para el backbone expandido. * Simulador con filtro y sin saturación, modelo sin recorte. Filas con x0 entrenable de e23, las demás de e21.}
 \end{figure}
 
 Con el recorte en $\pm 10$, el modelo deja pasar comandos de hasta 10 mientras el simulador los corta en 3, y el lazo se separa cada vez que el controlador pide más de 3. Con el recorte en $\pm 3$ y $\sigma = 0{,}01$ el lazo coincide. Con $\sigma = 0{,}05$ coincide recién con x0 entrenable, que corrige $\bh$. La distancia baja de 0,033 a 0,013 en theta-gamma y de 0,059 a 0,019 en gamma. Sin saturación en el simulador y sin recorte en el modelo pasa lo mismo.
@@ -384,7 +385,7 @@ Con los datos actuales solo se puede acotar por abajo. Si se inicializa por deba
 El nivel de saturación del actuador es un dato del equipo de estimulación, que se conoce o se mide con un ensayo de comandos grandes. Fijarlo equivale a usar ese dato. Se reporta junto con el modelo que lo deja en su valor inicial.
 
 \pr{¿Qué pasa con referencias que no sacan el comando del rango de entrenamiento?}
-Con referencias theta de 8~Hz y gamma de 40~Hz construidas para eso, el estado de filtro reproduce el lazo del simulador con distancia menor a 0,001, y el white-box y la agnóstica quedan a menos de 0,003. Las diferencias grandes aparecen cuando el controlador pide comandos fuera del rango de entrenamiento.
+Con referencias theta de 8~Hz y gamma de 40~Hz construidas para eso, el backbone expandido reproduce el lazo del simulador con distancia menor a 0,001, y el white-box y la agnóstica quedan a menos de 0,003. Las diferencias grandes aparecen cuando el controlador pide comandos fuera del rango de entrenamiento.
 
 \pr{¿Por qué en una versión anterior la historia con comando actual quedaba trabada en un valor fijo?}
 Era un error de la simulación del lazo, corregido. El tiempo de la simulación se acumula sumando el paso de 0,005~ms, y el redondeo crece con la corrida. Desde los 1292~ms, el código que guarda el comando aplicado dejaba de reconocer el comienzo de cada paso y no lo guardaba más. La red veía el comando actual y una historia en cero, y con esa entrada el modelo tiene un punto fijo en $E = 0{,}243$, $P = -10{,}46$, donde quedaba el lazo. La historia sin comando actual no se trababa porque el comando actual entra solo por el backbone, que responde a un comando negativo bajando $E$. Se corrigió la tolerancia y se rehicieron todas las corridas afectadas, que eran las de theta-gamma con modelos con historia.
@@ -401,11 +402,11 @@ Porque en lazo cerrado el controlador pide comandos entre $-13$ y $13$, y esas r
 \caption{NRMSE de test de la Neural ODE black-box $\dot x = g(I, E, P, Q)$ y de la misma red con historia del comando de 5~ms, con el white-box como referencia sin corrección y dos gray-box por perturbación. Red de 64 unidades, 3000 épocas, entrenada desde cero (e24).}
 \end{figure}
 
-La black-box sin historia mejora algo sobre el white-box en las dos plantas (6,50 contra 7,28 en el actuador y 2,88 contra 3,29 en la refractaria, con $\sigma = 0{,}01$). Con historia del comando, en el actuador supera a la corrección con red equivalente (3,47 contra 4,07 con $\sigma = 0{,}01$) y queda detrás del estado de filtro (2,25). En la refractaria queda detrás de la agnóstica y de la forma exacta.
+La black-box sin historia mejora algo sobre el white-box en las dos plantas (6,50 contra 7,28 en el actuador y 2,88 contra 3,29 en la refractaria, con $\sigma = 0{,}01$). Con historia del comando, en el actuador supera a la corrección con red equivalente (3,47 contra 4,07 con $\sigma = 0{,}01$) y queda detrás del backbone expandido (2,25). En la refractaria queda detrás de la agnóstica y del backbone expandido.
 
 \begin{preguntas}
 \pr{Si la black-box con historia iguala a la corrección con red, ¿qué aporta el gray-box?}
-Tres cosas. Los parámetros de Wilson-Cowan identificados, que la black-box no tiene. Las formas estructuradas, que son las más precisas en las dos plantas. Y, en las formas que no ponen el comando actual dentro de la red, la posibilidad de invertir el modelo en forma explícita dentro de un controlador (sección 2.3).
+Tres cosas. Los parámetros de Wilson-Cowan identificados, que la black-box no tiene. Los backbones expandidos, que son los más precisos en las dos plantas. Y, en las formas que no ponen el comando actual dentro de la red, la posibilidad de invertir el modelo en forma explícita dentro de un controlador (sección 2.3).
 
 \pr{¿Por qué la black-box tiene una red más grande y más épocas?}
 Porque aprende el campo vectorial entero y no una corrección chica sobre el backbone. Con la misma red que las correcciones quedaría en desventaja y la comparación no sería justa.
@@ -420,11 +421,11 @@ Todavía no. Hace falta adaptar la simulación del lazo a un modelo sin backbone
 \section{Síntesis}
 
 \begin{itemize}[leftmargin=*,itemsep=0.4em]
-\item Con el recorte el actuador no comprime los comandos de entrenamiento, y el estado de filtro identifica $\beta$ con 0,5 \% de error con $\sigma = 0{,}01$.
+\item Con el recorte el actuador no comprime los comandos de entrenamiento, y el backbone expandido identifica $\beta$ con 0,5 \% de error con $\sigma = 0{,}01$.
 \item El error de $\bh$ tiene dos fuentes. El ruido en las condiciones iniciales se corrige con x0 entrenable. La falta del estado del filtro en las redes no se corrige con x0.
 \item La precisión en lazo abierto no alcanza para elegir un modelo para control. La distancia entre lazos separa los modelos.
 \item El nivel del recorte no se puede aprender con comandos de entrenamiento de 0 a 2. Fijándolo en su valor conocido y con x0 entrenable, el lazo con el modelo coincide con el lazo con el simulador con los dos niveles de ruido.
-\item En lazo abierto la black-box con historia iguala a la corrección con red. La ventaja del gray-box está en los parámetros identificables, en las formas estructuradas y en la inversión explícita.
+\item En lazo abierto la black-box con historia iguala a la corrección con red. La ventaja del gray-box está en los parámetros identificables, en los backbones expandidos y en la inversión explícita.
 \end{itemize}
 
 \end{document}

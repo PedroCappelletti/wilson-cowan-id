@@ -10,6 +10,9 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import sys as _sys
+_sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+from nombres_modelos import mostrar  # noqa: E402
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -61,7 +64,7 @@ def figura(z, i, ref, var):
         ax.plot(t[a:b], z[f"{i}_{sim}_{var}"][a:b], color=TINTA, lw=1.2)
         ax.plot(t[a:b], z[f"{i}_{j}_{var}"][a:b], color=COLORES[nom], lw=1.4, ls="--")
         r = z[f"{i}_{j}_rmse"][2 if var == "E" else 1]
-        ax.set_title(f"{nom}   RMSE {var} {coma(round(float(r), 3))}", loc="left", fontsize=12.5, pad=3)
+        ax.set_title(f"{mostrar(nom)}   RMSE {var} {coma(round(float(r), 3))}", loc="left", fontsize=12.5, pad=3)
         ax.xaxis.set_major_formatter(FuncFormatter(coma))
         ax.yaxis.set_major_formatter(FuncFormatter(coma))
     for ax in axs[:, 0]:

@@ -36,7 +36,7 @@
 \begin{frame}
   \titlepage
   \vfill
-  \pie{Salvo aclaración, cada valor es la media de tres semillas. NRMSE sobre los 13 escenarios de test que interpolan. $\sigma$ es el desvío del ruido de medición. Simulador es la planta de Wilson-Cowan con el actuador perturbado, que genera los datos.}
+  \pie{Salvo aclaración, cada valor es la media de tres semillas. NRMSE sobre los 13 escenarios de test que interpolan. $\sigma$ es el desvío del ruido de medición. Simulador es la planta de Wilson-Cowan con el actuador perturbado, que genera los datos. El backbone expandido agrega al white-box la ecuación del mecanismo omitido, con sus parámetros físicos entrenables. En la refractaria agrega el factor $(1 - \hat r x)$. En el actuador agrega el filtro $\hat\tau\,\dot{\hat P} = P - \hat P$ y el recorte en $\pm 1/\hat\alpha$.}
 \end{frame}
 
 \begin{frame}{Forma de la saturación del actuador}
@@ -86,7 +86,7 @@
 
 \begin{frame}{x0 entrenable sobre el actuador con recorte}
   \figura{x0_entrenable_beta.pdf}
-  \pie{Error de \bh{} antes (gris) y después (azul) de la segunda etapa con el estado inicial de cada ventana entrenable. Redes en e22, estado de filtro en e23, desde el checkpoint de e21. El modelo de partida compite en la selección por validación. El white-box no mejora su validación con x0 y queda igual.}
+  \pie{Error de \bh{} antes (gris) y después (azul) de la segunda etapa con el estado inicial de cada ventana entrenable. Redes en e22, backbone expandido en e23, desde el checkpoint de e21. El modelo de partida compite en la selección por validación. El white-box no mejora su validación con x0 y queda igual.}
 \end{frame}
 
 \begin{frame}{Actividad $E$ en lazo cerrado: correcciones con red}
@@ -94,9 +94,9 @@
   \pie{$E$ con el controlador IMC del paper, theta-gamma, 1250 a 1350~ms, semilla 0, $\sigma = 0{,}01$. Continua, simulador. Discontinua, modelo del título.}
 \end{frame}
 
-\begin{frame}{Actividad $E$ en lazo cerrado: filtro entrenable y estado de filtro}
+\begin{frame}{Actividad $E$ en lazo cerrado: filtro entrenable y backbone expandido}
   \figurat{trazas_E_filtro.pdf}
-  \pie{$E$, mismas corridas. Con el filtro de 8 canales $E$ oscila entre los dos trenes de la referencia, donde el lazo con el simulador queda en reposo.}
+  \pie{$E$, mismas corridas. Con el filtro entrenable $E$ oscila entre los dos trenes de la referencia, donde el lazo con el simulador queda en reposo.}
 \end{frame}
 
 \begin{frame}{Comando $P$ en lazo cerrado: correcciones con red}
@@ -104,7 +104,7 @@
   \pie{Comando $P$ que calcula el controlador en las mismas corridas. La franja gris marca $\pm 3$, el nivel del recorte del simulador.}
 \end{frame}
 
-\begin{frame}{Comando $P$ en lazo cerrado: filtro entrenable y estado de filtro}
+\begin{frame}{Comando $P$ en lazo cerrado: filtro entrenable y backbone expandido}
   \figurat{trazas_P_filtro.pdf}
   \pie{Comando $P$ que calcula el controlador en las mismas corridas. La franja gris marca $\pm 3$, el nivel del recorte del simulador.}
 \end{frame}
@@ -124,7 +124,7 @@
     \begin{column}{0.39\textwidth}
       \small
       \begin{itemize}\setlength\itemsep{2mm}
-        \item El white-box y la agnóstica siguen a la referencia mejor que el simulador. Su lazo queda a 0,034 del lazo con el simulador, contra 0,010 del estado de filtro con recorte en $\pm 3$.
+        \item El white-box y la agnóstica siguen a la referencia mejor que el simulador. Su lazo queda a 0,034 del lazo con el simulador, contra 0,010 del backbone expandido con recorte en $\pm 3$.
         \item Las correcciones con historia siguen casi como el simulador y quedan más lejos, entre 0,049 y 0,065.
         \item El RMSE de seguimiento no ordena modelos. Se reporta junto con la distancia.
       \end{itemize}
@@ -145,11 +145,11 @@
 \begin{frame}{Síntesis}
   \vspace{2mm}
   \begin{itemize}\setlength\itemsep{2.5mm}
-    \item Con el recorte el actuador no comprime los comandos de entrenamiento, y el estado de filtro identifica $\beta$.
+    \item Con el recorte el actuador no comprime los comandos de entrenamiento, y el backbone expandido identifica $\beta$.
     \item El error de \bh{} tiene dos fuentes. El ruido en las condiciones iniciales se corrige con x0 entrenable. La falta del estado del filtro en las redes no se corrige con x0.
     \item La precisión en lazo abierto no alcanza para elegir un modelo para control. La distancia entre lazos separa los modelos.
     \item El modelo no puede aprender el nivel del recorte, porque los comandos de entrenamiento no pasan de 2 y el controlador pide hasta $\pm 11$. Fijando el nivel en su valor conocido (3) y con x0 entrenable, el lazo con el modelo coincide con el lazo con el simulador con $\sigma = 0{,}01$ y con $\sigma = 0{,}05$.
-    \item En lazo abierto la black-box con historia iguala a la corrección con red. La ventaja del gray-box está en los parámetros identificables y en las formas estructuradas.
+    \item En lazo abierto la black-box con historia iguala a la corrección con red. La ventaja del gray-box está en los parámetros identificables y en los backbones expandidos.
   \end{itemize}
 \end{frame}
 

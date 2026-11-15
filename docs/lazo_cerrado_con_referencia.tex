@@ -50,7 +50,7 @@ con $f_\gamma = 120$~Hz, $t \in [0, 2000]$~ms y $\varphi_\theta$ la fase de una 
 \includegraphics[width=\textwidth]{theta2s_I.pdf}
 \caption{Actividad inhibitoria $I$ en las mismas corridas.}
 \end{figure}
-Dentro de cada ráfaga, el lazo con el simulador sigue la forma de la gamma con errores en los picos. El white-box y la agnóstica quedan más cerca de la referencia que el propio simulador (RMSE de $E$ 0,052 contra 0,067), porque el controlador invierte un Wilson-Cowan sin actuador y los cancela casi exactamente. El estado de filtro con recorte en $\pm 3$ se superpone al lazo con el simulador, con y sin x0 entrenable. Con recorte en $\pm 10$ se separa en los picos de algunas ráfagas. Las tres correcciones con historia del comando siguen las ráfagas, pero oscilan en los tramos de reposo entre ráfagas, donde la referencia y el lazo con el simulador valen cero. El filtro de 8 canales es el que más oscila (RMSE de $E$ 0,116).
+Dentro de cada ráfaga, el lazo con el simulador sigue la forma de la gamma con errores en los picos. El white-box y la agnóstica quedan más cerca de la referencia que el propio simulador (RMSE de $E$ 0,052 contra 0,067), porque el controlador invierte un Wilson-Cowan sin actuador y los cancela casi exactamente. El backbone expandido con recorte en $\pm 3$ se superpone al lazo con el simulador, con y sin x0 entrenable. Con recorte en $\pm 10$ se separa en los picos de algunas ráfagas. Las tres correcciones con historia del comando siguen las ráfagas, pero oscilan en los tramos de reposo entre ráfagas, donde la referencia y el lazo con el simulador valen cero. El filtro entrenable es el que más oscila (RMSE de $E$ 0,116).
 
 
 \subsection{Gamma continua de 50~ms}
@@ -72,7 +72,7 @@ con $f_\gamma = 120$~Hz y $t \in [0, 50]$~ms.
 \includegraphics[width=\textwidth]{gamma50_I.pdf}
 \caption{Actividad inhibitoria $I$ en las mismas corridas.}
 \end{figure}
-Con la gamma continua, el lazo con el simulador va atrasado respecto de la referencia, por el filtro del actuador, y su RMSE es 0,068. El white-box y la agnóstica quedan en fase con la referencia (0,038 y 0,034). El estado de filtro con recorte en $\pm 3$ reproduce el atraso del simulador. Las correcciones con historia quedan entre 0,056 y 0,069, con la forma de onda de $I$ deformada en los valles.
+Con la gamma continua, el lazo con el simulador va atrasado respecto de la referencia, por el filtro del actuador, y su RMSE es 0,068. El white-box y la agnóstica quedan en fase con la referencia (0,038 y 0,034). El backbone expandido con recorte en $\pm 3$ reproduce el atraso del simulador. Las correcciones con historia quedan entre 0,056 y 0,069, con la forma de onda de $I$ deformada en los valles.
 
 
 \subsection{Referencias con el comando en el rango de entrenamiento}
@@ -103,7 +103,7 @@ con $f = 8$~Hz y $t \in [0, 500]$~ms para la theta, y $f = 40$~Hz y $t \in [0, 2
 \includegraphics[width=\textwidth]{gamma_rango_I.pdf}
 \caption{Actividad inhibitoria $I$ con la referencia gamma de 40~Hz en rango.}
 \end{figure}
-Con estas referencias el lazo con el simulador sigue con RMSE de 0,011 (theta) y 0,020 (gamma), y su comando queda dentro de $[0, 2]$ el 99~\% del tiempo. El white-box, la agnóstica y las tres versiones del estado de filtro reproducen ese seguimiento. Las correcciones con historia oscilan en los tramos de baja actividad, y su RMSE es de 2 a 5 veces el del lazo con el simulador. En sus lazos el comando sale de $[0, 2]$ entre el 45 y el 80~\% del tiempo, aunque la referencia no lo pide. La salida del rango la produce el propio lazo con el modelo. Un error chico de la red cerca del reposo, donde la sigmoidea es plana, se convierte en un comando grande, y ese comando, fuera del rango de entrenamiento, vuelve a entrar a la red.
+Con estas referencias el lazo con el simulador sigue con RMSE de 0,011 (theta) y 0,020 (gamma), y su comando queda dentro de $[0, 2]$ el 99~\% del tiempo. El white-box, la agnóstica y las tres versiones del backbone expandido reproducen ese seguimiento. Las correcciones con historia oscilan en los tramos de baja actividad, y su RMSE es de 2 a 5 veces el del lazo con el simulador. En sus lazos el comando sale de $[0, 2]$ entre el 45 y el 80~\% del tiempo, aunque la referencia no lo pide. La salida del rango la produce el propio lazo con el modelo. Un error chico de la red cerca del reposo, donde la sigmoidea es plana, se convierte en un comando grande, y ese comando, fuera del rango de entrenamiento, vuelve a entrar a la red.
 
 
 \section{RMSE contra la referencia}
@@ -121,10 +121,10 @@ white-box & 0,045 & 0,038 & 0,011 & 0,021 \\
 agnóstica & 0,044 & 0,034 & 0,011 & 0,021 \\
 historia con comando actual & 0,061 & 0,058 & 0,031 & 0,045 \\
 historia sin comando actual & 0,070 & 0,069 & 0,033 & 0,045 \\
-filtro 8 canales & 0,089 & 0,056 & 0,062 & 0,073 \\
-estado de filtro, recorte en ±10 & 0,056 & 0,064 & 0,011 & 0,020 \\
-estado de filtro, recorte en ±3 & 0,057 & 0,066 & 0,011 & 0,020 \\
-estado de filtro x0, recorte en ±3 & 0,057 & 0,066 & 0,011 & 0,020 \\
+filtro entrenable & 0,089 & 0,056 & 0,062 & 0,073 \\
+backbone expandido, recorte en ±10 & 0,056 & 0,064 & 0,011 & 0,020 \\
+backbone expandido, recorte en ±3 & 0,057 & 0,066 & 0,011 & 0,020 \\
+backbone expandido x0, recorte en ±3 & 0,057 & 0,066 & 0,011 & 0,020 \\
 \bottomrule
 \end{tabular}
 \end{center}

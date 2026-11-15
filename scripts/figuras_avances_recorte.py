@@ -12,6 +12,9 @@ import statistics as st
 from collections import defaultdict
 from pathlib import Path
 
+import sys as _sys
+_sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+from nombres_modelos import mostrar  # noqa: E402
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -94,7 +97,7 @@ def barras_h(ax, etiquetas, series, fmt="{:.1f}", xmax=None):
             if np.isfinite(v):
                 ax.text(v + (xmax or max(max(s[2]) for s in series)) * 0.012, p,
                         fmt.format(v).replace(".", ","), va="center", fontsize=14.5, color=TINTA2)
-    ax.set_yticks(y, etiquetas)
+    ax.set_yticks(y, [mostrar(e) for e in etiquetas])
     if not ax.yaxis_inverted():          # con sharey el eje es el mismo para los dos paneles
         ax.invert_yaxis()
     ax.grid(axis="y", visible=False)
@@ -157,7 +160,7 @@ def fig_e20():
             ax.text(v + (0.02 if v >= 0 else -0.02), p, f"{v:.2f}".replace(".", ",").replace("-", "−"), va="center",
                     ha="left" if v >= 0 else "right", fontsize=14.5, color=TINTA2)
     ax.axvline(0, color=TINTA2, lw=0.8)
-    ax.set_yticks(y, [r for r, _ in redes])
+    ax.set_yticks(y, [mostrar(r) for r, _ in redes])
     ax.invert_yaxis()
     ax.grid(axis="y", visible=False)
     ax.set_xlim(-0.45, 1.12)
@@ -183,7 +186,7 @@ def fig_x0():
             ax.plot(va, i, "o", color=GRIS, ms=8, label="sin x0 entrenable" if i == 0 else None)
             ax.plot(vb, i, "o", color=AZUL, ms=8, label="con x0 entrenable" if i == 0 else None)
             ax.text(vb, i - 0.28, coma(round(vb, 1)), ha="center", va="bottom", fontsize=14.5, color=AZUL)
-        ax.set_yticks(range(len(filas)), [f[0] for f in filas])
+        ax.set_yticks(range(len(filas)), [mostrar(f[0]) for f in filas])
         ax.set_ylim(len(filas) - 0.4, -0.7)
         ax.set_xlim(-3, 40)
         ax.grid(axis="y", visible=False)
@@ -238,7 +241,7 @@ def fig_rmse_vs_distancia(L):
                  ("historia con comando actual", "con red", (0.052, 0.0515)),
                  ("filtro 8 canales", "filtro entrenable", (0.042, 0.0815))]
     for txt, pl, (tx, ty) in etiquetas:
-        ax.annotate(txt, (p(pl, "dist_x"), p(pl, "rmse")), xytext=(tx, ty), fontsize=14.5, color=TINTA,
+        ax.annotate(mostrar(txt), (p(pl, "dist_x"), p(pl, "rmse")), xytext=(tx, ty), fontsize=14.5, color=TINTA,
                     va="center", arrowprops=dict(arrowstyle="-", color=GRIS, lw=0.8, shrinkB=5))
     ax.set_xlim(0, 0.09)
     ax.set_ylim(0.035, 0.087)
@@ -288,7 +291,7 @@ def fig_trazas():
                     ax.axhspan(-3, 3, color="#ecebe7", zorder=0)
                 ax.plot(t[a:b], z[f"{sim}_{var}"][a:b], color=TINTA, lw=2.0)
                 ax.plot(t[a:b], z[f"{k}_{var}"][a:b], color=color, lw=1.8, ls="--")
-                ax.set_title(clave, loc="left", fontsize=15, pad=3)
+                ax.set_title(mostrar(clave), loc="left", fontsize=15, pad=3)
             for ax in axs[:, 0]:
                 ax.set_ylabel(ylab)
             for ax in axs[1]:
