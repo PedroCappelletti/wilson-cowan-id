@@ -1,0 +1,189 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Arial}
+\setmonofont{Consolas}[Scale=0.92]
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage[a4paper,margin=1.8cm]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs,longtable,array}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\definecolor{gris}{gray}{0.40}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\setlength{\LTpre}{0.3em}
+\title{Scripts del controlador, los simuladores y la conexión con los modelos}
+\date{}
+\author{}
+\begin{document}
+\maketitle
+\vspace{-14mm}
+
+Repositorio \texttt{wilson-cowan-id}, commit \texttt{c10e568} de la rama main. Los números de línea corresponden a esa versión.
+
+La columna \emph{líneas} da el rango en el archivo, del encabezado (o decorador) a la última línea. La columna \emph{código} cuenta solo las líneas con código, sin comentarios, docstrings ni líneas en blanco. En gris, los métodos de cada clase.
+
+\section*{Controlador}
+El controlador del paper y el integrador del lazo.
+\begin{longtable}{@{}p{0.30\textwidth}rrp{0.42\textwidth}@{}}
+\toprule símbolo & líneas & código & qué hace \\ \midrule \endhead
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/closed\_loop.py}}\hfill{\small 354 líneas, 162 de código}} \\*[0.3ex]
+\texttt{theta\_gamma\_refs} & 48--59 & 7 & referencia theta-gamma \\
+\texttt{\_inv\_sat} & 65--73 & 4 & inversa de la sigmoidea, acotada a su dominio \\
+clase \texttt{IMCController} & 76--220 & 68 & PI, inversa de la sigmoidea y desacople (port del .m) \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 77--151} & {\color{gris}\small 30} & \\
+\quad{\color{gris}\small \texttt{compute}} & {\color{gris}\small 153--220} & {\color{gris}\small 37} & \\
+\texttt{simulate\_closed\_loop} & 304--354 & 36 & integrador original del lazo \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/closed\_loop\_ext.py}}\hfill{\small 336 líneas, 231 de código}} \\*[0.3ex]
+\texttt{simulate\_closed\_loop\_ext} & 206--298 & 72 & integrador que usan todos los lazos actuales \\
+\texttt{theta\_gamma\_ventana\_refs} & 304--336 & 22 & referencia theta2s (gamma con ventana theta) \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/exp\_f6\_closed\_loop.py}}\hfill{\small 177 líneas, 109 de código}} \\*[0.3ex]
+\texttt{fixed\_de} & 53--60 & 7 & parámetros fijos del controlador \\
+\texttt{rmse} & 74--79 & 5 & error de seguimiento contra la referencia \\
+\addlinespace[0.4ex]
+\end{longtable}
+\section*{Simuladores}
+Las plantas que generan los datos y que cierran el lazo de referencia.
+\begin{longtable}{@{}p{0.30\textwidth}rrp{0.42\textwidth}@{}}
+\toprule símbolo & líneas & código & qué hace \\ \midrule \endhead
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/wilson\_cowan/model.py}}\hfill{\small 600 líneas, 301 de código}} \\*[0.3ex]
+clase \texttt{WilsonCowanParams} & 47--79 & 18 & $\beta$ verdaderos \\
+\quad{\color{gris}\small \texttt{ke}} & {\color{gris}\small 69--74} & {\color{gris}\small 3} & \\
+\quad{\color{gris}\small \texttt{ki}} & {\color{gris}\small 76--79} & {\color{gris}\small 3} & \\
+\texttt{sigmoid} & 86--87 & 2 & sigmoidea \\
+clase \texttt{WilsonCowan} & 302--514 & 123 & sistema de Wilson-Cowan (traducción del .m) \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 311--321} & {\color{gris}\small 11} & \\
+\quad{\color{gris}\small \texttt{rhs}} & {\color{gris}\small 329--343} & {\color{gris}\small 8} & \\
+\quad{\color{gris}\small \texttt{rhs\_aug}} & {\color{gris}\small 356--360} & {\color{gris}\small 5} & \\
+\quad{\color{gris}\small \texttt{perturbed\_field}} & {\color{gris}\small 365--395} & {\color{gris}\small 18} & \\
+\quad{\color{gris}\small \texttt{effective\_inputs}} & {\color{gris}\small 399--403} & {\color{gris}\small 5} & \\
+\quad{\color{gris}\small \texttt{simulate}} & {\color{gris}\small 410--459} & {\color{gris}\small 35} & \\
+\quad{\color{gris}\small \texttt{\_simulate\_perturbed}} & {\color{gris}\small 464--514} & {\color{gris}\small 40} & \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/wilson\_cowan/uncertainty.py}}\hfill{\small 634 líneas, 278 de código}} \\*[0.3ex]
+clase \texttt{Perturbation} & 67--120 & 28 & clase base de las perturbaciones \\
+\quad{\color{gris}\small \texttt{extra0}} & {\color{gris}\small 75--77} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{d\_extra}} & {\color{gris}\small 79--81} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{inputs}} & {\color{gris}\small 84--86} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{drive}} & {\color{gris}\small 88--90} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{gains}} & {\color{gris}\small 92--94} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{weights}} & {\color{gris}\small 96--98} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{deriv}} & {\color{gris}\small 100--102} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{sigmoid\_i}} & {\color{gris}\small 105--106} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{sigmoid\_e}} & {\color{gris}\small 108--109} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{rest\_offsets}} & {\color{gris}\small 111--113} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{metadata}} & {\color{gris}\small 115--117} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{\_\_repr\_\_}} & {\color{gris}\small 119--120} & {\color{gris}\small 2} & \\
+clase \texttt{NoPerturbation} & 123--127 & 2 & planta ideal \\
+clase \texttt{Refractoriness} & 137--166 & 9 & refractaria, $r = 0{,}10$ \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 158--160} & {\color{gris}\small 3} & \\
+\quad{\color{gris}\small \texttt{gains}} & {\color{gris}\small 162--163} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{metadata}} & {\color{gris}\small 165--166} & {\color{gris}\small 2} & \\
+clase \texttt{Actuator} & 169--228 & 26 & filtro de 1 ms; con recorte=True, recorte duro en $\pm 3$ \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 193--204} & {\color{gris}\small 6} & \\
+\quad{\color{gris}\small \texttt{\_tau}} & {\color{gris}\small 206--209} & {\color{gris}\small 4} & \\
+\quad{\color{gris}\small \texttt{d\_extra}} & {\color{gris}\small 211--214} & {\color{gris}\small 3} & \\
+\quad{\color{gris}\small \texttt{inputs}} & {\color{gris}\small 216--222} & {\color{gris}\small 5} & \\
+\quad{\color{gris}\small \texttt{metadata}} & {\color{gris}\small 224--228} & {\color{gris}\small 5} & \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/closed\_loop.py}}\hfill{\small 354 líneas, 162 de código}} \\*[0.3ex]
+\texttt{make\_perturbed\_plant} & 255--275 & 9 & simulador perturbado como planta del lazo \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/gen\_uncertain\_dataset.py}}\hfill{\small 189 líneas, 102 de código}} \\*[0.3ex]
+\texttt{generar\_con} & 106--173 & 53 & simula y guarda un dataset \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/esc\_gen\_amplitud.py}}\hfill{\small 198 líneas, 124 de código}} \\*[0.3ex]
+\texttt{hz} & 58--59 & 2 & frecuencias de cada familia \\
+\texttt{ventana} & 62--64 & 2 & ventana de encendido \\
+\texttt{square} & 69--70 & 2 & familia square \\
+\texttt{aprbs} & 73--85 & 12 & familia APRBS \\
+\texttt{thetagamma} & 88--94 & 6 & familia theta-gamma \\
+\texttt{poisson} & 97--112 & 14 & familia Poisson \\
+\texttt{chirp} & 115--121 & 6 & familia chirp \\
+\texttt{ruido} & 124--136 & 12 & ruido blanco de banda limitada \\
+\texttt{par} & 141--162 & 20 & parámetros de cada escenario según familia y amplitud \\
+\texttt{escenarios} & 165--181 & 16 & grilla de amplitudes 1 a 12 y particiones train, val y test \\
+\texttt{main} & 184--194 & 11 & genera los datasets de las tres plantas \\
+\addlinespace[0.4ex]
+\end{longtable}
+\section*{Conexión entre el controlador y los modelos}
+Cómo cada modelo entrenado reemplaza al simulador bajo el controlador.
+\begin{longtable}{@{}p{0.30\textwidth}rrp{0.42\textwidth}@{}}
+\toprule símbolo & líneas & código & qué hace \\ \midrule \endhead
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/control\_paper\_planta\_modelo.py}}\hfill{\small 277 líneas, 208 de código}} \\*[0.3ex]
+clase \texttt{CampoModelo} & 41--100 & 53 & campo del modelo en numpy ($\hat\beta$ + red, o solo red) \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 44--65} & {\color{gris}\small 21} & \\
+\quad{\color{gris}\small \texttt{\_\_call\_\_}} & {\color{gris}\small 67--84} & {\color{gris}\small 17} & \\
+\quad{\color{gris}\small \texttt{\_red}} & {\color{gris}\small 86--100} & {\color{gris}\small 14} & \\
+clase \texttt{PlantaHistoria} & 103--134 & 19 & guarda el comando pasado para los modelos con historia \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 107--110} & {\color{gris}\small 4} & \\
+\quad{\color{gris}\small \texttt{extra0}} & {\color{gris}\small 112--113} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{\_\_call\_\_}} & {\color{gris}\small 115--134} & {\color{gris}\small 12} & \\
+clase \texttt{PlantaFiltro} & 137--157 & 16 & estado $\hat P$ y recorte del backbone expandido \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 141--145} & {\color{gris}\small 5} & \\
+\quad{\color{gris}\small \texttt{extra0}} & {\color{gris}\small 147--148} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{\_\_call\_\_}} & {\color{gris}\small 150--157} & {\color{gris}\small 8} & \\
+\texttt{planta\_de} & 160--166 & 7 & elige la clase de planta según el modelo \\
+\texttt{verificar} & 169--193 & 24 & compara el campo numpy contra PyTorch \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/esc\_eval.py}}\hfill{\small 296 líneas, 194 de código}} \\*[0.3ex]
+\texttt{cargar} & 49--77 & 27 & lee el checkpoint y reconstruye el modelo \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/dynamics.py}}\hfill{\small 351 líneas, 182 de código}} \\*[0.3ex]
+clase \texttt{\_FIRMLP} & 29--46 & 8 & red del filtro entrenable \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 39--42} & {\color{gris}\small 4} & \\
+\quad{\color{gris}\small \texttt{forward}} & {\color{gris}\small 44--46} & {\color{gris}\small 3} & \\
+clase \texttt{GrayBoxWC} & 49--351 & 170 & white-box, agnóstica, historias, filtro entrenable, black-box \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 55--184} & {\color{gris}\small 61} & \\
+\quad{\color{gris}\small \texttt{weights}} & {\color{gris}\small 187--188} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{weights\_dict}} & {\color{gris}\small 190--192} & {\color{gris}\small 3} & \\
+\quad{\color{gris}\small \texttt{\_extra}} & {\color{gris}\small 195--196} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{params\_dict}} & {\color{gris}\small 198--204} & {\color{gris}\small 6} & \\
+\quad{\color{gris}\small \texttt{backbone}} & {\color{gris}\small 211--257} & {\color{gris}\small 30} & \\
+\quad{\color{gris}\small \texttt{structured\_dict}} & {\color{gris}\small 260--266} & {\color{gris}\small 7} & \\
+\quad{\color{gris}\small \texttt{g\_out}} & {\color{gris}\small 271--289} & {\color{gris}\small 18} & \\
+\quad{\color{gris}\small \texttt{forward}} & {\color{gris}\small 295--301} & {\color{gris}\small 7} & \\
+\quad{\color{gris}\small \texttt{backbone\_sensitivities}} & {\color{gris}\small 317--351} & {\color{gris}\small 30} & \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/memory.py}}\hfill{\small 310 líneas, 186 de código}} \\*[0.3ex]
+clase \texttt{LagGrayBox} & 46--135 & 48 & backbone expandido del actuador ($\hat\tau$, $1/\hat\alpha$) \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 60--81} & {\color{gris}\small 11} & \\
+\quad{\color{gris}\small \texttt{tau}} & {\color{gris}\small 83--84} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{\_eff}} & {\color{gris}\small 86--90} & {\color{gris}\small 5} & \\
+\quad{\color{gris}\small \texttt{h0}} & {\color{gris}\small 92--96} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{filtered\_inputs}} & {\color{gris}\small 98--115} & {\color{gris}\small 9} & \\
+\quad{\color{gris}\small \texttt{forward}} & {\color{gris}\small 117--127} & {\color{gris}\small 11} & \\
+\quad{\color{gris}\small \texttt{params\_dict}} & {\color{gris}\small 129--130} & {\color{gris}\small 2} & \\
+\quad{\color{gris}\small \texttt{extras\_dict}} & {\color{gris}\small 132--135} & {\color{gris}\small 4} & \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/control\_distancia\_y\_rango.py}}\hfill{\small 260 líneas, 183 de código}} \\*[0.3ex]
+\texttt{modelos} & 64--98 & 31 & qué modelos entran por planta (sufijos @sat3, @satinf) \\
+\texttt{ref\_en\_rango} & 117--146 & 25 & referencias en rango \\
+\texttt{referencia} & 149--157 & 9 & las cuatro referencias \\
+\texttt{una} & 164--203 & 38 & una corrida de lazo: simulador o modelo, controlador, integración \\
+\texttt{distancias} & 210--220 & 10 & distancia entre lazos \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/control\_amplitud.py}}\hfill{\small 68 líneas, 49 de código}} \\*[0.3ex]
+\texttt{tareas} & 41--52 & 12 & lista de corridas de lazo (e25, e26, e27) \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/trazas\_lazo\_referencias.py}}\hfill{\small 98 líneas, 80 de código}} \\*[0.3ex]
+\texttt{una} & 53--83 & 30 & una corrida, con la traza completa y la referencia \\
+\addlinespace[0.4ex]
+\end{longtable}
+
+\section*{Scripts viejos}
+\sloppy
+No intervienen en los resultados actuales.
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item \texttt{control\_refrac.py}
+\item \texttt{control\_act.py}
+\item \texttt{control\_comparado.py}
+\item \texttt{cola\_control.py}
+\item \texttt{control\_paper\_modelos.py}
+\item \texttt{control\_historia\_pasada.py}
+\item \texttt{eval\_closed\_loop.py}
+\end{itemize}
+De \texttt{control\_paper\_modelos.py} solo se importan constantes, y de \texttt{exp\_f6\_closed\_loop.py} solo \texttt{fixed\_de} y \texttt{rmse}. La clase \texttt{IMCExtendido} de \texttt{closed\_loop\_ext.py} invierte el modelo y no se usa, porque los resultados dejan el controlador del paper sin cambios. El MATLAB original del simulador está en \texttt{documentos/simulador\_wilson\_cowan.m}.
+\end{document}
