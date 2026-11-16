@@ -1,0 +1,359 @@
+
+=== none -> wc0_amp_2s.npz — 110 escenarios ===
+  [train] square_A1          E=[-0.027, 0.910] |Df|=0.0000
+  [train] square_A2          E=[-0.031, 0.947] |Df|=0.0000
+  [train] square_A3          E=[-0.031, 0.943] |Df|=0.0000
+  [train] square_A4          E=[-0.025, 0.922] |Df|=0.0000
+  [train] square_A5          E=[-0.034, 0.966] |Df|=0.0000
+  [train] square_A6          E=[-0.033, 0.960] |Df|=0.0000
+  [train] square_A7          E=[-0.031, 0.948] |Df|=0.0000
+  [train] square_A8          E=[-0.028, 0.929] |Df|=0.0000
+  [train] square_A9          E=[-0.034, 0.966] |Df|=0.0000
+  [train] square_A10         E=[-0.033, 0.960] |Df|=0.0000
+  [train] square_A11         E=[-0.031, 0.948] |Df|=0.0000
+  [train] square_A12         E=[-0.028, 0.929] |Df|=0.0000
+  [val  ] square_A1.5_val    E=[-0.026, 0.717] |Df|=0.0000
+  [val  ] square_A7.5_val    E=[-0.034, 0.966] |Df|=0.0000
+  [test ] square_A4.5_test   E=[-0.033, 0.959] |Df|=0.0000
+  [test ] square_A10.5_test  E=[-0.031, 0.948] |Df|=0.0000
+  [train] aprbs_A1           E=[-0.025, 0.828] |Df|=0.0000
+  [train] aprbs_A2           E=[-0.032, 0.955] |Df|=0.0000
+  [train] aprbs_A3           E=[-0.033, 0.963] |Df|=0.0000
+  [train] aprbs_A4           E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A5           E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A6           E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A7           E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A8           E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A9           E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A10          E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A11          E=[-0.034, 0.966] |Df|=0.0000
+  [train] aprbs_A12          E=[-0.034, 0.966] |Df|=0.0000
+  [val  ] aprbs_A2.5_val     E=[-0.032, 0.960] |Df|=0.0000
+  [val  ] aprbs_A8.5_val     E=[-0.034, 0.966] |Df|=0.0000
+  [test ] aprbs_A5.5_test    E=[-0.034, 0.966] |Df|=0.0000
+  [test ] aprbs_A11.5_test   E=[-0.034, 0.966] |Df|=0.0000
+  [train] thetagamma_A1      E=[-0.026, 0.909] |Df|=0.0000
+  [train] thetagamma_A2      E=[-0.032, 0.958] |Df|=0.0000
+  [train] thetagamma_A3      E=[-0.033, 0.965] |Df|=0.0000
+  [train] thetagamma_A4      E=[-0.033, 0.965] |Df|=0.0000
+  [train] thetagamma_A5      E=[-0.034, 0.966] |Df|=0.0000
+  [train] thetagamma_A6      E=[-0.033, 0.966] |Df|=0.0000
+  [train] thetagamma_A7      E=[-0.034, 0.966] |Df|=0.0000
+  [train] thetagamma_A8      E=[-0.033, 0.966] |Df|=0.0000
+  [train] thetagamma_A9      E=[-0.034, 0.966] |Df|=0.0000
+  [train] thetagamma_A10     E=[-0.033, 0.966] |Df|=0.0000
+  [train] thetagamma_A11     E=[-0.034, 0.966] |Df|=0.0000
+  [train] thetagamma_A12     E=[-0.033, 0.966] |Df|=0.0000
+  [val  ] thetagamma_A3.5_val E=[-0.033, 0.965] |Df|=0.0000
+  [val  ] thetagamma_A9.5_val E=[-0.034, 0.966] |Df|=0.0000
+  [test ] thetagamma_A6.5_test E=[-0.033, 0.966] |Df|=0.0000
+  [test ] thetagamma_A1.5_test E=[-0.030, 0.944] |Df|=0.0000
+  [train] poisson_A1         E=[-0.026, 0.910] |Df|=0.0000
+  [train] poisson_A2         E=[-0.032, 0.956] |Df|=0.0000
+  [train] poisson_A3         E=[-0.033, 0.962] |Df|=0.0000
+  [train] poisson_A4         E=[-0.034, 0.966] |Df|=0.0000
+  [train] poisson_A5         E=[-0.034, 0.964] |Df|=0.0000
+  [train] poisson_A6         E=[-0.034, 0.966] |Df|=0.0000
+  [train] poisson_A7         E=[-0.034, 0.966] |Df|=0.0000
+  [train] poisson_A8         E=[-0.034, 0.966] |Df|=0.0000
+  [train] poisson_A9         E=[-0.034, 0.966] |Df|=0.0000
+  [train] poisson_A10        E=[-0.034, 0.966] |Df|=0.0000
+  [train] poisson_A11        E=[-0.034, 0.966] |Df|=0.0000
+  [train] poisson_A12        E=[-0.034, 0.966] |Df|=0.0000
+  [val  ] poisson_A4.5_val   E=[-0.034, 0.966] |Df|=0.0000
+  [val  ] poisson_A10.5_val  E=[-0.034, 0.966] |Df|=0.0000
+  [test ] poisson_A7.5_test  E=[-0.034, 0.966] |Df|=0.0000
+  [test ] poisson_A2.5_test  E=[-0.033, 0.963] |Df|=0.0000
+  [train] chirp_A1           E=[-0.026, 0.902] |Df|=0.0000
+  [train] chirp_A2           E=[-0.030, 0.937] |Df|=0.0000
+  [train] chirp_A3           E=[-0.033, 0.965] |Df|=0.0000
+  [train] chirp_A4           E=[-0.034, 0.966] |Df|=0.0000
+  [train] chirp_A5           E=[-0.034, 0.966] |Df|=0.0000
+  [train] chirp_A6           E=[-0.033, 0.962] |Df|=0.0000
+  [train] chirp_A7           E=[-0.034, 0.966] |Df|=0.0000
+  [train] chirp_A8           E=[-0.034, 0.966] |Df|=0.0000
+  [train] chirp_A9           E=[-0.034, 0.966] |Df|=0.0000
+  [train] chirp_A10          E=[-0.033, 0.964] |Df|=0.0000
+  [train] chirp_A11          E=[-0.034, 0.966] |Df|=0.0000
+  [train] chirp_A12          E=[-0.034, 0.966] |Df|=0.0000
+  [val  ] chirp_A5.5_val     E=[-0.034, 0.966] |Df|=0.0000
+  [val  ] chirp_A11.5_val    E=[-0.034, 0.966] |Df|=0.0000
+  [test ] chirp_A8.5_test    E=[-0.033, 0.963] |Df|=0.0000
+  [test ] chirp_A3.5_test    E=[-0.033, 0.966] |Df|=0.0000
+  [train] ruido_A1           E=[-0.023, 0.840] |Df|=0.0000
+  [train] ruido_A2           E=[-0.031, 0.896] |Df|=0.0000
+  [train] ruido_A3           E=[-0.030, 0.872] |Df|=0.0000
+  [train] ruido_A4           E=[-0.033, 0.966] |Df|=0.0000
+  [train] ruido_A5           E=[-0.033, 0.964] |Df|=0.0000
+  [train] ruido_A6           E=[-0.033, 0.956] |Df|=0.0000
+  [train] ruido_A7           E=[-0.034, 0.966] |Df|=0.0000
+  [train] ruido_A8           E=[-0.034, 0.966] |Df|=0.0000
+  [train] ruido_A9           E=[-0.033, 0.964] |Df|=0.0000
+  [train] ruido_A10          E=[-0.034, 0.966] |Df|=0.0000
+  [train] ruido_A11          E=[-0.034, 0.966] |Df|=0.0000
+  [train] ruido_A12          E=[-0.033, 0.964] |Df|=0.0000
+  [val  ] ruido_A6.5_val     E=[-0.034, 0.966] |Df|=0.0000
+  [val  ] ruido_A1.5_val     E=[-0.025, 0.789] |Df|=0.0000
+  [test ] ruido_A9.5_test    E=[-0.034, 0.966] |Df|=0.0000
+  [test ] ruido_A4.5_test    E=[-0.033, 0.954] |Df|=0.0000
+  [test ] box_a1.2           E=[-0.003, 0.848] |Df|=0.0000
+  [test ] square_a1.0_f130   E=[-0.001, 0.222] |Df|=0.0000
+  [test ] aprbs_2            E=[-0.000, 0.168] |Df|=0.0000
+  [test ] prbs_1             E=[-0.013, 0.868] |Df|=0.0000
+  [test ] thetagamma_2       E=[-0.003, 0.327] |Df|=0.0000
+  [test ] poisson_1          E=[-0.014, 0.877] |Df|=0.0000
+  [test ] chirp              E=[-0.012, 0.890] |Df|=0.0000
+  [test ] box_a0.5           E=[-0.000, 0.046] |Df|=0.0000
+  [test ] square_a0.8_f115   E=[-0.001, 0.105] |Df|=0.0000
+  [test ] aprbs_6            E=[-0.000, 0.705] |Df|=0.0000
+  [test ] prbs_5             E=[-0.010, 0.802] |Df|=0.0000
+  [test ] thetagamma_6       E=[-0.010, 0.812] |Df|=0.0000
+  [test ] poisson_5          E=[-0.011, 0.842] |Df|=0.0000
+  [test ] chirp_5            E=[-0.011, 0.873] |Df|=0.0000
+  -> data\processed\uncertain\wc0_amp_2s.npz
+
+=== refractoriness -> refrac_amp_2s.npz — 110 escenarios ===
+  [train] square_A1          E=[-0.027, 0.824] |Df|=0.0063
+  [train] square_A2          E=[-0.032, 0.863] |Df|=0.0159
+  [train] square_A3          E=[-0.031, 0.861] |Df|=0.0201
+  [train] square_A4          E=[-0.026, 0.846] |Df|=0.0213
+  [train] square_A5          E=[-0.034, 0.878] |Df|=0.0333
+  [train] square_A6          E=[-0.033, 0.875] |Df|=0.0333
+  [train] square_A7          E=[-0.031, 0.867] |Df|=0.0323
+  [train] square_A8          E=[-0.028, 0.852] |Df|=0.0290
+  [train] square_A9          E=[-0.034, 0.878] |Df|=0.0388
+  [train] square_A10         E=[-0.033, 0.875] |Df|=0.0354
+  [train] square_A11         E=[-0.031, 0.868] |Df|=0.0330
+  [train] square_A12         E=[-0.028, 0.852] |Df|=0.0292
+  [val  ] square_A1.5_val    E=[-0.026, 0.675] |Df|=0.0038
+  [val  ] square_A7.5_val    E=[-0.034, 0.878] |Df|=0.0383
+  [test ] square_A4.5_test   E=[-0.033, 0.874] |Df|=0.0288
+  [test ] square_A10.5_test  E=[-0.031, 0.868] |Df|=0.0330
+  [train] aprbs_A1           E=[-0.025, 0.735] |Df|=0.0010
+  [train] aprbs_A2           E=[-0.032, 0.868] |Df|=0.0106
+  [train] aprbs_A3           E=[-0.033, 0.875] |Df|=0.0163
+  [train] aprbs_A4           E=[-0.034, 0.878] |Df|=0.0269
+  [train] aprbs_A5           E=[-0.034, 0.878] |Df|=0.0210
+  [train] aprbs_A6           E=[-0.034, 0.879] |Df|=0.0274
+  [train] aprbs_A7           E=[-0.034, 0.879] |Df|=0.0297
+  [train] aprbs_A8           E=[-0.034, 0.879] |Df|=0.0296
+  [train] aprbs_A9           E=[-0.034, 0.879] |Df|=0.0357
+  [train] aprbs_A10          E=[-0.034, 0.879] |Df|=0.0322
+  [train] aprbs_A11          E=[-0.034, 0.879] |Df|=0.0330
+  [train] aprbs_A12          E=[-0.034, 0.879] |Df|=0.0370
+  [val  ] aprbs_A2.5_val     E=[-0.032, 0.872] |Df|=0.0146
+  [val  ] aprbs_A8.5_val     E=[-0.034, 0.879] |Df|=0.0327
+  [test ] aprbs_A5.5_test    E=[-0.034, 0.878] |Df|=0.0248
+  [test ] aprbs_A11.5_test   E=[-0.034, 0.879] |Df|=0.0357
+  [train] thetagamma_A1      E=[-0.026, 0.822] |Df|=0.0019
+  [train] thetagamma_A2      E=[-0.032, 0.870] |Df|=0.0102
+  [train] thetagamma_A3      E=[-0.033, 0.877] |Df|=0.0140
+  [train] thetagamma_A4      E=[-0.033, 0.878] |Df|=0.0183
+  [train] thetagamma_A5      E=[-0.034, 0.878] |Df|=0.0218
+  [train] thetagamma_A6      E=[-0.033, 0.878] |Df|=0.0234
+  [train] thetagamma_A7      E=[-0.034, 0.879] |Df|=0.0279
+  [train] thetagamma_A8      E=[-0.033, 0.878] |Df|=0.0272
+  [train] thetagamma_A9      E=[-0.034, 0.879] |Df|=0.0296
+  [train] thetagamma_A10     E=[-0.033, 0.879] |Df|=0.0295
+  [train] thetagamma_A11     E=[-0.034, 0.879] |Df|=0.0318
+  [train] thetagamma_A12     E=[-0.033, 0.878] |Df|=0.0306
+  [val  ] thetagamma_A3.5_val E=[-0.033, 0.877] |Df|=0.0166
+  [val  ] thetagamma_A9.5_val E=[-0.034, 0.879] |Df|=0.0300
+  [test ] thetagamma_A6.5_test E=[-0.033, 0.878] |Df|=0.0247
+  [test ] thetagamma_A1.5_test E=[-0.030, 0.857] |Df|=0.0073
+  [train] poisson_A1         E=[-0.026, 0.823] |Df|=0.0031
+  [train] poisson_A2         E=[-0.032, 0.868] |Df|=0.0080
+  [train] poisson_A3         E=[-0.033, 0.875] |Df|=0.0148
+  [train] poisson_A4         E=[-0.034, 0.878] |Df|=0.0165
+  [train] poisson_A5         E=[-0.034, 0.877] |Df|=0.0142
+  [train] poisson_A6         E=[-0.034, 0.878] |Df|=0.0178
+  [train] poisson_A7         E=[-0.034, 0.879] |Df|=0.0173
+  [train] poisson_A8         E=[-0.034, 0.879] |Df|=0.0190
+  [train] poisson_A9         E=[-0.034, 0.879] |Df|=0.0172
+  [train] poisson_A10        E=[-0.034, 0.878] |Df|=0.0150
+  [train] poisson_A11        E=[-0.034, 0.879] |Df|=0.0167
+  [train] poisson_A12        E=[-0.034, 0.879] |Df|=0.0206
+  [val  ] poisson_A4.5_val   E=[-0.034, 0.878] |Df|=0.0154
+  [val  ] poisson_A10.5_val  E=[-0.034, 0.879] |Df|=0.0179
+  [test ] poisson_A7.5_test  E=[-0.034, 0.878] |Df|=0.0159
+  [test ] poisson_A2.5_test  E=[-0.033, 0.875] |Df|=0.0118
+  [train] chirp_A1           E=[-0.026, 0.817] |Df|=0.0057
+  [train] chirp_A2           E=[-0.030, 0.852] |Df|=0.0121
+  [train] chirp_A3           E=[-0.033, 0.877] |Df|=0.0220
+  [train] chirp_A4           E=[-0.034, 0.878] |Df|=0.0257
+  [train] chirp_A5           E=[-0.034, 0.878] |Df|=0.0316
+  [train] chirp_A6           E=[-0.033, 0.875] |Df|=0.0272
+  [train] chirp_A7           E=[-0.034, 0.879] |Df|=0.0334
+  [train] chirp_A8           E=[-0.034, 0.879] |Df|=0.0344
+  [train] chirp_A9           E=[-0.034, 0.879] |Df|=0.0393
+  [train] chirp_A10          E=[-0.033, 0.877] |Df|=0.0318
+  [train] chirp_A11          E=[-0.034, 0.879] |Df|=0.0374
+  [train] chirp_A12          E=[-0.034, 0.879] |Df|=0.0375
+  [val  ] chirp_A5.5_val     E=[-0.034, 0.879] |Df|=0.0298
+  [val  ] chirp_A11.5_val    E=[-0.034, 0.879] |Df|=0.0411
+  [test ] chirp_A8.5_test    E=[-0.033, 0.877] |Df|=0.0306
+  [test ] chirp_A3.5_test    E=[-0.033, 0.878] |Df|=0.0240
+  [train] ruido_A1           E=[-0.023, 0.753] |Df|=0.0007
+  [train] ruido_A2           E=[-0.031, 0.817] |Df|=0.0026
+  [train] ruido_A3           E=[-0.030, 0.791] |Df|=0.0027
+  [train] ruido_A4           E=[-0.033, 0.878] |Df|=0.0161
+  [train] ruido_A5           E=[-0.033, 0.877] |Df|=0.0139
+  [train] ruido_A6           E=[-0.033, 0.870] |Df|=0.0119
+  [train] ruido_A7           E=[-0.034, 0.879] |Df|=0.0231
+  [train] ruido_A8           E=[-0.034, 0.878] |Df|=0.0194
+  [train] ruido_A9           E=[-0.033, 0.876] |Df|=0.0163
+  [train] ruido_A10          E=[-0.034, 0.879] |Df|=0.0287
+  [train] ruido_A11          E=[-0.034, 0.878] |Df|=0.0241
+  [train] ruido_A12          E=[-0.033, 0.876] |Df|=0.0177
+  [val  ] ruido_A6.5_val     E=[-0.034, 0.878] |Df|=0.0155
+  [val  ] ruido_A1.5_val     E=[-0.025, 0.707] |Df|=0.0002
+  [test ] ruido_A9.5_test    E=[-0.034, 0.879] |Df|=0.0219
+  [test ] ruido_A4.5_test    E=[-0.033, 0.869] |Df|=0.0123
+  [test ] box_a1.2           E=[-0.005, 0.764] |Df|=0.0146
+  [test ] square_a1.0_f130   E=[-0.001, 0.210] |Df|=0.0007
+  [test ] aprbs_2            E=[-0.000, 0.152] |Df|=0.0004
+  [test ] prbs_1             E=[-0.012, 0.785] |Df|=0.0140
+  [test ] thetagamma_2       E=[-0.003, 0.247] |Df|=0.0002
+  [test ] poisson_1          E=[-0.013, 0.795] |Df|=0.0143
+  [test ] chirp              E=[-0.011, 0.807] |Df|=0.0138
+  [test ] box_a0.5           E=[-0.000, 0.045] |Df|=0.0003
+  [test ] square_a0.8_f115   E=[-0.001, 0.102] |Df|=0.0003
+  [test ] aprbs_6            E=[-0.000, 0.528] |Df|=0.0007
+  [test ] prbs_5             E=[-0.008, 0.711] |Df|=0.0045
+  [test ] thetagamma_6       E=[-0.008, 0.724] |Df|=0.0015
+  [test ] poisson_5          E=[-0.009, 0.758] |Df|=0.0075
+  [test ] chirp_5            E=[-0.009, 0.790] |Df|=0.0107
+  -> data\processed\uncertain\refrac_amp_2s.npz
+
+=== actuator -> actc_amp_2s.npz — 110 escenarios ===
+  [train] square_A1          E=[-0.027, 0.885] |Df|=0.0257
+  [train] square_A2          E=[-0.031, 0.918] |Df|=0.0948
+  [train] square_A3          E=[-0.031, 0.906] |Df|=0.1899
+  [train] square_A4          E=[-0.027, 0.858] |Df|=0.3250
+  [train] square_A5          E=[-0.033, 0.964] |Df|=0.2135
+  [train] square_A6          E=[-0.032, 0.955] |Df|=0.2935
+  [train] square_A7          E=[-0.031, 0.938] |Df|=0.3422
+  [train] square_A8          E=[-0.028, 0.892] |Df|=0.3995
+  [train] square_A9          E=[-0.033, 0.965] |Df|=0.2370
+  [train] square_A10         E=[-0.033, 0.957] |Df|=0.2916
+  [train] square_A11         E=[-0.032, 0.942] |Df|=0.3296
+  [train] square_A12         E=[-0.030, 0.899] |Df|=0.3869
+  [val  ] square_A1.5_val    E=[-0.027, 0.328] |Df|=0.0643
+  [val  ] square_A7.5_val    E=[-0.033, 0.965] |Df|=0.2386
+  [test ] square_A4.5_test   E=[-0.032, 0.952] |Df|=0.2563
+  [test ] square_A10.5_test  E=[-0.032, 0.941] |Df|=0.3312
+  [train] aprbs_A1           E=[-0.025, 0.821] |Df|=0.0112
+  [train] aprbs_A2           E=[-0.032, 0.952] |Df|=0.0252
+  [train] aprbs_A3           E=[-0.033, 0.963] |Df|=0.0616
+  [train] aprbs_A4           E=[-0.033, 0.965] |Df|=0.0709
+  [train] aprbs_A5           E=[-0.033, 0.965] |Df|=0.1164
+  [train] aprbs_A6           E=[-0.033, 0.965] |Df|=0.1235
+  [train] aprbs_A7           E=[-0.033, 0.965] |Df|=0.1685
+  [train] aprbs_A8           E=[-0.033, 0.965] |Df|=0.1402
+  [train] aprbs_A9           E=[-0.033, 0.965] |Df|=0.1850
+  [train] aprbs_A10          E=[-0.033, 0.965] |Df|=0.1709
+  [train] aprbs_A11          E=[-0.033, 0.965] |Df|=0.2103
+  [train] aprbs_A12          E=[-0.033, 0.965] |Df|=0.1812
+  [val  ] aprbs_A2.5_val     E=[-0.032, 0.960] |Df|=0.0304
+  [val  ] aprbs_A8.5_val     E=[-0.033, 0.965] |Df|=0.1802
+  [test ] aprbs_A5.5_test    E=[-0.033, 0.965] |Df|=0.1123
+  [test ] aprbs_A11.5_test   E=[-0.033, 0.965] |Df|=0.2202
+  [train] thetagamma_A1      E=[-0.026, 0.908] |Df|=0.0083
+  [train] thetagamma_A2      E=[-0.032, 0.957] |Df|=0.0293
+  [train] thetagamma_A3      E=[-0.033, 0.965] |Df|=0.0367
+  [train] thetagamma_A4      E=[-0.033, 0.963] |Df|=0.0838
+  [train] thetagamma_A5      E=[-0.033, 0.965] |Df|=0.0920
+  [train] thetagamma_A6      E=[-0.033, 0.965] |Df|=0.1213
+  [train] thetagamma_A7      E=[-0.033, 0.965] |Df|=0.1236
+  [train] thetagamma_A8      E=[-0.033, 0.964] |Df|=0.1523
+  [train] thetagamma_A9      E=[-0.033, 0.965] |Df|=0.1414
+  [train] thetagamma_A10     E=[-0.033, 0.965] |Df|=0.1577
+  [train] thetagamma_A11     E=[-0.033, 0.965] |Df|=0.1495
+  [train] thetagamma_A12     E=[-0.033, 0.965] |Df|=0.1752
+  [val  ] thetagamma_A3.5_val E=[-0.033, 0.963] |Df|=0.0674
+  [val  ] thetagamma_A9.5_val E=[-0.033, 0.965] |Df|=0.1441
+  [test ] thetagamma_A6.5_test E=[-0.033, 0.965] |Df|=0.1284
+  [test ] thetagamma_A1.5_test E=[-0.030, 0.944] |Df|=0.0162
+  [train] poisson_A1         E=[-0.026, 0.909] |Df|=0.0122
+  [train] poisson_A2         E=[-0.032, 0.955] |Df|=0.0342
+  [train] poisson_A3         E=[-0.033, 0.961] |Df|=0.0611
+  [train] poisson_A4         E=[-0.033, 0.964] |Df|=0.0925
+  [train] poisson_A5         E=[-0.033, 0.963] |Df|=0.0944
+  [train] poisson_A6         E=[-0.033, 0.964] |Df|=0.1267
+  [train] poisson_A7         E=[-0.033, 0.965] |Df|=0.1184
+  [train] poisson_A8         E=[-0.033, 0.965] |Df|=0.1266
+  [train] poisson_A9         E=[-0.033, 0.965] |Df|=0.1085
+  [train] poisson_A10        E=[-0.033, 0.964] |Df|=0.1274
+  [train] poisson_A11        E=[-0.033, 0.965] |Df|=0.1124
+  [train] poisson_A12        E=[-0.033, 0.965] |Df|=0.1232
+  [val  ] poisson_A4.5_val   E=[-0.033, 0.965] |Df|=0.0872
+  [val  ] poisson_A10.5_val  E=[-0.033, 0.965] |Df|=0.1116
+  [test ] poisson_A7.5_test  E=[-0.033, 0.965] |Df|=0.1125
+  [test ] poisson_A2.5_test  E=[-0.033, 0.963] |Df|=0.0440
+  [train] chirp_A1           E=[-0.026, 0.902] |Df|=0.0149
+  [train] chirp_A2           E=[-0.030, 0.931] |Df|=0.0930
+  [train] chirp_A3           E=[-0.033, 0.965] |Df|=0.0995
+  [train] chirp_A4           E=[-0.033, 0.965] |Df|=0.1538
+  [train] chirp_A5           E=[-0.033, 0.965] |Df|=0.1284
+  [train] chirp_A6           E=[-0.032, 0.961] |Df|=0.2565
+  [train] chirp_A7           E=[-0.033, 0.965] |Df|=0.2063
+  [train] chirp_A8           E=[-0.033, 0.965] |Df|=0.2470
+  [train] chirp_A9           E=[-0.033, 0.965] |Df|=0.1907
+  [train] chirp_A10          E=[-0.033, 0.963] |Df|=0.3016
+  [train] chirp_A11          E=[-0.033, 0.965] |Df|=0.2387
+  [train] chirp_A12          E=[-0.033, 0.965] |Df|=0.2731
+  [val  ] chirp_A5.5_val     E=[-0.033, 0.965] |Df|=0.2045
+  [val  ] chirp_A11.5_val    E=[-0.033, 0.965] |Df|=0.2065
+  [test ] chirp_A8.5_test    E=[-0.032, 0.962] |Df|=0.2905
+  [test ] chirp_A3.5_test    E=[-0.033, 0.965] |Df|=0.1171
+  [train] ruido_A1           E=[-0.023, 0.839] |Df|=0.0028
+  [train] ruido_A2           E=[-0.030, 0.884] |Df|=0.0183
+  [train] ruido_A3           E=[-0.030, 0.876] |Df|=0.0507
+  [train] ruido_A4           E=[-0.033, 0.965] |Df|=0.0199
+  [train] ruido_A5           E=[-0.033, 0.963] |Df|=0.0656
+  [train] ruido_A6           E=[-0.033, 0.958] |Df|=0.1484
+  [train] ruido_A7           E=[-0.033, 0.965] |Df|=0.0468
+  [train] ruido_A8           E=[-0.033, 0.965] |Df|=0.1085
+  [train] ruido_A9           E=[-0.033, 0.964] |Df|=0.2192
+  [train] ruido_A10          E=[-0.033, 0.965] |Df|=0.0796
+  [train] ruido_A11          E=[-0.033, 0.965] |Df|=0.1553
+  [train] ruido_A12          E=[-0.033, 0.964] |Df|=0.2608
+  [val  ] ruido_A6.5_val     E=[-0.033, 0.965] |Df|=0.0890
+  [val  ] ruido_A1.5_val     E=[-0.023, 0.733] |Df|=0.0160
+  [test ] ruido_A9.5_test    E=[-0.033, 0.965] |Df|=0.0748
+  [test ] ruido_A4.5_test    E=[-0.033, 0.951] |Df|=0.0607
+  [test ] box_a1.2           E=[-0.003, 0.828] |Df|=0.0004
+  [test ] square_a1.0_f130   E=[-0.001, 0.122] |Df|=0.0253
+  [test ] aprbs_2            E=[-0.000, 0.159] |Df|=0.0036
+  [test ] prbs_1             E=[-0.012, 0.867] |Df|=0.0200
+  [test ] thetagamma_2       E=[-0.003, 0.227] |Df|=0.0038
+  [test ] poisson_1          E=[-0.013, 0.877] |Df|=0.0372
+  [test ] chirp              E=[-0.010, 0.888] |Df|=0.0420
+  [test ] box_a0.5           E=[-0.000, 0.045] |Df|=0.0000
+  [test ] square_a0.8_f115   E=[-0.001, 0.071] |Df|=0.0153
+  [test ] aprbs_6            E=[-0.000, 0.702] |Df|=0.0066
+  [test ] prbs_5             E=[-0.009, 0.801] |Df|=0.0106
+  [test ] thetagamma_6       E=[-0.009, 0.810] |Df|=0.0062
+  [test ] poisson_5          E=[-0.009, 0.842] |Df|=0.0207
+  [test ] chirp_5            E=[-0.009, 0.870] |Df|=0.0356
+  -> data\processed\uncertain\actc_amp_2s.npz
+
+Listo.
+  wc0_amp_2s_n01.npz: sigma=0.0031622776601683794  (0.9% del desvio de E)
+  wc0_amp_2s_n05.npz: sigma=0.0158113883008419  (4.5% del desvio de E)
+  wc0_amp_2s_n01_s1.npz: sigma=0.0031622776601683794  (0.9% del desvio de E)
+  wc0_amp_2s_n05_s1.npz: sigma=0.0158113883008419  (4.5% del desvio de E)
+  wc0_amp_2s_n01_s2.npz: sigma=0.0031622776601683794  (0.9% del desvio de E)
+  wc0_amp_2s_n05_s2.npz: sigma=0.0158113883008419  (4.5% del desvio de E)
+  refrac_amp_2s_n01.npz: sigma=0.0031622776601683794  (1.0% del desvio de E)
+  refrac_amp_2s_n05.npz: sigma=0.0158113883008419  (4.9% del desvio de E)
+  refrac_amp_2s_n01_s1.npz: sigma=0.0031622776601683794  (1.0% del desvio de E)
+  refrac_amp_2s_n05_s1.npz: sigma=0.0158113883008419  (4.9% del desvio de E)
+  refrac_amp_2s_n01_s2.npz: sigma=0.0031622776601683794  (1.0% del desvio de E)
+  refrac_amp_2s_n05_s2.npz: sigma=0.0158113883008419  (4.9% del desvio de E)
+  actc_amp_2s_n01.npz: sigma=0.0031622776601683794  (0.9% del desvio de E)
+  actc_amp_2s_n05.npz: sigma=0.0158113883008419  (4.6% del desvio de E)
+  actc_amp_2s_n01_s1.npz: sigma=0.0031622776601683794  (0.9% del desvio de E)
+  actc_amp_2s_n05_s1.npz: sigma=0.0158113883008419  (4.6% del desvio de E)
+  actc_amp_2s_n01_s2.npz: sigma=0.0031622776601683794  (0.9% del desvio de E)
+  actc_amp_2s_n05_s2.npz: sigma=0.0158113883008419  (4.6% del desvio de E)
