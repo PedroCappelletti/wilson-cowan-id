@@ -12,7 +12,7 @@
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 \setlength{\LTpre}{0.3em}
-\title{Scripts del controlador, los simuladores y la conexión con los modelos}
+\title{Scripts del controlador, los simuladores, el entrenamiento y la conexión con los modelos}
 \date{}
 \author{}
 \begin{document}
@@ -106,6 +106,53 @@ clase \texttt{Actuator} & 169--228 & 26 & filtro de 1 ms; con recorte=True, reco
 \texttt{par} & 141--162 & 20 & parámetros de cada escenario según familia y amplitud \\
 \texttt{escenarios} & 165--181 & 16 & grilla de amplitudes 1 a 12 y particiones train, val y test \\
 \texttt{main} & 184--194 & 11 & genera los datasets de las tres plantas \\
+\addlinespace[0.4ex]
+\end{longtable}
+\section*{Entrenamiento}
+De los datos al checkpoint. Los modelos en sí (\texttt{GrayBoxWC} y \texttt{LagGrayBox}) están en la sección siguiente, porque son los mismos que entran al lazo.
+\begin{longtable}{@{}p{0.30\textwidth}rrp{0.42\textwidth}@{}}
+\toprule símbolo & líneas & código & qué hace \\ \midrule \endhead
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/esc\_gen\_ruido.py}}\hfill{\small 85 líneas, 47 de código}} \\*[0.3ex]
+\texttt{agregar\_ruido} & 39--63 & 23 & suma ruido de observación al dataset ya generado (σ 0,01 y 0,05, por semilla) \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/cola\_amplitud.py}}\hfill{\small 95 líneas, 59 de código}} \\*[0.3ex]
+\texttt{args\_de} & 57--64 & 7 & argumentos de cada configuración \\
+\texttt{tareas} & 67--90 & 24 & las 180 corridas e25, e26 y e27, con su punto de partida \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/cola.py}}\hfill{\small 96 líneas, 60 de código}} \\*[0.3ex]
+\texttt{correr} & 50--96 & 36 & cola de corridas con lugares fijos; lanza esc\_run.py por tarea \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/esc\_run.py}}\hfill{\small 273 líneas, 198 de código}} \\*[0.3ex]
+\texttt{cargar\_params} & 49--59 & 8 & warm start: carga $\hat\beta$ de otra corrida (opción init-params) \\
+\texttt{suavizar} & 62--77 & 11 & suavizado opcional de los datos (no se usa en las corridas actuales) \\
+\texttt{main} & 80--269 & 158 & una corrida: arma el modelo, elige fit o fit\_aug, evalúa y guarda .pt y .json \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/graybox\_train.py}}\hfill{\small 548 líneas, 321 de código}} \\*[0.3ex]
+\texttt{apilar\_historia} & 46--56 & 6 & ventana de comandos pasados para las historias \\
+\texttt{make\_windows} & 59--98 & 27 & corta las trayectorias en ventanas de entrenamiento \\
+\texttt{open\_loop\_mse} & 167--187 & 18 & error en corrida libre, para validación \\
+\texttt{param\_errors} & 190--194 & 4 & error de $\hat\beta$ contra los verdaderos \\
+clase \texttt{MejorVal} & 197--226 & 21 & guarda el mejor modelo por validación (incluye el de inicio) \\
+\quad{\color{gris}\small \texttt{\_\_init\_\_}} & {\color{gris}\small 204--209} & {\color{gris}\small 6} & \\
+\quad{\color{gris}\small \texttt{evaluar}} & {\color{gris}\small 211--219} & {\color{gris}\small 8} & \\
+\quad{\color{gris}\small \texttt{restaurar}} & {\color{gris}\small 221--226} & {\color{gris}\small 6} & \\
+clase \texttt{TrainConfig} & 233--257 & 25 & hiperparámetros de fit \\
+\texttt{build\_model} & 291--300 & 8 & construye el GrayBoxWC según la variante \\
+\texttt{fit} & 303--506 & 142 & entrenamiento de white-box, agnóstica, historias, filtro entrenable y black-box \\
+\texttt{load\_split} & 518--548 & 24 & lee el dataset con sus particiones \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/memory.py}}\hfill{\small 310 líneas, 186 de código}} \\*[0.3ex]
+clase \texttt{AugTrainConfig} & 198--211 & 14 & hiperparámetros de fit\_aug, incluido x0 entrenable \\
+\texttt{fit\_aug} & 214--310 & 73 & entrenamiento del backbone expandido del actuador (estado aumentado) \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{src/neural\_ode/integrate.py}}\hfill{\small 43 líneas, 16 de código}} \\*[0.3ex]
+\texttt{rk4\_step} & 21--27 & 6 & paso RK4 en torch \\
+\texttt{rollout} & 30--43 & 8 & integra el modelo sobre una ventana; el gradiente lo atraviesa \\
+\addlinespace[0.4ex]
+\multicolumn{4}{@{}l}{\rule{0pt}{3.2ex}\textbf{\texttt{scripts/esc\_eval.py}}\hfill{\small 296 líneas, 194 de código}} \\*[0.3ex]
+\texttt{nrmse\_test} & 151--172 & 20 & NRMSE en corrida libre sobre test \\
+\texttt{r2\_delta} & 200--244 & 38 & R² de la corrección contra el término faltante \\
+\texttt{evaluar} & 250--281 & 30 & las métricas que se guardan en el .json \\
 \addlinespace[0.4ex]
 \end{longtable}
 \section*{Conexión entre el controlador y los modelos}
