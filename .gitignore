@@ -76,3 +76,7 @@ logs/escalado/LUGARES
 logs/escalado/PAUSADAS
 logs/escalado/*.err
 logs/escalado/despierto*.log
+
+# Informe final del concurso: tiene datos personales y el repo es público.
+# Vive en Overleaf y en local, nunca en el repo.
+docs/informe_final/
