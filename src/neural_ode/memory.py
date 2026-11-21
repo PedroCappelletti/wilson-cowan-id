@@ -83,6 +83,15 @@ class LagGrayBox(nn.Module):
     def tau(self) -> torch.Tensor:
         return F.softplus(self.raw_tau) + self.tau_min
 
+    def fijar_tau(self, valor: float) -> None:
+        """Deja τ̂ fijo en `valor` (ms). Para probar el backbone expandido con
+        una constante de tiempo equivocada (e29)."""
+        if valor <= self.tau_min:
+            raise ValueError(f"τ fijo {valor} por debajo del piso {self.tau_min}")
+        with torch.no_grad():
+            self.raw_tau.copy_(_inv_softplus(valor - self.tau_min))
+        self.raw_tau.requires_grad_(False)
+
     def _eff(self, u: torch.Tensor) -> torch.Tensor:
         alpha = torch.clamp(self.raw_alpha, 1e-3, 10.0)
         if self.recorte:

@@ -1,0 +1,26 @@
+=== escalado · e28_B100_vrd_n01_s1 · B · refrac_amp_2s_n01_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=9.220e-04 | err_max=  0.00% g_rms=0.0000 redund=nan
+    ep    99 | val=  1.07%
+    ep   199 | val=  1.02%
+    ep   250 | data=5.793e-05 | err_max=  0.00% g_rms=0.0257 redund=nan
+    ep   299 | val=  1.00%
+    ep   399 | val=  0.73%
+    ep   499 | val=  0.72%
+    ep   500 | data=3.569e-05 | err_max=  0.00% g_rms=0.0268 redund=nan
+    ep   599 | val=  0.72%
+    ep   699 | val=  0.72%
+    ep   750 | data=3.532e-05 | err_max=  0.00% g_rms=0.0269 redund=nan
+    ep   799 | val=  0.71%
+    ep   899 | val=  0.72%
+    ep   999 | val=  0.71%
+    ep  1000 | data=3.506e-05 | err_max=  0.00% g_rms=0.0269 redund=nan
+    ep  1099 | val=  0.71%
+    ep  1199 | val=  0.71%
+    ep  1250 | data=3.485e-05 | err_max=  0.00% g_rms=0.0269 redund=nan
+    ep  1299 | val=  0.71%
+    ep  1399 | val=  0.71%
+    ep  1499 | data=3.459e-05 | err_max=  0.00% g_rms=0.0269 redund=nan
+    ep  1499 | val=  0.70%
+
+  RESULTADO e28_B100_vrd_n01_s1: NRMSE_test=1.64% (I=2.00 E=1.27) R2df=0.878 err_param=0.00% [57.3 min]
+  -> results\escalado\e28_B100_vrd_n01_s1.json

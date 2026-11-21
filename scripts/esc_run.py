@@ -121,6 +121,11 @@ def main():
                     help="entrenar y validar solo con una familia de estimulos (box, square, ...)")
     ap.add_argument("--val-every", type=int, default=100,
                     help="épocas entre mediciones de validación (si el dataset la tiene)")
+    ap.add_argument("--forma", choices=["datos", "tanh", "recorte"], default="datos",
+                    help="saturación del estado de filtro (lag). 'datos' la toma del "
+                         "dataset; las otras la fuerzan, para probar la forma equivocada")
+    ap.add_argument("--tau-fijo", type=float, default=None,
+                    help="τ̂ fijo en ms en el estado de filtro (lag), sin entrenarlo")
     ap.add_argument("--tag", required=True)
     args = ap.parse_args()
     if args.freeze_phys and not args.init_params:
@@ -168,6 +173,8 @@ def main():
         crudo = data["raw"]
         claves = crudo.files if hasattr(crudo, "files") else crudo.keys()
         recorte = "pert_forma" in claves and str(crudo["pert_forma"]) == "recorte"
+        if args.forma != "datos":
+            recorte = args.forma == "recorte"
         model = (LagGrayBox(tau_min=max(0.15, 0.6 * data["dt"]), recorte=recorte)
                  if args.variant == "lag" else LatentGrayBox(n_hidden=args.n_hidden))
         # El estado aumentado tambien arranca del beta del white-box. fit_aug
@@ -179,6 +186,10 @@ def main():
             if ck0.get("recorte", False) != recorte:
                 ap.error("--init-model con otra forma de saturación que el dataset")
             model.load_state_dict(ck0["state"])
+        if args.tau_fijo is not None:
+            if args.variant != "lag":
+                ap.error("--tau-fijo es solo para el estado de filtro (lag)")
+            model.fijar_tau(args.tau_fijo)
         cfg = AugTrainConfig(window=args.window, epochs=args.epochs,
                              seed=args.seed, val_every=args.val_every,
                              x0_libre=args.x0_libre)
@@ -253,6 +264,7 @@ def main():
         "smooth": args.smooth, "x0_suave": args.x0_suave, "x0_libre": args.x0_libre,
         "init_params": args.init_params, "init_model": args.init_model,
         "freeze_phys": args.freeze_phys,
+        "forma": args.forma, "tau_fijo": args.tau_fijo,
         "familia": args.familia,
         "lam_norm": args.lam_norm, "lam_orth": args.lam_orth,
         "seed": args.seed, "minutos": mins,

@@ -8,8 +8,8 @@
 #                                                   y lo imprime. Pensado para correrlo en segundo
 #                                                   plano y despertarse cuando termina.
 #
-# C es amplitud (cola_amplitud.py, e25 a e27, la de siempre) o e28
-# (cola_amplitud_beta_verdadero.py). Los zips quedan en salida_hitos/ (amplitud)
+# C es amplitud (cola_amplitud.py, e25 a e27, la de siempre), e28
+# (cola_amplitud_beta_verdadero.py) o e29 (cola_forma_equivocada.py). Los zips quedan en salida_hitos/ (amplitud)
 # o salida_hitos_e28/, con todo lo terminado hasta ese hito: json, checkpoints y
 # logs de la tanda, y el log de la cola.
 
@@ -49,6 +49,15 @@ COLAS = {
             ("e28_hito_1_semilla0", lambda t: t.endswith("_s0")),
             ("e28_hito_2_semilla1", lambda t: t.endswith(("_s0", "_s1"))),
             ("e28_hito_3_todo", lambda t: True),
+        ]},
+    "e29": {
+        "modulo": "cola_forma_equivocada", "salida": "salida_hitos_e29",
+        "marca": "DONE_forma_equivocada", "prefijos": ("e29_",),
+        "log_cola": "cola_e29.out", "proceso": r"cola_forma_equivocada\.py",
+        "hitos": [
+            ("e29_hito_1_semilla0", lambda t: t.endswith("_s0")),
+            ("e29_hito_2_semilla1", lambda t: t.endswith(("_s0", "_s1"))),
+            ("e29_hito_3_todo", lambda t: True),
         ]},
 }
 

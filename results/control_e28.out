@@ -1,0 +1,130 @@
+128 simulaciones, 3 procesos
+  theta2s     actc   simulador                                        s-1  RMSE 0.0570
+  theta2s     actc   agnóstica, β verdadero                     _n01  s 0  RMSE 0.0563
+  theta2s     actc   historia con comando actual, β verdadero   _n01  s 0  RMSE 0.0645
+  theta2s     actc   historia sin comando actual, β verdadero   _n01  s 0  RMSE 0.0776
+  theta2s     actc   agnóstica, β verdadero                     _n01  s 1  RMSE 0.0846
+  theta2s     actc   filtro 8 canales, β verdadero              _n01  s 0  RMSE 0.0570
+  theta2s     actc   historia con comando actual, β verdadero   _n01  s 1  RMSE 0.0670
+  theta2s     actc   historia sin comando actual, β verdadero   _n01  s 1  RMSE 0.0747
+  theta2s     actc   agnóstica, β verdadero                     _n01  s 2  RMSE 0.0573
+  theta2s     actc   filtro 8 canales, β verdadero              _n01  s 1  RMSE 0.0666
+  theta2s     actc   historia con comando actual, β verdadero   _n01  s 2  RMSE 0.0664
+  theta2s     actc   historia sin comando actual, β verdadero   _n01  s 2  RMSE 0.0777
+  theta2s     actc   agnóstica, β verdadero                     _n05  s 0  RMSE 0.0703
+  theta2s     actc   filtro 8 canales, β verdadero              _n01  s 2  RMSE 0.0547
+  theta2s     actc   historia con comando actual, β verdadero   _n05  s 0  RMSE 0.0641
+  theta2s     actc   historia sin comando actual, β verdadero   _n05  s 0  RMSE 0.0793
+  theta2s     actc   agnóstica, β verdadero                     _n05  s 1  RMSE 0.0654
+  theta2s     actc   historia con comando actual, β verdadero   _n05  s 1  RMSE 0.0663
+  theta2s     actc   filtro 8 canales, β verdadero              _n05  s 0  RMSE 0.0562
+  theta2s     actc   historia sin comando actual, β verdadero   _n05  s 1  RMSE 0.0827
+  theta2s     actc   agnóstica, β verdadero                     _n05  s 2  RMSE 0.0703
+  theta2s     actc   filtro 8 canales, β verdadero              _n05  s 1  RMSE 0.0604
+  theta2s     actc   historia con comando actual, β verdadero   _n05  s 2  RMSE 0.0625
+  theta2s     actc   historia sin comando actual, β verdadero   _n05  s 2  RMSE 0.0734
+  theta2s     refrac simulador                                        s-1  RMSE 0.0386
+  theta2s     refrac agnóstica, β verdadero                     _n01  s 0  RMSE 0.0380
+  theta2s     refrac agnóstica, β verdadero                     _n01  s 1  RMSE 0.0380
+  theta2s     actc   filtro 8 canales, β verdadero              _n05  s 2  RMSE 0.0558
+  theta2s     refrac agnóstica, β verdadero                     _n01  s 2  RMSE 0.0381
+  theta2s     refrac agnóstica, β verdadero                     _n05  s 0  RMSE 0.0380
+  gamma50     actc   simulador                                        s-1  RMSE 0.0676
+  gamma50     actc   agnóstica, β verdadero                     _n01  s 0  RMSE 0.0328
+  gamma50     actc   historia con comando actual, β verdadero   _n01  s 0  RMSE 0.0495
+  gamma50     actc   historia sin comando actual, β verdadero   _n01  s 0  RMSE 0.0710
+  gamma50     actc   filtro 8 canales, β verdadero              _n01  s 0  RMSE 0.0537
+  gamma50     actc   agnóstica, β verdadero                     _n01  s 1  RMSE 0.0221
+  gamma50     actc   historia con comando actual, β verdadero   _n01  s 1  RMSE 0.0476
+  gamma50     actc   historia sin comando actual, β verdadero   _n01  s 1  RMSE 0.0654
+  theta2s     refrac agnóstica, β verdadero                     _n05  s 1  RMSE 0.0380
+  gamma50     actc   agnóstica, β verdadero                     _n01  s 2  RMSE 0.0343
+  gamma50     actc   filtro 8 canales, β verdadero              _n01  s 1  RMSE 0.0756
+  gamma50     actc   historia con comando actual, β verdadero   _n01  s 2  RMSE 0.0563
+  gamma50     actc   historia sin comando actual, β verdadero   _n01  s 2  RMSE 0.0887
+  gamma50     actc   agnóstica, β verdadero                     _n05  s 0  RMSE 0.0313
+  gamma50     actc   filtro 8 canales, β verdadero              _n01  s 2  RMSE 0.0450
+  gamma50     actc   historia con comando actual, β verdadero   _n05  s 0  RMSE 0.0501
+  gamma50     actc   historia sin comando actual, β verdadero   _n05  s 0  RMSE 0.1042
+  gamma50     actc   agnóstica, β verdadero                     _n05  s 1  RMSE 0.0268
+  gamma50     actc   filtro 8 canales, β verdadero              _n05  s 0  RMSE 0.0556
+  gamma50     actc   historia con comando actual, β verdadero   _n05  s 1  RMSE 0.0495
+  gamma50     actc   historia sin comando actual, β verdadero   _n05  s 1  RMSE 0.0754
+  gamma50     actc   agnóstica, β verdadero                     _n05  s 2  RMSE 0.0368
+  gamma50     actc   filtro 8 canales, β verdadero              _n05  s 1  RMSE 0.0783
+  gamma50     actc   historia con comando actual, β verdadero   _n05  s 2  RMSE 0.0538
+  gamma50     actc   historia sin comando actual, β verdadero   _n05  s 2  RMSE 0.0569
+  gamma50     refrac simulador                                        s-1  RMSE 0.0339
+  gamma50     refrac agnóstica, β verdadero                     _n01  s 0  RMSE 0.0334
+  gamma50     actc   filtro 8 canales, β verdadero              _n05  s 2  RMSE 0.0443
+  gamma50     refrac agnóstica, β verdadero                     _n01  s 1  RMSE 0.0335
+  gamma50     refrac agnóstica, β verdadero                     _n01  s 2  RMSE 0.0336
+  gamma50     refrac agnóstica, β verdadero                     _n05  s 0  RMSE 0.0334
+  gamma50     refrac agnóstica, β verdadero                     _n05  s 1  RMSE 0.0334
+  gamma50     refrac agnóstica, β verdadero                     _n05  s 2  RMSE 0.0336
+  theta2s     refrac agnóstica, β verdadero                     _n05  s 2  RMSE 0.0381
+  theta_rango actc   simulador                                        s-1  RMSE 0.0113
+  theta_rango actc   agnóstica, β verdadero                     _n01  s 0  RMSE 0.0233
+  theta_rango actc   historia con comando actual, β verdadero   _n01  s 0  RMSE 0.0269
+  theta_rango actc   historia sin comando actual, β verdadero   _n01  s 0  RMSE 0.0810
+  theta_rango actc   filtro 8 canales, β verdadero              _n01  s 0  RMSE 0.0117
+  theta_rango actc   agnóstica, β verdadero                     _n01  s 1  RMSE 0.0182
+  theta_rango actc   historia con comando actual, β verdadero   _n01  s 1  RMSE 0.0144
+  theta_rango actc   historia sin comando actual, β verdadero   _n01  s 1  RMSE 0.0496
+  theta_rango actc   agnóstica, β verdadero                     _n01  s 2  RMSE 0.0244
+  theta_rango actc   filtro 8 canales, β verdadero              _n01  s 1  RMSE 0.0429
+  theta_rango actc   historia con comando actual, β verdadero   _n01  s 2  RMSE 0.0111
+  theta_rango actc   historia sin comando actual, β verdadero   _n01  s 2  RMSE 0.0585
+  theta_rango actc   agnóstica, β verdadero                     _n05  s 0  RMSE 0.0251
+  theta_rango actc   filtro 8 canales, β verdadero              _n01  s 2  RMSE 0.0126
+  theta_rango actc   historia con comando actual, β verdadero   _n05  s 0  RMSE 0.0145
+  theta_rango actc   historia sin comando actual, β verdadero   _n05  s 0  RMSE 0.0730
+  theta_rango actc   agnóstica, β verdadero                     _n05  s 1  RMSE 0.0135
+  theta_rango actc   filtro 8 canales, β verdadero              _n05  s 0  RMSE 0.0316
+  theta_rango actc   historia con comando actual, β verdadero   _n05  s 1  RMSE 0.0261
+  theta_rango actc   historia sin comando actual, β verdadero   _n05  s 1  RMSE 0.0657
+  theta_rango actc   agnóstica, β verdadero                     _n05  s 2  RMSE 0.0237
+  theta_rango actc   filtro 8 canales, β verdadero              _n05  s 1  RMSE 0.0130
+  theta_rango actc   historia con comando actual, β verdadero   _n05  s 2  RMSE 0.0189
+  theta_rango actc   historia sin comando actual, β verdadero   _n05  s 2  RMSE 0.0427
+  theta_rango refrac simulador                                        s-1  RMSE 0.0122
+  theta_rango actc   filtro 8 canales, β verdadero              _n05  s 2  RMSE 0.0149
+  theta_rango refrac agnóstica, β verdadero                     _n01  s 0  RMSE 0.0121
+  theta_rango refrac agnóstica, β verdadero                     _n01  s 1  RMSE 0.0121
+  theta_rango refrac agnóstica, β verdadero                     _n01  s 2  RMSE 0.0121
+  theta_rango refrac agnóstica, β verdadero                     _n05  s 1  RMSE 0.0121
+  theta_rango refrac agnóstica, β verdadero                     _n05  s 0  RMSE 0.0121
+  gamma_rango actc   simulador                                        s-1  RMSE 0.0195
+  gamma_rango actc   agnóstica, β verdadero                     _n01  s 0  RMSE 0.0298
+  theta_rango refrac agnóstica, β verdadero                     _n05  s 2  RMSE 0.0121
+  gamma_rango actc   historia con comando actual, β verdadero   _n01  s 0  RMSE 0.0376
+  gamma_rango actc   historia sin comando actual, β verdadero   _n01  s 0  RMSE 0.0647
+  gamma_rango actc   agnóstica, β verdadero                     _n01  s 1  RMSE 0.0228
+  gamma_rango actc   filtro 8 canales, β verdadero              _n01  s 0  RMSE 0.0283
+  gamma_rango actc   historia con comando actual, β verdadero   _n01  s 1  RMSE 0.0336
+  gamma_rango actc   historia sin comando actual, β verdadero   _n01  s 1  RMSE 0.0599
+  gamma_rango actc   agnóstica, β verdadero                     _n01  s 2  RMSE 0.0307
+  gamma_rango actc   filtro 8 canales, β verdadero              _n01  s 1  RMSE 0.0247
+  gamma_rango actc   historia con comando actual, β verdadero   _n01  s 2  RMSE 0.0193
+  gamma_rango actc   historia sin comando actual, β verdadero   _n01  s 2  RMSE 0.0565
+  gamma_rango actc   agnóstica, β verdadero                     _n05  s 0  RMSE 0.0290
+  gamma_rango actc   historia con comando actual, β verdadero   _n05  s 0  RMSE 0.0366
+  gamma_rango actc   filtro 8 canales, β verdadero              _n01  s 2  RMSE 0.0200
+  gamma_rango actc   historia sin comando actual, β verdadero   _n05  s 0  RMSE 0.0661
+  gamma_rango actc   agnóstica, β verdadero                     _n05  s 1  RMSE 0.0245
+  gamma_rango actc   filtro 8 canales, β verdadero              _n05  s 0  RMSE 0.0208
+  gamma_rango actc   historia con comando actual, β verdadero   _n05  s 1  RMSE 0.0291
+  gamma_rango actc   historia sin comando actual, β verdadero   _n05  s 1  RMSE 0.0708
+  gamma_rango actc   agnóstica, β verdadero                     _n05  s 2  RMSE 0.0333
+  gamma_rango actc   historia con comando actual, β verdadero   _n05  s 2  RMSE 0.0284
+  gamma_rango actc   filtro 8 canales, β verdadero              _n05  s 1  RMSE 0.0299
+  gamma_rango actc   historia sin comando actual, β verdadero   _n05  s 2  RMSE 0.0612
+  gamma_rango refrac simulador                                        s-1  RMSE 0.0211
+  gamma_rango refrac agnóstica, β verdadero                     _n01  s 0  RMSE 0.0207
+  gamma_rango refrac agnóstica, β verdadero                     _n01  s 1  RMSE 0.0207
+  gamma_rango actc   filtro 8 canales, β verdadero              _n05  s 2  RMSE 0.0195
+  gamma_rango refrac agnóstica, β verdadero                     _n01  s 2  RMSE 0.0207
+  gamma_rango refrac agnóstica, β verdadero                     _n05  s 0  RMSE 0.0208
+  gamma_rango refrac agnóstica, β verdadero                     _n05  s 1  RMSE 0.0207
+  gamma_rango refrac agnóstica, β verdadero                     _n05  s 2  RMSE 0.0208
+-> C:\Users\User\Desktop\wilson-cowan-id\results\control_e28.json

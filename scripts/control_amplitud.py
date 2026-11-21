@@ -20,10 +20,10 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "scripts"))
 
-from control_distancia_y_rango import una, distancias, REFS  # noqa: E402
+from control_distancia_y_rango import una, distancias, REFS, SUFIJO  # noqa: E402
 from control_paper_modelos import NIVELES, SEMILLAS, RES  # noqa: E402
 
-OUT = RAIZ / "results" / "control_amplitud.json"
+OUT = RAIZ / "results" / f"control_amplitud{SUFIJO}.json"
 MODELOS = {
     "actc": [("white-box", "e25_e2wb"), ("agnóstica", "e25_e2B_wrm"),
              ("historia con comando actual", "e25_H100_wrm"),

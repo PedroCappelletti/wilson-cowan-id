@@ -1,0 +1,26 @@
+=== escalado · e28_K400f8_vrd_n01_s0 · K · actc_amp_2s_n01 · W=10 · epochs=1500 ===
+    ep     0 | data=2.406e-02 | err_max=  0.00% 
+    ep    99 | val=  7.90%
+    ep   199 | val=  5.72%
+    ep   250 | data=1.414e-03 | err_max=  0.00% 
+    ep   299 | val=  4.65%
+    ep   399 | val=  3.97%
+    ep   499 | val=  3.60%
+    ep   500 | data=6.617e-04 | err_max=  0.00% 
+    ep   599 | val=  3.21%
+    ep   699 | val=  2.95%
+    ep   750 | data=3.669e-04 | err_max=  0.00% 
+    ep   799 | val=  2.56%
+    ep   899 | val=  2.33%
+    ep   999 | val=  2.16%
+    ep  1000 | data=2.208e-04 | err_max=  0.00% 
+    ep  1099 | val=  2.01%
+    ep  1199 | val=  2.77%
+    ep  1250 | data=1.431e-04 | err_max=  0.00% 
+    ep  1299 | val=  1.71%
+    ep  1399 | val=  2.14%
+    ep  1499 | data=1.497e-04 | err_max=  0.00% 
+    ep  1499 | val=  1.87%
+
+  RESULTADO e28_K400f8_vrd_n01_s0: NRMSE_test=4.14% (I=4.52 E=3.76) R2df=0.954 err_param=0.00% [82.8 min]
+  -> results\escalado\e28_K400f8_vrd_n01_s0.json

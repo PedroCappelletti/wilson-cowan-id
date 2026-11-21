@@ -22,6 +22,8 @@
 \maketitle
 \vspace{-12mm}
 
+Todas las corridas de este documento son en lazo cerrado. El controlador IMC del paper, con los parámetros verdaderos, calcula el comando y la planta del panel lo recibe, sea el simulador o un modelo. La única simulación en lazo abierto es la que construye las referencias en rango de la sección~1.3, que después se siguen en lazo cerrado como las demás.
+
 \section{Referencias}
 
 \subsection{Theta-gamma con ventana}
@@ -37,18 +39,33 @@ con $f_\gamma = 120$~Hz, $t \in [0, 2000]$~ms y $\varphi_\theta$ la fase de una 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{theta2s_referencia.pdf}
-\caption{Arriba, la theta, con $T_w = 1$ en celeste. Abajo, $r_E$. En gris, la ventana de las figuras siguientes.}
+\caption{Arriba, la theta, con $T_w = 1$ en celeste. Abajo, $r_E$. En gris, los dos tramos de las figuras siguientes.}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{theta2s_E.pdf}
-\caption{Actividad excitatoria $E$ con la referencia theta-gamma, entre 1150 y 1500~ms. Gris, referencia. Negro, lazo con el simulador. Discontinua, lazo con el modelo del panel.}
+\includegraphics[width=\textwidth]{theta2s_simulador.pdf}
+\caption{Lazo con el simulador con la referencia theta-gamma. Izquierda, principio de la corrida, de 0 a 350~ms. Derecha, de 1150 a 1500~ms. Punteada, referencia. Línea llena, lazo con el simulador.}
 \end{figure}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{theta2s_I.pdf}
-\caption{Actividad inhibitoria $I$ en las mismas corridas.}
+\includegraphics[width=\textwidth]{theta2s_E_1.pdf}
+\caption{Actividad excitatoria $E$ con la referencia theta-gamma, de 0 a 350~ms (izquierda) y de 1150 a 1500~ms (derecha), para el white-box, la agnóstica y las dos correcciones con historia. Punteada, referencia. Línea llena, lazo con el modelo del panel.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{theta2s_E_2.pdf}
+\caption{Actividad excitatoria $E$ en los mismos tramos, para el filtro entrenable y las tres versiones del backbone expandido.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{theta2s_I_1.pdf}
+\caption{Actividad inhibitoria $I$ en las mismas corridas, primeros cuatro modelos.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{theta2s_I_2.pdf}
+\caption{Actividad inhibitoria $I$ en las mismas corridas, últimos cuatro modelos.}
 \end{figure}
 Dentro de cada ráfaga, el lazo con el simulador sigue la forma de la gamma con errores en los picos. El white-box y la agnóstica quedan más cerca de la referencia que el propio simulador (RMSE de $E$ 0,052 contra 0,067), porque el controlador invierte un Wilson-Cowan sin actuador y los cancela casi exactamente. El backbone expandido con recorte en $\pm 3$ se superpone al lazo con el simulador, con y sin x0 entrenable. Con recorte en $\pm 10$ se separa en los picos de algunas ráfagas. Las tres correcciones con historia del comando siguen las ráfagas, pero oscilan en los tramos de reposo entre ráfagas, donde la referencia y el lazo con el simulador valen cero. El filtro entrenable es el que más oscila (RMSE de $E$ 0,116).
 
@@ -64,44 +81,61 @@ con $f_\gamma = 120$~Hz y $t \in [0, 50]$~ms.
 
 \begin{figure}[H]
 \centering
+\includegraphics[width=\textwidth]{gamma50_simulador.pdf}
+\caption{Lazo con el simulador con la gamma continua de 50~ms. Punteada, referencia. Línea llena, lazo con el simulador.}
+\end{figure}
+\begin{figure}[H]
+\centering
 \includegraphics[width=\textwidth]{gamma50_E.pdf}
-\caption{Actividad excitatoria $E$ con la gamma continua de 50~ms. Gris, referencia. Negro, lazo con el simulador. Discontinua, lazo con el modelo del panel.}
+\caption{Actividad excitatoria $E$ con la gamma continua de 50~ms. Punteada, referencia. Línea llena, lazo con el modelo del panel.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{gamma50_I.pdf}
 \caption{Actividad inhibitoria $I$ en las mismas corridas.}
 \end{figure}
-Con la gamma continua, el lazo con el simulador va atrasado respecto de la referencia, por el filtro del actuador, y su RMSE es 0,068. El white-box y la agnóstica quedan en fase con la referencia (0,038 y 0,034). El backbone expandido con recorte en $\pm 3$ reproduce el atraso del simulador. Las correcciones con historia quedan entre 0,056 y 0,069, con la forma de onda de $I$ deformada en los valles.
+Con la gamma continua, el lazo con el simulador va atrasado respecto de la referencia, por el filtro del actuador, y su RMSE es 0,068. Sobre la onda de 120~Hz tiene además una oscilación de unos 480~Hz. La corrida no tiene ruido, así que esa oscilación es parte de la dinámica del lazo. Viene del comando: el controlador invierte un Wilson-Cowan sin actuador, el filtro de 1~ms atrasa lo que pide, y el comando $P$ oscila a esa frecuencia entre $-11{,}7$ y $11{,}0$ (percentiles 5 y 95). El filtro deja pasar una parte de esa oscilación, que aparece en $E$ e $I$. El white-box y la agnóstica quedan en fase con la referencia (0,038 y 0,034) y no tienen la oscilación rápida, porque no modelan el filtro y su comando queda entre 0,4 y 1,8. El backbone expandido con recorte en $\pm 3$, que tiene el estado del filtro, reproduce el atraso y la oscilación del simulador. Las correcciones con historia quedan entre 0,056 y 0,069, con la forma de onda de $I$ deformada en los valles.
 
 
-\subsection{Referencias con el comando en el rango de entrenamiento}
+\subsection{Referencias con el comando en el rango de entrenamiento, construidas en lazo abierto}
 
-Referencia: $\big(r_I(t), r_E(t)\big) = \big(I(t), E(t)\big)$, la solución del Wilson-Cowan sin perturbación desde el reposo con
+Referencia, construida en lazo abierto: $\big(r_I(t), r_E(t)\big) = \big(I(t), E(t)\big)$, la solución del Wilson-Cowan sin perturbación desde el reposo con
 \[
 P(t) = 1 + 0{,}8\,\sin(2\pi f t), \qquad Q(t) = 0{,}75 + 0{,}6\,\sin(2\pi f t - 1),
 \]
 con $f = 8$~Hz y $t \in [0, 500]$~ms para la theta, y $f = 40$~Hz y $t \in [0, 250]$~ms para la gamma.
 
+Estas referencias salen de una simulación en lazo abierto. Se aplica el estímulo $P(t)$, $Q(t)$ al Wilson-Cowan sin perturbación y su respuesta $E(t)$, $I(t)$ queda como referencia. Por construcción, el comando que la reproduce es ese mismo estímulo, que está dentro del rango de entrenamiento. Con la theta de 8~Hz, la respuesta tiene ráfagas sin que haya ninguna ventana en la definición. Cuando $P$ sube de 0,8, la red sale del reposo y oscila a su frecuencia propia, de unos 100~Hz (período de 9,7~ms). Cuando $P$ baja de 1,2, vuelve al reposo. Queda una ráfaga de cinco o seis ciclos por cada ciclo de la theta. Con la gamma de 40~Hz, la red da un pico por ciclo del estímulo, con la forma angosta que le impone la sigmoidea. Una vez construida, cada planta sigue esa referencia en lazo cerrado, igual que con las otras dos, y eso es lo que muestran las figuras de esta sección.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{theta_rango_simulador.pdf}
+\caption{Lazo con el simulador con la referencia theta de 8~Hz en rango, 500~ms. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el simulador.}
+\end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{theta_rango_E.pdf}
-\caption{Actividad excitatoria $E$ con la referencia theta de 8~Hz en rango, 500~ms.}
+\caption{Actividad excitatoria $E$ con la referencia theta de 8~Hz en rango. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el modelo del panel.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{theta_rango_I.pdf}
-\caption{Actividad inhibitoria $I$ con la referencia theta de 8~Hz en rango.}
+\caption{Actividad inhibitoria $I$ con la referencia theta de 8~Hz en rango. Referencia construida en lazo abierto, seguida en lazo cerrado.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{gamma_rango_simulador.pdf}
+\caption{Lazo con el simulador con la referencia gamma de 40~Hz en rango, 250~ms. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el simulador.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{gamma_rango_E.pdf}
-\caption{Actividad excitatoria $E$ con la referencia gamma de 40~Hz en rango, 250~ms.}
+\caption{Actividad excitatoria $E$ con la referencia gamma de 40~Hz en rango. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el modelo del panel.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{gamma_rango_I.pdf}
-\caption{Actividad inhibitoria $I$ con la referencia gamma de 40~Hz en rango.}
+\caption{Actividad inhibitoria $I$ con la referencia gamma de 40~Hz en rango. Referencia construida en lazo abierto, seguida en lazo cerrado.}
 \end{figure}
 Con estas referencias el lazo con el simulador sigue con RMSE de 0,011 (theta) y 0,020 (gamma), y su comando queda dentro de $[0, 2]$ el 99~\% del tiempo. El white-box, la agnóstica y las tres versiones del backbone expandido reproducen ese seguimiento. Las correcciones con historia oscilan en los tramos de baja actividad, y su RMSE es de 2 a 5 veces el del lazo con el simulador. En sus lazos el comando sale de $[0, 2]$ entre el 45 y el 80~\% del tiempo, aunque la referencia no lo pide. La salida del rango la produce el propio lazo con el modelo. Un error chico de la red cerca del reposo, donde la sigmoidea es plana, se convierte en un comando grande, y ese comando, fuera del rango de entrenamiento, vuelve a entrar a la red.
 

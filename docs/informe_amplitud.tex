@@ -162,13 +162,28 @@ Referencia theta-gamma con ventana, $r_I(t) = T_w(t)\,[0{,}2\,\sin(2\pi f_\gamma
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{theta2s_E.pdf}
-\caption{Actividad $E$ con la referencia theta-gamma, entre 1150 y 1500~ms. Gris, referencia. Negro, lazo con el simulador. Discontinua, lazo con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
+\includegraphics[width=\textwidth]{theta2s_simulador.pdf}
+\caption{Lazo con el simulador con la referencia theta-gamma. Izquierda, principio de la corrida, de 0 a 350~ms. Derecha, de 1150 a 1500~ms. Punteada, referencia. Línea llena, lazo con el simulador.}
 \end{figure}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{theta2s_I.pdf}
-\caption{Actividad $I$ en las mismas corridas.}
+\includegraphics[width=\textwidth]{theta2s_E_1.pdf}
+\caption{Actividad $E$ con la referencia theta-gamma, de 0 a 350~ms (izquierda) y de 1150 a 1500~ms (derecha), para el white-box, la agnóstica y las dos correcciones con historia. Punteada, referencia. Línea llena, lazo con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{theta2s_E_2.pdf}
+\caption{Actividad $E$ en los mismos tramos, para el filtro entrenable, el backbone expandido y las dos black-box.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{theta2s_I_1.pdf}
+\caption{Actividad $I$ en las mismas corridas, primeros cuatro modelos.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{theta2s_I_2.pdf}
+\caption{Actividad $I$ en las mismas corridas, últimos cuatro modelos.}
 \end{figure}
 El backbone expandido se superpone al lazo con el simulador. El white-box, la agnóstica y la black-box siguen la forma de las ráfagas y se apartan en los picos. Las dos historias, el filtro entrenable y la black-box con historia siguen las ráfagas pero oscilan entre ellas, donde la referencia y el lazo con el simulador están en reposo. Las oscilaciones del filtro entrenable son más cortas que con los datos de $[0, 2]$.
 
@@ -176,37 +191,52 @@ Gamma continua, $r_I(t) = 0{,}2\,\sin(2\pi f_\gamma t - 0{,}94) + 0{,}25$ y $r_E
 
 \begin{figure}[H]
 \centering
+\includegraphics[width=\textwidth]{gamma50_simulador.pdf}
+\caption{Lazo con el simulador con la gamma continua de 50~ms. Punteada, referencia. Línea llena, lazo con el simulador.}
+\end{figure}
+\begin{figure}[H]
+\centering
 \includegraphics[width=\textwidth]{gamma50_E.pdf}
-\caption{Actividad $E$ con la gamma continua de 50~ms. Gris, referencia. Negro, lazo con el simulador. Discontinua, lazo con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
+\caption{Actividad $E$ con la gamma continua de 50~ms. Punteada, referencia. Línea llena, lazo con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{gamma50_I.pdf}
 \caption{Actividad $I$ en las mismas corridas.}
 \end{figure}
-Con la gamma continua, el lazo con el simulador va atrasado respecto de la referencia, por el filtro del actuador. El backbone expandido reproduce ese atraso. La black-box y la agnóstica quedan en fase con la referencia (RMSE de 0,028 y 0,034 contra 0,068 del simulador). La historia sin comando actual se deforma (0,118).
+Con la gamma continua, el lazo con el simulador va atrasado respecto de la referencia, por el filtro del actuador, y tiene encima una oscilación de unos 480~Hz. La corrida no tiene ruido, y la oscilación viene del comando, que el controlador calcula sin conocer el filtro y que oscila a esa frecuencia entre $-11{,}7$ y $11{,}0$. El backbone expandido reproduce el atraso y la oscilación. La black-box y la agnóstica quedan en fase con la referencia (RMSE de 0,028 y 0,034 contra 0,068 del simulador). La historia sin comando actual se deforma (0,118).
 
-Referencias en rango, $(r_I, r_E) = (I, E)$ del Wilson-Cowan sin perturbación con $P(t) = 1 + 0{,}8\,\sin(2\pi f t)$ y $Q(t) = 0{,}75 + 0{,}6\,\sin(2\pi f t - 1)$, con $f = 8$~Hz durante 500~ms y $f = 40$~Hz durante 250~ms.
+Referencias en rango, construidas en lazo abierto, $(r_I, r_E) = (I, E)$ del Wilson-Cowan sin perturbación con $P(t) = 1 + 0{,}8\,\sin(2\pi f t)$ y $Q(t) = 0{,}75 + 0{,}6\,\sin(2\pi f t - 1)$, con $f = 8$~Hz durante 500~ms y $f = 40$~Hz durante 250~ms. Salen de simular en lazo abierto el Wilson-Cowan con ese estímulo, así que el comando que las reproduce está dentro de $[0, 2]$. Las ráfagas de la theta las produce la propia red: cuando $P$ sube de 0,8 oscila a unos 100~Hz, y cuando baja de 1,2 vuelve al reposo. Una vez construidas, cada planta las sigue en lazo cerrado, y eso es lo que muestran las figuras.
 
 \begin{figure}[H]
 \centering
+\includegraphics[width=\textwidth]{theta_rango_simulador.pdf}
+\caption{Lazo con el simulador con la referencia theta de 8~Hz en rango. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el simulador.}
+\end{figure}
+\begin{figure}[H]
+\centering
 \includegraphics[width=\textwidth]{theta_rango_E.pdf}
-\caption{Actividad $E$ con la referencia theta de 8~Hz en rango. Gris, referencia. Negro, lazo con el simulador. Discontinua, lazo con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
+\caption{Actividad $E$ con la referencia theta de 8~Hz en rango. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{theta_rango_I.pdf}
-\caption{Actividad $I$ con la referencia theta de 8~Hz en rango.}
+\caption{Actividad $I$ con la referencia theta de 8~Hz en rango. Referencia construida en lazo abierto, seguida en lazo cerrado.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{gamma_rango_simulador.pdf}
+\caption{Lazo con el simulador con la referencia gamma de 40~Hz en rango. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el simulador.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{gamma_rango_E.pdf}
-\caption{Actividad $E$ con la referencia gamma de 40~Hz en rango. Gris, referencia. Negro, lazo con el simulador. Discontinua, lazo con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
+\caption{Actividad $E$ con la referencia gamma de 40~Hz en rango. Punteada, referencia, construida en lazo abierto. Línea llena, lazo cerrado con el modelo del panel, entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$). En cada panel, RMSE contra la referencia.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{gamma_rango_I.pdf}
-\caption{Actividad $I$ con la referencia gamma de 40~Hz en rango.}
+\caption{Actividad $I$ con la referencia gamma de 40~Hz en rango. Referencia construida en lazo abierto, seguida en lazo cerrado.}
 \end{figure}
 Con las referencias en rango, el backbone expandido, la black-box, la black-box con historia y el filtro entrenable siguen casi igual que el simulador. El white-box y la agnóstica quedan algo por encima. Las dos historias oscilan en los tramos de baja actividad, y la historia sin comando actual es la que más se aparta (RMSE de 0,073 contra 0,011 del simulador en la theta).
 

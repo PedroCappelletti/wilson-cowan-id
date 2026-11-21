@@ -268,7 +268,7 @@ y lo mismo para $Q$. No hay cota sobre $P$ ni $Q$ ni anti-windup. Sobre la plant
 \begin{itemize}[leftmargin=*,itemsep=0.15em]
 \item Theta-gamma de 2~s: $r_E = 0{,}3\sin(2\pi f_\gamma t) + 0{,}45$ y $r_I = 0{,}2\sin(2\pi f_\gamma t - 0{,}94) + 0{,}25$, con $f_\gamma = 120$~Hz, mientras la fase de una oscilación theta está a menos de $\pi/4$ de su valle, y $r_E = r_I = 0$ fuera de esos tramos. La theta es ruido blanco filtrado entre 4 y 12~Hz con semilla fija.
 \item Gamma continua de 50~ms, con las mismas expresiones de $r_E$ y $r_I$.
-\item Theta en rango (8~Hz, 500~ms) y gamma en rango (40~Hz, 250~ms). Son la respuesta del Wilson-Cowan sin perturbación a $P(t) = 1 + 0{,}8\sin(2\pi f t)$ y $Q(t) = 0{,}75 + 0{,}6\sin(2\pi f t - 1)$, y están construidas para que el comando del controlador quede dentro del rango de entrenamiento de amplitud chica. Con el simulador como planta, el comando queda dentro de $[0, 2]$ el 99~\% del tiempo.
+\item Theta en rango (8~Hz, 500~ms) y gamma en rango (40~Hz, 250~ms). Se construyen en lazo abierto, como la respuesta del Wilson-Cowan sin perturbación a $P(t) = 1 + 0{,}8\sin(2\pi f t)$ y $Q(t) = 0{,}75 + 0{,}6\sin(2\pi f t - 1)$, y están construidas para que el comando del controlador quede dentro del rango de entrenamiento de amplitud chica. Después se siguen en lazo cerrado como las otras dos. Con el simulador como planta, el comando queda dentro de $[0, 2]$ el 99~\% del tiempo.
 \end{itemize}
 
 \textbf{Métricas.} El error de seguimiento es

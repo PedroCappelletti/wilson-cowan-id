@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import sys
 from functools import lru_cache
 from multiprocessing import Pool
@@ -53,8 +54,15 @@ import numpy as np
 from control_paper_modelos import CON_RED, EXACTA, WB, NIVELES, SEMILLAS, DT, RES, W
 from control_paper_planta_modelo import planta_de
 
-OUT = RAIZ / "results" / "control_distancia_rango.json"
-REFS = ("theta2s", "gamma50", "theta_rango", "gamma_rango")
+# WC_FGAMMA=100 repite el lazo con la gamma a 100 Hz, la f_t del diseño del
+# paper (T(s) ≈ 1 de DC a f_t). Solo cambian theta2s y gamma50; las referencias
+# en rango son de 8 y 40 Hz y no se repiten. Las plantas se limitan a las del
+# informe (refractaria y actuador con recorte) y la salida lleva el sufijo.
+F_GAMMA = float(os.environ.get("WC_FGAMMA", "120"))
+SUFIJO = "" if F_GAMMA == 120.0 else f"_{F_GAMMA:g}hz"
+OUT = RAIZ / "results" / f"control_distancia_rango{SUFIJO}.json"
+REFS = ("theta2s", "gamma50", "theta_rango", "gamma_rango") if not SUFIJO else ("theta2s", "gamma50")
+PLANTAS = ("refrac", "act", "actc", "actf") if not SUFIJO else ("refrac", "actc")
 # (frecuencia en Hz, duración en ms) de las referencias en rango
 EN_RANGO = {"theta_rango": (8.0, 500.0), "gamma_rango": (40.0, 250.0)}
 RANGO_P, RANGO_Q = (0.0, 2.0), (0.0, 1.5)
@@ -101,9 +109,9 @@ def modelos(planta, suf, k):
 def tareas():
     out = []
     for ref in REFS:
-        for planta in ("ideal", "refrac", "act", "actc", "actf"):
+        for planta in ("ideal", *PLANTAS):
             out.append((ref, planta, "simulador", None, "", -1))
-        for planta in ("refrac", "act", "actc", "actf"):
+        for planta in PLANTAS:
             for suf in NIVELES:
                 for k in SEMILLAS:
                     for nombre, tag in modelos(planta, suf, k):
@@ -150,9 +158,9 @@ def referencia(ref):
     from src.neural_ode import theta_gamma_refs
     from src.neural_ode.closed_loop_ext import theta_gamma_ventana_refs
     if ref == "theta2s":
-        return theta_gamma_ventana_refs()[0], (0.0, 2000.0)
+        return theta_gamma_ventana_refs(f_gamma=F_GAMMA)[0], (0.0, 2000.0)
     if ref == "gamma50":
-        return theta_gamma_refs(120.0, True), (0.0, 50.0)
+        return theta_gamma_refs(F_GAMMA, True), (0.0, 50.0)
     t, I, E = ref_en_rango(ref)
     return (lambda tt: (float(np.interp(tt, t, I)), float(np.interp(tt, t, E)))), (0.0, t[-1])
 

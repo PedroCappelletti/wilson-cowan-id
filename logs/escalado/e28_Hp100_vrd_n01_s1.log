@@ -1,0 +1,26 @@
+=== escalado · e28_Hp100_vrd_n01_s1 · Hp · actc_amp_2s_n01_s1 · W=10 · epochs=1500 ===
+    ep     0 | data=2.405e-02 | err_max=  0.00% 
+    ep    99 | val=  9.26%
+    ep   199 | val=  7.84%
+    ep   250 | data=3.746e-03 | err_max=  0.00% 
+    ep   299 | val=  7.20%
+    ep   399 | val=  6.41%
+    ep   499 | val=  7.02%
+    ep   500 | data=3.416e-03 | err_max=  0.00% 
+    ep   599 | val=  6.37%
+    ep   699 | val=  5.41%
+    ep   750 | data=2.448e-03 | err_max=  0.00% 
+    ep   799 | val=  5.16%
+    ep   899 | val=  4.90%
+    ep   999 | val=  4.80%
+    ep  1000 | data=2.059e-03 | err_max=  0.00% 
+    ep  1099 | val=  4.66%
+    ep  1199 | val=  4.57%
+    ep  1250 | data=1.750e-03 | err_max=  0.00% 
+    ep  1299 | val=  4.50%
+    ep  1399 | val=  4.54%
+    ep  1499 | data=1.530e-03 | err_max=  0.00% 
+    ep  1499 | val=  4.35%
+
+  RESULTADO e28_Hp100_vrd_n01_s1: NRMSE_test=7.09% (I=7.59 E=6.59) R2df=0.537 err_param=0.00% [68.4 min]
+  -> results\escalado\e28_Hp100_vrd_n01_s1.json

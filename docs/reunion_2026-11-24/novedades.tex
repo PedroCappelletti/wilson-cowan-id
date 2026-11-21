@@ -1,0 +1,123 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\IfFontExistsTF{Arial}{\setmainfont{Arial}}{\setmainfont{TeX Gyre Heros}}
+\usepackage[spanish,es-noshorthands,es-tabla]{babel}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{icomma}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\graphicspath{{../informe_final/figuras/}}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.12}
+\newcommand{\bh}{\hat\beta}
+
+\title{Novedades desde la reunión del 17/11}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-14mm}
+
+Todo lo de este documento es en lazo cerrado salvo donde dice lazo abierto: el entrenamiento, las métricas de NRMSE y $R^2$, y la prueba de repetición de la Sección~3. En lazo cerrado, el controlador IMC del paper, con los parámetros verdaderos, calcula el comando, y la planta es el simulador o un modelo.
+
+\section{Gamma a 100~Hz}
+
+\textbf{Por qué.} El archivo del controlador usa 120~Hz. En el paper (p.~5) el objetivo es la gamma alta, $f_t \approx 100$~Hz, y el controlador se diseña para que la sensibilidad complementaria tenga ganancia unitaria desde continua hasta $f_t$ ($T(s) = F(s)$ con el IMC). 120~Hz queda por encima de ese ancho de banda. Se repitieron theta-gamma y gamma continua con 100~Hz, para la refractaria y el actuador con recorte, con los modelos de los dos regímenes. Las referencias en rango (8 y 40~Hz) no cambian. Los resultados de 120~Hz se conservan, y el informe presenta las dos frecuencias.
+
+\textbf{Resultado.} Con 100~Hz, el seguimiento de la gamma continua mejoró 20 a 30~\% en todas las plantas. Con el simulador, el RMSE bajó de 0,034 a 0,026 en la refractaria y de 0,068 a 0,054 con actuador. Theta-gamma casi no cambió. El orden de los modelos por distancia al lazo con el simulador se mantuvo (Tabla~\ref{tab:100}).
+
+\begin{table}[H]
+\centering
+\small
+\caption{Lazo cerrado con la gamma a 120 y a 100~Hz, planta con actuador y recorte, modelos entrenados con amplitud grande y $\sigma = 0{,}01$. Distancia al lazo con el simulador, mediana de tres semillas, en el formato 120~Hz / 100~Hz.}
+\label{tab:100}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+planta en el lazo & theta-gamma & gamma 50~ms \\
+\midrule
+white-box & 0,037 / 0,036 & 0,068 / 0,057 \\
+agnóstica & 0,041 / 0,042 & 0,071 / 0,056 \\
+historia con comando actual & 0,040 / 0,042 & 0,075 / 0,062 \\
+historia sin comando actual & 0,061 / 0,065 & 0,111 / 0,108 \\
+filtro entrenable & 0,037 / 0,036 & 0,072 / 0,068 \\
+backbone expandido & 0,012 / 0,014 & 0,008 / 0,070 \\
+black-box & 0,033 / 0,034 & 0,064 / 0,054 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{La excepción.} El backbone expandido con la gamma continua pasó de 0,008 a 0,070. El controlador supone que el comando actúa al instante, el filtro de 1~ms lo retrasa, y entre los dos forman un ciclo límite que deja un rizo de unos 470~Hz en $E$ (los «picos chicos»). Con 120~Hz, el rizo del simulador y el del modelo tienen la misma frecuencia (472,0 y 471,4~Hz, casi 4 ciclos por período de la gamma) y quedan en fase. Con 100~Hz, el del simulador sube a 494~Hz, casi 5 ciclos por período, y el del modelo queda en 468~Hz. En 40~ms la fase se corre 1,15 ciclos y los rizos terminan en contrafase (Fig.~\ref{fig:rizo}). Separando la diferencia en $E$, la parte lenta (por debajo de 200~Hz) da 0,006 y el rizo 0,080. El modelo sigue al simulador en lo que importa para el seguimiento, y la distancia punto a punto castiga el desfase del rizo.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{rizo_100_120.pdf}
+\caption{Actividad $E$ con la gamma continua de 120~Hz (arriba) y de 100~Hz (abajo), entre 30 y 50~ms, planta con actuador y recorte. Punteada, referencia. Azul, lazo cerrado con el simulador. Naranja, lazo cerrado con el backbone expandido entrenado con amplitud grande (semilla 0, $\sigma = 0{,}01$).}
+\label{fig:rizo}
+\end{figure}
+
+\section{Redes con $\beta$ verdadero y amplitud grande (e28)}
+
+Se entrenó solo la red, con $\beta$ fijo en el valor verdadero, sobre los datos de amplitud grande del actuador con recorte y de la refractaria. 30 corridas, en la otra computadora, con el mismo dataset que e25. La pregunta era si las redes del actuador quedan lejos del simulador porque no pueden representar el filtro con el recorte o porque $\bh$ se deforma.
+
+\textbf{Lazo abierto.} Con $\beta$ verdadero, las dos redes con el comando actual reconstruyen el término omitido ($R^2$ de 0,95 y 0,96, contra alrededor de 0 con $\beta$ libre) y reproducen los escenarios nuevos casi igual que con $\beta$ libre. Sin el comando actual no alcanza: $R^2$ de 0,54 en la historia sin comando actual y de $-1{,}47$ en la agnóstica (Tabla~\ref{tab:e28}).
+
+\begin{table}[H]
+\centering
+\small
+\caption{Lazo abierto con $\beta$ libre (e25, warm start) y con $\beta$ verdadero (e28), amplitud grande, $\sigma = 0{,}01$. NRMSE en los 12 escenarios de test nuevos y $R^2$ de la corrección efectiva contra el término omitido exacto. Media de tres semillas. Con $\sigma = 0{,}05$ el orden es el mismo.}
+\label{tab:e28}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+& \multicolumn{2}{c}{NRMSE} & \multicolumn{2}{c}{$R^2$} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+modelo & $\beta$ libre & $\beta$ verdadero & $\beta$ libre & $\beta$ verdadero \\
+\midrule
+actuador, agnóstica & 8,12 & 12,80 & 0,00 & $-1{,}47$ \\
+actuador, historia con comando actual & 1,62 & 1,84 & $-0{,}03$ & 0,95 \\
+actuador, historia sin comando actual & 1,86 & 4,31 & $-0{,}62$ & 0,54 \\
+actuador, filtro entrenable & 1,31 & 1,49 & $-0{,}08$ & 0,96 \\
+refractaria, agnóstica & 0,44 & 0,70 & 0,87 & 0,88 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Lazo cerrado.} Con $\beta$ verdadero las redes del actuador no se acercan al lazo con el simulador. En theta-gamma y gamma quedan entre 0,037 y 0,088, igual que con $\beta$ libre, contra 0,012 y 0,008 del backbone expandido. En las referencias en rango, la agnóstica y el filtro entrenable quedan más lejos que con $\beta$ libre (0,027 contra 0,008 en theta en rango para la agnóstica). En la refractaria todo queda por debajo de 0,0015. Con 100~Hz el cuadro es el mismo.
+
+\textbf{Lectura.} Las redes con el comando actual pueden representar el término omitido cuando $\beta$ es el correcto, y aun así su lazo queda lejos. Lo que las separa del simulador en lazo cerrado depende entonces de lo que representan en la región a la que las lleva el controlador. La deformación de $\bh$ no lo explica.
+
+\section{Pruebas de lazo cerrado que están corriendo}
+
+Corren en la computadora de acá, con 3 procesos, para 120 y 100~Hz. Deberían terminar en la madrugada del 22/11.
+
+\begin{enumerate}[leftmargin=*,itemsep=0.35em]
+\item \textbf{Repetición en lazo abierto con el comando del lazo.} Cada modelo recibe en lazo abierto el comando $P$, $Q$ registrado en el lazo con el simulador, y se mide su distancia a la trayectoria del simulador. Si un modelo sigue al simulador con ese comando y aun así su lazo se separa, la diferencia la amplifica la realimentación. Si no lo sigue, el modelo falla en esa región de comando y estado. Es la prueba de la explicación de la sección anterior.
+\item \textbf{Black-box de amplitud chica en lazo cerrado.} Las black-box de e24 nunca entraron al lazo. Falta su fila en la tabla de lazo cerrado de amplitud chica.
+\item \textbf{Ruido de medición en el lazo.} El controlador mide $I$ y $E$ con el ruido de los datos (desvío por muestra de 0,0032 y 0,016, retenido 0,5~ms), y el simulador y el modelo reciben la misma realización. Hasta ahora todo el lazo cerrado era sin ruido, y es lo primero que preguntaría alguien de control.
+\item \textbf{Distancia lenta y rizo.} La distancia del actuador partida en la parte por debajo y por encima de 200~Hz, para todos los modelos y semillas. Lo de la Sección~1 se midió solo en una semilla.
+\end{enumerate}
+
+\textbf{Primeras filas de la repetición} (theta-gamma, 120~Hz, semilla 0, $\sigma = 0{,}01$, distancia a la trayectoria del simulador en lazo abierto con el comando del lazo): backbone expandido 0,001; filtro entrenable 0,025; black-box con historia 0,026; historia sin comando actual 0,040; historia con comando actual 0,048; black-box 0,141; agnóstica 0,249; white-box 0,265. En lazo cerrado esos modelos quedaban a entre 0,033 y 0,061 del simulador. Los modelos sin memoria del comando se separan mucho en lazo abierto (0,14 a 0,27) y la realimentación los acerca. Los que tienen memoria quedan en lazo abierto a una distancia parecida a la de su lazo, o menor. Es preliminar: falta el resto de las semillas y la gamma continua.
+
+\section{Backbone expandido con la forma equivocada (e29)}
+
+El backbone expandido recibe la forma exacta del actuador, y es la objeción más previsible de alguien que conozca gray-box. e29 lo entrena sobre el actuador con recorte, con amplitud grande y arrancando desde el white-box, con una pieza de la forma cambiada por vez:
+\begin{itemize}[leftmargin=*,itemsep=0.15em]
+\item saturación $\tanh(\hat\alpha v)/\hat\alpha$ en lugar del recorte;
+\item $\hat\tau$ fijo en 2~ms, el doble del verdadero;
+\item $\hat\tau$ fijo en 0,5~ms, la mitad.
+\end{itemize}
+Son 18 corridas (dos ruidos, tres semillas), en la otra computadora. Cuando estén, se miden el error de $\bh$, el NRMSE en lazo abierto y la distancia en lazo cerrado.
+
+\section{Informe final}
+
+El informe sigue el instructivo del concurso, con los nueve puntos y las firmas. El punto 5 incluye la metodología completa y los resultados de los dos regímenes, con los agregados de esta semana (100~Hz y e28). Están marcados en amarillo lo que falta de las pruebas en curso, de e29 y los datos administrativos. Se entrega el 11/12.
+
+\end{document}
