@@ -70,6 +70,18 @@ docs/*.aux
 docs/*.log
 docs/*.out
 docs/*.toc
+docs/**/*.aux
+docs/**/*.log
+docs/**/*.out
+docs/**/*.toc
+docs/**/*.bcf
+docs/**/*.run.xml
+docs/**/*.fls
+docs/**/*.fdb_latexmk
+docs/**/*.xdv
+# Marcas de fin de las colas de lazo cerrado
+results/*.fin
+desktop.ini
 
 # Estado de la cola mientras corre (cola.py, pausar.py) y salidas de error vacías
 logs/escalado/LUGARES

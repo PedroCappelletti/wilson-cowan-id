@@ -1,0 +1,106 @@
+bb_chica: 104 simulaciones, 3 procesos -> pruebas_bb_chica.json
+  theta2s     actc   simulador                                        s-1       RMSE 0.0570
+  theta2s     actc   black-box                                  _n01  s 0       RMSE 0.0599
+  theta2s     actc   black-box con historia                     _n01  s 0       RMSE 0.2621
+  theta2s     actc   black-box                                  _n01  s 1       RMSE 0.0474
+  theta2s     actc   black-box                                  _n01  s 2       RMSE 0.0447
+  theta2s     actc   black-box con historia                     _n01  s 1       RMSE 0.4462
+  theta2s     actc   black-box con historia                     _n01  s 2       RMSE 0.5552
+  theta2s     actc   black-box                                  _n05  s 0       RMSE 0.1258
+  theta2s     actc   black-box con historia                     _n05  s 0       RMSE 0.3888
+  theta2s     actc   black-box                                  _n05  s 1       RMSE 0.0530
+  theta2s     actc   black-box con historia                     _n05  s 1       RMSE 0.4701
+  theta2s     actc   black-box                                  _n05  s 2       RMSE 0.0579
+  theta2s     refrac simulador                                        s-1       RMSE 0.0386
+  theta2s     actc   black-box con historia                     _n05  s 2       RMSE 0.6595
+  theta2s     refrac black-box                                  _n01  s 0       RMSE 0.0372
+  theta2s     refrac black-box                                  _n01  s 1       RMSE 0.0317
+  theta2s     refrac black-box con historia                     _n01  s 0       RMSE 0.0796
+  theta2s     refrac black-box con historia                     _n01  s 1       RMSE 0.1326
+  theta2s     refrac black-box                                  _n01  s 2       RMSE 0.0322
+  theta2s     refrac black-box con historia                     _n01  s 2       RMSE 0.2025
+  theta2s     refrac black-box                                  _n05  s 0       RMSE 0.0422
+  theta2s     refrac black-box con historia                     _n05  s 0       RMSE 0.1327
+  theta2s     refrac black-box                                  _n05  s 1       RMSE 0.0339
+  theta2s     refrac black-box con historia                     _n05  s 1       RMSE 0.1551
+  gamma50     actc   simulador                                        s-1       RMSE 0.0676
+  gamma50     actc   black-box                                  _n01  s 0       RMSE 0.0257
+  gamma50     actc   black-box con historia                     _n01  s 0       RMSE 0.4393
+  gamma50     actc   black-box                                  _n01  s 1       RMSE 0.0270
+  gamma50     actc   black-box con historia                     _n01  s 1       RMSE 0.4950
+  gamma50     actc   black-box                                  _n01  s 2       RMSE 0.0252
+  gamma50     actc   black-box con historia                     _n01  s 2       RMSE 0.6174
+  gamma50     actc   black-box                                  _n05  s 0       RMSE 0.3221
+  gamma50     actc   black-box con historia                     _n05  s 0       RMSE 0.5071
+  gamma50     actc   black-box                                  _n05  s 1       RMSE 0.0269
+  gamma50     actc   black-box con historia                     _n05  s 1       RMSE 0.4714
+  gamma50     actc   black-box                                  _n05  s 2       RMSE 0.0248
+  gamma50     actc   black-box con historia                     _n05  s 2       RMSE 0.3555
+  gamma50     refrac simulador                                        s-1       RMSE 0.0339
+  gamma50     refrac black-box                                  _n01  s 0       RMSE 0.0315
+  gamma50     refrac black-box con historia                     _n01  s 0       RMSE 0.0593
+  theta2s     refrac black-box                                  _n05  s 2       RMSE 0.0332
+  gamma50     refrac black-box                                  _n01  s 1       RMSE 0.0301
+  gamma50     refrac black-box con historia                     _n01  s 1       RMSE 0.1304
+  gamma50     refrac black-box                                  _n01  s 2       RMSE 0.0273
+  gamma50     refrac black-box                                  _n05  s 0       RMSE 0.0505
+  gamma50     refrac black-box con historia                     _n01  s 2       RMSE 0.1965
+  gamma50     refrac black-box                                  _n05  s 1       RMSE 0.0305
+  gamma50     refrac black-box con historia                     _n05  s 0       RMSE 0.2322
+  gamma50     refrac black-box                                  _n05  s 2       RMSE 0.0285
+  gamma50     refrac black-box con historia                     _n05  s 1       RMSE 0.2536
+  gamma50     refrac black-box con historia                     _n05  s 2       RMSE 0.3873
+  theta2s     refrac black-box con historia                     _n05  s 2       RMSE 0.2409
+  theta_rango actc   simulador                                        s-1       RMSE 0.0113
+  theta_rango actc   black-box                                  _n01  s 0       RMSE 0.0124
+  theta_rango actc   black-box                                  _n01  s 1       RMSE 0.0121
+  theta_rango actc   black-box con historia                     _n01  s 0       RMSE 0.4356
+  theta_rango actc   black-box con historia                     _n01  s 1       RMSE 0.5303
+  theta_rango actc   black-box                                  _n01  s 2       RMSE 0.0121
+  theta_rango actc   black-box con historia                     _n01  s 2       RMSE 0.6000
+  theta_rango actc   black-box                                  _n05  s 0       RMSE 0.0122
+  theta_rango actc   black-box con historia                     _n05  s 0       RMSE 0.3595
+  theta_rango actc   black-box                                  _n05  s 1       RMSE 0.0120
+  theta_rango actc   black-box con historia                     _n05  s 1       RMSE 0.5147
+  theta_rango actc   black-box                                  _n05  s 2       RMSE 0.0121
+  theta_rango refrac simulador                                        s-1       RMSE 0.0122
+  theta_rango actc   black-box con historia                     _n05  s 2       RMSE 0.4965
+  theta_rango refrac black-box                                  _n01  s 0       RMSE 0.0126
+  theta_rango refrac black-box con historia                     _n01  s 0       RMSE 0.0123
+  theta_rango refrac black-box                                  _n01  s 1       RMSE 0.0126
+  theta_rango refrac black-box con historia                     _n01  s 1       RMSE 0.0123
+  theta_rango refrac black-box                                  _n01  s 2       RMSE 0.0126
+  theta_rango refrac black-box con historia                     _n01  s 2       RMSE 0.0126
+  theta_rango refrac black-box                                  _n05  s 0       RMSE 0.0127
+  theta_rango refrac black-box con historia                     _n05  s 0       RMSE 0.0124
+  theta_rango refrac black-box                                  _n05  s 1       RMSE 0.0127
+  theta_rango refrac black-box con historia                     _n05  s 1       RMSE 0.1657
+  theta_rango refrac black-box                                  _n05  s 2       RMSE 0.0127
+  theta_rango refrac black-box con historia                     _n05  s 2       RMSE 0.0123
+  gamma_rango actc   simulador                                        s-1       RMSE 0.0195
+  gamma_rango actc   black-box                                  _n01  s 0       RMSE 0.0202
+  gamma_rango actc   black-box                                  _n01  s 1       RMSE 0.0201
+  gamma_rango actc   black-box con historia                     _n01  s 0       RMSE 0.3874
+  gamma_rango actc   black-box con historia                     _n01  s 1       RMSE 0.6649
+  gamma_rango actc   black-box                                  _n01  s 2       RMSE 0.0200
+  gamma_rango actc   black-box con historia                     _n01  s 2       RMSE 0.8210
+  gamma_rango actc   black-box                                  _n05  s 0       RMSE 0.0198
+  gamma_rango actc   black-box con historia                     _n05  s 0       RMSE 0.3965
+  gamma_rango actc   black-box                                  _n05  s 1       RMSE 0.0201
+  gamma_rango actc   black-box con historia                     _n05  s 1       RMSE 0.7233
+  gamma_rango actc   black-box                                  _n05  s 2       RMSE 0.0200
+  gamma_rango refrac simulador                                        s-1       RMSE 0.0211
+  gamma_rango actc   black-box con historia                     _n05  s 2       RMSE 0.7668
+  gamma_rango refrac black-box                                  _n01  s 0       RMSE 0.0206
+  gamma_rango refrac black-box                                  _n01  s 1       RMSE 0.0206
+  gamma_rango refrac black-box con historia                     _n01  s 0       RMSE 0.0207
+  gamma_rango refrac black-box con historia                     _n01  s 1       RMSE 0.0208
+  gamma_rango refrac black-box                                  _n01  s 2       RMSE 0.0206
+  gamma_rango refrac black-box con historia                     _n01  s 2       RMSE 0.3267
+  gamma_rango refrac black-box                                  _n05  s 0       RMSE 0.0205
+  gamma_rango refrac black-box con historia                     _n05  s 0       RMSE 0.0208
+  gamma_rango refrac black-box                                  _n05  s 1       RMSE 0.0205
+  gamma_rango refrac black-box con historia                     _n05  s 1       RMSE 0.2483
+  gamma_rango refrac black-box                                  _n05  s 2       RMSE 0.0207
+  gamma_rango refrac black-box con historia                     _n05  s 2       RMSE 0.4417
+-> C:\Users\User\Desktop\wilson-cowan-id\results\pruebas_bb_chica.json

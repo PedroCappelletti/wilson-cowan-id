@@ -1,0 +1,163 @@
+ruido: 152 simulaciones, 3 procesos -> pruebas_ruido_100hz.json
+  theta2s     actc   white-box                                  _n01  s 0 _n01  RMSE 0.0541
+  theta2s     actc   simulador                                        s-1 _n01  RMSE 0.0612
+  theta2s     actc   agnóstica                                  _n01  s 0 _n01  RMSE 0.0618
+  theta2s     actc   historia con comando actual                _n01  s 0 _n01  RMSE 0.0656
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:142: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actc   historia sin comando actual                _n01  s 0 _n01  RMSE 0.0858
+  theta2s     actc   estado de filtro                           _n01  s 0 _n01  RMSE 0.0610
+  theta2s     actc   filtro 8 canales                           _n01  s 0 _n01  RMSE 0.0589
+  theta2s     actc   black-box                                  _n01  s 0 _n01  RMSE 0.0563
+  theta2s     actc   white-box                                  _n01  s 1 _n01  RMSE 0.0540
+  theta2s     actc   black-box con historia                     _n01  s 0 _n01  RMSE 0.0636
+  theta2s     actc   agnóstica                                  _n01  s 1 _n01  RMSE 0.0617
+  theta2s     actc   historia con comando actual                _n01  s 1 _n01  RMSE 0.0627
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:142: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actc   historia sin comando actual                _n01  s 1 _n01  RMSE 0.0823
+  theta2s     actc   estado de filtro                           _n01  s 1 _n01  RMSE 0.0609
+  theta2s     actc   filtro 8 canales                           _n01  s 1 _n01  RMSE 0.0600
+  theta2s     actc   black-box                                  _n01  s 1 _n01  RMSE 0.0560
+  theta2s     actc   white-box                                  _n01  s 2 _n01  RMSE 0.0541
+  theta2s     actc   black-box con historia                     _n01  s 1 _n01  RMSE 0.0585
+  theta2s     actc   agnóstica                                  _n01  s 2 _n01  RMSE 0.0621
+  theta2s     actc   historia con comando actual                _n01  s 2 _n01  RMSE 0.0617
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:142: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actc   historia sin comando actual                _n01  s 2 _n01  RMSE 0.0842
+  theta2s     actc   estado de filtro                           _n01  s 2 _n01  RMSE 0.0612
+  theta2s     actc   black-box                                  _n01  s 2 _n01  RMSE 0.0554
+  theta2s     actc   filtro 8 canales                           _n01  s 2 _n01  RMSE 0.0604
+  theta2s     refrac white-box                                  _n01  s 0 _n01  RMSE 0.0396
+  theta2s     refrac simulador                                        s-1 _n01  RMSE 0.0391
+  theta2s     actc   black-box con historia                     _n01  s 2 _n01  RMSE 0.0606
+  theta2s     refrac forma exacta                               _n01  s 0 _n01  RMSE 0.0390
+  theta2s     refrac agnóstica                                  _n01  s 0 _n01  RMSE 0.0393
+  theta2s     refrac white-box                                  _n01  s 1 _n01  RMSE 0.0396
+  theta2s     refrac black-box                                  _n01  s 0 _n01  RMSE 0.0391
+  theta2s     refrac forma exacta                               _n01  s 1 _n01  RMSE 0.0390
+  theta2s     refrac agnóstica                                  _n01  s 1 _n01  RMSE 0.0393
+  theta2s     refrac white-box                                  _n01  s 2 _n01  RMSE 0.0396
+  theta2s     refrac black-box                                  _n01  s 1 _n01  RMSE 0.0391
+  theta2s     refrac forma exacta                               _n01  s 2 _n01  RMSE 0.0390
+  gamma50     actc   simulador                                        s-1 _n01  RMSE 0.0627
+  gamma50     actc   white-box                                  _n01  s 0 _n01  RMSE 0.0415
+  gamma50     actc   agnóstica                                  _n01  s 0 _n01  RMSE 0.0243
+  gamma50     actc   historia con comando actual                _n01  s 0 _n01  RMSE 0.0472
+  gamma50     actc   historia sin comando actual                _n01  s 0 _n01  RMSE 0.1003
+  gamma50     actc   filtro 8 canales                           _n01  s 0 _n01  RMSE 0.0656
+  theta2s     refrac agnóstica                                  _n01  s 2 _n01  RMSE 0.0393
+  gamma50     actc   estado de filtro                           _n01  s 0 _n01  RMSE 0.0574
+  gamma50     actc   black-box                                  _n01  s 0 _n01  RMSE 0.0233
+  gamma50     actc   white-box                                  _n01  s 1 _n01  RMSE 0.0415
+  gamma50     actc   black-box con historia                     _n01  s 0 _n01  RMSE 0.0444
+  gamma50     actc   agnóstica                                  _n01  s 1 _n01  RMSE 0.0244
+  gamma50     actc   historia con comando actual                _n01  s 1 _n01  RMSE 0.0464
+  gamma50     actc   historia sin comando actual                _n01  s 1 _n01  RMSE 0.0978
+  gamma50     actc   estado de filtro                           _n01  s 1 _n01  RMSE 0.0571
+  gamma50     actc   filtro 8 canales                           _n01  s 1 _n01  RMSE 0.0526
+  gamma50     actc   black-box                                  _n01  s 1 _n01  RMSE 0.0233
+  gamma50     actc   white-box                                  _n01  s 2 _n01  RMSE 0.0415
+  gamma50     actc   black-box con historia                     _n01  s 1 _n01  RMSE 0.0436
+  gamma50     actc   agnóstica                                  _n01  s 2 _n01  RMSE 0.0250
+  gamma50     actc   historia con comando actual                _n01  s 2 _n01  RMSE 0.0415
+  gamma50     actc   historia sin comando actual                _n01  s 2 _n01  RMSE 0.1003
+  gamma50     actc   estado de filtro                           _n01  s 2 _n01  RMSE 0.0574
+  gamma50     actc   filtro 8 canales                           _n01  s 2 _n01  RMSE 0.0470
+  gamma50     actc   black-box                                  _n01  s 2 _n01  RMSE 0.0232
+  gamma50     refrac simulador                                        s-1 _n01  RMSE 0.0261
+  gamma50     actc   black-box con historia                     _n01  s 2 _n01  RMSE 0.0394
+  gamma50     refrac white-box                                  _n01  s 0 _n01  RMSE 0.0271
+  gamma50     refrac forma exacta                               _n01  s 0 _n01  RMSE 0.0261
+  gamma50     refrac agnóstica                                  _n01  s 0 _n01  RMSE 0.0265
+  gamma50     refrac white-box                                  _n01  s 1 _n01  RMSE 0.0271
+  gamma50     refrac black-box                                  _n01  s 0 _n01  RMSE 0.0262
+  gamma50     refrac agnóstica                                  _n01  s 1 _n01  RMSE 0.0265
+  gamma50     refrac forma exacta                               _n01  s 1 _n01  RMSE 0.0261
+  gamma50     refrac white-box                                  _n01  s 2 _n01  RMSE 0.0271
+  gamma50     refrac black-box                                  _n01  s 1 _n01  RMSE 0.0260
+  gamma50     refrac agnóstica                                  _n01  s 2 _n01  RMSE 0.0266
+  gamma50     refrac forma exacta                               _n01  s 2 _n01  RMSE 0.0261
+  gamma50     refrac black-box                                  _n01  s 2 _n01  RMSE 0.0265
+  theta2s     refrac black-box                                  _n01  s 2 _n01  RMSE 0.0390
+  theta2s     actc   white-box                                  _n05  s 0 _n05  RMSE 0.0548
+  theta2s     actc   simulador                                        s-1 _n05  RMSE 0.0656
+  theta2s     actc   agnóstica                                  _n05  s 0 _n05  RMSE 0.0623
+  theta2s     actc   historia con comando actual                _n05  s 0 _n05  RMSE 0.0716
+  theta2s     actc   historia sin comando actual                _n05  s 0 _n05  RMSE 0.0835
+  theta2s     actc   estado de filtro                           _n05  s 0 _n05  RMSE 0.0663
+  theta2s     actc   black-box                                  _n05  s 0 _n05  RMSE 0.0573
+  theta2s     actc   filtro 8 canales                           _n05  s 0 _n05  RMSE 0.0671
+  theta2s     actc   white-box                                  _n05  s 1 _n05  RMSE 0.0548
+  theta2s     actc   black-box con historia                     _n05  s 0 _n05  RMSE 0.0673
+  theta2s     actc   agnóstica                                  _n05  s 1 _n05  RMSE 0.0627
+  theta2s     actc   historia con comando actual                _n05  s 1 _n05  RMSE 0.0735
+  theta2s     actc   historia sin comando actual                _n05  s 1 _n05  RMSE 0.0875
+  theta2s     actc   estado de filtro                           _n05  s 1 _n05  RMSE 0.0631
+  theta2s     actc   filtro 8 canales                           _n05  s 1 _n05  RMSE 0.0658
+  theta2s     actc   black-box                                  _n05  s 1 _n05  RMSE 0.0590
+  theta2s     actc   white-box                                  _n05  s 2 _n05  RMSE 0.0548
+  theta2s     actc   black-box con historia                     _n05  s 1 _n05  RMSE 0.0629
+  theta2s     actc   agnóstica                                  _n05  s 2 _n05  RMSE 0.0623
+  theta2s     actc   historia con comando actual                _n05  s 2 _n05  RMSE 0.0632
+  theta2s     actc   historia sin comando actual                _n05  s 2 _n05  RMSE 0.0785
+  theta2s     actc   estado de filtro                           _n05  s 2 _n05  RMSE 0.0648
+  theta2s     actc   filtro 8 canales                           _n05  s 2 _n05  RMSE 0.0650
+  theta2s     actc   black-box                                  _n05  s 2 _n05  RMSE 0.0582
+  theta2s     refrac simulador                                        s-1 _n05  RMSE 0.0403
+  theta2s     actc   black-box con historia                     _n05  s 2 _n05  RMSE 0.0666
+  theta2s     refrac white-box                                  _n05  s 0 _n05  RMSE 0.0409
+  theta2s     refrac forma exacta                               _n05  s 0 _n05  RMSE 0.0401
+  theta2s     refrac agnóstica                                  _n05  s 0 _n05  RMSE 0.0404
+  theta2s     refrac white-box                                  _n05  s 1 _n05  RMSE 0.0409
+  theta2s     refrac black-box                                  _n05  s 0 _n05  RMSE 0.0401
+  theta2s     refrac forma exacta                               _n05  s 1 _n05  RMSE 0.0401
+  theta2s     refrac agnóstica                                  _n05  s 1 _n05  RMSE 0.0404
+  theta2s     refrac white-box                                  _n05  s 2 _n05  RMSE 0.0409
+  theta2s     refrac black-box                                  _n05  s 1 _n05  RMSE 0.0401
+  theta2s     refrac forma exacta                               _n05  s 2 _n05  RMSE 0.0401
+  gamma50     actc   simulador                                        s-1 _n05  RMSE 0.0710
+  gamma50     actc   white-box                                  _n05  s 0 _n05  RMSE 0.0410
+  gamma50     actc   agnóstica                                  _n05  s 0 _n05  RMSE 0.0257
+  gamma50     actc   historia con comando actual                _n05  s 0 _n05  RMSE 0.0516
+  gamma50     actc   historia sin comando actual                _n05  s 0 _n05  RMSE 0.1047
+  gamma50     actc   filtro 8 canales                           _n05  s 0 _n05  RMSE 0.0481
+  gamma50     actc   estado de filtro                           _n05  s 0 _n05  RMSE 0.0748
+  gamma50     actc   black-box                                  _n05  s 0 _n05  RMSE 0.0255
+  gamma50     actc   black-box con historia                     _n05  s 0 _n05  RMSE 0.0573
+  gamma50     actc   white-box                                  _n05  s 1 _n05  RMSE 0.0410
+  gamma50     actc   agnóstica                                  _n05  s 1 _n05  RMSE 0.0258
+  theta2s     refrac agnóstica                                  _n05  s 2 _n05  RMSE 0.0405
+  gamma50     actc   historia con comando actual                _n05  s 1 _n05  RMSE 0.0521
+  gamma50     actc   historia sin comando actual                _n05  s 1 _n05  RMSE 0.1082
+  gamma50     actc   filtro 8 canales                           _n05  s 1 _n05  RMSE 0.0575
+  gamma50     actc   estado de filtro                           _n05  s 1 _n05  RMSE 0.0724
+  gamma50     actc   black-box                                  _n05  s 1 _n05  RMSE 0.0260
+  gamma50     actc   black-box con historia                     _n05  s 1 _n05  RMSE 0.0644
+  gamma50     actc   white-box                                  _n05  s 2 _n05  RMSE 0.0411
+  gamma50     actc   agnóstica                                  _n05  s 2 _n05  RMSE 0.0263
+  gamma50     actc   historia con comando actual                _n05  s 2 _n05  RMSE 0.0461
+  gamma50     actc   historia sin comando actual                _n05  s 2 _n05  RMSE 0.0967
+  gamma50     actc   estado de filtro                           _n05  s 2 _n05  RMSE 0.0747
+  gamma50     actc   filtro 8 canales                           _n05  s 2 _n05  RMSE 0.0506
+  gamma50     actc   black-box                                  _n05  s 2 _n05  RMSE 0.0253
+  gamma50     refrac simulador                                        s-1 _n05  RMSE 0.0285
+  gamma50     actc   black-box con historia                     _n05  s 2 _n05  RMSE 0.0721
+  gamma50     refrac white-box                                  _n05  s 0 _n05  RMSE 0.0291
+  gamma50     refrac forma exacta                               _n05  s 0 _n05  RMSE 0.0284
+  gamma50     refrac agnóstica                                  _n05  s 0 _n05  RMSE 0.0287
+  gamma50     refrac white-box                                  _n05  s 1 _n05  RMSE 0.0292
+  gamma50     refrac black-box                                  _n05  s 0 _n05  RMSE 0.0286
+  gamma50     refrac agnóstica                                  _n05  s 1 _n05  RMSE 0.0288
+  gamma50     refrac forma exacta                               _n05  s 1 _n05  RMSE 0.0284
+  gamma50     refrac white-box                                  _n05  s 2 _n05  RMSE 0.0291
+  gamma50     refrac black-box                                  _n05  s 1 _n05  RMSE 0.0285
+  gamma50     refrac agnóstica                                  _n05  s 2 _n05  RMSE 0.0288
+  gamma50     refrac forma exacta                               _n05  s 2 _n05  RMSE 0.0284
+  gamma50     refrac black-box                                  _n05  s 2 _n05  RMSE 0.0284
+  theta2s     refrac black-box                                  _n05  s 2 _n05  RMSE 0.0400
+-> C:\Users\User\Desktop\wilson-cowan-id\results\pruebas_ruido_100hz.json

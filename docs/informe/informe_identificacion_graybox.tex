@@ -159,7 +159,7 @@ donde $\xi$ es la entrada de la corrección y cambia según la variante. Los die
 
 \textbf{Historia con comando actual.} $\xi = (I, E, P_k, \dots, P_{k-K+1}, Q_k, \dots, Q_{k-K+1})$, con $K = 10$, o sea 5~ms del comando. El comando actual entra en la sigmoidea y en la red.
 
-\textbf{Historia sin comando actual.} La misma entrada sin $P_k$ ni $Q_k$, con los nueve comandos anteriores. El modelo queda afín en el comando actual.
+\textbf{Historia sin comando actual.} La misma entrada sin $P_k$ ni $Q_k$, con los 10 comandos anteriores. El modelo queda afín en el comando actual.
 
 \textbf{Filtro entrenable.} Una capa lineal sin sesgo resume la historia del comando, $z = A\,h_k$ con $h_k \in \mathbb{R}^{2K}$, $K = 40$ (20~ms) y $A \in \mathbb{R}^{8\times 2K}$, y la red recibe $\xi = (I, E, z)$. Cada fila de $A$ es un filtro FIR sobre los dos comandos, entrenado junto con la red sin forma impuesta.
 
@@ -185,7 +185,7 @@ modelo & entrada de la red & memoria del comando & afín en $u_k$ & parámetros 
 white-box & sin red & no & sí & 10 \\
 agnóstica & $I, E$ & no & sí & 1228 \\
 historia con comando actual & $I, E$, 5~ms del comando & 10 muestras & no & 1868 \\
-historia sin comando actual & $I, E$, 9 comandos anteriores & 9 muestras & sí & 1804 \\
+historia sin comando actual & $I, E$, 10 comandos anteriores & 10 muestras & sí & 1868 \\
 filtro entrenable & $I, E$, 8 canales FIR de 20~ms & 40 muestras & no & 2124 \\
 backbone expandido refractario & sin red & no & sí & 13 \\
 backbone expandido con actuador & sin red & un polo, $\hat\tau$ & no & 12 \\

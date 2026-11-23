@@ -1,0 +1,204 @@
+repeticion: 196 simulaciones, 3 procesos -> pruebas_repeticion_100hz.json
+  theta2s     actc   simulador                                        s-1       RMSE 0.0621
+  theta2s     actc   white-box                                  _n01  s 0       RMSE 0.0540  rep 0.2460
+  theta2s     actc   agnóstica                                  _n01  s 0       RMSE 0.0618  rep 0.2404
+  theta2s     actc   historia con comando actual                _n01  s 0       RMSE 0.0648  rep 0.0502
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:142: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actc   historia sin comando actual                _n01  s 0       RMSE 0.0835  rep 0.0484
+  theta2s     actc   estado de filtro                           _n01  s 0       RMSE 0.0612  rep 0.0009
+  theta2s     actc   filtro 8 canales                           _n01  s 0       RMSE 0.0588  rep 0.0244
+  theta2s     actc   black-box                                  _n01  s 0       RMSE 0.0559  rep 0.1332
+  theta2s     actc   black-box con historia                     _n01  s 0       RMSE 0.0615  rep 0.0306
+  theta2s     actc   agnóstica, β verdadero                     _n01  s 0       RMSE 0.0562  rep 0.2268
+  theta2s     actc   historia con comando actual, β verdadero   _n01  s 0       RMSE 0.0665  rep 0.0567
+  theta2s     actc   white-box                                  _n01  s 1       RMSE 0.0540  rep 0.2460
+  theta2s     actc   historia sin comando actual, β verdadero   _n01  s 0       RMSE 0.0763  rep 0.0765
+  theta2s     actc   agnóstica                                  _n01  s 1       RMSE 0.0617  rep 0.2457
+  theta2s     actc   filtro 8 canales, β verdadero              _n01  s 0       RMSE 0.0593  rep 0.0345
+  theta2s     actc   historia con comando actual                _n01  s 1       RMSE 0.0641  rep 0.0342
+  theta2s     actc   estado de filtro                           _n01  s 1       RMSE 0.0613  rep 0.0009
+  theta2s     actc   historia sin comando actual                _n01  s 1       RMSE 0.0786  rep 0.0423
+  theta2s     actc   filtro 8 canales                           _n01  s 1       RMSE 0.0595  rep 0.0222
+  theta2s     actc   black-box                                  _n01  s 1       RMSE 0.0553  rep 0.1299
+  theta2s     actc   black-box con historia                     _n01  s 1       RMSE 0.0569  rep 0.0293
+  theta2s     actc   agnóstica, β verdadero                     _n01  s 1       RMSE 0.0849  rep 0.2848
+  theta2s     actc   historia con comando actual, β verdadero   _n01  s 1       RMSE 0.0723  rep 0.0516
+  theta2s     actc   white-box                                  _n01  s 2       RMSE 0.0540  rep 0.2460
+  theta2s     actc   historia sin comando actual, β verdadero   _n01  s 1       RMSE 0.0754  rep 0.0804
+  theta2s     actc   agnóstica                                  _n01  s 2       RMSE 0.0621  rep 0.2442
+  theta2s     actc   filtro 8 canales, β verdadero              _n01  s 1       RMSE 0.0643  rep 0.0365
+  theta2s     actc   historia con comando actual                _n01  s 2       RMSE 0.0620  rep 0.0371
+C:\Users\User\Desktop\wilson-cowan-id\src\neural_ode\memory.py:142: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:839.)
+  alpha = float(torch.clamp(self.raw_alpha, 1e-3, 10.0))
+  theta2s     actc   estado de filtro                           _n01  s 2       RMSE 0.0614  rep 0.0009
+  theta2s     actc   historia sin comando actual                _n01  s 2       RMSE 0.0852  rep 0.0497
+  theta2s     actc   filtro 8 canales                           _n01  s 2       RMSE 0.0590  rep 0.0272
+  theta2s     actc   black-box                                  _n01  s 2       RMSE 0.0555  rep 0.1060
+  theta2s     actc   black-box con historia                     _n01  s 2       RMSE 0.0595  rep 0.0368
+  theta2s     actc   agnóstica, β verdadero                     _n01  s 2       RMSE 0.0561  rep 0.2813
+  theta2s     actc   historia con comando actual, β verdadero   _n01  s 2       RMSE 0.0675  rep 0.0541
+  theta2s     actc   historia sin comando actual, β verdadero   _n01  s 2       RMSE 0.0791  rep 0.0872
+  theta2s     actc   white-box                                  _n05  s 0       RMSE 0.0539  rep 0.2457
+  theta2s     actc   filtro 8 canales, β verdadero              _n01  s 2       RMSE 0.0590  rep 0.0355
+  theta2s     actc   agnóstica                                  _n05  s 0       RMSE 0.0617  rep 0.2248
+  theta2s     actc   historia con comando actual                _n05  s 0       RMSE 0.0682  rep 0.0481
+  theta2s     actc   estado de filtro                           _n05  s 0       RMSE 0.0619  rep 0.0011
+  theta2s     actc   historia sin comando actual                _n05  s 0       RMSE 0.0827  rep 0.0390
+  theta2s     actc   filtro 8 canales                           _n05  s 0       RMSE 0.0593  rep 0.0269
+  theta2s     actc   black-box                                  _n05  s 0       RMSE 0.0557  rep 0.2114
+  theta2s     actc   black-box con historia                     _n05  s 0       RMSE 0.0616  rep 0.0290
+  theta2s     actc   agnóstica, β verdadero                     _n05  s 0       RMSE 0.0709  rep 0.2026
+  theta2s     actc   historia con comando actual, β verdadero   _n05  s 0       RMSE 0.0674  rep 0.0504
+  theta2s     actc   historia sin comando actual, β verdadero   _n05  s 0       RMSE 0.0824  rep 0.0756
+  theta2s     actc   white-box                                  _n05  s 1       RMSE 0.0539  rep 0.2458
+  theta2s     actc   filtro 8 canales, β verdadero              _n05  s 0       RMSE 0.0589  rep 0.0343
+  theta2s     actc   agnóstica                                  _n05  s 1       RMSE 0.0621  rep 0.2451
+  theta2s     actc   historia con comando actual                _n05  s 1       RMSE 0.0718  rep 0.0387
+  theta2s     actc   estado de filtro                           _n05  s 1       RMSE 0.0616  rep 0.0014
+  theta2s     actc   historia sin comando actual                _n05  s 1       RMSE 0.0836  rep 0.0475
+  theta2s     actc   filtro 8 canales                           _n05  s 1       RMSE 0.0575  rep 0.0241
+  theta2s     actc   black-box                                  _n05  s 1       RMSE 0.0611  rep 0.2239
+  theta2s     actc   black-box con historia                     _n05  s 1       RMSE 0.0586  rep 0.0287
+  theta2s     actc   agnóstica, β verdadero                     _n05  s 1       RMSE 0.0674  rep 0.2859
+  theta2s     actc   historia con comando actual, β verdadero   _n05  s 1       RMSE 0.0678  rep 0.0585
+  theta2s     actc   white-box                                  _n05  s 2       RMSE 0.0539  rep 0.2458
+  theta2s     actc   historia sin comando actual, β verdadero   _n05  s 1       RMSE 0.0871  rep 0.0808
+  theta2s     actc   filtro 8 canales, β verdadero              _n05  s 1       RMSE 0.0645  rep 0.0393
+  theta2s     actc   agnóstica                                  _n05  s 2       RMSE 0.0618  rep 0.2461
+  theta2s     actc   historia con comando actual                _n05  s 2       RMSE 0.0590  rep 0.0319
+  theta2s     actc   estado de filtro                           _n05  s 2       RMSE 0.0619  rep 0.0012
+  theta2s     actc   historia sin comando actual                _n05  s 2       RMSE 0.0769  rep 0.0418
+  theta2s     actc   filtro 8 canales                           _n05  s 2       RMSE 0.0575  rep 0.0265
+  theta2s     actc   black-box                                  _n05  s 2       RMSE 0.0564  rep 0.1947
+  theta2s     actc   black-box con historia                     _n05  s 2       RMSE 0.0593  rep 0.0373
+  theta2s     actc   agnóstica, β verdadero                     _n05  s 2       RMSE 0.0720  rep 0.2776
+  theta2s     actc   historia con comando actual, β verdadero   _n05  s 2       RMSE 0.0658  rep 0.0529
+  theta2s     refrac simulador                                        s-1       RMSE 0.0390
+  theta2s     actc   historia sin comando actual, β verdadero   _n05  s 2       RMSE 0.0724  rep 0.0922
+  theta2s     refrac white-box                                  _n01  s 0       RMSE 0.0395  rep 0.0297
+  theta2s     actc   filtro 8 canales, β verdadero              _n05  s 2       RMSE 0.0580  rep 0.0349
+  theta2s     refrac forma exacta                               _n01  s 0       RMSE 0.0389  rep 0.0010
+  theta2s     refrac agnóstica                                  _n01  s 0       RMSE 0.0392  rep 0.0021
+  theta2s     refrac white-box                                  _n01  s 1       RMSE 0.0395  rep 0.0297
+  theta2s     refrac forma exacta                               _n01  s 1       RMSE 0.0389  rep 0.0008
+  theta2s     refrac agnóstica                                  _n01  s 1       RMSE 0.0392  rep 0.0023
+  theta2s     refrac black-box                                  _n01  s 0       RMSE 0.0390  rep 0.0043
+  theta2s     refrac white-box                                  _n01  s 2       RMSE 0.0395  rep 0.0297
+  theta2s     refrac forma exacta                               _n01  s 2       RMSE 0.0389  rep 0.0010
+  theta2s     refrac black-box                                  _n01  s 1       RMSE 0.0390  rep 0.0049
+  theta2s     refrac agnóstica                                  _n01  s 2       RMSE 0.0393  rep 0.0021
+  theta2s     refrac white-box                                  _n05  s 0       RMSE 0.0394  rep 0.0303
+  theta2s     refrac forma exacta                               _n05  s 0       RMSE 0.0389  rep 0.0024
+  theta2s     refrac agnóstica                                  _n05  s 0       RMSE 0.0392  rep 0.0034
+  theta2s     refrac black-box                                  _n01  s 2       RMSE 0.0389  rep 0.0103
+  theta2s     refrac white-box                                  _n05  s 1       RMSE 0.0394  rep 0.0305
+  theta2s     refrac forma exacta                               _n05  s 1       RMSE 0.0389  rep 0.0020
+  theta2s     refrac agnóstica                                  _n05  s 1       RMSE 0.0392  rep 0.0026
+  theta2s     refrac black-box                                  _n05  s 0       RMSE 0.0389  rep 0.0096
+  theta2s     refrac white-box                                  _n05  s 2       RMSE 0.0394  rep 0.0302
+  theta2s     refrac forma exacta                               _n05  s 2       RMSE 0.0389  rep 0.0027
+  theta2s     refrac agnóstica                                  _n05  s 2       RMSE 0.0392  rep 0.0026
+  gamma50     actc   simulador                                        s-1       RMSE 0.0540
+  gamma50     actc   white-box                                  _n01  s 0       RMSE 0.0417  rep 0.2138
+  gamma50     actc   agnóstica                                  _n01  s 0       RMSE 0.0243  rep 0.2376
+  theta2s     refrac black-box                                  _n05  s 1       RMSE 0.0389  rep 0.0060
+  gamma50     actc   historia con comando actual                _n01  s 0       RMSE 0.0468  rep 0.0954
+  gamma50     actc   historia sin comando actual                _n01  s 0       RMSE 0.1127  rep 0.1016
+  gamma50     actc   estado de filtro                           _n01  s 0       RMSE 0.0598  rep 0.0025
+  gamma50     actc   filtro 8 canales                           _n01  s 0       RMSE 0.0582  rep 0.0552
+  gamma50     actc   black-box                                  _n01  s 0       RMSE 0.0233  rep 0.2164
+  gamma50     actc   black-box con historia                     _n01  s 0       RMSE 0.0433  rep 0.0782
+  gamma50     actc   agnóstica, β verdadero                     _n01  s 0       RMSE 0.0308  rep 0.3504
+  gamma50     actc   historia con comando actual, β verdadero   _n01  s 0       RMSE 0.0423  rep 0.1801
+  gamma50     actc   historia sin comando actual, β verdadero   _n01  s 0       RMSE 0.0672  rep 0.2050
+  gamma50     actc   white-box                                  _n01  s 1       RMSE 0.0416  rep 0.2139
+  gamma50     actc   agnóstica                                  _n01  s 1       RMSE 0.0244  rep 0.2446
+  gamma50     actc   filtro 8 canales, β verdadero              _n01  s 0       RMSE 0.0454  rep 0.1305
+  gamma50     actc   historia con comando actual                _n01  s 1       RMSE 0.0423  rep 0.1084
+  gamma50     actc   historia sin comando actual                _n01  s 1       RMSE 0.0965  rep 0.0979
+  gamma50     actc   estado de filtro                           _n01  s 1       RMSE 0.0598  rep 0.0023
+  gamma50     actc   black-box                                  _n01  s 1       RMSE 0.0232  rep 0.2354
+  gamma50     actc   filtro 8 canales                           _n01  s 1       RMSE 0.0529  rep 0.0686
+  gamma50     actc   agnóstica, β verdadero                     _n01  s 1       RMSE 0.0172  rep 0.3247
+  gamma50     actc   black-box con historia                     _n01  s 1       RMSE 0.0412  rep 0.0900
+  gamma50     actc   historia con comando actual, β verdadero   _n01  s 1       RMSE 0.0392  rep 0.1788
+  gamma50     actc   historia sin comando actual, β verdadero   _n01  s 1       RMSE 0.0596  rep 0.1879
+  gamma50     actc   white-box                                  _n01  s 2       RMSE 0.0417  rep 0.2138
+  gamma50     actc   agnóstica                                  _n01  s 2       RMSE 0.0250  rep 0.2402
+  gamma50     actc   filtro 8 canales, β verdadero              _n01  s 1       RMSE 0.0651  rep 0.1113
+  gamma50     actc   historia con comando actual                _n01  s 2       RMSE 0.0388  rep 0.1186
+  gamma50     actc   historia sin comando actual                _n01  s 2       RMSE 0.0992  rep 0.1383
+  gamma50     actc   estado de filtro                           _n01  s 2       RMSE 0.0596  rep 0.0023
+  gamma50     actc   filtro 8 canales                           _n01  s 2       RMSE 0.0466  rep 0.0854
+  gamma50     actc   black-box                                  _n01  s 2       RMSE 0.0233  rep 0.2299
+  gamma50     actc   agnóstica, β verdadero                     _n01  s 2       RMSE 0.0327  rep 0.3543
+  gamma50     actc   black-box con historia                     _n01  s 2       RMSE 0.0390  rep 0.0952
+  gamma50     actc   historia con comando actual, β verdadero   _n01  s 2       RMSE 0.0424  rep 0.1300
+  gamma50     actc   historia sin comando actual, β verdadero   _n01  s 2       RMSE 0.0454  rep 0.1993
+  gamma50     actc   white-box                                  _n05  s 0       RMSE 0.0412  rep 0.2136
+  gamma50     actc   agnóstica                                  _n05  s 0       RMSE 0.0241  rep 0.2397
+  gamma50     actc   filtro 8 canales, β verdadero              _n01  s 2       RMSE 0.0366  rep 0.1255
+  gamma50     actc   historia con comando actual                _n05  s 0       RMSE 0.0429  rep 0.1120
+  gamma50     actc   historia sin comando actual                _n05  s 0       RMSE 0.0999  rep 0.1027
+  gamma50     actc   estado de filtro                           _n05  s 0       RMSE 0.0583  rep 0.0039
+  gamma50     actc   filtro 8 canales                           _n05  s 0       RMSE 0.0425  rep 0.0875
+  gamma50     actc   black-box                                  _n05  s 0       RMSE 0.0231  rep 0.2114
+  gamma50     actc   agnóstica, β verdadero                     _n05  s 0       RMSE 0.0319  rep 0.3516
+  gamma50     actc   black-box con historia                     _n05  s 0       RMSE 0.0523  rep 0.0765
+  gamma50     actc   historia con comando actual, β verdadero   _n05  s 0       RMSE 0.0416  rep 0.1521
+  gamma50     actc   historia sin comando actual, β verdadero   _n05  s 0       RMSE 0.0972  rep 0.1836
+  gamma50     actc   white-box                                  _n05  s 1       RMSE 0.0412  rep 0.2142
+  gamma50     actc   agnóstica                                  _n05  s 1       RMSE 0.0242  rep 0.2385
+  gamma50     actc   filtro 8 canales, β verdadero              _n05  s 0       RMSE 0.0520  rep 0.1319
+  gamma50     actc   historia con comando actual                _n05  s 1       RMSE 0.0505  rep 0.1148
+  gamma50     actc   historia sin comando actual                _n05  s 1       RMSE 0.1078  rep 0.1278
+  gamma50     actc   estado de filtro                           _n05  s 1       RMSE 0.0594  rep 0.0043
+  gamma50     actc   black-box                                  _n05  s 1       RMSE 0.0235  rep 0.2198
+  gamma50     actc   filtro 8 canales                           _n05  s 1       RMSE 0.0457  rep 0.0865
+  gamma50     actc   agnóstica, β verdadero                     _n05  s 1       RMSE 0.0229  rep 0.3444
+  gamma50     actc   black-box con historia                     _n05  s 1       RMSE 0.0385  rep 0.1022
+  gamma50     actc   historia con comando actual, β verdadero   _n05  s 1       RMSE 0.0424  rep 0.2087
+  gamma50     actc   historia sin comando actual, β verdadero   _n05  s 1       RMSE 0.0630  rep 0.1902
+  gamma50     actc   white-box                                  _n05  s 2       RMSE 0.0413  rep 0.2137
+  gamma50     actc   agnóstica                                  _n05  s 2       RMSE 0.0247  rep 0.2357
+  gamma50     actc   filtro 8 canales, β verdadero              _n05  s 1       RMSE 0.0865  rep 0.1047
+  gamma50     actc   historia con comando actual                _n05  s 2       RMSE 0.0432  rep 0.0877
+  gamma50     actc   historia sin comando actual                _n05  s 2       RMSE 0.0905  rep 0.0943
+  gamma50     actc   estado de filtro                           _n05  s 2       RMSE 0.0594  rep 0.0038
+  gamma50     actc   filtro 8 canales                           _n05  s 2       RMSE 0.0464  rep 0.0719
+  gamma50     actc   black-box                                  _n05  s 2       RMSE 0.0233  rep 0.2134
+  theta2s     refrac black-box                                  _n05  s 2       RMSE 0.0388  rep 0.0055
+  gamma50     actc   agnóstica, β verdadero                     _n05  s 2       RMSE 0.0323  rep 0.3501
+  gamma50     actc   black-box con historia                     _n05  s 2       RMSE 0.0394  rep 0.1067
+  gamma50     actc   historia sin comando actual, β verdadero   _n05  s 2       RMSE 0.0445  rep 0.2296
+  gamma50     actc   historia con comando actual, β verdadero   _n05  s 2       RMSE 0.0401  rep 0.1214
+  gamma50     refrac simulador                                        s-1       RMSE 0.0263
+  gamma50     actc   filtro 8 canales, β verdadero              _n05  s 2       RMSE 0.0327  rep 0.1129
+  gamma50     refrac white-box                                  _n01  s 0       RMSE 0.0272  rep 0.0606
+  gamma50     refrac forma exacta                               _n01  s 0       RMSE 0.0262  rep 0.0023
+  gamma50     refrac agnóstica                                  _n01  s 0       RMSE 0.0267  rep 0.0025
+  gamma50     refrac white-box                                  _n01  s 1       RMSE 0.0272  rep 0.0606
+  gamma50     refrac black-box                                  _n01  s 0       RMSE 0.0264  rep 0.0078
+  gamma50     refrac forma exacta                               _n01  s 1       RMSE 0.0262  rep 0.0017
+  gamma50     refrac agnóstica                                  _n01  s 1       RMSE 0.0267  rep 0.0036
+  gamma50     refrac white-box                                  _n01  s 2       RMSE 0.0272  rep 0.0606
+  gamma50     refrac forma exacta                               _n01  s 2       RMSE 0.0262  rep 0.0026
+  gamma50     refrac black-box                                  _n01  s 1       RMSE 0.0261  rep 0.0082
+  gamma50     refrac agnóstica                                  _n01  s 2       RMSE 0.0267  rep 0.0031
+  gamma50     refrac white-box                                  _n05  s 0       RMSE 0.0271  rep 0.0620
+  gamma50     refrac agnóstica                                  _n05  s 0       RMSE 0.0265  rep 0.0065
+  gamma50     refrac forma exacta                               _n05  s 0       RMSE 0.0261  rep 0.0060
+  gamma50     refrac black-box                                  _n01  s 2       RMSE 0.0266  rep 0.0259
+  gamma50     refrac white-box                                  _n05  s 1       RMSE 0.0272  rep 0.0624
+  gamma50     refrac forma exacta                               _n05  s 1       RMSE 0.0261  rep 0.0050
+  gamma50     refrac agnóstica                                  _n05  s 1       RMSE 0.0266  rep 0.0040
+  gamma50     refrac black-box                                  _n05  s 0       RMSE 0.0263  rep 0.0209
+  gamma50     refrac white-box                                  _n05  s 2       RMSE 0.0272  rep 0.0619
+  gamma50     refrac agnóstica                                  _n05  s 2       RMSE 0.0266  rep 0.0046
+  gamma50     refrac black-box                                  _n05  s 1       RMSE 0.0263  rep 0.0099
+  gamma50     refrac forma exacta                               _n05  s 2       RMSE 0.0262  rep 0.0071
+  gamma50     refrac black-box                                  _n05  s 2       RMSE 0.0261  rep 0.0129
+-> C:\Users\User\Desktop\wilson-cowan-id\results\pruebas_repeticion_100hz.json

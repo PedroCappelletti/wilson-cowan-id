@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-# Ejemplos del dataset de amplitud grande: comando P y respuesta E del
-# simulador con actuador con recorte, una familia por fila, amplitudes 2 y 10.
+# Ejemplos del dataset de amplitud grande: comando P y respuesta E de la
+# planta con actuador con recorte, una familia por fila, amplitudes 2 y 10.
+# Cada fila tiene su ventana, elegida para que se vea la estructura de la
+# familia: dos ciclos theta enteros, varios eventos de Poisson, el chirp
+# completo. El eje de tiempo va en todos los paneles.
 #
 #   python scripts/figura_dataset_amplitud.py
 
@@ -23,24 +26,28 @@ plt.rcParams.update({"font.family": "Arial", "font.size": 11, "axes.spines.top":
 d = np.load(RAIZ / "data/processed/uncertain/actc_amp_2s.npz", allow_pickle=True)
 lab = list(d["labels"]); t = d["t"]
 fams = ["square", "aprbs", "thetagamma", "poisson", "chirp", "ruido"]
-a, b = np.searchsorted(t, 400), np.searchsorted(t, 520)
-fig, axs = plt.subplots(len(fams), 2, figsize=(11, 12), sharex=True)
+VENTANA = {"square": (400, 500), "aprbs": (400, 500), "thetagamma": (400, 600),
+           "poisson": (400, 550), "chirp": (0, 2000), "ruido": (400, 500)}
+fig, axs = plt.subplots(len(fams), 2, figsize=(11, 14))
 for i, fam in enumerate(fams):
+    a, b = (np.searchsorted(t, v) for v in VENTANA[fam])
     for j, A in enumerate((2, 10)):
         k = lab.index(f"{fam}_A{A}")
         ax = axs[i, j]
-        ax.plot(t[a:b], d["P"][k, a:b], color="#2a78d6", lw=1.1, label="comando P")
+        ancho = 0.4 if fam == "chirp" else 1.1
+        ax.plot(t[a:b], d["P"][k, a:b], color="#2a78d6", lw=ancho, label="comando P")
         ax.set_ylim(-14, 14)
         ax2 = ax.twinx()
-        ax2.plot(t[a:b], d["E"][k, a:b], color="#1f1f1e", lw=1.3, label="E")
+        ax2.plot(t[a:b], d["E"][k, a:b], color="#1f1f1e", lw=0.4 if fam == "chirp" else 1.3, label="E")
         ax2.set_ylim(-0.1, 1.0)
         ax2.spines["top"].set_visible(False)
         ax.set_title(f"{fam}, A = {A}", loc="left", fontsize=11)
         ax.yaxis.set_major_formatter(coma); ax2.yaxis.set_major_formatter(coma)
         if j == 0: ax.set_ylabel("P")
         if j == 1: ax2.set_ylabel("E")
-for ax in axs[-1]:
-    ax.set_xlabel("tiempo (ms)"); ax.xaxis.set_major_formatter(coma)
+        ax.set_xlim(*VENTANA[fam])
+        ax.set_xlabel("tiempo (ms)", fontsize=10)
+        ax.xaxis.set_major_formatter(coma)
 fig.tight_layout()
 fig.savefig(OUT / "ejemplos_amplitud.png", dpi=90)
 fig.savefig(OUT / "ejemplos_amplitud.pdf")

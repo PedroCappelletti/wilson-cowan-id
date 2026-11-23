@@ -70,8 +70,8 @@ if __name__ == "__main__":
         t = tr["sim"]["t"]
         m = t >= 30
         a.plot(t[m], tr["sim"]["rE"][m], ":", c="k", lw=1.3, label="referencia")
-        a.plot(t[m], tr["sim"]["E"][m], c="#1f77b4", lw=1.2, label="lazo cerrado, simulador")
-        a.plot(t[m], tr["lag"]["E"][m], c="#d95f02", lw=1.2, label="lazo cerrado, estado de filtro")
+        a.plot(t[m], tr["sim"]["E"][m], c="#1f77b4", lw=1.2, label="lazo cerrado con la planta")
+        a.plot(t[m], tr["lag"]["E"][m], c="#d95f02", lw=1.2, label="lazo cerrado con el backbone expandido")
         a.set_ylabel("E")
         a.set_title(f"gamma continua de {fg} Hz", fontsize=11, loc="left")
     ax[-1].set_xlabel("t (ms)")
