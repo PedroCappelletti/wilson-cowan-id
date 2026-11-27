@@ -66,14 +66,14 @@ Las tablas dan ese RMSE combinado, en las mismas unidades de actividad que E e I
 | con red | perturbada | $\hat\beta$ del mejor modelo con red por validación; la red se usa o no según la columna «uso» |
 | backbone expandido | perturbada | $\hat\beta$ del backbone expandido |
 
-Las perturbaciones son las del resto del trabajo: refractariedad con $r = 0{,}1$, y un actuador con filtro de primer orden ($\tau = 1$ ms) seguido de saturación $3\tanh(u/3)$. Los modelos son los de la tanda `e16` (datos de 2 s a 2 kHz), con $\sigma$ = 0,01 y 0,05 y tres semillas cada uno. Esos σ son el equivalente a 20 kHz; por muestra, el ruido de los datos a 2 kHz es de 0,0032 y 0,016. Por la regla de validación, la mejor corrección con red es:
+Las perturbaciones son las del resto del trabajo: refractariedad con $r = 0{,}1$, y un actuador con filtro de primer orden ($\tau = 1$ ms) seguido de un recorte en ±3. Los modelos son los de la tanda `e25`, con datos de 2 s a 2 kHz y comandos bipolares de amplitud 1 a 12 (descripción en [[Arquitectura de los modelos gray-box]]), con $\sigma$ = 0,01 y 0,05 y tres semillas cada uno. Esos σ son el equivalente a 20 kHz; por muestra, el ruido de los datos a 2 kHz es de 0,0032 y 0,016. Las correcciones con red son las mismas que en `controlador_planta_modelo.pdf`:
 
-- en refractariedad, la agnóstica con warm start, ventana de 5 ms con $\sigma$ = 0,01 y de 20 ms con $\sigma$ = 0,05;
+- en refractariedad, la agnóstica con warm start y ventana de 5 ms;
 - en el actuador, la historia con comando actual, con warm start.
 
-En el backbone expandido, la refractariedad usa el factor $(1 - r x)$ y el actuador una copia del filtro, los dos con warm start.
+En el backbone expandido, la refractariedad usa el factor $(1 - r x)$ y el actuador una copia del filtro y del recorte, los dos con warm start.
 
-Son 90 simulaciones: 6 sin modelo identificado y 84 con modelo.
+Son 90 simulaciones: 6 sin modelo identificado y 84 con modelo. Ninguna diverge.
 
 ## 4. Resultados
 
@@ -85,47 +85,47 @@ Ideal: RMSE de 0,0382 en la theta-gamma (E 0,0426, I 0,0331) y de 0,0324 en la g
 |----------------|--------------------|------|----------|--------------------|--------------------|
 | ideal | | | 0 % | 0,0382 | 0,0324 |
 | β verdaderos | | | 0 % | 0,0386 | 0,0339 |
-| white-box | solo $\hat\beta$ | 0,01 | 10,5 % | 0,0388 ± 0,0000 | 0,0339 ± 0,0000 |
-| | | 0,05 | 5,4 % | 0,0386 ± 0,0000 | 0,0332 ± 0,0001 |
-| agnóstica (red) | solo $\hat\beta$ | 0,01 | 3,5 % | 0,0387 ± 0,0000 | 0,0342 ± 0,0000 |
-| | | 0,05 | 4,9 % | 0,0386 ± 0,0000 | 0,0339 ± 0,0001 |
-| agnóstica (red) | $\hat\beta$ y cancela la red | 0,01 | 3,5 % | 0,0395 ± 0,0000 | 0,0340 ± 0,0001 |
-| | | 0,05 | 4,9 % | 0,0393 ± 0,0001 | 0,0336 ± 0,0004 |
-| backbone expandido | $\hat\beta$ e invierte la forma | 0,01 | 2,8 % | 0,0384 ± 0,0000 | **0,0326 ± 0,0000** |
-| | | 0,05 | 7,6 % | 0,0384 ± 0,0001 | **0,0325 ± 0,0002** |
+| white-box | solo $\hat\beta$ | 0,01 | 8,8 % | 0,0386 ± 0,0000 | 0,0324 ± 0,0000 |
+| | | 0,05 | 8,9 % | 0,0386 ± 0,0000 | 0,0323 ± 0,0000 |
+| agnóstica (red) | solo $\hat\beta$ | 0,01 | 1,7 % | 0,0386 ± 0,0000 | 0,0340 ± 0,0000 |
+| | | 0,05 | 2,0 % | 0,0386 ± 0,0000 | 0,0339 ± 0,0000 |
+| agnóstica (red) | $\hat\beta$ y cancela la red | 0,01 | 1,7 % | 0,0392 ± 0,0000 | 0,0336 ± 0,0000 |
+| | | 0,05 | 2,0 % | 0,0392 ± 0,0000 | 0,0338 ± 0,0001 |
+| backbone expandido | $\hat\beta$ e invierte la forma | 0,01 | 0,2 % | 0,0384 ± 0,0000 | 0,0324 ± 0,0000 |
+| | | 0,05 | 0,5 % | 0,0384 ± 0,0000 | 0,0324 ± 0,0000 |
 
 **Planta con actuador**
 
 | modelo | uso | σ | error de $\hat\beta$ | RMSE theta-gamma | RMSE gamma continua |
 |----------------|--------------------|------|----------|--------------------|--------------------|
 | ideal | | | 0 % | 0,0382 | 0,0324 |
-| β verdaderos | | | 0 % | **0,0599** | **0,0692** |
-| white-box | solo $\hat\beta$ | 0,01 | 25,2 % | 0,0643 ± 0,0001 | 0,0901 ± 0,0001 |
-| | | 0,05 | 20,8 % | 0,0651 ± 0,0035 | 0,0878 ± 0,0012 |
-| historia con comando actual (red) | solo $\hat\beta$ | 0,01 | 24,3 % | 0,0680 ± 0,0045 | 0,0828 ± 0,0068 |
-| | | 0,05 | 29,4 % | 0,0713 ± 0,0003 | 0,0771 ± 0,0088 |
-| backbone expandido | solo $\hat\beta$ | 0,01 | 8,7 % | 0,0717 ± 0,0002 | 0,0765 ± 0,0023 |
-| | | 0,05 | 14,5 % | 0,0707 ± 0,0002 | 0,0779 ± 0,0028 |
+| β verdaderos | | | 0 % | 0,0570 | 0,0676 |
+| white-box | solo $\hat\beta$ | 0,01 | 121,9 % | 0,0738 ± 0,0001 | 0,0961 ± 0,0000 |
+| | | 0,05 | 121,2 % | 0,0726 ± 0,0001 | 0,0959 ± 0,0001 |
+| historia con comando actual (red) | solo $\hat\beta$ | 0,01 | 117,9 % | 0,0798 ± 0,0046 | 0,0784 ± 0,0165 |
+| | | 0,05 | 114,4 % | 0,0828 ± 0,0051 | 0,0730 ± 0,0059 |
+| backbone expandido | solo $\hat\beta$ | 0,01 | 0,1 % | 0,0583 ± 0,0000 | 0,0665 ± 0,0012 |
+| | | 0,05 | 0,7 % | 0,0584 ± 0,0020 | 0,0619 ± 0,0065 |
 
-![](../results/figures/control/paper_modelos_actuador.png){width=80%}
+![](../results/figures/control/paper_modelos_amplitud_actuador.png){width=85%}
 
-*Figura 1.* Actividad excitatoria en lazo cerrado (azul) y referencia $r_E$ (gris, discontinua) durante una ráfaga gamma de la theta-gamma de 2 s. Controlador de Martínez et al. (2022) sin cota ni anti-windup. Fila 1: planta sin perturbación con parámetros verdaderos. Filas 2 a 4: planta con actuador (filtro de 1 ms y saturación $3\tanh(u/3)$) con parámetros verdaderos, con los $\hat\beta$ de la historia con comando actual y con los $\hat\beta$ del backbone expandido, los dos con warm start. Modelos con $\sigma$ = 0,01, semilla 0.
+*Figura 1.* Actividad excitatoria en lazo cerrado (azul) y referencia $r_E$ (negro, discontinua) en la theta-gamma de 2 s. Izquierda, de 0 a 350 ms; derecha, de 1150 a 1500 ms. Controlador de Martínez et al. (2022) sin cota ni anti-windup. Fila 1: planta sin perturbación con parámetros verdaderos. Filas 2 a 4: planta con actuador (filtro de 1 ms y recorte en ±3) con parámetros verdaderos, con los $\hat\beta$ de la historia con comando actual y con los $\hat\beta$ del backbone expandido, los dos con warm start. Modelos con $\sigma$ = 0,01, semilla 0.
 
-![](../results/figures/control/paper_modelos_refractariedad.png){width=80%}
+![](../results/figures/control/paper_modelos_amplitud_refractariedad.png){width=85%}
 
-*Figura 2.* Igual que la figura 1, para la planta con refractariedad ($r = 0{,}1$) y tres ráfagas. Filas: parámetros verdaderos; $\hat\beta$ de la agnóstica cancelando la red; $\hat\beta$ del backbone expandido con la inversión del factor $(1 - r x)$ y de la saturación.
+*Figura 2.* Igual que la figura 1, para la planta con refractariedad ($r = 0{,}1$). Filas: parámetros verdaderos; $\hat\beta$ de la agnóstica cancelando la red; $\hat\beta$ del backbone expandido con la inversión del factor $(1 - r x)$ y de la saturación.
 
 ## 5. Observaciones
 
-**Refractariedad.** La perturbación casi no degrada al controlador: con parámetros verdaderos el RMSE sube de 0,0382 a 0,0386 en la theta-gamma y de 0,0324 a 0,0339 en la gamma continua. Los modelos quedan cerca de ese caso: entre 0,0384 y 0,0395 en la theta-gamma (−0,5 a +2,3 %) y entre 0,0325 y 0,0342 en la gamma continua (−4,1 a +0,9 %). El backbone expandido con su inversión es el único caso que recupera el nivel ideal en la gamma continua (0,0326 contra 0,0324). Cancelar la red mejora la gamma continua respecto de usar solo $\hat\beta$ y empeora la theta-gamma en un 2 %: en la theta-gamma, el error de E sube de 0,0434 a 0,0443.
+**Refractariedad.** La perturbación casi no degrada al controlador: con parámetros verdaderos el RMSE sube de 0,0382 a 0,0386 en la theta-gamma y de 0,0324 a 0,0339 en la gamma continua. Los modelos quedan cerca de ese caso: entre 0,0384 y 0,0392 en la theta-gamma (−0,5 a +1,6 %) y entre 0,0323 y 0,0340 en la gamma continua (−4,7 a +0,3 %). En la gamma continua, el backbone expandido con su inversión y el white-box quedan en el nivel ideal (0,0324). Cancelar la red mejora la gamma continua respecto de usar solo $\hat\beta$ y empeora la theta-gamma en un 1,6 %.
 
-**Actuador.** Es la perturbación que importa para el control. Con parámetros verdaderos, el RMSE sube un 57 % en la theta-gamma (0,0382 a 0,0599) y se duplica en la gamma continua (0,0324 a 0,0692). La figura 1 muestra el origen: el filtro de 1 ms atrasa el comando y la oscilación sale deformada, con picos secundarios. Ningún modelo identificado, usado así, baja del controlador con parámetros verdaderos:
+**Actuador.** Es la perturbación que importa para el control. Con parámetros verdaderos, el RMSE sube un 49 % en la theta-gamma (0,0382 a 0,0570) y se duplica en la gamma continua (0,0324 a 0,0676). La figura 1 muestra el origen: el filtro de 1 ms atrasa el comando y la oscilación sale deformada, con picos secundarios.
 
-- En la gamma continua, el backbone expandido queda a +11 a +13 % del controlador con β verdaderos, la historia a +11 a +20 % y el white-box a +27 a +30 %. El orden no sigue del todo al error de $\hat\beta$: el backbone expandido tiene el menor (8,7 a 14,5 %), pero la historia controla mejor que el white-box con más error de parámetros (24,3 a 29,4 % contra 20,8 a 25,2 %).
-- En la theta-gamma el orden se invierte: el white-box es el mejor (+7 a +9 %) la historia queda a +14 a +19 % y el backbone expandido a +18 a +20 %. Una explicación posible es que los $\hat\beta$ del white-box absorben parte del actuador, y ese sesgo, que empeora la identificación, compensa algo del atraso en las transiciones entre ráfaga y reposo. No está verificada.
+- El backbone expandido identifica $\hat\beta$ con 0,1 a 0,7 % de error y controla como el controlador con β verdaderos: +2 % en la theta-gamma y de −8 a −2 % en la gamma continua, con desvío entre semillas de hasta 0,0065 en σ = 0,05.
+- El white-box y la historia compensan el recorte deformando $\hat\beta$ (114 a 122 % de error), y usados así empeoran el control: +27 a +29 % (white-box) y +40 a +45 % (historia) en la theta-gamma, +42 % y +8 a +16 % en la gamma continua.
 
-La dispersión entre semillas de la historia (hasta 0,0088) es del mismo orden que las diferencias entre modelos.
+La dispersión entre semillas de la historia (hasta 0,0165) es del mismo orden que las diferencias entre modelos.
 
-**Comando.** Sin cota, el controlador pide en todos los casos comandos muy fuera del rango de los estímulos de entrenamiento (de 0 a 2). Con la planta ideal, $P$ va de −13 a +12 en la theta-gamma; en el actuador llega a −17 y +18 según el modelo. En la planta ideal y en refractariedad, $P$ solo es negativo en la theta-gamma, al apagar cada ráfaga. Esto también ocurre en el paper: su saturación acota $\tilde u_x$ a $[-k_x, 1 - k_x]$ para que exista la sigmoidea inversa, pero no acota $P$ ni $Q$. Su figura 8d muestra $P$ entre −15 y +8 en la misma tarea.
+**Comando.** Sin cota, el controlador pide comandos fuera de ±3, el nivel del recorte. Con la planta ideal, $P$ va de −12,9 a +12,4 en la theta-gamma; en el actuador, con β verdaderos o con los $\hat\beta$ del backbone expandido, de −14 a +13. Con los $\hat\beta$ deformados el comando crece: hasta +21 con el white-box y +38 con la historia. Los datos de entrenamiento cubren $|P| \le 12$, así que solo los dos últimos casos salen de ese rango. Esto también ocurre en el paper: su saturación acota $\tilde u_x$ a $[-k_x, 1 - k_x]$ para que exista la sigmoidea inversa, pero no acota $P$ ni $Q$. Su figura 8d muestra $P$ entre −15 y +8 en la misma tarea.
 
 **Limitaciones de esta prueba.** El controlador del paper solo aprovecha de un modelo con red lo que entra en su despeje cerrado: los $\hat\beta$ y, en refractariedad, una red que depende solo del estado. Las variantes que invierten la red o el backbone expandido con actuador, y las versiones con cota y anti-windup, están en [[Controladores - resultados]]. La medición es sin ruido y el controlador recibe $E$ e $I$ directamente; en el paper los estima un filtro de Kalman extendido a partir del LFP con ruido. Fuera de eso, la estructura es la misma: ganancias, saturación de $\tilde u_x$, inversión de la sigmoidea y cancelación del acoplamiento.

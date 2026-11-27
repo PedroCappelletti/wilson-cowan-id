@@ -6,11 +6,13 @@
 # referencia en la theta-gamma para cada planta (σ = 0,01, semilla 0).
 #
 #   python scripts/resumen_control_planta_modelo.py
+#   python scripts/resumen_control_planta_modelo.py --amplitud   (e25, recorte en ±3)
 
 from __future__ import annotations
 
 import json
 import math
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -18,6 +20,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 
 RAIZ = Path(__file__).resolve().parents[1]
 OUT = RAIZ / "results" / "figures" / "control"
@@ -98,7 +101,107 @@ def figura(trazas, nombre, casos, ventana):
     plt.close(fig)
 
 
+# --amplitud: modelos e25 (amplitud grande) y actuador con recorte en ±3, desde
+# control_amplitud.json. Ese JSON guarda el percentil 5 y 95 del comando en lugar
+# del mínimo y el máximo, y la distancia al lazo con el simulador.
+NOMBRE_AMP = {"refrac": [("white-box", "white-box"), ("agnóstica", "agnóstica"),
+                         ("forma exacta", "backbone expandido")],
+              "actc": [("white-box", "white-box"), ("historia con comando actual", "historia con comando actual"),
+                       ("estado de filtro", "backbone expandido")]}
+TRAMOS = ((0, 350), (1150, 1500))
+
+
+def tabla_amplitud(filas):
+    g = defaultdict(list)
+    for r in filas:
+        g[(r["referencia"], r["perturbacion"], r["planta"], r["ruido"])].append(r)
+
+    def ms(rs, k):
+        v = np.array([r[k] for r in rs])
+        return f"{coma(v.mean())} ± {coma(v.std())}"
+
+    md = []
+    for pert, npert in (("refrac", "Refractariedad"), ("actc", "Actuador con recorte")):
+        for ref, nref in (("theta2s", "theta-gamma"), ("gamma50", "gamma continua")):
+            md += [f"**{npert}, {nref}**", "",
+                   "| conectado al controlador | σ | RMSE de seguimiento | distancia al lazo con el simulador |",
+                   "|---|---|---|---|",
+                   f"| simulador | | {coma(g[(ref, pert, 'simulador', '')][0]['rmse'])} | |"]
+            for clave, nom in NOMBRE_AMP[pert]:
+                for i, (suf, s) in enumerate((("_n01", "0,01"), ("_n05", "0,05"))):
+                    a = g[(ref, pert, clave, suf)]
+                    md.append(f"| {nom if i == 0 else ''} | {s} | {ms(a, 'rmse')} | {ms(a, 'dist_x')} |")
+            md.append("")
+    md += ["**Rango del comando** (percentiles 5 y 95; mínimo del 5 y máximo del 95 sobre los dos σ y las "
+           "tres semillas)", "",
+           "| perturbación | conectado al controlador | $P$, theta-gamma | $Q$, theta-gamma "
+           "| $P$, gamma continua | $Q$, gamma continua |", "|---|---|---|---|---|---|"]
+
+    def rango(rs, k):
+        lo = min(r[k][0] for r in rs)
+        hi = max(r[k][1] for r in rs)
+        return f"{lo:.1f} a {hi:.1f}".replace(".", ",").replace("-", "−")
+
+    for pert, npert in (("refrac", "refractariedad"), ("actc", "actuador con recorte")):
+        for i, (clave, nom) in enumerate([("simulador", "simulador")] + NOMBRE_AMP[pert]):
+            a = [r for (ref, p, q, _), rs in g.items() if ref == "theta2s" and p == pert and q == clave for r in rs]
+            b = [r for (ref, p, q, _), rs in g.items() if ref == "gamma50" and p == pert and q == clave for r in rs]
+            md.append(f"| {npert if i == 0 else ''} | {nom} | {rango(a, 'P_p5_p95')} | {rango(a, 'Q_p5_p95')} "
+                      f"| {rango(b, 'P_p5_p95')} | {rango(b, 'Q_p5_p95')} |")
+    return "\n".join(md)
+
+
+def figura_dos_tramos(trazas, nombre, casos, tramos=TRAMOS):
+    """E de cada lazo en línea llena y r_E punteada, un lazo por fila; el principio
+    de la theta-gamma a la izquierda y un tramo del medio a la derecha."""
+    plt.rcParams.update({"font.family": "Arial", "font.size": 9.5, "pdf.fonttype": 42,
+                         "axes.spines.top": False, "axes.spines.right": False})
+    fig, axs = plt.subplots(len(casos), 2, figsize=(17 / 2.54, 2.6 * len(casos) / 2.54 + 1),
+                            sharey=True, squeeze=False, layout="constrained")
+    for fila, (clave, rot) in zip(axs, casos):
+        t = trazas[f"{clave}|t"]
+        for ax, (a, b) in zip(fila, tramos):
+            m = (t >= a) & (t <= b)
+            ax.plot(t[m], trazas[f"{clave}|E"][m], color="#104281", lw=1.1)
+            ax.plot(t[m], trazas[f"{clave}|rE"][m], color="#1f1f1e", lw=0.9, ls=(0, (3, 2)))
+            ax.set_xlim(a, b)
+            ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}".replace(".", ",").replace("-", "−")))
+        fila[0].set_ylabel("E")
+        fila[0].set_title(rot.replace("β̂", r"$\hat{\beta}$"), loc="left", fontsize=9.5)
+        fila[0].set_ylim(-0.1, 0.9)
+    for ax in axs[-1]:
+        ax.set_xlabel("tiempo [ms]")
+    h = [plt.Line2D([], [], color="#104281"), plt.Line2D([], [], color="#1f1f1e", ls=(0, (3, 2)))]
+    fig.legend(h, ["E en lazo cerrado", "referencia $r_E$"], loc="outside lower center",
+               ncol=2, frameon=False)
+    OUT.mkdir(parents=True, exist_ok=True)
+    for ext in ("pdf", "png"):
+        fig.savefig(OUT / f"{nombre}.{ext}", dpi=200, bbox_inches="tight")
+    plt.close(fig)
+
+
+def main_amplitud():
+    filas = json.loads((RAIZ / "results" / "control_amplitud.json").read_text(encoding="utf-8"))
+    (RAIZ / "results" / "control_planta_modelo_amplitud.md").write_text(tabla_amplitud(filas) + "\n",
+                                                                         encoding="utf-8")
+    tr = dict(np.load(RAIZ / "results" / "control_planta_modelo_amplitud_trazas.npz"))
+    figura_dos_tramos(tr, "planta_modelo_amplitud_simulador", [
+        ("theta2s|actc|simulador", "Simulador con actuador (filtro de 1 ms y recorte en ±3)"),
+        ("theta2s|refrac|simulador", "Simulador con refractariedad")])
+    figura_dos_tramos(tr, "planta_modelo_amplitud_actuador", [
+        ("theta2s|actc|white-box", "Modelo white-box"),
+        ("theta2s|actc|con red", "Modelo historia con comando actual"),
+        ("theta2s|actc|forma exacta", "Modelo backbone expandido")])
+    figura_dos_tramos(tr, "planta_modelo_amplitud_refractariedad", [
+        ("theta2s|refrac|white-box", "Modelo white-box"),
+        ("theta2s|refrac|con red", "Modelo agnóstica"),
+        ("theta2s|refrac|forma exacta", "Modelo backbone expandido")])
+    print("escrito: results/control_planta_modelo_amplitud.md y figuras planta_modelo_amplitud_*")
+
+
 def main():
+    if "--amplitud" in sys.argv:
+        return main_amplitud()
     filas = json.loads((RAIZ / "results" / "control_planta_modelo.json").read_text(encoding="utf-8"))
     (RAIZ / "results" / "control_planta_modelo.md").write_text(tabla(filas) + "\n", encoding="utf-8")
     tr = dict(np.load(RAIZ / "results" / "control_planta_modelo_trazas.npz"))

@@ -24,6 +24,13 @@
 # sin el primer quinto de la simulación.
 #
 #   python scripts/control_paper_modelos.py [procesos]
+#   python scripts/control_paper_modelos.py [procesos] --amplitud
+#
+# --amplitud repite lo mismo con los modelos e25 (amplitud grande) y el actuador
+# con recorte en ±3 (actc) en lugar de 3·tanh(u/3). Con amplitud grande no se
+# elige la red por validación: van la agnóstica y la historia con comando
+# actual, las mismas que en control_amplitud.py, para que los dos documentos
+# hablen de los mismos modelos. Escribe *_amplitud.json y *_amplitud_trazas.npz.
 
 from __future__ import annotations
 
@@ -52,23 +59,31 @@ CON_RED = {("refrac", "_n01"): "B100_wrm", ("refrac", "_n05"): "B400_wrm",
            ("act", "_n01"): "H100_wrm", ("act", "_n05"): "H100_wrm"}
 EXACTA = {"refrac": "e1S2_wrm", "act": "lag_wrm"}
 WB = {"refrac": "e1wb", "act": "e2wb"}
+AMPLITUD = "--amplitud" in sys.argv
+if AMPLITUD:
+    OUT = RAIZ / "results" / "control_paper_modelos_amplitud.json"
+    TRAZAS = RAIZ / "results" / "control_paper_modelos_amplitud_trazas.npz"
 
 
 def tareas():
     out = []
+    tanda, act = ("e25", "actc") if AMPLITUD else ("e16", "act")
+    con_red = ({(p, s): ("B100_wrm" if p == "refrac" else "H100_wrm") for p in ("refrac", "act")
+                for s in NIVELES} if AMPLITUD else CON_RED)
     for ref in REFS:
         out.append((ref, "ideal", "ideal", None, "β verdaderos", "", -1))
         for planta in ("refrac", "act"):
-            out.append((ref, planta, "β verdaderos", None, "β verdaderos", "", -1))
+            pn = act if planta == "act" else planta
+            out.append((ref, pn, "β verdaderos", None, "β verdaderos", "", -1))
             for suf in NIVELES:
                 for k in SEMILLAS:
-                    out.append((ref, planta, "white-box", f"e16_{WB[planta]}{suf}_s{k}", "solo β̂", suf, k))
-                    red = f"e16_{CON_RED[(planta, suf)]}{suf}_s{k}"
-                    out.append((ref, planta, "con red", red, "solo β̂", suf, k))
+                    out.append((ref, pn, "white-box", f"{tanda}_{WB[planta]}{suf}_s{k}", "solo β̂", suf, k))
+                    red = f"{tanda}_{con_red[(planta, suf)]}{suf}_s{k}"
+                    out.append((ref, pn, "con red", red, "solo β̂", suf, k))
                     if planta == "refrac":
-                        out.append((ref, planta, "con red", red, "β̂ + g", suf, k))
-                    ex = f"e16_{EXACTA[planta]}{suf}_s{k}"
-                    out.append((ref, planta, "forma exacta", ex,
+                        out.append((ref, pn, "con red", red, "β̂ + g", suf, k))
+                    ex = f"{tanda}_{EXACTA[planta]}{suf}_s{k}"
+                    out.append((ref, pn, "forma exacta", ex,
                                 "β̂ + forma" if planta == "refrac" else "solo β̂", suf, k))
     return out
 
@@ -88,7 +103,8 @@ def una(t):
     p = WilsonCowanParams()
     true = {kk: getattr(p, kk) for kk in ALL_P}
     pert = {"ideal": NoPerturbation(), "refrac": Refractoriness(r=0.10),
-            "act": Actuator(sat=3.0, tau_act=1.0)}[planta_n]
+            "act": Actuator(sat=3.0, tau_act=1.0),
+            "actc": Actuator(sat=3.0, tau_act=1.0, recorte=True)}[planta_n]
     planta = make_perturbed_plant(p, pert)
     SAT = fixed_de(true)
     if tag is None:
@@ -123,7 +139,8 @@ def una(t):
 
 
 def main():
-    procesos = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    procesos = int(args[0]) if args else 1
     ts = tareas()
     print(f"{len(ts)} simulaciones, {procesos} procesos", flush=True)
     filas, trazas = [], {}

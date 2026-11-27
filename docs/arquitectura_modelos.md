@@ -14,12 +14,13 @@ pdf: "[[arquitectura-modelos-graybox.pdf]]"
 Los modelos se ajustan sobre trayectorias simuladas. El estado observado es $x = (I, E)^\top$, las actividades de las poblaciones inhibitoria y excitatoria. La entrada es $u = (P, Q)^\top$, el comando de luz sobre la población excitatoria ($P$) y sobre la inhibitoria ($Q$). La salida del modelo es la trayectoria completa de $x$; el ajuste no se hace contra el LFP.
 
 Cada escenario dura 2 s, muestreado con $\Delta t = 0{,}5$ ms (4001 muestras), con el estímulo encendido entre 100 y 1900 ms. Las plantas son Wilson-Cowan con los parámetros verdaderos más un mecanismo que el modelo no tiene:
+
 - **Refractariedad:** la sigmoidea se multiplica por $(1 - r\,x)$, con $r = 0{,}10$.
-- **Actuador:** a las poblaciones no llega $P$ sino $P_{ef} = 3\tanh(P_{lag}/3)$, con $\dot P_{lag} = (P - P_{lag})/\tau$ y $\tau = 1$ ms, y lo mismo para $Q$.
+- **Actuador:** a las poblaciones no llega $P$ sino $P_{ef} = \min\big(3, \max(-3, P_{lag})\big)$, con $\dot P_{lag} = (P - P_{lag})/\tau$ y $\tau = 1$ ms, y lo mismo para $Q$. El recorte es simétrico porque el comando del controlador del paper es libre de signo.
 
 El comando se mantiene constante entre muestras, tanto en la planta como en el modelo. La planta se integra con RK4 a 0,05 ms, con 10 subpasos por muestra (`scripts/gen_uncertain_dataset.py`, `generar_con`). A $I$ y $E$ se les suma ruido blanco gaussiano independiente, con σ por muestra de 0,0032 y 0,016. En el resto del documento esos niveles se nombran σ = 0,01 y σ = 0,05, su equivalente a 20 kHz: el σ se escala por $\sqrt{2/20}$ para que la densidad espectral del ruido sea la misma que con muestreo de 20 kHz (`scripts/esc_gen_ruido.py`, opción `--ref-fs`).
 
-Los estímulos de entrenamiento cubren $P \in [0;\ 2{,}0]$ y $Q \in [0;\ 1{,}5]$. Fuera de ese rango, el modelo extrapola.
+Los estímulos son de seis familias: tren cuadrado, APRBS, theta-gamma, Poisson, chirp y ruido blanco filtrado a 50, 150 o 400 Hz (`scripts/esc_gen_amplitud.py`). Cada escenario tiene una amplitud $A$ y el comando es bipolar: $P \in [-A, A]$ y $Q \in [-A_Q, A_Q]$, con $A_Q = \tfrac{14}{12}A$ porque el controlador pide más en $Q$ que en $P$. Hay 72 escenarios de entrenamiento, uno por familia y por amplitud entera de 1 a 12. Validación y test tienen 12 escenarios cada uno, con amplitudes fuera de esa grilla (de 1,5 a 11,5). El test suma además los 14 escenarios de test del conjunto anterior, de amplitud chica. Con $A$ hasta 12, el entrenamiento cubre el rango de comandos que pide el controlador ($P$ entre −13 y 13). Los valores identificados que se citan son de esa tanda (`e25`).
 
 ## 2. Backbone
 
@@ -120,7 +121,7 @@ $$
 
 con $r_j \in [0, 2]$ y $\alpha \in [10^{-3}, 10]$ acotados por recorte, sin softplus, para que el gradiente no se anule cerca de cero. $\alpha \to 0$ es el canal lineal. Son 13 parámetros. Con $r$ arrancando cerca de 0, $r_j$ queda trabado en el borde y el modelo colapsa al white-box; por eso se entrena arrancando del β del white-box y con $r_j = 0{,}05$.
 
-En la planta con refractariedad, el modelo con σ = 0,01 identificó $r_E = 0{,}098$ (verdadero 0,10), $r_I = 0$ (verdadero 0,10) y $\alpha$ en la cota inferior, que es lo correcto, porque esa planta no satura.
+En la planta con refractariedad, el modelo con σ = 0,01 identificó $r_E = r_I = 0{,}102$ (verdadero 0,10) y $\alpha$ en la cota inferior, que es lo correcto, porque esa planta no satura. El error medio de $\hat\beta$ es de 0,24 % con σ = 0,01 y de 0,49 % con σ = 0,05 (media de tres semillas).
 
 El despeje sigue siendo cerrado: se divide el objetivo por $(1 - r_j x_j)$ y se invierte la saturación con artanh. Ya está implementado en `IMCController` (argumento `structured`).
 
@@ -132,10 +133,10 @@ $$
 y = (I, E, \hat P, \hat Q)^\top,\qquad
 \dot{\hat P} = \frac{P - \hat P}{\hat\tau},\quad
 \dot{\hat Q} = \frac{Q - \hat Q}{\hat\tau},\quad
-\dot x = f_{WC}\big(x,\ s(\hat P),\ s(\hat Q);\ \beta\big),\quad s(v) = \frac{\tanh(\alpha v)}{\alpha} \tag{7}
+\dot x = f_{WC}\big(x,\ s(\hat P),\ s(\hat Q);\ \beta\big),\quad s(v) = \min\!\big(\tfrac{1}{\alpha}, \max(-\tfrac{1}{\alpha}, v)\big) \tag{7}
 $$
 
-Son 12 parámetros: β, $\hat\tau = \mathrm{softplus}(\tilde\tau) + \tau_{min}$ y $\alpha$. El piso es $\tau_{min} = \max(0{,}15;\ 0{,}6\,\Delta t) = 0{,}3$ ms, porque con $\Delta t = 0{,}5$ ms y $\hat\tau < 0{,}18$ ms el RK4 se vuelve inestable.
+Son 12 parámetros: β, $\hat\tau = \mathrm{softplus}(\tilde\tau) + \tau_{min}$ y $\alpha$, cuya inversa $1/\alpha$ es el nivel del recorte. Con `recorte=False`, $s(v) = \tanh(\alpha v)/\alpha$, la forma de la saturación $3\tanh(u/3)$ de la línea anterior. El piso es $\tau_{min} = \max(0{,}15;\ 0{,}6\,\Delta t) = 0{,}3$ ms, porque con $\Delta t = 0{,}5$ ms y $\hat\tau < 0{,}18$ ms el RK4 se vuelve inestable.
 
 $\hat P$ no se observa. Al inicio de cada ventana de entrenamiento se calcula exacto recorriendo el filtro sobre todo el comando, con la solución del retenedor de orden cero:
 
@@ -145,7 +146,7 @@ $$
 
 Código: `LagGrayBox.filtered_inputs`. Sin esto, arrancar cada ventana con $\hat P = P$ metía un transitorio falso que sesgaba $\hat\tau$ a la mitad.
 
-En la planta con actuador, el modelo con warm start, que es el que se usa en el control, identificó $\hat\tau$ entre 0,96 y 1,04 ms (verdadero 1,0 ms), pero **no la saturación**: $\alpha$ quedó en $10^{-3}$, o sea sin saturación, y β absorbió el efecto (con σ = 0,01 y semilla 0, $w_{EE} = 7{,}46$ contra 6,4 y $\theta_e = 3{,}13$ contra 2,8). Para un controlador, esto quiere decir que el modelo no anticipa la pérdida de efecto de los comandos grandes: en la planta, un comando de 3 llega como 2,28 y uno de 6, como 2,89.
+En la planta con actuador, el modelo con warm start, que es el que se usa en el control, identificó $\hat\tau$ entre 0,993 y 0,999 ms (verdadero 1,0 ms) y el nivel del recorte $1/\hat\alpha$ entre 2,99 y 3,00 (verdadero 3), en las tres semillas y los dos niveles de ruido. El error medio de $\hat\beta$ es de 0,10 % con σ = 0,01 y de 0,72 % con σ = 0,05. El nivel se identifica porque los comandos de entrenamiento pasan de ±3 y el recorte actúa sobre los datos. Con estímulos en $[0, 2]$ el recorte no actuaba, $\alpha$ no recibía gradiente y el nivel quedaba en su valor inicial, 10.
 
 Para el control, $u$ llega a $x$ solo a través de $\hat u$: el grado relativo de $P$ a $E$ es 2, y el despeje cerrado del paper deja de valer. Con ese controlador, de este modelo se usa solo β.
 
@@ -156,10 +157,10 @@ Para el control, $u$ llega a $x$ solo a través de $\hat u$: el grado relativo d
 ## 6. Cómo se obtienen los parámetros
 
 `scripts/esc_run.py` entrena una configuración. Con datos de 2 s:
-1. **Ventanas.** Las trayectorias de entrenamiento (28 escenarios) se parten en ventanas de $W = 10$ muestras (5 ms), o de 40 (20 ms) en los entrenamientos `B400`. Cada una arranca del estado observado (`make_windows`).
+1. **Ventanas.** Las trayectorias de entrenamiento (72 escenarios) se parten en ventanas de $W = 10$ muestras (5 ms), o de 40 (20 ms) en los entrenamientos `B400`. Cada una arranca del estado observado (`make_windows`).
 2. **Pérdida.** El error cuadrático medio entre la trayectoria predicha por (3) y la observada, sobre todas las ventanas.
 3. **Optimización.** Adam durante 1500 épocas, con tasas de 0,05 para los pesos, 0,02 para los demás parámetros físicos y 0,003 para la red, y el gradiente recortado en 10. Después, L-BFGS solo sobre los parámetros físicos.
-4. **Selección.** Cada 100 épocas y una vez más después del L-BFGS, el modelo se integra libre sobre 7 escenarios de validación, y se guarda el estado con menor NRMSE (`MejorVal`). No se usa el test para elegir nada.
+4. **Selección.** Cada 100 épocas y una vez más después del L-BFGS, el modelo se integra libre sobre los 12 escenarios de validación, y se guarda el estado con menor NRMSE (`MejorVal`). No se usa el test para elegir nada.
 5. **Arranque.** Ignorante, con los diez parámetros en 1,0, o desde el β de un white-box ajustado sobre los mismos datos (`--init-params`).
 
 Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug` y `AugTrainConfig` en `src/neural_ode/memory.py` para el backbone expandido con actuador y la latent ODE, que siguen el mismo esquema sin el paso de L-BFGS.
@@ -184,18 +185,20 @@ Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug`
 
 **Evaluación del modelo dentro del controlador.** Todos los modelos son módulos de PyTorch con firma `modelo(x, P, Q) → ẋ` (en el backbone expandido con actuador, `x` incluye $\hat P$ y $\hat Q$), así que $\partial \dot x / \partial u_k$ se obtiene por diferenciación automática. Un checkpoint se carga con `cargar(ruta)`, en `scripts/esc_eval.py`, que reconstruye la variante a partir de los flags guardados y devuelve el modelo y el checkpoint.
 
-**Invertibilidad.** El controlador del paper fija un $\dot x$ objetivo y despeja el comando que lo produce. En el backbone, $u_k$ entra sumado al argumento de una sigmoidea monótona, y el despeje es cerrado (ec. 6 del paper). En la agnóstica también, porque $g(I, E)$ no depende del comando y solo desplaza el objetivo. Con historia y filtro entrenable, $u_k$ entra además a la red, junto con los comandos anteriores. Despejarlo requiere resolver en cada paso una ecuación no lineal en $(P_k, Q_k)$, sin fórmula cerrada. Esa ecuación puede tener varias soluciones o ninguna: el entrenamiento no obliga a la red a ser monótona en $u_k$, y fuera del rango de los estímulos de entrenamiento ($P \in [0; 2]$, $Q \in [0; 1{,}5]$) la red no tiene datos que la restrinjan. Un controlador que use estos modelos sin invertirlos (MPC, o la estructura IMC clásica con el modelo completo en paralelo) evita ese problema.
+**Invertibilidad.** El controlador del paper fija un $\dot x$ objetivo y despeja el comando que lo produce. En el backbone, $u_k$ entra sumado al argumento de una sigmoidea monótona, y el despeje es cerrado (ec. 6 del paper). En la agnóstica también, porque $g(I, E)$ no depende del comando y solo desplaza el objetivo. Con historia y filtro entrenable, $u_k$ entra además a la red, junto con los comandos anteriores. Despejarlo requiere resolver en cada paso una ecuación no lineal en $(P_k, Q_k)$, sin fórmula cerrada. Esa ecuación puede tener varias soluciones o ninguna: el entrenamiento no obliga a la red a ser monótona en $u_k$, y fuera del rango de los estímulos de entrenamiento ($|P| \le 12$, $|Q| \le 14$) la red no tiene datos que la restrinjan. Un controlador que use estos modelos sin invertirlos (MPC, o la estructura IMC clásica con el modelo completo en paralelo) evita ese problema.
 **Valores identificados** con σ = 0,01, semilla 0, para quien quiera usar los parámetros directamente:
 
 | | $w_{EE}$ | $w_{EI}$ | $w_{IE}$ | $w_{II}$ | $\tau_e$ | $\tau_i$ | $a_e$ | $a_i$ | $\theta_e$ | $\theta_i$ |
 |------------------------|----|----|----|----|----|----|----|----|----|----|
 | verdaderos | 6,40 | 4,80 | 6,00 | 1,20 | 1,00 | 2,00 | 1,20 | 1,00 | 2,80 | 4,00 |
-| refractariedad, white-box | 5,82 | 4,90 | 6,19 | 1,89 | 1,12 | 2,06 | 1,28 | 1,05 | 2,64 | 3,98 |
-| refractariedad, agnóstica con warm start | 6,20 | 4,69 | 6,16 | 1,32 | 1,08 | 2,04 | 1,24 | 0,98 | 2,69 | 4,01 |
-| refractariedad, backbone expandido | 6,33 | 4,77 | 6,06 | 1,45 | 1,01 | 2,02 | 1,21 | 0,98 | 2,78 | 4,02 |
-| actuador, white-box | 8,21 | 7,30 | 6,96 | 2,05 | 1,41 | 2,36 | 1,14 | 0,91 | 3,03 | 4,24 |
-| actuador, historia con comando actual, warm start | 9,43 | 7,15 | 6,99 | 0,94 | 1,21 | 1,98 | 0,91 | 0,79 | 3,56 | 4,84 |
-| actuador, backbone expandido con warm start | 7,46 | 5,51 | 6,46 | 1,36 | 0,98 | 2,00 | 1,01 | 0,93 | 3,13 | 4,25 |
+| refractariedad, white-box | 5,98 | 4,69 | 5,78 | 1,65 | 1,04 | 2,07 | 1,05 | 0,89 | 2,70 | 3,84 |
+| refractariedad, agnóstica con warm start | 6,39 | 4,79 | 5,99 | 1,26 | 1,04 | 2,08 | 1,20 | 1,01 | 2,77 | 3,95 |
+| refractariedad, backbone expandido | 6,41 | 4,79 | 6,00 | 1,21 | 0,99 | 1,99 | 1,20 | 1,00 | 2,81 | 4,00 |
+| actuador, white-box | 10,82 | 9,18 | 16,21 | 7,59 | 1,70 | 3,03 | 0,76 | 0,34 | 3,39 | 8,49 |
+| actuador, historia con comando actual, warm start | 12,60 | 9,72 | 18,37 | 2,17 | 1,64 | 2,60 | 0,49 | 0,19 | 4,28 | 12,10 |
+| actuador, backbone expandido con warm start | 6,39 | 4,79 | 5,99 | 1,20 | 1,00 | 2,00 | 1,20 | 1,00 | 2,80 | 4,00 |
+
+En el actuador, el white-box y las redes compensan el recorte deformando $\hat\beta$: el error medio es de 122 % en el white-box y de 98 % en la historia con comando actual (σ = 0,01, semilla 0). El backbone expandido representa el recorte y queda en 0,11 %.
 
 ## 9. Archivos y funciones
 

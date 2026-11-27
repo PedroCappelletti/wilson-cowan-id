@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -29,17 +30,17 @@ def coma(x, d=4):
     return f"{x:.{d}f}".replace(".", ",")
 
 
-def tabla(filas):
+def tabla(filas, act="act"):
     g = defaultdict(list)
     for r in filas:
         g[(r["referencia"], r["planta"], r["modelo"], r["uso"], r["ruido"])].append(r)
     md = []
-    for ref, nr in (("theta2s", "theta-gamma de 2 s"), ("gamma50", "gamma de 50 ms")):
+    for ref, nr in (("theta2s", "theta-gamma de 2 s"), ("gamma50", "gamma continua")):
         ideal = g[(ref, "ideal", "ideal", "β verdaderos", "")][0]
         md += [f"### Referencia {nr}", "",
                f"Ideal (Wilson-Cowan sin perturbación, β verdaderos): RMSE {coma(ideal['rmse'])} "
                f"(I {coma(ideal['rmse_I'])}, E {coma(ideal['rmse_E'])}).", ""]
-        for planta, npl in (("refrac", "refractariedad"), ("act", "actuador")):
+        for planta, npl in (("refrac", "refractariedad"), (act, "actuador")):
             md += [f"**Planta con {npl}**", "",
                    "| modelo | uso en el controlador | σ = 0,01: error de β̂ | σ = 0,01: RMSE "
                    "| σ = 0,05: error de β̂ | σ = 0,05: RMSE |",
@@ -90,7 +91,29 @@ def figura(trazas, nombre, casos, ventana):
     plt.close(fig)
 
 
+def main_amplitud():
+    """Modelos e25 y actuador con recorte en ±3 (control_paper_modelos.py --amplitud)."""
+    from resumen_control_planta_modelo import figura_dos_tramos
+    filas = json.loads((RAIZ / "results" / "control_paper_modelos_amplitud.json").read_text(encoding="utf-8"))
+    (RAIZ / "results" / "control_paper_modelos_amplitud.md").write_text(tabla(filas, "actc") + "\n",
+                                                                        encoding="utf-8")
+    tr = dict(np.load(RAIZ / "results" / "control_paper_modelos_amplitud_trazas.npz"))
+    figura_dos_tramos(tr, "paper_modelos_amplitud_actuador", [
+        ("theta2s|ideal|ideal|β verdaderos", "Planta sin perturbación, β verdaderos"),
+        ("theta2s|actc|β verdaderos|β verdaderos", "Planta con actuador, β verdaderos"),
+        ("theta2s|actc|con red|solo β̂", "Planta con actuador, historia con comando actual, β̂"),
+        ("theta2s|actc|forma exacta|solo β̂", "Planta con actuador, backbone expandido, β̂")])
+    figura_dos_tramos(tr, "paper_modelos_amplitud_refractariedad", [
+        ("theta2s|refrac|β verdaderos|β verdaderos", "Planta con refractariedad, β verdaderos"),
+        ("theta2s|refrac|con red|β̂ + g", "Planta con refractariedad, agnóstica, β̂ y cancela la red"),
+        ("theta2s|refrac|forma exacta|β̂ + forma",
+         "Planta con refractariedad, backbone expandido, β̂ e invierte la forma")])
+    print("escrito: results/control_paper_modelos_amplitud.md y figuras paper_modelos_amplitud_*")
+
+
 def main():
+    if "--amplitud" in sys.argv:
+        return main_amplitud()
     filas = json.loads((RAIZ / "results" / "control_paper_modelos.json").read_text(encoding="utf-8"))
     (RAIZ / "results" / "control_paper_modelos.md").write_text(tabla(filas) + "\n", encoding="utf-8")
     tr = dict(np.load(RAIZ / "results" / "control_paper_modelos_trazas.npz"))
