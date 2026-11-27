@@ -97,12 +97,13 @@ def main():
     figura(tr, "paper_modelos_actuador", [
         ("ideal|ideal|β verdaderos", "Ideal: planta sin perturbación, β verdaderos"),
         ("act|β verdaderos|β verdaderos", "Planta con actuador, β verdaderos"),
-        ("act|con red|solo β̂", "Planta con actuador, historia de 5 ms (con red), β̂"),
-        ("act|forma exacta|solo β̂", "Planta con actuador, estado de filtro, β̂")], (720, 760))
+        ("act|con red|solo β̂", "Planta con actuador, historia con comando actual (con red), β̂"),
+        ("act|forma exacta|solo β̂", "Planta con actuador, backbone expandido, β̂")], (720, 760))
     figura(tr, "paper_modelos_refractariedad", [
         ("refrac|β verdaderos|β verdaderos", "Planta con refractariedad, β verdaderos"),
-        ("refrac|con red|β̂ + g", "Planta con refractariedad, agnóstica (con red), β̂ + g"),
-        ("refrac|forma exacta|β̂ + forma", "Planta con refractariedad, forma exacta, β̂ + forma")], (600, 900))
+        ("refrac|con red|β̂ + g", "Planta con refractariedad, agnóstica (con red), β̂ y cancela la red"),
+        ("refrac|forma exacta|β̂ + forma", "Planta con refractariedad, backbone expandido, β̂ e invierte la forma")],
+        (600, 900))
     print("escrito: results/control_paper_modelos.md y figuras paper_modelos_*")
 
 

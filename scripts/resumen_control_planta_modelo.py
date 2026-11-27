@@ -22,8 +22,11 @@ import matplotlib.pyplot as plt
 RAIZ = Path(__file__).resolve().parents[1]
 OUT = RAIZ / "results" / "figures" / "control"
 PLANTAS = ("white-box", "con red", "forma exacta")
-NOMBRE = {"refrac": {"con red": "agnóstica", "forma exacta": "forma exacta", "white-box": "white-box"},
-          "act": {"con red": "historia 5 ms", "forma exacta": "estado de filtro", "white-box": "white-box"}}
+# Las claves son los nombres internos de los JSON; lo que se muestra sigue la
+# nomenclatura del informe.
+NOMBRE = {"refrac": {"con red": "agnóstica", "forma exacta": "backbone expandido", "white-box": "white-box"},
+          "act": {"con red": "historia con comando actual", "forma exacta": "backbone expandido",
+                  "white-box": "white-box"}}
 
 
 def coma(x, d=4):

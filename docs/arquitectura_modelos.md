@@ -51,10 +51,10 @@ Código: `GrayBoxWC.backbone(x, P, Q)`, en `src/neural_ode/dynamics.py`. Devuelv
 Los modelos con corrección son aditivos:
 
 $$
-\dot x = f_{WC}(x, u; \beta) + g_\phi(\xi) \tag{2}
+\dot x = f_{WC}(x, u; \beta) + \mathcal{N}_\phi(\xi) \tag{2}
 $$
 
-donde $\xi$ es la entrada de la corrección, que cambia según la variante (sección 4), y $g_\phi$ devuelve $(g_I, g_E)$. Sin corrección, $g_\phi \equiv 0$ y el modelo es el white-box.
+donde $\xi$ es la entrada de la corrección, que cambia según la variante (sección 4), y $\mathcal{N}_\phi$ devuelve una componente para $I$ y otra para $E$. Sin corrección, $\mathcal{N}_\phi \equiv 0$ y el modelo es el white-box.
 
 El modelo se integra con RK4 de paso fijo $\Delta t$, con el comando retenido durante el paso:
 
@@ -69,19 +69,19 @@ Las variantes con historia reciben en cada paso un vector con el comando actual 
 
 ## 4. Correcciones con red neuronal
 
-En las tres variantes, $g_\phi$ es un perceptrón de dos capas ocultas de 32 unidades con tangente hiperbólica:
+En las tres variantes, $\mathcal{N}_\phi$ es un perceptrón de dos capas ocultas de 32 unidades con tangente hiperbólica:
 
 $$
-g_\phi(\xi) = W_3\,\tanh\!\big(W_2 \tanh(W_1 \xi + b_1) + b_2\big) + b_3,\qquad W_3 \in \mathbb{R}^{2\times 32} \tag{4}
+\mathcal{N}_\phi(\xi) = W_3\,\tanh\!\big(W_2 \tanh(W_1 \xi + b_1) + b_2\big) + b_3,\qquad W_3 \in \mathbb{R}^{2\times 32} \tag{4}
 $$
 
-Los sesgos y $W_3$ arrancan en cero, así que al inicio del entrenamiento $g_\phi = 0$ y el modelo coincide con el backbone. Las variantes cambian solo $\xi$. Se elige con el argumento `correction_inputs` de `GrayBoxWC`; la red está en `GrayBoxWC.g` y se evalúa con `GrayBoxWC.g_out`.
+Los sesgos y $W_3$ arrancan en cero, así que al inicio del entrenamiento $\mathcal{N}_\phi = 0$ y el modelo coincide con el backbone. Las variantes cambian solo $\xi$. Se elige con el argumento `correction_inputs` de `GrayBoxWC`; la red está en `GrayBoxWC.g` y se evalúa con `GrayBoxWC.g_out`.
 
 ### 4.1 Agnóstica: $\xi = (I, E)$
 
 $\xi \in \mathbb{R}^2$ (variante `B`, `correction_inputs="x"`). La corrección depende solo del estado actual: no ve el comando ni el pasado. Tiene 1218 pesos, más los 10 de β.
 
-Como $g_\phi$ no depende de $u$, (2) sigue siendo afín en $u$ dentro de cada sigmoidea, y el despeje cerrado del controlador sigue valiendo: alcanza con restar $\tau\,g_\phi(x)$ del objetivo antes de invertir la sigmoidea.
+Como $\mathcal{N}_\phi$ no depende de $u$, (2) sigue siendo afín en $u$ dentro de cada sigmoidea, y el despeje cerrado del controlador sigue valiendo: alcanza con restar $\tau\,\mathcal{N}_\phi(x)$ del objetivo antes de invertir la sigmoidea.
 
 ### 4.2 Historia del comando: $\xi = (I, E, P_k, \dots, P_{k-K+1}, Q_k, \dots, Q_{k-K+1})$
 
@@ -109,7 +109,7 @@ $z$ es lineal en $u_k$, pero la red no, así que como en 4.2 el comando actual e
 
 ## 5. Backbone expandido (sin red)
 
-### 5.1 Forma exacta
+### 5.1 Backbone expandido refractario
 
 Variante `S` (`structured=True`). Se agregan tres parámetros al backbone:
 
@@ -124,7 +124,7 @@ En la planta con refractariedad, el modelo con σ = 0,01 identificó $r_E = 0{,}
 
 El despeje sigue siendo cerrado: se divide el objetivo por $(1 - r_j x_j)$ y se invierte la saturación con artanh. Ya está implementado en `IMCController` (argumento `structured`).
 
-### 5.2 Estado de filtro
+### 5.2 Backbone expandido con actuador
 
 `LagGrayBox`, en `src/neural_ode/memory.py`. El estado se aumenta con una copia del filtro del actuador:
 
@@ -151,22 +151,22 @@ Para el control, $u$ llega a $x$ solo a través de $\hat u$: el grado relativo d
 
 ### 5.3 Latent ODE
 
-`LatentGrayBox` (`src/neural_ode/memory.py`) agrega un estado $z \in \mathbb{R}^2$ sin forma física: $\dot z = h_\psi(I, E, z, P, Q)$ y $\dot x = f_{WC}(x, u) + g_\phi(I, E, z)$, con $z = 0$ al inicio de cada ventana. Se probó en el escalado sin ruido, con la planta con actuador y los datos de 200 ms, y dio $R^2 = -0{,}51$ contra el término faltante. No está en las tandas actuales.
+`LatentGrayBox` (`src/neural_ode/memory.py`) agrega un estado $z \in \mathbb{R}^2$ sin forma física: $\dot z = h_\psi(I, E, z, P, Q)$ y $\dot x = f_{WC}(x, u) + \mathcal{N}_\phi(I, E, z)$, con $z = 0$ al inicio de cada ventana. Se probó en el escalado sin ruido, con la planta con actuador y los datos de 200 ms, y dio $R^2 = -0{,}51$ contra el término faltante. No está en las tandas actuales.
 
 ## 6. Cómo se obtienen los parámetros
 
 `scripts/esc_run.py` entrena una configuración. Con datos de 2 s:
-1. **Ventanas.** Las trayectorias de entrenamiento (28 escenarios) se parten en ventanas de $W = 10$ muestras (5 ms), o de 40 (20 ms) en las corridas `B400`. Cada una arranca del estado observado (`make_windows`).
+1. **Ventanas.** Las trayectorias de entrenamiento (28 escenarios) se parten en ventanas de $W = 10$ muestras (5 ms), o de 40 (20 ms) en los entrenamientos `B400`. Cada una arranca del estado observado (`make_windows`).
 2. **Pérdida.** El error cuadrático medio entre la trayectoria predicha por (3) y la observada, sobre todas las ventanas.
 3. **Optimización.** Adam durante 1500 épocas, con tasas de 0,05 para los pesos, 0,02 para los demás parámetros físicos y 0,003 para la red, y el gradiente recortado en 10. Después, L-BFGS solo sobre los parámetros físicos.
 4. **Selección.** Cada 100 épocas y una vez más después del L-BFGS, el modelo se integra libre sobre 7 escenarios de validación, y se guarda el estado con menor NRMSE (`MejorVal`). No se usa el test para elegir nada.
 5. **Arranque.** Ignorante, con los diez parámetros en 1,0, o desde el β de un white-box ajustado sobre los mismos datos (`--init-params`).
 
-Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug` y `AugTrainConfig` en `src/neural_ode/memory.py` para el estado de filtro y la latent ODE, que siguen el mismo esquema sin el paso de L-BFGS.
+Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug` y `AugTrainConfig` en `src/neural_ode/memory.py` para el backbone expandido con actuador y la latent ODE, que siguen el mismo esquema sin el paso de L-BFGS.
 
 ## 7. Cuadro comparativo
 
-| | white-box | agnóstica | historia | filtro entrenable | forma exacta | estado de filtro |
+| | white-box | agnóstica | historia | filtro entrenable | backbone expandido refractario | backbone expandido con actuador |
 |----------------|---------|---------|-----------|-----------|-----------|-----------|
 | variante en el código | `whitebox` | `B` | `H` | `K` | `S` | `lag` |
 | estado | $(I, E)$ | $(I, E)$ | $(I, E)$ | $(I, E)$ | $(I, E)$ | $(I, E, \hat P, \hat Q)$ |
@@ -175,14 +175,14 @@ Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug`
 | memoria del comando | no | no | $K$ muestras | $K$ muestras | no | un polo, $\hat\tau$ |
 | afín en $u_k$ dentro de la sigmoidea | sí | sí | no | no | sí, tras invertir la saturación | no; grado relativo 2 |
 | parámetros | 10 | 1228 | 1868 ($K$ = 10) | 2124 ($n$ = 8) | 13 | 12 |
-| despeje cerrado (ec. 6 del paper) | sí | sí, restando $g$ | no | no | sí | no |
+| despeje cerrado (ec. 6 del paper) | sí | sí, restando $\mathcal{N}_\phi$ | no | no | sí | no |
 | qué necesita guardar el controlador | nada | nada | los $K - 1$ comandos anteriores | los $K - 1$ comandos anteriores | nada | $\hat P, \hat Q$ |
 
 ## 8. Consecuencias para el diseño del controlador
 
-> **Prueba previa, no vigente.** Esta sección trata el modelo identificado usado dentro del controlador. Fue una prueba y no es la línea actual del proyecto. Lo vigente es el controlador del paper tal cual, con los parámetros del `.m`, y el modelo identificado como planta, al lado del simulador: `controlador_planta_modelo.pdf`.
+> **Prueba previa, no vigente.** Esta sección trata el modelo identificado usado dentro del controlador. Fue una prueba y no es la línea actual del proyecto. Lo vigente es el controlador del paper tal cual, con los parámetros del `.m`, y el modelo identificado conectado al controlador en lugar de la planta, al lado del simulador: `controlador_planta_modelo.pdf`.
 
-**Evaluación del modelo dentro del controlador.** Todos los modelos son módulos de PyTorch con firma `modelo(x, P, Q) → ẋ` (en el estado de filtro, `x` incluye $\hat P$ y $\hat Q$), así que $\partial \dot x / \partial u_k$ se obtiene por diferenciación automática. Un checkpoint se carga con `cargar(ruta)`, en `scripts/esc_eval.py`, que reconstruye la variante a partir de los flags guardados y devuelve el modelo y el checkpoint.
+**Evaluación del modelo dentro del controlador.** Todos los modelos son módulos de PyTorch con firma `modelo(x, P, Q) → ẋ` (en el backbone expandido con actuador, `x` incluye $\hat P$ y $\hat Q$), así que $\partial \dot x / \partial u_k$ se obtiene por diferenciación automática. Un checkpoint se carga con `cargar(ruta)`, en `scripts/esc_eval.py`, que reconstruye la variante a partir de los flags guardados y devuelve el modelo y el checkpoint.
 
 **Invertibilidad.** El controlador del paper fija un $\dot x$ objetivo y despeja el comando que lo produce. En el backbone, $u_k$ entra sumado al argumento de una sigmoidea monótona, y el despeje es cerrado (ec. 6 del paper). En la agnóstica también, porque $g(I, E)$ no depende del comando y solo desplaza el objetivo. Con historia y filtro entrenable, $u_k$ entra además a la red, junto con los comandos anteriores. Despejarlo requiere resolver en cada paso una ecuación no lineal en $(P_k, Q_k)$, sin fórmula cerrada. Esa ecuación puede tener varias soluciones o ninguna: el entrenamiento no obliga a la red a ser monótona en $u_k$, y fuera del rango de los estímulos de entrenamiento ($P \in [0; 2]$, $Q \in [0; 1{,}5]$) la red no tiene datos que la restrinjan. Un controlador que use estos modelos sin invertirlos (MPC, o la estructura IMC clásica con el modelo completo en paralelo) evita ese problema.
 **Valores identificados** con σ = 0,01, semilla 0, para quien quiera usar los parámetros directamente:
@@ -192,17 +192,17 @@ Funciones: `fit` y `TrainConfig` en `src/neural_ode/graybox_train.py`; `fit_aug`
 | verdaderos | 6,40 | 4,80 | 6,00 | 1,20 | 1,00 | 2,00 | 1,20 | 1,00 | 2,80 | 4,00 |
 | refractariedad, white-box | 5,82 | 4,90 | 6,19 | 1,89 | 1,12 | 2,06 | 1,28 | 1,05 | 2,64 | 3,98 |
 | refractariedad, agnóstica con warm start | 6,20 | 4,69 | 6,16 | 1,32 | 1,08 | 2,04 | 1,24 | 0,98 | 2,69 | 4,01 |
-| refractariedad, forma exacta | 6,33 | 4,77 | 6,06 | 1,45 | 1,01 | 2,02 | 1,21 | 0,98 | 2,78 | 4,02 |
+| refractariedad, backbone expandido | 6,33 | 4,77 | 6,06 | 1,45 | 1,01 | 2,02 | 1,21 | 0,98 | 2,78 | 4,02 |
 | actuador, white-box | 8,21 | 7,30 | 6,96 | 2,05 | 1,41 | 2,36 | 1,14 | 0,91 | 3,03 | 4,24 |
-| actuador, historia 5 ms con warm start | 9,43 | 7,15 | 6,99 | 0,94 | 1,21 | 1,98 | 0,91 | 0,79 | 3,56 | 4,84 |
-| actuador, estado de filtro con warm start | 7,46 | 5,51 | 6,46 | 1,36 | 0,98 | 2,00 | 1,01 | 0,93 | 3,13 | 4,25 |
+| actuador, historia con comando actual, warm start | 9,43 | 7,15 | 6,99 | 0,94 | 1,21 | 1,98 | 0,91 | 0,79 | 3,56 | 4,84 |
+| actuador, backbone expandido con warm start | 7,46 | 5,51 | 6,46 | 1,36 | 0,98 | 2,00 | 1,01 | 0,93 | 3,13 | 4,25 |
 
 ## 9. Archivos y funciones
 
 | archivo | qué contiene |
 |----------|-------------|
-| `src/neural_ode/dynamics.py` | `GrayBoxWC` (backbone, red, forma exacta), `_FIRMLP` (filtro entrenable) |
-| `src/neural_ode/memory.py` | `LagGrayBox` (estado de filtro), `LatentGrayBox`, `fit_aug` |
+| `src/neural_ode/dynamics.py` | `GrayBoxWC` (backbone, red, backbone expandido refractario), `_FIRMLP` (filtro entrenable) |
+| `src/neural_ode/memory.py` | `LagGrayBox` (backbone expandido con actuador), `LatentGrayBox`, `fit_aug` |
 | `src/neural_ode/integrate.py` | `rk4_step`, `rollout` |
 | `src/neural_ode/graybox_train.py` | `TrainConfig`, `VARIANTS`, `build_model`, `make_windows`, `apilar_historia`, `fit`, `MejorVal`, `load_split` |
 | `src/neural_ode/closed_loop.py` | `IMCController` (el controlador del paper), plantas para lazo cerrado |

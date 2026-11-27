@@ -34,7 +34,7 @@ Los parámetros del controlador son siempre los del `.m`: $\tau_e = 1$, $\tau_i 
 - **Parámetros como argumentos.** `fixed` ($\tau$, $a$, $\theta$, $k$) y `weights` ($w$) se pasan al construirlo, en vez de ser variables compartidas con la planta.
 - **Integración.** `simulate_closed_loop_ext` (`src/neural_ode/closed_loop_ext.py`) integra $[Z_1, Z_2, I, E, \text{estados internos de la planta}]$ con RK4 de paso fijo, $\Delta t = 0{,}005$ ms. El comando se calcula al principio de cada paso y se mantiene durante el paso. Las referencias se evalúan en forma analítica, sin interpolar.
 
-**Verificación.** Las ecuaciones de `msd_ode` se integraron en Python con RK45 de Dormand-Prince, el método de `ode45`, y se compararon con el port sobre la planta sin perturbación y la referencia gamma de 50 ms:
+**Verificación.** Las ecuaciones de `msd_ode` se integraron en Python con RK45 de Dormand-Prince, el método de `ode45`, y se compararon con el port sobre la planta sin perturbación y la gamma continua de 50 ms:
 
 | integración | RMSE de seguimiento |
 |---|---|
@@ -54,7 +54,7 @@ La diferencia es proporcional a $\Delta t$, que es lo que da mantener el comando
 
 ## 3. Conexión con los modelos
 
-El controlador es el mismo en todas las corridas. Cambia la planta: el simulador perturbado o un modelo identificado a partir de los datos de ese simulador.
+El controlador es el mismo en todas las simulaciones. Cambia lo que se le conecta: la planta, que es el simulador perturbado, o en su lugar un modelo identificado a partir de los datos de ese simulador.
 
 ```{=latex}
 \begin{center}
@@ -66,7 +66,7 @@ El controlador es el mismo en todas las corridas. Cambia la planta: el simulador
 \node[caja] (mod) at (13.4,0) {modelo identificado\\\texttt{planta\_de(modelo)}};
 \node[caja] (r)   at (0,-2.8)   {referencias\\$r_I(t)$, $r_E(t)$};
 \node[caja] (c)   at (4.2,-2.8) {controlador\\\texttt{IMCController}\\parámetros del \texttt{.m}};
-\node[caja, minimum width=70mm] (pl) at (11.2,-2.8) {planta\\$(I, E, P, Q) \to (\dot I, \dot E)$};
+\node[caja, minimum width=70mm] (pl) at (11.2,-2.8) {planta o modelo\\$(I, E, P, Q) \to (\dot I, \dot E)$};
 \draw[flecha] (sim.south) -- (sim.south |- pl.north);
 \draw[flecha] (mod.south) -- (mod.south |- pl.north);
 \node at ($(sim.east)!0.5!(mod.west)$) {o};
@@ -80,10 +80,10 @@ El controlador es el mismo en todas las corridas. Cambia la planta: el simulador
 Pasos, como en `scripts/control_paper_planta_modelo.py`:
 
 1. `cargar(ruta)` (`scripts/esc_eval.py`) reconstruye el modelo desde su checkpoint.
-2. `planta_de(modelo)` lo convierte en planta. El campo $\hat f(I, E, P, Q)$ se reescribe en numpy con los pesos del checkpoint: con PyTorch, una corrida de 2 s son 1,6 millones de evaluaciones y tarda más de diez minutos. En 200 puntos al azar, la diferencia con el `forward` de PyTorch es menor que $2{,}2 \times 10^{-7}$ relativo, en los 36 modelos. Según el modelo:
-    - **white-box, agnóstica y forma exacta.** El campo, sin estados internos.
-    - **historia de 5 ms.** La planta guarda el comando que recibe en cada paso y le pasa a la red $P$ y $Q$ en $t, t - 0{,}5, \dots, t - 4{,}5$ ms (10 valores, al paso de los datos de entrenamiento). Antes de $t = 0$ el comando vale 0.
-    - **estado de filtro.** Dos estados internos, $\hat P$ y $\hat Q$, con $\dot{\hat P} = (P - \hat P)/\hat\tau$, y el campo recibe $\tanh(\hat\alpha \hat P)/\hat\alpha$; lo mismo para $Q$. Arrancan en 0.
+2. `planta_de(modelo)` lo prepara para conectarlo al controlador en lugar de la planta. El campo $\hat f(I, E, P, Q)$ se reescribe en numpy con los pesos del checkpoint: con PyTorch, una simulación de 2 s son 1,6 millones de evaluaciones y tarda más de diez minutos. En 200 puntos al azar, la diferencia con el `forward` de PyTorch es menor que $2{,}2 \times 10^{-7}$ relativo, en los 36 modelos. Según el modelo:
+    - **white-box, agnóstica y backbone expandido refractario.** El campo, sin estados internos.
+    - **historia con comando actual.** El modelo guarda el comando que recibe en cada paso y le pasa a la red $P$ y $Q$ en $t, t - 0{,}5, \dots, t - 4{,}5$ ms (10 valores, al paso de los datos de entrenamiento). Antes de $t = 0$ el comando vale 0.
+    - **backbone expandido con actuador.** Dos estados internos, $\hat P$ y $\hat Q$, con $\dot{\hat P} = (P - \hat P)/\hat\tau$, y el campo recibe $\tanh(\hat\alpha \hat P)/\hat\alpha$; lo mismo para $Q$. Arrancan en 0.
 3. `IMCController(fixed_de(β del .m), w del .m)` construye el controlador.
 4. `simulate_closed_loop_ext(planta, controlador, referencias, dt=0.005, dt_ctrl=0.005)` corre el lazo. Para el simulador, la planta es `make_perturbed_plant(β del .m, perturbación)`.
 
@@ -96,12 +96,12 @@ Pasos, como en `scripts/control_paper_planta_modelo.py`:
 | fila | refractariedad | actuador |
 |---|---|---|
 | white-box | `e1wb` | `e2wb` |
-| agnóstica / historia | agnóstica $g(I, E)$ con warm start, ventana de 5 ms (σ = 0,01) y 20 ms (σ = 0,05) | historia de 5 ms con warm start |
-| forma exacta / estado de filtro | factor $(1 - r x)$ y saturación, con warm start | estado de filtro con warm start |
+| agnóstica / historia | agnóstica con warm start, ventana de 5 ms (σ = 0,01) y 20 ms (σ = 0,05) | historia con comando actual, con warm start |
+| backbone expandido | factor $(1 - r x)$ y saturación, con warm start | copia del filtro, con warm start |
 
 **Referencias.**
 
-- Gamma de 50 ms: $r_E = 0{,}3\sin(2\pi\, 120\, t) + 0{,}45$, $r_I = 0{,}2\sin(2\pi\, 120\, t - 0{,}94) + 0{,}25$, $t$ en s.
+- Gamma continua (50 ms): $r_E = 0{,}3\sin(2\pi\, 120\, t) + 0{,}45$, $r_I = 0{,}2\sin(2\pi\, 120\, t - 0{,}94) + 0{,}25$, $t$ en s.
 - Theta-gamma de 2 s (`theta_gamma_ventana_refs`): la misma gamma mientras la fase de una theta está a menos de $\pi/4$ de su valle, y $r_E = r_I = 0$ fuera. La theta es ruido blanco filtrado entre 4 y 12 Hz, con semilla fija.
 
 **Simulación.** Estado inicial e integradores en cero. Medición de $I$ y $E$ sin ruido.
@@ -110,54 +110,54 @@ Pasos, como en `scripts/control_paper_planta_modelo.py`:
 
 $$\mathrm{RMSE}_x = \sqrt{\frac{1}{N - n_0}\sum_{k=n_0}^{N-1}(x_k - r_{x,k})^2}, \qquad n_0 = N/5, \qquad \mathrm{RMSE} = \sqrt{\frac{\mathrm{RMSE}_E^2 + \mathrm{RMSE}_I^2}{2}} .$$
 
-Con modelo como planta, media ± desvío sobre las tres semillas.
+Con el modelo conectado en lugar de la planta, media ± desvío sobre las tres semillas.
 
 ## 5. Resultados
 
-Simulador sin perturbación: RMSE 0,0382 en la theta-gamma (E 0,0426, I 0,0331) y 0,0324 en la gamma (E 0,0313, I 0,0335). Las 78 corridas terminan sin divergir.
+Simulador sin perturbación: RMSE 0,0382 en la theta-gamma (E 0,0426, I 0,0331) y 0,0324 en la gamma continua (E 0,0313, I 0,0335). Las 78 simulaciones terminan sin divergir.
 
 **Refractariedad**
 
-| planta | σ | RMSE theta-gamma | RMSE gamma |
+| conectado al controlador | σ | RMSE theta-gamma | RMSE gamma continua |
 |----------------|------|--------------------|--------------------|
 | simulador | | 0,0386 | 0,0339 |
 | white-box | 0,01 | 0,0401 ± 0,0000 | 0,0348 ± 0,0001 |
 | | 0,05 | 0,0388 ± 0,0001 | 0,0315 ± 0,0002 |
 | agnóstica | 0,01 | 0,0388 ± 0,0000 | 0,0335 ± 0,0001 |
 | | 0,05 | 0,0384 ± 0,0001 | 0,0327 ± 0,0001 |
-| forma exacta | 0,01 | 0,0388 ± 0,0000 | 0,0341 ± 0,0001 |
+| backbone expandido | 0,01 | 0,0388 ± 0,0000 | 0,0341 ± 0,0001 |
 | | 0,05 | 0,0383 ± 0,0006 | 0,0313 ± 0,0008 |
 
 **Actuador**
 
-| planta | σ | RMSE theta-gamma | RMSE gamma |
+| conectado al controlador | σ | RMSE theta-gamma | RMSE gamma continua |
 |----------------|------|--------------------|--------------------|
 | simulador | | 0,0599 | 0,0692 |
 | white-box | 0,01 | 0,0450 ± 0,0001 | 0,0387 ± 0,0003 |
 | | 0,05 | 0,0430 ± 0,0001 | 0,0324 ± 0,0004 |
-| historia 5 ms | 0,01 | 0,1223 ± 0,0120 | 0,0536 ± 0,0014 |
-| | 0,05 | 0,1336 ± 0,0158 | 0,0488 ± 0,0017 |
-| estado de filtro | 0,01 | 0,0556 ± 0,0003 | 0,0599 ± 0,0010 |
+| historia con comando actual | 0,01 | 0,0602 ± 0,0049 | 0,0536 ± 0,0014 |
+| | 0,05 | 0,0613 ± 0,0012 | 0,0488 ± 0,0017 |
+| backbone expandido | 0,01 | 0,0556 ± 0,0003 | 0,0599 ± 0,0010 |
 | | 0,05 | 0,0545 ± 0,0001 | 0,0607 ± 0,0008 |
 
 **Rango del comando** (mínimo y máximo sobre los dos σ y las tres semillas)
 
-| perturbación | planta | $P$, theta-gamma | $Q$, theta-gamma | $P$, gamma | $Q$, gamma |
+| perturbación | conectado al controlador | $P$, theta-gamma | $Q$, theta-gamma | $P$, gamma continua | $Q$, gamma continua |
 |------------------|-------------------|----------------|----------------|----------------|----------------|
 | ninguna | simulador | −12,9 a 12,4 | −15,5 a 15,5 | 0,6 a 12,4 | −13,7 a 6,2 |
 | refractariedad | simulador | −12,9 a 12,4 | −15,5 a 15,5 | 0,8 a 12,4 | −13,7 a 6,2 |
 | | white-box | −12,9 a 12,4 | −15,5 a 15,5 | 0,7 a 12,4 | −13,8 a 6,2 |
 | | agnóstica | −12,9 a 12,4 | −15,5 a 15,5 | 0,7 a 12,4 | −13,7 a 6,2 |
-| | forma exacta | −12,9 a 12,4 | −15,5 a 15,5 | 0,7 a 12,4 | −13,7 a 6,2 |
+| | backbone expandido | −12,9 a 12,4 | −15,5 a 15,5 | 0,7 a 12,4 | −13,7 a 6,2 |
 | actuador | simulador | −13,7 a 13,1 | −16,4 a 15,5 | −13,4 a 12,9 | −16,4 a 15,5 |
 | | white-box | −13,0 a 12,4 | −15,6 a 15,5 | −0,2 a 12,4 | −14,1 a 6,2 |
-| | historia 5 ms | −15,1 a 13,2 | −16,9 a 16,1 | −13,5 a 12,4 | −15,0 a 6,2 |
-| | estado de filtro | −14,7 a 13,1 | −16,4 a 15,5 | −13,6 a 12,9 | −16,0 a 15,5 |
+| | historia con comando actual | −15,1 a 13,3 | −16,9 a 16,1 | −13,5 a 12,4 | −15,0 a 6,2 |
+| | backbone expandido | −14,7 a 13,1 | −16,4 a 15,5 | −13,6 a 12,9 | −16,0 a 15,5 |
 
 ![](../results/figures/control/planta_modelo_actuador.png){width=80%}
 
-*Figura 1.* Actividad excitatoria en lazo cerrado (azul) y referencia $r_E$ (gris, discontinua) durante una ráfaga gamma de la theta-gamma de 2 s. Controlador IMC con los parámetros del `.m`, sin cota ni anti-windup. Fila 1: simulador con actuador (filtro de 1 ms y saturación $3\tanh(u/3)$). Filas 2 a 4: como planta, los modelos white-box, historia de 5 ms y estado de filtro identificados de ese simulador, con σ = 0,01 y semilla 0.
+*Figura 1.* Actividad excitatoria en lazo cerrado (azul) y referencia $r_E$ (gris, discontinua) durante una ráfaga gamma de la theta-gamma de 2 s. Controlador IMC con los parámetros del `.m`, sin cota ni anti-windup. Fila 1: simulador con actuador (filtro de 1 ms y saturación $3\tanh(u/3)$). Filas 2 a 4: conectados en lugar de la planta, los modelos white-box, historia con comando actual y backbone expandido identificados de ese simulador, con σ = 0,01 y semilla 0.
 
 ![](../results/figures/control/planta_modelo_refractariedad.png){width=80%}
 
-*Figura 2.* Igual que la figura 1, con refractariedad ($r = 0{,}1$) y tres ráfagas. Filas: simulador; modelos white-box, agnóstica y forma exacta.
+*Figura 2.* Igual que la figura 1, con refractariedad ($r = 0{,}1$) y tres ráfagas. Filas: simulador; modelos white-box, agnóstica y backbone expandido.
