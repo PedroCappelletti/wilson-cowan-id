@@ -63,7 +63,7 @@ Las tablas dan ese RMSE combinado, en las mismas unidades de actividad que E e I
 | ideal | Wilson-Cowan sin perturbación | verdaderos |
 | β verdaderos | perturbada | verdaderos; no sabe de la perturbación |
 | white-box | perturbada | $\hat\beta$ del white-box |
-| con red | perturbada | $\hat\beta$ del mejor modelo con red por validación; la red se usa o no según la columna «uso» |
+| con red | perturbada | $\hat\beta$ de la corrección con red indicada abajo; la red se usa o no según la columna «uso» |
 | backbone expandido | perturbada | $\hat\beta$ del backbone expandido |
 
 Las perturbaciones son las del resto del trabajo: refractariedad con $r = 0{,}1$, y un actuador con filtro de primer orden ($\tau = 1$ ms) seguido de un recorte en ±3. Los modelos son los de la tanda `e25`, con datos de 2 s a 2 kHz y comandos bipolares de amplitud 1 a 12 (descripción en [[Arquitectura de los modelos gray-box]]), con $\sigma$ = 0,01 y 0,05 y tres semillas cada uno. Esos σ son el equivalente a 20 kHz; por muestra, el ruido de los datos a 2 kHz es de 0,0032 y 0,016. Las correcciones con red son las mismas que en `controlador_planta_modelo.pdf`:
