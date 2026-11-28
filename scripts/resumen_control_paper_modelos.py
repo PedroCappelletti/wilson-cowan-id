@@ -26,6 +26,16 @@ ORDEN = [("β verdaderos", "β verdaderos"), ("white-box", "solo β̂"), ("con r
          ("con red", "β̂ + g"), ("forma exacta", "β̂ + forma"), ("forma exacta", "solo β̂")]
 
 
+# Las claves del JSON conservan los nombres internos; la tabla usa los del informe.
+USO_TABLA = {"β̂ + g": "β̂ y cancela la red", "β̂ + forma": "β̂ e invierte la forma"}
+
+
+def nombre_tabla(modelo, planta):
+    if modelo == "con red":
+        return "agnóstica (red)" if planta == "refrac" else "historia con comando actual (red)"
+    return {"forma exacta": "backbone expandido"}.get(modelo, modelo)
+
+
 def coma(x, d=4):
     return f"{x:.{d}f}".replace(".", ",")
 
@@ -63,7 +73,8 @@ def tabla(filas, act="act"):
                     celdas += [f"{coma(eb.mean(), 1)} %", f"{coma(v.mean())} ± {coma(v.std())}"]
                 if not any(celdas):
                     continue
-                md.append(f"| {modelo} | {uso} | " + " | ".join(celdas) + " |")
+                md.append(f"| {nombre_tabla(modelo, planta)} | {USO_TABLA.get(uso, uso)} | "
+                          + " | ".join(celdas) + " |")
             md.append("")
     return "\n".join(md)
 
