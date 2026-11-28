@@ -55,10 +55,10 @@ def tabla(filas):
         return f"{coma(v.mean())} ± {coma(v.std())}"
 
     md = [f"Simulador sin perturbación: RMSE {celda('theta2s', 'ideal', 'simulador', '')} en la theta-gamma "
-          f"y {celda('gamma50', 'ideal', 'simulador', '')} en la gamma.", ""]
+          f"y {celda('gamma50', 'ideal', 'simulador', '')} en la gamma continua.", ""]
     for pert, npert in (("refrac", "refractariedad"), ("act", "actuador")):
         md += [f"**Con {npert}**", "",
-               "| planta | σ | RMSE theta-gamma | RMSE gamma |", "|---|---|---|---|",
+               "| conectado | σ | RMSE theta-gamma | RMSE gamma continua |", "|---|---|---|---|",
                f"| simulador | | {celda('theta2s', pert, 'simulador', '')} | {celda('gamma50', pert, 'simulador', '')} |"]
         for pl in PLANTAS:
             for i, (suf, s) in enumerate((("_n01", "0,01"), ("_n05", "0,05"))):
@@ -66,7 +66,7 @@ def tabla(filas):
                 md.append(f"| {nom} | {s} | {celda('theta2s', pert, pl, suf)} | {celda('gamma50', pert, pl, suf)} |")
         md.append("")
     md += ["**Rango del comando**", "",
-           "| perturbación | planta | $P$, theta-gamma | $Q$, theta-gamma | $P$, gamma | $Q$, gamma |",
+           "| perturbación | conectado | $P$, theta-gamma | $Q$, theta-gamma | $P$, gamma continua | $Q$, gamma continua |",
            "|---|---|---|---|---|---|"]
     for pert, npert in (("ideal", "ninguna"), ("refrac", "refractariedad"), ("act", "actuador")):
         for i, pl in enumerate(("simulador",) + (PLANTAS if pert != "ideal" else ())):

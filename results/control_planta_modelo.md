@@ -1,8 +1,8 @@
-Simulador sin perturbación: RMSE 0,0382 en la theta-gamma y 0,0324 en la gamma.
+Simulador sin perturbación: RMSE 0,0382 en la theta-gamma y 0,0324 en la gamma continua.
 
 **Con refractariedad**
 
-| planta | σ | RMSE theta-gamma | RMSE gamma |
+| conectado | σ | RMSE theta-gamma | RMSE gamma continua |
 |---|---|---|---|
 | simulador | | 0,0386 | 0,0339 |
 | white-box | 0,01 | 0,0401 ± 0,0000 | 0,0348 ± 0,0001 |
@@ -14,7 +14,7 @@ Simulador sin perturbación: RMSE 0,0382 en la theta-gamma y 0,0324 en la gamma.
 
 **Con actuador**
 
-| planta | σ | RMSE theta-gamma | RMSE gamma |
+| conectado | σ | RMSE theta-gamma | RMSE gamma continua |
 |---|---|---|---|
 | simulador | | 0,0599 | 0,0692 |
 | white-box | 0,01 | 0,0450 ± 0,0001 | 0,0387 ± 0,0003 |
@@ -26,7 +26,7 @@ Simulador sin perturbación: RMSE 0,0382 en la theta-gamma y 0,0324 en la gamma.
 
 **Rango del comando**
 
-| perturbación | planta | $P$, theta-gamma | $Q$, theta-gamma | $P$, gamma | $Q$, gamma |
+| perturbación | conectado | $P$, theta-gamma | $Q$, theta-gamma | $P$, gamma continua | $Q$, gamma continua |
 |---|---|---|---|---|---|
 | ninguna | simulador | −12,9 a 12,4 | −15,5 a 15,5 | 0,6 a 12,4 | −13,7 a 6,2 |
 | refractariedad | simulador | −12,9 a 12,4 | −15,5 a 15,5 | 0,8 a 12,4 | −13,7 a 6,2 |
